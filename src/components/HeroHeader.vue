@@ -23,30 +23,25 @@
       >
         <div class="lc-block mb-4">
           <div editable="rich">
-            <h1 class="display-1 fw-bolder">With Love and Respect</h1>
+            <h1 class="display-5 fw-bolder">
+              Build Perfect Body for Healthy Lifestyle
+            </h1>
           </div>
         </div>
 
         <div class="lc-block">
           <div editable="rich">
-            <p class="lead">
-              Lorem ipsum dolor sit amet, consectetur adipiscing elit. Proin
-              faucibus porttitor dui.
-            </p>
-
-            <p class="lead">Sim in vestibulum metus pulvinar sit amet.</p>
+            <p class="lead">with us</p>
           </div>
         </div>
-
+        <br />
         <div class="lc-block">
           <svg
-            onclick="this.closest('section').nextElementSibling.scrollIntoView({ behavior: 'smooth'  });"
             width="4em"
             height="4em"
             viewBox="0 0 16 16"
             lc-helper="svg-icon"
             fill="currentColor"
-            xmlns="http://www.w3.org/2000/svg"
             style=""
           >
             <path

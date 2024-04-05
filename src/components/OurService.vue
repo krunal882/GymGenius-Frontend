@@ -1,22 +1,28 @@
 <template>
-  <div class="container marketing">
+  <div
+    class="container marketing"
+    style="background-image: url(../assets/img/hero-bg.png)"
+  >
     <div class="text-black absolute top-40 left-30 text-center">
-      <h1 class="text-5xl lg:text-5xl md:text-2xl sm:text-xl">
-        One membership for all <br />
-        your fitness needs
+      <h1
+        class="text-5xl lg:text-5xl md:text-2xl sm:text-xl"
+        style="margin-top: 30px; margin-bottom: 50px"
+      >
+        push your limits forward <br />
+        we offer to you
       </h1>
     </div>
     <!-- Three columns of text below the carousel -->
     <div class="row">
       <div class="col-lg-4">
         <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+          class="rounded-circle-container"
+          src="../assets/img/service-icon/weight.png"
           alt="Generic placeholder image"
-          width="140"
-          height="140"
+          width="100"
+          height="100"
         />
-        <h2>Heading</h2>
+        <h2>Quality Equipment</h2>
         <p>
           Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
           Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
@@ -31,13 +37,13 @@
       </div>
       <div class="col-lg-4">
         <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+          class="rounded-circle-container"
+          src="../assets/img/service-icon/dumbbell.png"
           alt="Generic placeholder image"
-          width="140"
-          height="140"
+          width="100"
+          height="100"
         />
-        <h2>Heading</h2>
+        <h2>Nutrition</h2>
         <p>
           Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
           Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
@@ -52,13 +58,13 @@
       </div>
       <div class="col-lg-4">
         <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+          class="rounded-circle-container"
+          src="../assets/img/service-icon/yoga.png"
           alt="Generic placeholder image"
-          width="140"
-          height="140"
+          width="100"
+          height="100"
         />
-        <h2>Heading</h2>
+        <h2>Yoga</h2>
         <p>
           Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
           Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
@@ -73,13 +79,13 @@
       </div>
       <div class="col-lg-4">
         <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+          class="rounded-circle-container"
+          src="../assets/img/service-icon/stationary-bike.png"
           alt="Generic placeholder image"
-          width="140"
-          height="140"
+          width="100"
+          height="100"
         />
-        <h2>Heading</h2>
+        <h2>Exercises</h2>
         <p>
           Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
           Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
@@ -96,13 +102,13 @@
       <!-- /.col-lg-4 -->
       <div class="col-lg-4">
         <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+          class="rounded-circle-container"
+          src="../assets/img/service-icon/shopping.png"
           alt="Generic placeholder image"
-          width="140"
-          height="140"
+          width="100"
+          height="100"
         />
-        <h2>Heading</h2>
+        <h2>Gym Wear</h2>
         <p>
           Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget
           lacinia odio sem nec elit. Cras mattis consectetur purus sit amet
@@ -118,13 +124,13 @@
       <!-- /.col-lg-4 -->
       <div class="col-lg-4">
         <img
-          class="rounded-circle"
-          src="data:image/gif;base64,R0lGODlhAQABAIAAAHd3dwAAACH5BAAAAAAALAAAAAABAAEAAAICRAEAOw=="
+          class="rounded-circle-container"
+          src="../assets/img/service-icon/plan.png"
           alt="Generic placeholder image"
-          width="140"
-          height="140"
+          width="100"
+          height="100"
         />
-        <h2>Heading</h2>
+        <h2>Diet plans</h2>
         <p>
           Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas
           eget quam. Vestibulum id ligula porta felis euismod semper. Fusce

@@ -1,5 +1,8 @@
 <template>
-  <nav class="d-flex justify-content-center">
+  <nav
+    class="navbar d-flex justify-content-center py-0 shadow"
+    style="height: 42px"
+  >
     <ul>
       <li><a href="#men">Men</a></li>
       <li><a href="#women">Women</a></li>

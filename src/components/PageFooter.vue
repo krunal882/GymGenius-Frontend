@@ -7,39 +7,7 @@
       style="background-color: #1c2331"
     >
       <!-- Section: Social media -->
-      <section
-        class="d-flex justify-content-between p-4"
-        style="background-color: #6351ce"
-      >
-        <!-- Left -->
-        <div class="me-5">
-          <span>Get connected with us on social networks:</span>
-        </div>
-        <!-- Left -->
 
-        <!-- Right -->
-        <div>
-          <a href="" class="text-white me-4">
-            <i class="fab fa-facebook-f"></i>
-          </a>
-          <a href="" class="text-white me-4">
-            <i class="fab fa-twitter"></i>
-          </a>
-          <a href="" class="text-white me-4">
-            <i class="fab fa-google"></i>
-          </a>
-          <a href="" class="text-white me-4">
-            <i class="fab fa-instagram"></i>
-          </a>
-          <a href="" class="text-white me-4">
-            <i class="fab fa-linkedin"></i>
-          </a>
-          <a href="" class="text-white me-4">
-            <i class="fab fa-github"></i>
-          </a>
-        </div>
-        <!-- Right -->
-      </section>
       <!-- Section: Social media -->
 
       <!-- Section: Links  -->
@@ -120,7 +88,7 @@
               <p><i class="fas fa-home mr-3"></i> New York, NY 10012, US</p>
               <p><i class="fas fa-envelope mr-3"></i> info@example.com</p>
               <p><i class="fas fa-phone mr-3"></i> + 01 234 567 88</p>
-              <p><i class="fas fa-print mr-3"></i> + 01 234 567 89</p>
+              <p><i class="fas fa-print mr-3"></i> + 01 23 567 89</p>
             </div>
             <!-- Grid column -->
           </div>
@@ -131,10 +99,8 @@
 
       <!-- Copyright -->
       <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2)">
-        © 2020 Copyright:
-        <a class="text-white" href="https://mdbootstrap.com/"
-          >MDBootstrap.com</a
-        >
+        © 2024 Copyright:
+        <a class="text-white" href="https://gymgenius.com/">gymgenius.com</a>
       </div>
       <!-- Copyright -->
     </footer>

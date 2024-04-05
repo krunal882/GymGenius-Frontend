@@ -15,11 +15,12 @@
           aria-expanded="false"
           aria-label="Toggle navigation"
         >
-          <span
+          <!-- <span
             class="iconify bar-icon"
             data-icon="fa-solid:bars"
             data-inline="false"
-          ></span>
+          ></span> -->
+          <v-app-bar-nav-icon class="iconify bar-icon"> </v-app-bar-nav-icon>
         </button>
         <div class="collapse navbar-collapse" id="navbarNav">
           <ul class="navbar-nav ml-auto">
@@ -29,11 +30,21 @@
               ></a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Features</a>
+              <a class="nav-link" href="#">exercises</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="#">Pricing</a>
+              <a class="nav-link" href="#">yoga</a>
             </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">nutrition</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="/store">shop</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link" href="#">blogs</a>
+            </li>
+
             <li class="nav-item">
               <a class="nav-link" href="#">About</a>
             </li>
