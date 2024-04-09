@@ -1,16 +1,16 @@
 <template>
   <nav
     class="navbar d-flex justify-content-center py-0 shadow"
-    style="height: 42px"
+    style="height: 42px; position: sticky"
   >
     <ul>
-      <li><a href="#men">Men</a></li>
-      <li><a href="#women">Women</a></li>
-      <li><a href="#cardio">Cardio</a></li>
-      <li><a href="#cycles">Cycles</a></li>
-      <li><a href="#accessories">Accessories</a></li>
-      <li><a href="#supplements">Supplements</a></li>
-      <li><a href="#equipments">Equipments</a></li>
+      <li><router-link to="/men">Men</router-link></li>
+      <li><router-link to="/women">Women</router-link></li>
+      <li><router-link to="/cardio">Cardio</router-link></li>
+      <li><router-link to="/cycles">Cycles</router-link></li>
+      <li><router-link to="/accessories">Accessories</router-link></li>
+      <li><router-link to="/supplements">Supplements</router-link></li>
+      <li><router-link to="/equipments">Equipments</router-link></li>
     </ul>
   </nav>
 </template>

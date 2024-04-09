@@ -1,7 +1,7 @@
 /* eslint-disable */
 <template>
   <div>
-    <div id="carouselExampleIndicators" class="carousel slide">
+    <div id="carouselExampleIndicators" class="carousel slide mb-5">
       <div class="carousel-indicators">
         <button
           type="button"
@@ -25,26 +25,8 @@
         ></button>
       </div>
       <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img
-            src="../../assets/img/store-crousel-img2.png"
-            class="d-block w-100"
-            alt="..."
-          />
-        </div>
-        <div class="carousel-item">
-          <img
-            src="../../assets/img/store-crousel-img3.png"
-            class="d-block w-100"
-            alt="..."
-          />
-        </div>
-        <div class="carousel-item">
-          <img
-            src="../../assets/img/store-crousel-img4.png"
-            class="d-block w-100"
-            alt="..."
-          />
+        <div class="carousel-item active" v-for="(image, i) in images" :key="i">
+          <img :src="image" class="d-block w-100" alt="..." />
         </div>
       </div>
       <button
@@ -54,7 +36,6 @@
         data-bs-slide="prev"
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Previous</span>
       </button>
       <button
         class="carousel-control-next"
@@ -63,7 +44,6 @@
         data-bs-slide="next"
       >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
-        <span class="visually-hidden">Next</span>
       </button>
     </div>
   </div>
@@ -71,7 +51,22 @@
 
 <script>
 export default {
+  data() {
+    return {
+      images: [""],
+    };
+  },
   components: {},
+  async created() {
+    // Load images asynchronously using dynamic import
+    const [image1, image2, image3] = await Promise.all([
+      import("../../../assets/img/store-crousel-img2.png"),
+      import("../../../assets/img/store-crousel-img3.png"),
+      import("../../../assets/img/store-crousel-img4.png"),
+    ]);
+    // Set the images array once both images are loaded
+    this.images = [image1.default, image2.default, image3.default];
+  },
 };
 </script>
 

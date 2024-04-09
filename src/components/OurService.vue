@@ -8,150 +8,113 @@
         class="text-5xl lg:text-5xl md:text-2xl sm:text-xl"
         style="margin-top: 30px; margin-bottom: 50px"
       >
-        push your limits forward <br />
+        push your limits forward,<br />
         we offer to you
       </h1>
     </div>
     <!-- Three columns of text below the carousel -->
     <div class="row">
-      <div class="col-lg-4">
-        <img
-          class="rounded-circle-container"
-          src="../assets/img/service-icon/weight.png"
-          alt="Generic placeholder image"
-          width="100"
-          height="100"
-        />
-        <h2>Quality Equipment</h2>
-        <p>
-          Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
-          Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
-          risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
-          cursus magna.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button"
-            >View details &raquo;</a
-          >
-        </p>
+      <div class="col-lg-4" v-for="(card, index) in cards" :key="index">
+        <v-card>
+          <v-img
+            class="rounded-circle-container"
+            :src="card.image"
+            alt="Generic placeholder image"
+            width="100"
+            height="100"
+          />
+          <h2 style="font-size: 24px; font-weight: bold; margin-top: 20px">
+            {{ card.title }}
+          </h2>
+          <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px">
+            {{ card.description }}
+          </p>
+          <p>
+            <a
+              class="btn btn-secondary"
+              href="#"
+              role="button"
+              style="font-size: 14px; text-transform: uppercase"
+            >
+              View details &raquo;
+            </a>
+          </p>
+        </v-card>
       </div>
-      <div class="col-lg-4">
-        <img
-          class="rounded-circle-container"
-          src="../assets/img/service-icon/dumbbell.png"
-          alt="Generic placeholder image"
-          width="100"
-          height="100"
-        />
-        <h2>Nutrition</h2>
-        <p>
-          Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
-          Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
-          risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
-          cursus magna.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button"
-            >View details &raquo;</a
-          >
-        </p>
-      </div>
-      <div class="col-lg-4">
-        <img
-          class="rounded-circle-container"
-          src="../assets/img/service-icon/yoga.png"
-          alt="Generic placeholder image"
-          width="100"
-          height="100"
-        />
-        <h2>Yoga</h2>
-        <p>
-          Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
-          Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
-          risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
-          cursus magna.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button"
-            >View details &raquo;</a
-          >
-        </p>
-      </div>
-      <div class="col-lg-4">
-        <img
-          class="rounded-circle-container"
-          src="../assets/img/service-icon/stationary-bike.png"
-          alt="Generic placeholder image"
-          width="100"
-          height="100"
-        />
-        <h2>Exercises</h2>
-        <p>
-          Donec sed odio dui. Etiam porta sem malesuada magna mollis euismod.
-          Nullam id dolor id nibh ultricies vehicula ut id elit. Morbi leo
-          risus, porta ac consectetur ac, vestibulum at eros. Praesent commodo
-          cursus magna.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button"
-            >View details &raquo;</a
-          >
-        </p>
-      </div>
-
-      <!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <img
-          class="rounded-circle-container"
-          src="../assets/img/service-icon/shopping.png"
-          alt="Generic placeholder image"
-          width="100"
-          height="100"
-        />
-        <h2>Gym Wear</h2>
-        <p>
-          Duis mollis, est non commodo luctus, nisi erat porttitor ligula, eget
-          lacinia odio sem nec elit. Cras mattis consectetur purus sit amet
-          fermentum. Fusce dapibus, tellus ac cursus commodo, tortor mauris
-          condimentum nibh.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button"
-            >View details &raquo;</a
-          >
-        </p>
-      </div>
-      <!-- /.col-lg-4 -->
-      <div class="col-lg-4">
-        <img
-          class="rounded-circle-container"
-          src="../assets/img/service-icon/plan.png"
-          alt="Generic placeholder image"
-          width="100"
-          height="100"
-        />
-        <h2>Diet plans</h2>
-        <p>
-          Donec sed odio dui. Cras justo odio, dapibus ac facilisis in, egestas
-          eget quam. Vestibulum id ligula porta felis euismod semper. Fusce
-          dapibus, tellus ac cursus commodo, tortor mauris condimentum nibh, ut
-          fermentum massa justo sit amet risus.
-        </p>
-        <p>
-          <a class="btn btn-secondary" href="#" role="button"
-            >View details &raquo;</a
-          >
-        </p>
-      </div>
-
-      <!-- /.col-lg-4 -->
     </div>
-    <!-- /.row -->
   </div>
 </template>
 
 <script>
-export default {};
+export default {
+  data() {
+    return {
+      cards: [
+        {
+          image: "../assets/img/service-icon/weight.png",
+          title: "Quality Equipment",
+          description:
+            "Transform your home workouts with our premium selection of gym " +
+            "equipment, carefully curated to bring the gym experience to the " +
+            "comfort of your own home. From cardio machines to strength training " +
+            "gear, we offer high-quality products designed to help you achieve your " +
+            "fitness goals conveniently and effectively with us.",
+        },
+        {
+          image: "../assets/img/service-icon/dumbbell.png",
+          title: "Nutrition",
+          description:
+            "Discover the nutritional details of your favorite food items and make " +
+            "informed choices about your diet and health. Whether you're tracking " +
+            "your calorie intake, monitoring your fat consumption, or simply " +
+            "curious about the nutritional content of different foods, we've got " +
+            "you covered with comprehensive information to help you achieve your " +
+            "health and wellness goals.",
+        },
+        {
+          image: "../assets/img/service-icon/yoga.png",
+          title: "Yoga",
+          description:
+            "Discover the benefits and techniques of various yoga poses to enhance " +
+            "your practice and deepen your understanding of yoga. Whether you're a " +
+            "beginner seeking guidance on foundational poses or an experienced yogi " +
+            "looking to expand your repertoire, we've compiled comprehensive " +
+            "information to help you explore the world of yoga asanas.",
+        },
+        {
+          image: "../assets/img/service-icon/stationary-bike.png",
+          title: "Exercises",
+          description:
+            "Discover a variety of exercises to help you stay active, fit, and " +
+            "healthy. Whether you're looking to build strength, improve " +
+            "flexibility, boost cardiovascular health, or enhance overall fitness, " +
+            "we've compiled comprehensive information on different types of " +
+            "exercises to support your fitness journey.",
+        },
+        {
+          image: "../assets/img/service-icon/shopping.png",
+          title: "Gym Wear",
+          description:
+            "Discover a range of high-quality gym wear products designed to enhance " +
+            "your performance, comfort, and style during workouts. Whether you're " +
+            "hitting the gym, going for a run, or practicing yoga, we offer a " +
+            "variety of athletic apparel and accessories to help you look and feel " +
+            "your best while staying active and motivated.",
+        },
+        {
+          image: "../assets/img/service-icon/plan.png",
+          title: "Diet plans",
+          description:
+            "Achieve your health and fitness goals with our personalized diet plans " +
+            "designed to support weight loss, muscle gain or weight gain. Whether " +
+            "you're looking to shed pounds, build lean muscle mass, or increase " +
+            "body weight, our expertly crafted plans provide the " +
+            "guidance you need  for success.",
+        },
+      ],
+    };
+  },
+};
 </script>
 
 <style scoped>

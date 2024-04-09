@@ -1,23 +1,17 @@
 <template>
   <div>
-    <StoreNavbar />
-    <StoreCarousel />
-    <ProductHeader />
+    <router-view></router-view>
+    <!-- This will render the child components -->
   </div>
 </template>
 
 <script>
-import StoreNavbar from "../../components/store/StoreNavbar.vue";
-import StoreCarousel from "../../components/store/StoreCarousel.vue";
-import ProductHeader from "../../components/store/ProductHeader.vue";
 export default {
   name: "StorePage",
-  components: {
-    StoreNavbar,
-    StoreCarousel,
-    ProductHeader,
-  },
+  components: {},
 };
 </script>
 
-<style></style>
+<style scoped>
+/* Your scoped styles here */
+</style>
