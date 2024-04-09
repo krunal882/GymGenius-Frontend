@@ -4,7 +4,12 @@
     <nav class="navbar my-navbar navbar-expand-lg navbar-light">
       <div class="container">
         <a class="navbar-brand" href="#">
-          <img class="img-250px" src="../assets/logo.png" alt="" />
+          <img
+            class="img-200px"
+            src="../assets/logo.png"
+            alt=""
+            style="width: 220px"
+          />
         </a>
         <button
           class="navbar-toggler border-0"
@@ -39,7 +44,7 @@
               <a class="nav-link" href="#">nutrition</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link" href="/store">shop</a>
+              <router-link class="nav-link" to="/store">shop</router-link>
             </li>
             <li class="nav-item">
               <a class="nav-link" href="#">blogs</a>
@@ -50,15 +55,23 @@
             </li>
           </ul>
         </div>
+        <v-btn variant="outlined" color="white">Login/Register</v-btn>
       </div>
     </nav>
   </div>
 </template>
 
 <script>
-// export default {
-//   name: "HelloWorld",
-// };
+export default {
+  mounted() {
+    // const script = document.createElement("script");
+    // script.src = "https://www.chatbase.co/embed.min.js";
+    // script.defer = true;
+    // script.setAttribute("chatbotId", "_goC7mZy5K-mr7xGihzhw");
+    // script.setAttribute("domain", "www.chatbase.co");
+    // document.body.appendChild(script);
+  },
+};
 </script>
 
 <!-- Add "scoped" attribute to limit CSS to this component only -->
