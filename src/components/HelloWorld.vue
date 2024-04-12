@@ -51,11 +51,15 @@
             </li>
 
             <li class="nav-item">
-              <a class="nav-link" href="#">About</a>
+              <router-link class="nav-link" to="/fitnessTrackers"
+                >Analyzer</router-link
+              >
             </li>
           </ul>
         </div>
-        <v-btn variant="outlined" color="white">Login/Register</v-btn>
+        <v-btn variant="outlined" color="white" to="/authentication"
+          >Login/Register</v-btn
+        >
       </div>
     </nav>
   </div>

@@ -4,7 +4,7 @@
     style="height: 42px; position: sticky"
   >
     <ul>
-      <li><router-link to="/men">Men</router-link></li>
+      <li><router-link to="men">Men</router-link></li>
       <li><router-link to="/women">Women</router-link></li>
       <li><router-link to="/cardio">Cardio</router-link></li>
       <li><router-link to="/cycles">Cycles</router-link></li>

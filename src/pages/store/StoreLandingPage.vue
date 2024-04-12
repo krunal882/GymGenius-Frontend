@@ -40,7 +40,6 @@ import ProductCarousel from "../../components/store/ProductCarousel.vue";
 import ShopByCategory from "../../components/store/ShopByCategory.vue";
 import SpotLight from "../../components/store/SpotLight.vue";
 export default {
-  name: "StorePage",
   components: {
     StoreNavbar,
     StoreCarousel,
