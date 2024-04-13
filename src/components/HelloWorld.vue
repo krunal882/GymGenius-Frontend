@@ -1,5 +1,5 @@
 <template>
-  <div id="back-to-top">
+  <div>
     <!-- Adjust z-index as needed -->
     <nav class="navbar my-navbar navbar-expand-lg navbar-light">
       <div class="container">

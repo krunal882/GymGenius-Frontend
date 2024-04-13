@@ -4,13 +4,19 @@
     style="height: 42px; position: sticky"
   >
     <ul>
-      <li><router-link to="men">Men</router-link></li>
-      <li><router-link to="/women">Women</router-link></li>
-      <li><router-link to="/cardio">Cardio</router-link></li>
-      <li><router-link to="/cycles">Cycles</router-link></li>
-      <li><router-link to="/accessories">Accessories</router-link></li>
-      <li><router-link to="/supplements">Supplements</router-link></li>
-      <li><router-link to="/equipments">Equipments</router-link></li>
+      <li><router-link :to="{ name: 'men' }">Men</router-link></li>
+      <li><router-link :to="{ name: 'women' }">Women</router-link></li>
+      <li><router-link :to="{ name: 'cardio' }">Cardio</router-link></li>
+      <li><router-link :to="{ name: 'cycles' }">Cycles</router-link></li>
+      <li>
+        <router-link :to="{ name: 'accessories' }">Accessories</router-link>
+      </li>
+      <li>
+        <router-link :to="{ name: 'equipments' }">Supplements</router-link>
+      </li>
+      <li>
+        <router-link :to="{ name: 'supplements' }">Equipments</router-link>
+      </li>
     </ul>
   </nav>
 </template>
@@ -23,6 +29,9 @@ export default {};
 nav {
   background-color: white;
   overflow: hidden;
+  position: sticky;
+  top: 0;
+  z-index: 1000;
 }
 
 nav ul {
