@@ -1,0 +1,129 @@
+<template>
+  <div class="d-flex">
+    <div>
+      <Knob
+        v-model="weight"
+        :size="200"
+        rangeColor="SlateGray"
+        valueColor="green"
+        :max="200"
+        :min="20"
+        :step="1"
+        aria-label="Weight"
+        id="weight"
+      />
+      <label class="bold-label">Weight: {{ weight }} kg</label>
+    </div>
+    <div style="margin-left: 100px">
+      <Knob
+        v-model="height"
+        :size="200"
+        rangeColor="SlateGray"
+        valueColor="green"
+        :max="210"
+        :min="140"
+        :step="1"
+        aria-label="height"
+        id="height"
+      />
+      <label class="bold-label">Height: {{ height }} cm</label>
+    </div>
+    <div style="margin-left: 100px">
+      <Knob
+        v-model="age"
+        :size="200"
+        rangeColor="SlateGray"
+        valueColor="green"
+        :max="120"
+        :min="12"
+        :step="1"
+        aria-label="age"
+        id="age"
+      />
+      <label class="bold-label">Age: {{ age }} year</label>
+    </div>
+    <div style="margin-left: 50px; width: 148px">
+      <v-select
+        clearable
+        label="Gender"
+        v-model="gender"
+        :items="['Male', 'Female']"
+        variant="outlined"
+      ></v-select>
+    </div>
+    <div class="text-center calculate">
+      <v-btn :loading="loading" @click="calculateCalories">
+        Calculate Your Calories
+        <template v-slot:loader>
+          <v-progress-linear indeterminate></v-progress-linear>
+        </template>
+      </v-btn>
+      <div v-if="caloriesResult !== null" class="calories-result mt-5">
+        Your Daily Calories: {{ caloriesResult.toFixed(2) }}
+      </div>
+    </div>
+  </div>
+</template>
+
+<script>
+import Knob from "primevue/knob";
+
+export default {
+  name: "CalorieCalculator",
+  components: {
+    Knob,
+  },
+  data() {
+    return {
+      weight: 50,
+      height: 150,
+      age: 12,
+      gender: "Male",
+      loading: false,
+      caloriesResult: null,
+      activityFactor: 1.2, // Adding activityFactor field
+    };
+  },
+  methods: {
+    calculateCalories() {
+      this.caloriesResult = null;
+      this.loading = true;
+      setTimeout(() => {
+        // Calculate BMR based on Mifflin-St Jeor equation
+        let bmr;
+        if (this.gender === "Male") {
+          bmr = 10 * this.weight + 6.25 * this.height - 5 * this.age + 5;
+        } else {
+          bmr = 10 * this.weight + 6.25 * this.height - 5 * this.age - 161;
+        }
+        // Adjust BMR based on activity level (activityFactor)
+        const activityFactor = this.activityFactor;
+        const totalCalories = bmr * activityFactor;
+        this.caloriesResult = totalCalories;
+        this.loading = false;
+      }, 1000);
+    },
+  },
+};
+</script>
+
+<style scoped>
+.bold-label {
+  font-weight: bold;
+  margin-left: 45px;
+}
+.calorie-result {
+  font-weight: bold;
+  margin-top: 20px;
+}
+.calculate {
+  margin: auto;
+  margin-top: 0px;
+  width: fit-content;
+  height: 50px;
+  font-family: Arial, Helvetica, sans-serif;
+}
+.calculate:hover span {
+  color: white;
+}
+</style>
