@@ -27,6 +27,14 @@ import WaterCalculator from './pages/fitness-trackers/WaterCalculator.vue'
 import FatCalculator from './pages/fitness-trackers/FatCalculator.vue'
 import TdeeCalculator from './pages/fitness-trackers/TdeeCalculator.vue'
 
+import ProfileSection from './components/userProfile/ProfileSection.vue'
+import SettingSection from './components/userProfile/SettingSection.vue'
+import ProfilePage from './pages/ProfilePage.vue'
+import CartSection from './components/userProfile/CartSection.vue'
+import LogoutSection from './components/userProfile/LogoutSection.vue'
+import PurchaseSection from './components/userProfile/PurchaseSection.vue'
+import BookMarkSection from './components/userProfile/BookMarkSection.vue'
+
 import { createApp } from 'vue'
 import App from './App.vue'
 
@@ -79,7 +87,19 @@ const router = createRouter({
             { path: 'fat-calculator', component: FatCalculator, name: 'fatCalculator' },
             { path: 'tdee-calculator', component: TdeeCalculator, name: 'tdeeCalculator' },
         ]
-    },]
+    },
+    {
+        path: '/profile', component: ProfilePage,
+        children: [
+            { path: 'personalInfo', component: ProfileSection, name: 'personalInfo' },
+            { path: 'setting', component: SettingSection, name: 'setting' },
+            { path: 'cart', component: CartSection, name: 'cart' },
+            { path: 'purchase', component: PurchaseSection, name: 'purchase' },
+            { path: 'logout', component: LogoutSection, name: 'logout' },
+            { path: 'bookmark', component: BookMarkSection, name: 'bookmark' },
+        ]
+    },
+    ]
 })
 
 router.beforeEach((to, from, next) => {
