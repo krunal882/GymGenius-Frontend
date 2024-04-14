@@ -6,6 +6,7 @@
       class="mx-auto"
       max-width="400"
       style="margin: 10px; cursor: pointer"
+      @click="handleCardClick(item)"
     >
       <v-img
         class="align-end text-white"
@@ -35,11 +36,41 @@ export default {
           image: require("../../assets/img/fitnessTrackers/food-journal.webp"), // Using require to correctly resolve the image path
         },
         {
-          title: "CALORIE CALCULATOR",
-          image: require("../../assets/img/fitnessTrackers/food-journal.webp"), // Using require to correctly resolve the image path
+          title: "BMR CALCULATOR",
+          image: require("../../assets/img/fitnessTrackers/bmr-calculator.webp"), // Using require to correctly resolve the image path
+        },
+        {
+          title: "WATER INTAKE CALCULATOR",
+          image: require("../../assets/img/fitnessTrackers/woman-drinking-water.webp"), // Using require to correctly resolve the image path},
+        },
+        {
+          title: "BODY FAT CALCULATOR",
+          image: require("../../assets/img/fitnessTrackers/body-fat-calculator.webp"), // Using require to correctly resolve the image path},
+        },
+        {
+          title: "TDEE CALCULATOR",
+          image: require("../../assets/img/fitnessTrackers/tdee-calculator.webp"), // Using require to correctly resolve the image path},
         },
       ],
     };
+  },
+  methods: {
+    handleCardClick(item) {
+      if (item.title === "BMI CALCULATOR") {
+        // Redirect to the BMI calculator page
+        this.$router.push({ name: "bmiCalculator" });
+      } else if (item.title === "CALORIE CALCULATOR") {
+        this.$router.push({ name: "calorieCalculator" });
+      } else if (item.title === "BMR CALCULATOR") {
+        this.$router.push({ name: "bmrCalculator" });
+      } else if (item.title === "WATER INTAKE CALCULATOR") {
+        this.$router.push({ name: "waterCalculator" });
+      } else if (item.title === "BODY FAT CALCULATOR") {
+        this.$router.push({ name: "fatCalculator" });
+      } else if (item.title === "TDEE CALCULATOR") {
+        this.$router.push({ name: "tdeeCalculator" });
+      }
+    },
   },
 };
 </script>

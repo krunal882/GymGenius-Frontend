@@ -61,12 +61,18 @@
           >Login/Register</v-btn
         >
       </div>
+      <ProfileMenu style="margin-right: 0" />
     </nav>
   </div>
 </template>
 
 <script>
+import ProfileMenu from "./ProfileMenu.vue";
+
 export default {
+  components: {
+    ProfileMenu,
+  },
   mounted() {
     // const script = document.createElement("script");
     // script.src = "https://www.chatbase.co/embed.min.js";
