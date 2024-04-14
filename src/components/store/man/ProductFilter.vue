@@ -1,7 +1,7 @@
 <template>
   <v-container
     class="ml-10"
-    style="width: 332px; margin-right: 0px; margin-top: 25px"
+    style="width: 332px; margin-right: 0px; margin-top: 25px; margin-left: 0px"
   >
     <div class="row">
       <div
@@ -106,9 +106,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.bg-image {
-  background-size: cover;
-  background-position: center;
-}
-</style>
+<style scoped></style>
