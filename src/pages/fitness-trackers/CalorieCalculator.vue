@@ -22,7 +22,7 @@
 <script>
 import TrackerHeader from "@/components/fitnessTracker/TrackerHeader.vue";
 import CalorieCalculation from "@/components/fitnessTracker/CalorieCalculation.vue";
-import CalorieInfo from "@/components/fitnessTracker/calculator info/CalorieInfo.vue";
+import CalorieInfo from "@/components/fitnessTracker/calculator-info/CalorieInfo.vue";
 export default {
   components: {
     TrackerHeader,

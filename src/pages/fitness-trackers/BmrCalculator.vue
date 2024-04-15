@@ -27,7 +27,7 @@
 <script>
 import TrackerHeader from "@/components/fitnessTracker/TrackerHeader.vue";
 import BmrCalculation from "@/components/fitnessTracker/BmrCalculation.vue";
-import BmrInfo from "@/components/fitnessTracker/calculator info/BmrInfo.vue";
+import BmrInfo from "@/components/fitnessTracker/calculator-info/BmrInfo.vue";
 
 export default {
   components: {

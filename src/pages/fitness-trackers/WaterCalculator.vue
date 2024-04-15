@@ -14,9 +14,9 @@
 </template>
 
 <script>
-import TrackerHeader from "@/components/fitnessTracker/TrackerHeader.vue";
-import WaterCalculation from "@/components/fitnessTracker/WaterCalculation.vue";
-import WaterInfo from "@/components/fitnessTracker/calculator info/WaterInfo.vue";
+import TrackerHeader from "@/components/fitnessTracker/TrackerHeader";
+import WaterCalculation from "@/components/fitnessTracker/WaterCalculation";
+import WaterInfo from "@/components/fitnessTracker/calculator-info/WaterInfo";
 
 export default {
   components: {

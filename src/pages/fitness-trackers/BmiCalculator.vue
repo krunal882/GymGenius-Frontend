@@ -32,7 +32,7 @@
 
 <script>
 import BmiCalculation from "@/components/fitnessTracker/BmiCalculation.vue";
-import BmiSignificance from "@/components/fitnessTracker/calculator info/BmiInfo.vue";
+import BmiSignificance from "@/components/fitnessTracker/calculator-info/BmiInfo.vue";
 import TrackerHeader from "@/components/fitnessTracker/TrackerHeader.vue";
 export default {
   components: {

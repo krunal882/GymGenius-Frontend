@@ -20,7 +20,7 @@
 <script>
 import TrackerHeader from "@/components/fitnessTracker/TrackerHeader.vue";
 import TdeeCalculation from "@/components/fitnessTracker/TdeeCalculation.vue";
-import TdeeInfo from "@/components/fitnessTracker/calculator info/TdeeInfo.vue";
+import TdeeInfo from "@/components/fitnessTracker/calculator-info/TdeeInfo.vue";
 export default {
   components: {
     TrackerHeader,

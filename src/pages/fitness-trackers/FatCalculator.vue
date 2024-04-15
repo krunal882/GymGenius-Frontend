@@ -16,7 +16,7 @@
 <script>
 import TrackerHeader from "@/components/fitnessTracker/TrackerHeader.vue";
 import FatCalculation from "@/components/fitnessTracker/FatCalculation.vue";
-import FatInfo from "@/components/fitnessTracker/calculator info/FatInfo.vue";
+import FatInfo from "@/components/fitnessTracker/calculator-info/FatInfo.vue";
 
 export default {
   components: {
