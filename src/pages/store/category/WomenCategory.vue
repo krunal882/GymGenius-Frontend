@@ -2,8 +2,11 @@
   <StoreNavWrapper>
     <CategoryCarousel :images="carouselImages" />
     <div class="d-flex">
-      <ProductFilter />
-      <CategoryProduct />
+      <ProductFilter @filters-applied="applyFilters" />
+      <CategoryProduct
+        :product="filteredProducts"
+        @product-selected="onProductSelected"
+      />
     </div>
   </StoreNavWrapper>
 </template>
@@ -12,8 +15,10 @@
 import CategoryProduct from "../../../components/store/CategoryProduct.vue";
 import CategoryCarousel from "../../../components/store/CategoryCarousel.vue";
 import ProductFilter from "../../../components/store/man/ProductFilter.vue";
+import storeFilterMixin from "../../../components/store/storeFilterMixin";
 import StoreNavWrapper from "../../../components/store/storeComponents/StoreNavWrapper";
 export default {
+  mixins: [storeFilterMixin],
   components: {
     CategoryCarousel,
     ProductFilter,
@@ -27,6 +32,7 @@ export default {
         require("../../../assets/img/women/women-carousel2.webp"),
         require("../../../assets/img/women/women-carousel3.webp"),
       ],
+      category: "women",
     };
   },
 };
