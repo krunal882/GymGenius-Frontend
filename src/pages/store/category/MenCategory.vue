@@ -1,14 +1,12 @@
 <template>
-  <StoreNavWrapper>
-    <ManCarousal :images="carouselImages" />
-    <div class="d-flex">
-      <ProductFilter @filters-applied="applyFilters" />
-      <CategoryProduct
-        :product="filteredProducts"
-        @product-selected="onProductSelected"
-      />
-    </div>
-  </StoreNavWrapper>
+  <ManCarousal :images="carouselImages" />
+  <div class="d-flex">
+    <ProductFilter @filters-applied="applyFilters" />
+    <CategoryProduct
+      :product="filteredProducts"
+      @product-selected="onProductSelected"
+    />
+  </div>
 </template>
 
 <script>
@@ -16,7 +14,6 @@ import CategoryProduct from "../../../components/store/CategoryProduct.vue";
 import ManCarousal from "../../../components/store/CategoryCarousel.vue";
 import ProductFilter from "../../../components/store/man/ProductFilter.vue";
 import storeFilterMixin from "../../../components/store/storeFilterMixin";
-import StoreNavWrapper from "../../../components/store/storeComponents/StoreNavWrapper";
 export default {
   mixins: [storeFilterMixin],
 
@@ -24,7 +21,6 @@ export default {
     ManCarousal,
     ProductFilter,
     CategoryProduct,
-    StoreNavWrapper,
   },
   data() {
     return {

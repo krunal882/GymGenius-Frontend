@@ -1,5 +1,4 @@
 <template>
-  <StoreNavWrapper>
     <CategoryCarousel :images="carouselImages" />
     <div class="d-flex">
       <ProductFilter @filters-applied="applyFilters" />
@@ -8,14 +7,12 @@
         @product-selected="onProductSelected"
       />
     </div>
-  </StoreNavWrapper>
 </template>
 
 <script>
 import CategoryProduct from "../../../components/store/CategoryProduct.vue";
 import CategoryCarousel from "../../../components/store/CategoryCarousel.vue";
 import ProductFilter from "../../../components/store/man/ProductFilter.vue";
-import StoreNavWrapper from "../../../components/store/storeComponents/StoreNavWrapper";
 import storeFilterMixin from "../../../components/store/storeFilterMixin";
 export default {
   mixins: [storeFilterMixin],
@@ -23,7 +20,6 @@ export default {
     CategoryCarousel,
     ProductFilter,
     CategoryProduct,
-    StoreNavWrapper,
   },
   data() {
     return {

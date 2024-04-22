@@ -1,28 +1,27 @@
 <template>
   <div>
-    <StoreNavbar />
     <StoreCarousel />
     <p class="container slider">
       EQUIPMENTS
       <a href="/" class="viewAll">view more</a>
     </p>
-    <ProductCarousel />
+    <ProductCarousel :product="product" category="equipments" />
     <p class="container slider">
       SUPPLEMENTS
       <a href="/" class="viewAll">view more</a>
     </p>
-    <ProductCarousel />
+    <ProductCarousel :product="product" category="supplements" />
 
     <p class="container slider">
       CYCLES
       <a href="/" class="viewAll">view more</a>
     </p>
-    <ProductCarousel />
+    <ProductCarousel :product="product" category="cycles" />
     <p class="container slider">
       CARDIO
       <a href="/" class="viewAll">view more</a>
     </p>
-    <ProductCarousel />
+    <ProductCarousel :product="product" category="cardio" />
     <p class="container slider" style="font-size: 30px">SHOP BY WORKOUT</p>
     <ShopByCategory />
     <p class="container slider" style="font-size: 30px; margin-top: 40px">
@@ -34,18 +33,31 @@
 </template>
 
 <script>
-import StoreNavbar from "@/components/store/storeComponents/StoreNavbar.vue";
 import StoreCarousel from "../../components/store/storeComponents/StoreCarousel.vue";
 import ProductCarousel from "../../components/store/ProductCarousel.vue";
 import ShopByCategory from "../../components/store/ShopByCategory.vue";
 import SpotLight from "../../components/store/SpotLight.vue";
 export default {
   components: {
-    StoreNavbar,
     StoreCarousel,
     ProductCarousel,
     ShopByCategory,
     SpotLight,
+  },
+  computed: {
+    product() {
+      return this.$store.state.productsModule.product;
+    },
+  },
+  mounted() {
+    const filteredFilters = {}; // You need to define your filter criteria
+    const limit = 12; // Specify the limit here
+
+    this.$store
+      .dispatch("fetchProduct", { filteredFilters, limit })
+      .catch((error) => {
+        console.error("Error fetching product:", error);
+      });
   },
 };
 </script>
