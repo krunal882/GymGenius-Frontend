@@ -1,5 +1,8 @@
+import ForgotPassword from "@/pages/userAuth/ForgotPassword.vue";
 import axios, { AxiosResponse } from "axios";
 import { Commit, GetterTree, ActionTree } from "vuex";
+import { toast } from "vue3-toastify";
+import "vue3-toastify/dist/index.css";
 
 interface State {
   user: object;
@@ -48,25 +51,30 @@ const mutations = {
     // Adjust the type according to your product object structure
     state.user = data.data.user;
     state.token = data.data.token;
-    console.log(data.data.user, data.data.token);
     document.cookie = `Authorization=Bearer ${data.data.token}`; // 604800 seconds = 7 days
   },
 };
 const actions = {
   async userLogin(
-    { commit }: { commit: Commit },
+    { commit, dispatch }: { commit: Commit; dispatch: any },
     { email, password }: { email: Email; password: Password }
   ) {
     try {
       const url = "http://localhost:3000/auth/login";
 
       const response = await axios.post(url, {
-        email: email,
-        password: password,
+        email,
+        password,
       });
       console.log(response);
-
+      const subject = "Account Login";
+      const html = "<p>successfully loggedIn to your account</p>";
       commit("setUser", response);
+      await axios.post("http://localhost:3000/mailer/email", {
+        recipients: email,
+        subject,
+        html,
+      });
     } catch (error) {
       console.log("Error in login", error);
     }
@@ -100,10 +108,40 @@ const actions = {
         age,
       });
       console.log(name, email, password, confirmPassword);
-      console.log(response);
       commit("setUser", response);
+      const subject = "Account Signup";
+      const html = "<p>successfully created account</p>";
+      console.log("hi");
+      await axios.post("http://localhost:3000/mailer/email", {
+        recipients: email,
+        subject,
+        html,
+      });
     } catch (error) {
       console.log("error in signup", error);
+    }
+  },
+
+  async forgetPassword({ email }: { email: Email }) {
+    try {
+      const url = "http://localhost:3000/auth/forgotPassword";
+
+      const response = await axios.post(url, {
+        email,
+      });
+      console.log(response);
+
+      const subject = "Reset Password";
+      const link = "";
+      const html = "<p>Reset your password using following link</p>";
+      if (response.status === 201) {
+        toast.success("Password reset email sent successfully");
+      } else {
+        console.log("Error in sending mail");
+        // Show an error message to the user if the request was not successful
+      }
+    } catch (error) {
+      console.log("Error in sending mail");
     }
   },
 };
