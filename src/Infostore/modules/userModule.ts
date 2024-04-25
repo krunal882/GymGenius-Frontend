@@ -56,7 +56,7 @@ const mutations = {
 };
 const actions = {
   async userLogin(
-    { commit, dispatch }: { commit: Commit; dispatch: any },
+    { commit }: { commit: Commit },
     { email, password }: { email: Email; password: Password }
   ) {
     try {
@@ -70,11 +70,11 @@ const actions = {
       const subject = "Account Login";
       const html = "<p>successfully loggedIn to your account</p>";
       commit("setUser", response);
-      await axios.post("http://localhost:3000/mailer/email", {
-        recipients: email,
-        subject,
-        html,
-      });
+      // await axios.post("http://localhost:3000/mailer/email", {
+      //   recipients: email,
+      //   subject,
+      //   html,
+      // });
     } catch (error) {
       console.log("Error in login", error);
     }
@@ -142,6 +142,29 @@ const actions = {
       }
     } catch (error) {
       console.log("Error in sending mail");
+    }
+  },
+
+  async resetPassword({
+    newPassword,
+    newConfirmPassword,
+  }: {
+    newPassword: string;
+    newConfirmPassword: string;
+  }) {
+    try {
+      const url = "http://localhost:3000/auth/resetPassword";
+
+      console.log(newPassword, newConfirmPassword);
+      const response = await axios.post(url, {
+        newPassword,
+        newConfirmPassword,
+        resetPasswordToken:
+          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtydW5hbHZla2FyaXlhMjBAZ21haWwuY29tIiwidXNlcklkIjoiNjYyYTAxMzUwZjYyN2U0NjM5YWU5NmQ2IiwiaWF0IjoxNzE0MDM1Nzc4LCJleHAiOjE3MTUzMzE3Nzh9.XJ3fx9Yllw-zhmeEvwu3i0HwAdgYkATJHg6YRBvW5pk",
+      });
+      console.log(response);
+    } catch (error) {
+      console.log("Error in Resetting password", error);
     }
   },
 };
