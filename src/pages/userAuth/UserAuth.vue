@@ -168,6 +168,16 @@
                       :rules="emailRules"
                     />
                     <v-text-field
+                      v-model="age"
+                      label="Age"
+                      outlined
+                      dense
+                      color="blue"
+                      autocomplete="false"
+                      :rules="ageRules"
+                      type="number"
+                    />
+                    <v-text-field
                       v-model="signUpPassword"
                       label="Password"
                       outlined
@@ -176,6 +186,16 @@
                       autocomplete="false"
                       type="password"
                       :rules="passwordRules"
+                    />
+                    <v-text-field
+                      v-model="confirmPassword"
+                      label="Confirm Password"
+                      outlined
+                      dense
+                      color="blue"
+                      autocomplete="false"
+                      type="password"
+                      :rules="confirmPasswordRules"
                     />
                     <v-row>
                       <v-col cols="12" sm="7">
@@ -250,7 +270,9 @@ export default {
     return {
       step: 1,
       loginEmail: "",
+      age: null,
       loginPassword: "",
+      confirmPassword: "",
       rememberMe: false,
       fullName: "",
       signUpEmail: "",
@@ -265,6 +287,15 @@ export default {
         (v) => (v && v.length >= 8) || "Password must be at least 8 characters",
       ],
       nameRules: [(v) => !!v || "Name is required"],
+      ageRules: [
+        (v) => v !== null || "Age is required",
+        (v) => /^[1-9][0-9]*$/.test(v) || "Age must be a number",
+        (v) => v >= 12 || "Age must be at least 12 years",
+      ],
+      confirmPasswordRules: [
+        (v) => !!v || "Confirm Password is required",
+        (v) => v === this.signUpPassword || "Passwords do not match",
+      ],
     };
   },
   methods: {
@@ -276,14 +307,31 @@ export default {
       const options = `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
       window.open(url, `${provider}Window`, options);
     },
+    // Other computed properties
 
     login() {
+      console.log(this.loginEmail, this.loginPassword);
       // Perform login authentication
+      this.$store.dispatch("userLogin", {
+        email: this.loginEmail,
+        password: this.loginPassword,
+      });
+      if (document.cookie.includes("Authorization")) {
+        this.$router.push("/GymGenius");
+        this.state.token;
+      }
     },
     signUp() {
-      // Perform sign up action
+      this.$store.dispatch("userSignup", {
+        email: this.signUpEmail,
+        password: this.signUpPassword,
+        name: this.fullName,
+        age: +this.age,
+        confirmPassword: this.confirmPassword,
+      });
     },
   },
+  computed: {},
 };
 </script>
 
