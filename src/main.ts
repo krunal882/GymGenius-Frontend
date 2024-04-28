@@ -39,6 +39,18 @@ import LogoutSection from "./components/userProfile/LogoutSection.vue";
 import PurchaseSection from "./components/userProfile/PurchaseSection.vue";
 import BookMarkSection from "./components/userProfile/BookMarkSection.vue";
 
+import FoodSection from "./components/FoodNutritionPage/FoodSection.vue";
+import FoodNutrition from "./components/FoodNutritionPage/FoodNutrition.vue";
+import FoodItemPage from "./pages/foodSection/FoodItemPage.vue";
+
+import DietPlan from "./components/DietplanPage/DietPlan.vue";
+
+import YogaPage from "./pages/yoga/YogaPage.vue";
+import YogaPoses from "./components/YogaPage/YogaPoses.vue";
+
+import ExercisePage from "./pages/exercise/ExercisePage.vue";
+import ExerciseInfo from "./components/ExercisePage/ExerciseInfo.vue";
+
 import { createApp } from "vue";
 import App from "./App.vue";
 
@@ -65,6 +77,7 @@ const router = createRouter({
     {
       path: "/GymGenius",
       component: LandingPage,
+      name: "GymGenius",
     },
     { path: "/authentication", component: UserAuth, name: "authentication" },
     {
@@ -141,6 +154,45 @@ const router = createRouter({
           path: "tdee-calculator",
           component: TdeeCalculator,
           name: "tdeeCalculator",
+        },
+      ],
+    },
+    {
+      path: "/foodSection",
+      component: FoodItemPage,
+      children: [
+        {
+          path: "",
+          component: FoodSection,
+          name: "foodSection",
+        },
+        {
+          path: "nutrition",
+          component: FoodNutrition,
+          name: "foodNutrition",
+        },
+        { path: "dietPlan", component: DietPlan, name: "dietPlan" },
+      ],
+    },
+    {
+      path: "/YogaPoses",
+      component: YogaPage,
+      children: [
+        {
+          path: "",
+          component: YogaPoses,
+          name: "yogaPoses",
+        },
+      ],
+    },
+    {
+      path: "/exercise",
+      component: ExercisePage,
+      children: [
+        {
+          path: "",
+          component: ExerciseInfo,
+          name: "exerciseInfo",
         },
       ],
     },
