@@ -48,28 +48,44 @@ const state: State = {
 
 const mutations = {
   setUser(state: State, data: any) {
-    // Adjust the type according to your product object structure
-    state.user = data.data.user;
-    state.token = data.data.token;
-    document.cookie = `Authorization=Bearer ${data.data.token}`; // 604800 seconds = 7 days
+    const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
+    if (
+      userInfo &&
+      userInfo.userModule &&
+      userInfo.userModule.user &&
+      userInfo.userModule.user._id &&
+      data.user &&
+      data.user._id &&
+      userInfo.userModule.user._id === data.user._id
+    ) {
+      return;
+    } else {
+      console.log(data.user);
+      state.user = data.user;
+      state.token = data.token;
+      localStorage.setItem("userInfo", JSON.stringify(data));
+    }
+    document.cookie = `Authorization=Bearer ${data.token}`; // 604800 seconds = 7 days
   },
 };
+
 const actions = {
   async userLogin(
     { commit }: { commit: Commit },
     { email, password }: { email: Email; password: Password }
   ) {
     try {
+      console.log(email);
       const url = "http://localhost:3000/auth/login";
 
       const response = await axios.post(url, {
         email,
         password,
       });
-      console.log(response);
+      console.log(response.data);
       const subject = "Account Login";
       const html = "<p>successfully loggedIn to your account</p>";
-      commit("setUser", response);
+      commit("setUser", response.data);
       // await axios.post("http://localhost:3000/mailer/email", {
       //   recipients: email,
       //   subject,
@@ -88,12 +104,14 @@ const actions = {
       name,
       age,
       confirmPassword,
+      number,
     }: {
       email: Email;
       password: Password;
       name: Name;
       age: Age;
       confirmPassword: ConfirmPassword;
+      number: string;
     }
   ) {
     console.log(name, email, password, name, age, confirmPassword);
@@ -106,34 +124,44 @@ const actions = {
         password,
         confirmPassword,
         age,
+        number,
       });
-      console.log(name, email, password, confirmPassword);
-      commit("setUser", response);
+      console.log(response);
+      commit("setUser", response.data);
       const subject = "Account Signup";
       const html = "<p>successfully created account</p>";
-      console.log("hi");
-      await axios.post("http://localhost:3000/mailer/email", {
-        recipients: email,
-        subject,
-        html,
-      });
+      // await axios.post("http://localhost:3000/mailer/email", {
+      //   recipients: email,
+      //   subject,
+      //   html,
+      // });
     } catch (error) {
       console.log("error in signup", error);
     }
   },
 
-  async forgetPassword({ email }: { email: Email }) {
+  async forgotPassword(
+    { commit }: { commit: Commit },
+    { email }: { email: string }
+  ) {
     try {
       const url = "http://localhost:3000/auth/forgotPassword";
-
+      console.log(email);
       const response = await axios.post(url, {
         email,
       });
-      console.log(response);
+      console.log(response.data);
 
       const subject = "Reset Password";
-      const link = "";
-      const html = "<p>Reset your password using following link</p>";
+      const link = `http://localhost:8081/resetPassword/${response.data}`;
+      const html = `Forgot your password? Click <a href="${link}">here</a> to reset your password.`;
+
+      await axios.post("http://localhost:3000/mailer/email", {
+        recipients: email,
+        subject,
+        html,
+      });
+
       if (response.status === 201) {
         toast.success("Password reset email sent successfully");
       } else {
@@ -145,13 +173,18 @@ const actions = {
     }
   },
 
-  async resetPassword({
-    newPassword,
-    newConfirmPassword,
-  }: {
-    newPassword: string;
-    newConfirmPassword: string;
-  }) {
+  async resetPassword(
+    { commit }: { commit: Commit },
+    {
+      newPassword,
+      newConfirmPassword,
+      resetPasswordToken,
+    }: {
+      newPassword: string;
+      newConfirmPassword: string;
+      resetPasswordToken: string;
+    }
+  ) {
     try {
       const url = "http://localhost:3000/auth/resetPassword";
 
@@ -159,12 +192,33 @@ const actions = {
       const response = await axios.post(url, {
         newPassword,
         newConfirmPassword,
-        resetPasswordToken:
-          "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImtydW5hbHZla2FyaXlhMjBAZ21haWwuY29tIiwidXNlcklkIjoiNjYyYTAxMzUwZjYyN2U0NjM5YWU5NmQ2IiwiaWF0IjoxNzE0MDM1Nzc4LCJleHAiOjE3MTUzMzE3Nzh9.XJ3fx9Yllw-zhmeEvwu3i0HwAdgYkATJHg6YRBvW5pk",
+        resetPasswordToken,
       });
       console.log(response);
     } catch (error) {
       console.log("Error in Resetting password", error);
+    }
+  },
+  async userUpdate(
+    { commit }: { commit: Commit },
+    {
+      email,
+      name,
+      age,
+      id,
+    }: { email: Email; name: string; age: Number; id: string }
+  ) {
+    try {
+      const url = `http://localhost:3000/auth/updateUser?id=${id}`;
+      console.log(url);
+      const response = await axios.patch(url, {
+        email,
+        name,
+        age,
+      });
+      console.log(age);
+    } catch (error) {
+      console.log("error in update user information", error);
     }
   },
 };

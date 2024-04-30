@@ -178,6 +178,15 @@
                       type="number"
                     />
                     <v-text-field
+                      v-model="number"
+                      label="Number"
+                      outlined
+                      dense
+                      color="blue"
+                      autocomplete="false"
+                      :rules="numberRules"
+                    />
+                    <v-text-field
                       v-model="signUpPassword"
                       label="Password"
                       outlined
@@ -197,21 +206,7 @@
                       type="password"
                       :rules="confirmPasswordRules"
                     />
-                    <v-row>
-                      <v-col cols="12" sm="7">
-                        <v-checkbox
-                          v-model="acceptTerms"
-                          label="I Accept AAE"
-                          class="mt-n1"
-                          color="blue"
-                        />
-                      </v-col>
-                      <v-col cols="12" sm="5">
-                        <span class="caption blue--text ml-n4"
-                          >Terms &Conditions</span
-                        >
-                      </v-col>
-                    </v-row>
+
                     <v-btn color="blue" dark block tile @click="signUp"
                       >Sign up</v-btn
                     >
@@ -271,6 +266,7 @@ export default {
       step: 1,
       loginEmail: "",
       age: null,
+      number: null,
       loginPassword: "",
       confirmPassword: "",
       rememberMe: false,
@@ -296,6 +292,11 @@ export default {
         (v) => !!v || "Confirm Password is required",
         (v) => v === this.signUpPassword || "Passwords do not match",
       ],
+      numberRules: [
+        (v) => !!v || "Number is required",
+        (v) => /^[0-9]+$/.test(v) || "Number must contain only digits",
+        (v) => v.length === 10 || "Number must be 10 digits",
+      ],
     };
   },
   methods: {
@@ -316,10 +317,10 @@ export default {
         email: this.loginEmail,
         password: this.loginPassword,
       });
-      if (document.cookie.includes("Authorization")) {
-        this.$router.push("/GymGenius");
-        this.state.token;
-      }
+      // if (document.cookie.includes("Authorization")) {
+      //   this.$router.push("/GymGenius");
+      //   this.state.token;
+      // }
     },
     signUp() {
       this.$store.dispatch("userSignup", {
@@ -327,6 +328,7 @@ export default {
         password: this.signUpPassword,
         name: this.fullName,
         age: +this.age,
+        number: this.number,
         confirmPassword: this.confirmPassword,
       });
     },

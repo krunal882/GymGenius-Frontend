@@ -85,12 +85,16 @@ const router = createRouter({
       component: ForgotPassword,
       name: "forgotPassword",
     },
-    { path: "/resetPassword", component: ResetPassword, name: "resetPassword" },
+    {
+      path: "/resetPassword/:token",
+      component: ResetPassword,
+      name: "resetPassword",
+    },
     {
       path: "/store",
       component: StorePage,
       children: [
-        { path: "", component: StoreLandingPage },
+        { path: "", component: StoreLandingPage, name: "store" },
         { path: "men", component: MenCategory, name: "men" },
         { path: "women", component: WomenCategory, name: "women" },
         { path: "cardio", component: CardioCategory, name: "cardio" },
@@ -124,7 +128,7 @@ const router = createRouter({
       path: "/fitnessTrackers",
       component: FitnessTrackers,
       children: [
-        { path: "", component: TrackerLandingPage },
+        { path: "", component: TrackerLandingPage, name: "fitnessTrackers" },
         {
           path: "bmi-calculator",
           component: BmiCalculator,

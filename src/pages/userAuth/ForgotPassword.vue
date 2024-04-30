@@ -24,7 +24,7 @@
         outlined
         :rules="emailRules"
       ></v-text-field>
-      <v-btn class="rounded-0" color="black" x-large block dark
+      <v-btn class="rounded-0" color="black" x-large block dark @click="reset"
         >Reset Password</v-btn
       >
     </v-form>
@@ -41,6 +41,17 @@ export default {
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
       ],
     };
+  },
+  methods: {
+    reset() {
+      const email = this.resetEmail;
+      // this.$store.dispatch("forgotPassword", { email: this.resetEmail });
+      console.log(email);
+      this.$store.dispatch("forgotPassword", {
+        email: email,
+        // password: this.loginPassword,
+      });
+    },
   },
 };
 </script>
