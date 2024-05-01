@@ -32,7 +32,6 @@ import FatCalculator from "./pages/fitness-trackers/FatCalculator.vue";
 import TdeeCalculator from "./pages/fitness-trackers/TdeeCalculator.vue";
 
 import ProfileSection from "./components/userProfile/ProfileSection.vue";
-import SettingSection from "./components/userProfile/SettingSection.vue";
 import ProfilePage from "./pages/ProfilePage.vue";
 import CartSection from "./components/userProfile/CartSection.vue";
 import LogoutSection from "./components/userProfile/LogoutSection.vue";
@@ -209,7 +208,6 @@ const router = createRouter({
           component: ProfileSection,
           name: "personalInfo",
         },
-        { path: "setting", component: SettingSection, name: "setting" },
         { path: "cart", component: CartSection, name: "cart" },
         { path: "purchase", component: PurchaseSection, name: "purchase" },
         { path: "logout", component: LogoutSection, name: "logout" },
