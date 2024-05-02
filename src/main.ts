@@ -4,19 +4,6 @@ import "primevue/resources/themes/aura-light-green/theme.css";
 import { createRouter, createWebHistory } from "vue-router";
 import store from "./Infostore";
 import LandingPage from "./pages/landing/LandingPage.vue";
-import StorePage from "./pages/store/StorePage.vue";
-import MenCategory from "./pages/store/category/MenCategory.vue";
-import WomenCategory from "./pages/store/category/WomenCategory.vue";
-import CardioCategory from "./pages/store/category/CardioCategory.vue";
-import CycleCategory from "./pages/store/category/CycleCategory.vue";
-import AccessoryCategory from "./pages/store/category/AccessoryCategory.vue";
-import EquipmentCategory from "./pages/store/category/EquipmentCategory.vue";
-import SupplementCategory from "./pages/store/category/SupplementCategory.vue";
-import StoreLandingPage from "./pages/store/StoreLandingPage.vue";
-import StrengthCategory from "./pages/store/category/StrengthCategory.vue";
-import RunningCategory from "./pages/store/category/RunningCategory.vue";
-import YogaCategory from "./pages/store/category/YogaCategory.vue";
-import ProductDetail from "./components/store/ProductDetail.vue";
 
 import UserAuth from "./pages/userAuth/UserAuth.vue";
 import ForgotPassword from "./pages/userAuth/ForgotPassword.vue";
@@ -50,6 +37,13 @@ import YogaPoses from "./components/YogaPage/YogaPoses.vue";
 import ExercisePage from "./pages/exercise/ExercisePage.vue";
 import ExerciseInfo from "./components/ExercisePage/ExerciseInfo.vue";
 
+import UsersSection from "./components/userProfile/Admin/UsersSection.vue";
+import DietSection from "./components/userProfile/Admin/DietSection.vue";
+import ExerciseSection from "./components/userProfile/Admin/ExerciseSection.vue";
+import NutritionSection from "./components/userProfile/Admin/NutritionSection.vue";
+import YogaSection from "./components/userProfile/Admin/YogaSection.vue";
+
+import { storeRoutes } from "./routes/storeRoutes";
 import { createApp } from "vue";
 import App from "./App.vue";
 
@@ -88,40 +82,6 @@ const router = createRouter({
       path: "/resetPassword/:token",
       component: ResetPassword,
       name: "resetPassword",
-    },
-    {
-      path: "/store",
-      component: StorePage,
-      children: [
-        { path: "", component: StoreLandingPage, name: "store" },
-        { path: "men", component: MenCategory, name: "men" },
-        { path: "women", component: WomenCategory, name: "women" },
-        { path: "cardio", component: CardioCategory, name: "cardio" },
-        { path: "cycles", component: CycleCategory, name: "cycles" },
-        { path: "strength", component: StrengthCategory, name: "strength" },
-        { path: "running", component: RunningCategory, name: "running" },
-        { path: "yoga", component: YogaCategory, name: "yoga" },
-        {
-          path: "accessories",
-          component: AccessoryCategory,
-          name: "accessories",
-        },
-        {
-          path: "equipments",
-          component: EquipmentCategory,
-          name: "equipments",
-        },
-        {
-          path: "supplements",
-          component: SupplementCategory,
-          name: "supplements",
-        },
-        {
-          path: ":category/:id",
-          component: ProductDetail,
-          name: "productDetail",
-        },
-      ],
     },
     {
       path: "/fitnessTrackers",
@@ -212,6 +172,23 @@ const router = createRouter({
         { path: "purchase", component: PurchaseSection, name: "purchase" },
         { path: "logout", component: LogoutSection, name: "logout" },
         { path: "bookmark", component: BookMarkSection, name: "bookmark" },
+        { path: "users-admin", component: UsersSection, name: "users-admin" },
+        {
+          path: "dietPlan-admin",
+          component: DietSection,
+          name: "dietPlan-admin",
+        },
+        {
+          path: "exercise-admin",
+          component: ExerciseSection,
+          name: "exercise-admin",
+        },
+        {
+          path: "nutrition-admin",
+          component: NutritionSection,
+          name: "nutrition-admin",
+        },
+        { path: "yoga-admin", component: YogaSection, name: "yoga-admin" },
       ],
     },
   ],
@@ -225,6 +202,9 @@ router.beforeEach((to, from, next) => {
 
 const app = createApp(App);
 
+storeRoutes.getRoutes().forEach((route) => {
+  router.addRoute(route);
+});
 app.use(vuetify);
 app.use(router);
 app.use(store);
