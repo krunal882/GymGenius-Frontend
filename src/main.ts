@@ -12,6 +12,7 @@ import { profileRoutes } from "./routes/profileRoutes";
 import { foodRoutes } from "./routes/foodSectionRoutes";
 import { yogaRoutes } from "./routes/yogaRoutes";
 import { exerciseRoutes } from "./routes/exerciseRoutes";
+import NotFoundPage from "./pages/404/NotFoundPage.vue";
 import { createApp } from "vue";
 import App from "./App.vue";
 
@@ -49,6 +50,11 @@ const router = createRouter({
       path: "/GymGenius",
       component: LandingPage,
       name: "GymGenius",
+    },
+    {
+      path: "/:catchAll(.*)", // Wildcard path to match any route
+      component: NotFoundPage, // Render the 404 page component
+      name: "NotFound",
     },
   ],
 });
