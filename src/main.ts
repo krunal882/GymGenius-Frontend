@@ -5,45 +5,13 @@ import { createRouter, createWebHistory } from "vue-router";
 import store from "./Infostore";
 import LandingPage from "./pages/landing/LandingPage.vue";
 
-import UserAuth from "./pages/userAuth/UserAuth.vue";
-import ForgotPassword from "./pages/userAuth/ForgotPassword.vue";
-import ResetPassword from "./pages/userAuth/ResetPassword.vue";
-
-import FitnessTrackers from "./pages/fitness-trackers/FitnessTrackers.vue";
-import BmiCalculator from "./pages/fitness-trackers/BmiCalculator.vue";
-import TrackerLandingPage from "./pages/fitness-trackers/TrackerLandingPage.vue";
-import CalorieCalculator from "./pages/fitness-trackers/CalorieCalculator.vue";
-import BmrCalculator from "./pages/fitness-trackers/BmrCalculator.vue";
-import WaterCalculator from "./pages/fitness-trackers/WaterCalculator.vue";
-import FatCalculator from "./pages/fitness-trackers/FatCalculator.vue";
-import TdeeCalculator from "./pages/fitness-trackers/TdeeCalculator.vue";
-
-import ProfileSection from "./components/userProfile/ProfileSection.vue";
-import ProfilePage from "./pages/ProfilePage.vue";
-import CartSection from "./components/userProfile/CartSection.vue";
-import LogoutSection from "./components/userProfile/LogoutSection.vue";
-import PurchaseSection from "./components/userProfile/PurchaseSection.vue";
-import BookMarkSection from "./components/userProfile/BookMarkSection.vue";
-
-import FoodSection from "./components/FoodNutritionPage/FoodSection.vue";
-import FoodNutrition from "./components/FoodNutritionPage/FoodNutrition.vue";
-import FoodItemPage from "./pages/foodSection/FoodItemPage.vue";
-
-import DietPlan from "./components/DietplanPage/DietPlan.vue";
-
-import YogaPage from "./pages/yoga/YogaPage.vue";
-import YogaPoses from "./components/YogaPage/YogaPoses.vue";
-
-import ExercisePage from "./pages/exercise/ExercisePage.vue";
-import ExerciseInfo from "./components/ExercisePage/ExerciseInfo.vue";
-
-import UsersSection from "./components/userProfile/Admin/UsersSection.vue";
-import DietSection from "./components/userProfile/Admin/DietSection.vue";
-import ExerciseSection from "./components/userProfile/Admin/ExerciseSection.vue";
-import NutritionSection from "./components/userProfile/Admin/NutritionSection.vue";
-import YogaSection from "./components/userProfile/Admin/YogaSection.vue";
-
+import { authRoutes } from "./routes/authRoutes";
 import { storeRoutes } from "./routes/storeRoutes";
+import { trackersRoutes } from "./routes/trackersRoutes";
+import { profileRoutes } from "./routes/profileRoutes";
+import { foodRoutes } from "./routes/foodSectionRoutes";
+import { yogaRoutes } from "./routes/yogaRoutes";
+import { exerciseRoutes } from "./routes/exerciseRoutes";
 import { createApp } from "vue";
 import App from "./App.vue";
 
@@ -52,7 +20,17 @@ import { createVuetify } from "vuetify";
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
+import { RouteRecordRaw, Router } from "vue-router";
+
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+
+function addRoutes(router: Router, ...routeCollections: any[]): void {
+  routeCollections.forEach((routes) => {
+    routes.getRoutes().forEach((route: RouteRecordRaw) => {
+      router.addRoute(route);
+    });
+  });
+}
 
 const vuetify = createVuetify({
   components,
@@ -72,125 +50,6 @@ const router = createRouter({
       component: LandingPage,
       name: "GymGenius",
     },
-    { path: "/authentication", component: UserAuth, name: "authentication" },
-    {
-      path: "/forgotPassword",
-      component: ForgotPassword,
-      name: "forgotPassword",
-    },
-    {
-      path: "/resetPassword/:token",
-      component: ResetPassword,
-      name: "resetPassword",
-    },
-    {
-      path: "/fitnessTrackers",
-      component: FitnessTrackers,
-      children: [
-        { path: "", component: TrackerLandingPage, name: "fitnessTrackers" },
-        {
-          path: "bmi-calculator",
-          component: BmiCalculator,
-          name: "bmiCalculator",
-        },
-        {
-          path: "calorie-calculator",
-          component: CalorieCalculator,
-          name: "calorieCalculator",
-        },
-        {
-          path: "bmr-calculator",
-          component: BmrCalculator,
-          name: "bmrCalculator",
-        },
-        {
-          path: "water-calculator",
-          component: WaterCalculator,
-          name: "waterCalculator",
-        },
-        {
-          path: "fat-calculator",
-          component: FatCalculator,
-          name: "fatCalculator",
-        },
-        {
-          path: "tdee-calculator",
-          component: TdeeCalculator,
-          name: "tdeeCalculator",
-        },
-      ],
-    },
-    {
-      path: "/foodSection",
-      component: FoodItemPage,
-      children: [
-        {
-          path: "",
-          component: FoodSection,
-          name: "foodSection",
-        },
-        {
-          path: "nutrition",
-          component: FoodNutrition,
-          name: "foodNutrition",
-        },
-        { path: "dietPlan", component: DietPlan, name: "dietPlan" },
-      ],
-    },
-    {
-      path: "/YogaPoses",
-      component: YogaPage,
-      children: [
-        {
-          path: "",
-          component: YogaPoses,
-          name: "yogaPoses",
-        },
-      ],
-    },
-    {
-      path: "/exercise",
-      component: ExercisePage,
-      children: [
-        {
-          path: "",
-          component: ExerciseInfo,
-          name: "exerciseInfo",
-        },
-      ],
-    },
-    {
-      path: "/profile",
-      component: ProfilePage,
-      children: [
-        {
-          path: "personalInfo",
-          component: ProfileSection,
-          name: "personalInfo",
-        },
-        { path: "cart", component: CartSection, name: "cart" },
-        { path: "purchase", component: PurchaseSection, name: "purchase" },
-        { path: "logout", component: LogoutSection, name: "logout" },
-        { path: "bookmark", component: BookMarkSection, name: "bookmark" },
-        { path: "users-admin", component: UsersSection, name: "users-admin" },
-        {
-          path: "dietPlan-admin",
-          component: DietSection,
-          name: "dietPlan-admin",
-        },
-        {
-          path: "exercise-admin",
-          component: ExerciseSection,
-          name: "exercise-admin",
-        },
-        {
-          path: "nutrition-admin",
-          component: NutritionSection,
-          name: "nutrition-admin",
-        },
-        { path: "yoga-admin", component: YogaSection, name: "yoga-admin" },
-      ],
-    },
   ],
 });
 
@@ -202,9 +61,17 @@ router.beforeEach((to, from, next) => {
 
 const app = createApp(App);
 
-storeRoutes.getRoutes().forEach((route) => {
-  router.addRoute(route);
-});
+addRoutes(
+  router,
+  authRoutes,
+  storeRoutes,
+  trackersRoutes,
+  profileRoutes,
+  foodRoutes,
+  exerciseRoutes,
+  yogaRoutes
+);
+
 app.use(vuetify);
 app.use(router);
 app.use(store);
