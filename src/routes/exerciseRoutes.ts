@@ -1,5 +1,5 @@
-import ExerciseInfo from "@/components/ExercisePage/ExerciseInfo.vue";
-import ExercisePage from "@/pages/exercise/ExercisePage.vue";
+import ExerciseInfo from "../components/ExercisePage/ExerciseInfo.vue";
+import ExercisePage from "../pages/exercise/ExercisePage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [

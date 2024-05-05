@@ -1,14 +1,14 @@
-import DietSection from "@/components/userProfile/Admin/DietSection.vue";
-import ExerciseSection from "@/components/userProfile/Admin/ExerciseSection.vue";
-import NutritionSection from "@/components/userProfile/Admin/NutritionSection.vue";
-import UsersSection from "@/components/userProfile/Admin/UsersSection.vue";
-import YogaSection from "@/components/userProfile/Admin/YogaSection.vue";
-import BookMarkSection from "@/components/userProfile/BookMarkSection.vue";
-import CartSection from "@/components/userProfile/CartSection.vue";
-import LogoutSection from "@/components/userProfile/LogoutSection.vue";
-import ProfileSection from "@/components/userProfile/ProfileSection.vue";
-import PurchaseSection from "@/components/userProfile/PurchaseSection.vue";
-import ProfilePage from "@/pages/ProfilePage.vue";
+import DietSection from "../components/userProfile/Admin/DietSection.vue";
+import ExerciseSection from "../components/userProfile/Admin/ExerciseSection.vue";
+import NutritionSection from "../components/userProfile/Admin/NutritionSection.vue";
+import UsersSection from "../components/userProfile/Admin/UsersSection.vue";
+import YogaSection from "../components/userProfile/Admin/YogaSection.vue";
+import BookMarkSection from "../components/userProfile/BookMarkSection.vue";
+import CartSection from "../components/userProfile/CartSection.vue";
+import LogoutSection from "../components/userProfile/LogoutSection.vue";
+import ProfileSection from "../components/userProfile/ProfileSection.vue";
+import PurchaseSection from "../components/userProfile/PurchaseSection.vue";
+import ProfilePage from "../pages/ProfilePage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [

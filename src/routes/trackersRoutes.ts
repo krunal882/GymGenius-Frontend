@@ -1,11 +1,11 @@
-import BmiCalculator from "@/pages/fitness-trackers/BmiCalculator.vue";
-import BmrCalculator from "@/pages/fitness-trackers/BmrCalculator.vue";
-import CalorieCalculator from "@/pages/fitness-trackers/CalorieCalculator.vue";
-import FatCalculator from "@/pages/fitness-trackers/FatCalculator.vue";
-import FitnessTrackers from "@/pages/fitness-trackers/FitnessTrackers.vue";
-import TdeeCalculator from "@/pages/fitness-trackers/TdeeCalculator.vue";
-import TrackerLandingPage from "@/pages/fitness-trackers/TrackerLandingPage.vue";
-import WaterCalculator from "@/pages/fitness-trackers/WaterCalculator.vue";
+import BmiCalculator from "../pages/fitness-trackers/BmiCalculator.vue";
+import BmrCalculator from "../pages/fitness-trackers/BmrCalculator.vue";
+import CalorieCalculator from "../pages/fitness-trackers/CalorieCalculator.vue";
+import FatCalculator from "../pages/fitness-trackers/FatCalculator.vue";
+import FitnessTrackers from "../pages/fitness-trackers/FitnessTrackers.vue";
+import TdeeCalculator from "../pages/fitness-trackers/TdeeCalculator.vue";
+import TrackerLandingPage from "../pages/fitness-trackers/TrackerLandingPage.vue";
+import WaterCalculator from "../pages/fitness-trackers/WaterCalculator.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [

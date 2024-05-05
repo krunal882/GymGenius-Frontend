@@ -1,5 +1,5 @@
-import YogaPoses from "@/components/YogaPage/YogaPoses.vue";
-import YogaPage from "@/pages/yoga/YogaPage.vue";
+import YogaPoses from "../components/YogaPage/YogaPoses.vue";
+import YogaPage from "../pages/yoga/YogaPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [

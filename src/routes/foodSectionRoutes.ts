@@ -1,7 +1,7 @@
-import DietPlan from "@/components/DietplanPage/DietPlan.vue";
-import FoodNutrition from "@/components/FoodNutritionPage/FoodNutrition.vue";
-import FoodSection from "@/components/FoodNutritionPage/FoodSection.vue";
-import FoodItemPage from "@/pages/foodSection/FoodItemPage.vue";
+import DietPlan from "../components/DietplanPage/DietPlan.vue";
+import FoodNutrition from "../components/FoodNutritionPage/FoodNutrition.vue";
+import FoodSection from "../components/FoodNutritionPage/FoodSection.vue";
+import FoodItemPage from "../pages/foodSection/FoodItemPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const routes = [
