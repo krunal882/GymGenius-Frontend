@@ -1,8 +1,17 @@
 <template>
   <v-container>
-    <v-col v-for="yoga in yoga" :key="yoga.id" cols="4">
-      <v-card class="" width="900" style="display: flex">
-        <!-- Image container -->
+    <v-row v-if="loading">
+      <v-col v-for="n in this.yoga.length" :key="n" cols="4">
+        <v-skeleton-loader
+          class="mx-auto border"
+          max-width="300"
+          type="image, article, chip@2"
+        ></v-skeleton-loader>
+      </v-col>
+    </v-row>
+
+    <v-col v-else v-for="yoga in yoga" :key="yoga.id" cols="4">
+      <v-card class="image-hover-effect" width="900" style="display: flex">
         <div style="flex: 1; padding-right: 16px">
           <v-img height="300" :src="yoga.url_png">
             <v-card-title class="text-center">{{
@@ -36,9 +45,10 @@
             >Translation of Name: {{ yoga.translation_name }}</v-card-text
           >
 
-          <v-card-actions>
+          <v-card-actions style="justify-content: space-between">
             <!-- Emit an event when the Explore button is clicked -->
             <v-btn color="orange" @click="exploreClicked(yoga)">Explore</v-btn>
+            <v-btn color="orange" @click="bookmark(yoga)">Bookmark</v-btn>
           </v-card-actions>
         </div>
       </v-card>
@@ -54,11 +64,56 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      loading: true,
+    };
+  },
+  computed: {
+    skeletonCount() {
+      return this.loading ? this.yoga.length : 0;
+    },
+  },
   methods: {
     exploreClicked(yoga) {
       // Emit an event named "explore" when the button is clicked
       this.$emit("explore", yoga);
     },
+    bookmark(yoga) {
+      const userId = this.$store.state.userModule.userId;
+      console.log(userId, yoga._id);
+      const yogaId = yoga._id;
+      this.$store.dispatch("bookmarkItem", {
+        userId,
+        itemId: yogaId,
+        itemType: "yoga",
+      });
+    },
+    loadData() {
+      setTimeout(() => {
+        this.loading = false;
+      }, 2000);
+    },
+  },
+  watch: {
+    yoga: {
+      handler(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          this.loading = true;
+          this.loadData();
+        }
+      },
+      immediate: true,
+    },
+  },
+  created() {
+    this.loadData();
   },
 };
 </script>
+
+<style scoped>
+.image-hover-effect:hover {
+  transform: scale(1.1);
+}
+</style>

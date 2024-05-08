@@ -3,7 +3,14 @@
     class="ml-10"
     style="width: 332px; margin-right: 0px; margin-top: 25px"
   >
-    <form @submit.prevent="submit">
+    <v-icon
+      class="menu-icon"
+      @click="toggleFilter"
+      style="color: black; font-size: 24px"
+      >mdi-menu</v-icon
+    >
+
+    <form v-if="showFilter" @submit.prevent="submit">
       <div class="row">
         <div
           class="col-md-3 col-sm-3 col-xs-12"
@@ -93,6 +100,7 @@
 export default {
   data() {
     return {
+      showFilter: false,
       selectedForce: [],
       selectedLevel: [],
       selectedEquipment: [],
@@ -144,6 +152,9 @@ export default {
   },
   computed: {},
   methods: {
+    toggleFilter() {
+      this.showFilter = !this.showFilter; // Toggle filter visibility
+    },
     applyFilters() {
       const filteredFilters = {};
 
@@ -187,4 +198,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.menu-icon {
+  cursor: pointer;
+}
+</style>

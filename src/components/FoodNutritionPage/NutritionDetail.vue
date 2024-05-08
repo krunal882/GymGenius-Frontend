@@ -179,7 +179,7 @@ export default {
       this.$emit("explore");
     },
     bookmark(foodItem) {
-      const userId = this.$store.state.userModule.user._id;
+      const userId = this.$store.state.userModule.userId;
       const foodId = foodItem._id;
       this.$store.dispatch("bookmarkItem", {
         userId,

@@ -149,7 +149,7 @@ export default {
       this.$emit("explore");
     },
     bookmark(dietPlan) {
-      const userId = this.$store.state.userModule.user._id;
+      const userId = this.$store.state.userModule.userId;
       console.log(userId, dietPlan._id);
       const dietId = dietPlan._id;
       this.$store.dispatch("bookmarkItem", {

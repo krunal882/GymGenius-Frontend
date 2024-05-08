@@ -59,6 +59,7 @@
       <v-card-actions>
         <!-- Emit an event when the Explore button is clicked -->
         <v-btn color="orange" @click="exploreClicked">Go Back</v-btn>
+        <v-btn color="orange" @click="bookmark(yoga)">Bookmark</v-btn>
       </v-card-actions>
     </div>
   </v-card>
@@ -81,6 +82,16 @@ export default {
     exploreClicked() {
       // Emit an event named "explore" when the button is clicked
       this.$emit("explore");
+    },
+    bookmark(yoga) {
+      const userId = this.$store.state.userModule.userId;
+      console.log(userId, yoga._id);
+      const yogaId = yoga._id;
+      this.$store.dispatch("bookmarkItem", {
+        userId,
+        itemId: yogaId,
+        itemType: "yoga",
+      });
     },
   },
 };

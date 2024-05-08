@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <v-row justify="center">
-      <v-card width="400" class="mx-10 my-10">
+      <v-card width="400" class="mx-10 my-10 image-hover-effect">
         <router-link :to="{ name: 'foodNutrition' }">
           <img height="300px" width="100%" :src="nutrition" cover />
         </router-link>
@@ -13,9 +13,9 @@
           carbohydrates, fiber, protein, and fat content.Dive into a
           comprehensive overview of the food item recipes and serving ideas.
         </v-card-text>
-        <v-btn color="orange-lighten-2" variant="text"> Explore </v-btn>
+        <!-- <v-btn color="orange-lighten-2" variant="text"> Explore </v-btn> -->
       </v-card>
-      <v-card width="400" class="mx-10 my-10">
+      <v-card width="400" class="mx-10 my-10 image-hover-effect">
         <router-link :to="{ name: 'dietPlan' }">
           <v-img height="300px" width="100%" :src="diet" cover></v-img>
         </router-link>
@@ -28,14 +28,14 @@
           serving sizes, and suggested meal ideas. Discover how this food can be
           incorporated into your diet for a healthier lifestyle.
         </v-card-text>
-        <v-btn
+        <!-- <v-btn
           color="orange-lighten-2"
           variant="text"
           class="text-center"
           style="justify-content-center"
         >
           Explore
-        </v-btn>
+        </v-btn> -->
       </v-card>
     </v-row>
   </v-container>
@@ -61,3 +61,9 @@ export default {
   methods: {},
 };
 </script>
+
+<style scoped>
+.image-hover-effect:hover {
+  transform: scale(1.1);
+}
+</style>

@@ -85,9 +85,10 @@
       <v-card-text>Equipment Need: {{ exercise.equipment }}</v-card-text>
       <v-card-text>Category : {{ exercise.category }}</v-card-text>
 
-      <v-card-actions>
+      <v-card-actions style="justify-content: space-between">
         <!-- Emit an event when the Explore button is clicked -->
         <v-btn color="orange" @click="exploreClicked">Go Back</v-btn>
+        <v-btn color="orange" @click="bookmark(exercise)">Bookmark</v-btn>
       </v-card-actions>
     </div>
   </v-card>
@@ -108,6 +109,16 @@ export default {
   methods: {
     exploreClicked() {
       this.$emit("explore");
+    },
+    bookmark(exercise) {
+      const userId = this.$store.state.userModule.userId;
+      console.log(userId, exercise._id);
+      const exerciseId = exercise._id;
+      this.$store.dispatch("bookmarkItem", {
+        userId,
+        itemId: exerciseId,
+        itemType: "exercise",
+      });
     },
     async loadImages(exerciseName) {
       const formatedName = exerciseName.replace(/ /g, "_").replace(/\//g, "_");

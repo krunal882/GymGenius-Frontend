@@ -1,9 +1,22 @@
 <template>
   <v-container>
-    <v-row style="justify-content: space-between">
+    <v-row v-if="loading">
+      <v-col v-for="n in this.dietPlan.length" :key="n" cols="4">
+        <v-skeleton-loader
+          class="mx-auto border"
+          max-width="300"
+          type="image, article, chip@2"
+        ></v-skeleton-loader>
+      </v-col>
+    </v-row>
+
+    <v-row v-else style="justify-content: space-between">
       <v-col v-for="dietPlan in dietPlan" :key="dietPlan.id" cols="4">
-        <v-card class="text-black my-4 mx-2" min-width="350" height="400">
-          <!-- Image -->
+        <v-card
+          class="text-black my-4 mx-2 image-hover-effect"
+          min-width="350"
+          height="400"
+        >
           <v-img
             class="align-end text-white"
             style="height: 200px; width: 100%; object-fit: cover"
@@ -48,12 +61,22 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      loading: true,
+    };
+  },
+  computed: {
+    skeletonCount() {
+      return this.loading ? this.dietPlan.length : 0;
+    },
+  },
   methods: {
     exploreClicked(dietPlan) {
       this.$emit("explore", dietPlan);
     },
     bookmark(dietPlan) {
-      const userId = this.$store.state.userModule.user._id;
+      const userId = this.$store.state.userModule.userId;
       console.log(userId, dietPlan._id);
       const dietId = dietPlan._id;
       this.$store.dispatch("bookmarkItem", {
@@ -62,6 +85,25 @@ export default {
         itemType: "diet",
       });
     },
+    loadData() {
+      setTimeout(() => {
+        this.loading = false;
+      }, 2000);
+    },
+  },
+  watch: {
+    dietPlan: {
+      handler(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          this.loading = true;
+          this.loadData();
+        }
+      },
+      immediate: true,
+    },
+  },
+  created() {
+    this.loadData();
   },
 };
 </script>
@@ -80,5 +122,8 @@ export default {
 /* Style the button */
 .v-btn {
   width: 200px; /* Set button width */
+}
+.image-hover-effect:hover {
+  transform: scale(1.1);
 }
 </style>
