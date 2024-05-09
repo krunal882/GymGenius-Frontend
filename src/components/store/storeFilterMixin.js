@@ -3,6 +3,9 @@
 export default {
 
     methods: {
+        search() {
+            this.fetchProductWithFilters({ name: this.selectedItem });
+        },
         async applyFilters(filteredFilters) {
             try {
                 await this.fetchProductWithFilters(filteredFilters);
@@ -12,8 +15,8 @@ export default {
         },
         async fetchProductWithFilters(filteredFilters) {
             try {
-                // Dispatch the fetchProduct action with the filtered filters
-                await this.$store.dispatch('fetchProduct', filteredFilters);
+
+                await this.$store.dispatch('fetchProduct', { filteredFilters, limit: 15 });
             } catch (error) {
                 console.error('Error fetching product with filters:', error);
             }
@@ -36,11 +39,11 @@ export default {
             return filteredProducts;
         }
     },
-    mounted() {
+    created() {
         const filteredFilters = {}; // Initialize with an empty object
-
+        const limit = 15;
         this.$store
-            .dispatch("fetchProduct", { filteredFilters }) // Pass the filteredFilters object
+            .dispatch("fetchProduct", { filteredFilters, limit }) // Pass the filteredFilters object
             .catch((error) => {
                 console.error("Error fetching product:", error);
             });
