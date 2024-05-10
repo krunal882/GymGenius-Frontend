@@ -54,24 +54,16 @@ export default {
     },
   },
   methods: {
-    exploreClicked(foodItem) {
-      this.$emit("explore", foodItem);
-    },
     imgPath(foodItemName) {
       const imgPath = `../../assets/img/foodItem/${foodItemName}.jpg`;
       return imgPath;
     },
     editClick(foodItem) {
-      this.$emit("edit-exercise", foodItem);
+      this.$emit("edit-foodItem", foodItem);
     },
     deleteClick(foodItem) {
-      const userId = this.$store.state.userModule.userId;
-      const exerciseId = foodItem._id;
-      this.$store.dispatch("bookmarkItem", {
-        userId,
-        itemId: exerciseId,
-        itemType: "exercise",
-      });
+      this.$emit("remove-foodItem", foodItem);
+
     },
     loadData() {
       setTimeout(() => {
