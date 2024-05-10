@@ -1,6 +1,17 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit } from "vuex";
 
+interface Yoga {
+  category_name: string;
+  english_name: string;
+  sanskrit_name_adapted: string;
+  sanskrit_name: string;
+  translation_name: string;
+  pose_description: string;
+  pose_benefits: string;
+  instructions: string;
+}
+
 interface State {
   yoga: any[]; // Adjust the type according to your Yoga object structure
 }
@@ -27,17 +38,13 @@ const actions = {
     try {
       let url = "http://localhost:3000/yoga-poses";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
-        // Construct the query parameters from filteredFilters object
         const queryParams = Object.entries(filteredFilters)
           .map(([key, value]) => {
-            // Check if the value is an array
             if (Array.isArray(value)) {
-              // If it's an array, create separate parameters for each value
               return value
                 .map((v) => `${key}=${encodeURIComponent(v)}`)
                 .join("&");
             } else {
-              // Otherwise, create a single parameter
               return `${key}=${encodeURIComponent(value)}`;
             }
           })
@@ -57,6 +64,22 @@ const actions = {
     } catch (error) {
       console.error("Error fetching yoga-poses:", error);
     }
+  },
+  async editYoga(
+    { commit }: { commit: Commit },
+    { id, yoga }: { id: string; yoga: Yoga }
+  ) {
+    console.log(yoga, id);
+    const url = `http://localhost:3000/yoga-poses/updateYoga?id=${id}`;
+    const response = await axios.patch(url, yoga);
+    console.log(response.data);
+  },
+
+  async removeYoga({ commit }: { commit: Commit }, { id }: { id: string }) {
+    console.log(id);
+    const url = `http://localhost:3000/yoga-poses/deleteYoga?id=${id}`;
+    const response = await axios.delete(url);
+    console.log(response);
   },
 };
 

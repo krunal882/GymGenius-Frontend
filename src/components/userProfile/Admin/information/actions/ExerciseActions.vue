@@ -101,13 +101,7 @@ export default {
       this.$emit("edit-exercise", exercise);
     },
     deleteClick(exercise) {
-      const userId = this.$store.state.userModule.userId;
-      const exerciseId = exercise._id;
-      this.$store.dispatch("bookmarkItem", {
-        userId,
-        itemId: exerciseId,
-        itemType: "exercise",
-      });
+      this.$emit("remove-exercise", exercise);
     },
     loadData() {
       setTimeout(() => {

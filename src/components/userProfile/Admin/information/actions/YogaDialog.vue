@@ -4,20 +4,19 @@
     max-width="800"
     @click:outside="handleClickOutside"
   >
-    <!-- Adjusted max-width to 800 for a larger dialog -->
     <v-card>
       <v-card-title> Edit Yoga-pose </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <div class="d-flex flex-wrap">
-            <v-text-field
-              :rules="Rules"
+            <v-select
               v-model="yoga.category_name"
+              :items="category"
               label="category"
               variant="outlined"
               required
               class="mr-4 mb-4"
-            ></v-text-field>
+            ></v-select>
             <v-text-field
               :rules="Rules"
               v-model="yoga.english_name"
@@ -27,18 +26,17 @@
               class="mb-4"
             ></v-text-field>
           </div>
-          <v-text-field
+          <v-textarea
             :rules="Rules"
             v-model="yoga.category_description"
             label="category_description"
             variant="outlined"
             required
             class="mb-4"
-          ></v-text-field>
+          ></v-textarea>
           <div class="d-flex">
             <v-text-field
               v-model="yoga.sanskrit_name"
-              :items="forceTypes"
               label="sanskrit name"
               required
               variant="outlined"
@@ -46,7 +44,6 @@
             ></v-text-field>
             <v-text-field
               v-model="yoga.sanskrit_name_adapted"
-              :items="levelTypes"
               label="sanskrit name adapted"
               required
               variant="outlined"
@@ -55,28 +52,27 @@
           </div>
           <v-text-field
             v-model="yoga.translation_name"
-            :items="levelTypes"
             label="translation_name"
             required
             variant="outlined"
             class="mb-4"
           ></v-text-field>
-          <v-text-area
+          <v-textarea
             :rules="Rules"
             v-model="yoga.pose_description"
             label="pose description"
             variant="outlined"
             required
             class="mr-4 mb-4"
-          ></v-text-area>
-          <v-text-area
+          ></v-textarea>
+          <v-textarea
             :rules="Rules"
             v-model="yoga.pose_benefits"
             label="pose benefits"
             variant="outlined"
             required
             class="mr-4 mb-4"
-          ></v-text-area>
+          ></v-textarea>
         </v-form>
       </v-card-text>
       <v-card-actions>
@@ -96,7 +92,19 @@ export default {
   },
   data() {
     return {
-      // Values for the level types
+      category: [
+        "Core Yoga",
+        "Chest Opening Yoga",
+        "Seated Yoga",
+        "Strengthening Yoga",
+        "Standing Yoga",
+        "Restorative Yoga",
+        "Arm Balance Yoga",
+        "Inversion Yoga",
+        "Backbend Yoga",
+        "Forward Bend Yoga",
+        "Hip Opening Yoga",
+      ],
       dialog: false,
       valid: true,
       yoga: {
@@ -109,6 +117,10 @@ export default {
         pose_description: "",
         pose_benefits: "",
       },
+      Rules: [
+        (v) => !!v || "Field is Required",
+        (v) => (v.trim && !!v.trim()) || "Field cannot contain only spaces",
+      ],
     };
   },
   watch: {

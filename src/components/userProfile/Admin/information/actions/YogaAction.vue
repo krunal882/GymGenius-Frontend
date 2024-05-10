@@ -81,19 +81,12 @@ export default {
       // Emit an event named "explore" when the button is clicked
       this.$emit("explore", yoga);
     },
-    bookmark(yoga) {
-      const userId = this.$store.state.userModule.userId;
-      console.log(userId, yoga._id);
-      const yogaId = yoga._id;
-      this.$store.dispatch("bookmarkItem", {
-        userId,
-        itemId: yogaId,
-        itemType: "yoga",
-      });
-    },
+
     editClick(yoga) {
-      console.log("hi");
       this.$emit("edit-yoga", yoga);
+    },
+    deleteClick(yoga) {
+      this.$emit("remove-yoga", yoga);
     },
     loadData() {
       setTimeout(() => {

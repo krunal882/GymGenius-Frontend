@@ -20,7 +20,7 @@
             <YogaAdmin />
           </template>
           <template v-if="tab === 3">
-            <YogaAdmin />
+            <DietAdmin />
           </template>
           <template v-if="tab === 4">
             <NutritionAdmin />
@@ -35,11 +35,13 @@
 import ExerciseAdmin from "./information/ExerciseAdmin.vue";
 import YogaAdmin from "./information/YogaAdmin.vue";
 import NutritionAdmin from "./information/NutritionAdmin.vue";
+import DietAdmin from "./information/DietAdmin.vue";
 export default {
   components: {
     ExerciseAdmin,
     YogaAdmin,
     NutritionAdmin,
+    DietAdmin,
   },
   data() {
     return {

@@ -1,11 +1,21 @@
 <template>
   <div>
     <ProductSearch @search="handleSearch" />
-    <ExerciseActions :exercises="exercises" @edit-exercise="openEditDialog" />
+    <ExerciseActions
+      :exercises="exercises"
+      @edit-exercise="openEditDialog"
+      @remove-exercise="openRemoveDialog"
+    />
     <ExerciseDialog
       :exerciseData="selectedExercise"
       :dialogOpen="dialogOpen"
       @close-dialog="closeEditDialog"
+    />
+    <RemoveItem
+      :action="removeExercise"
+      :item="selectedExercise"
+      :dialogOpen="removeDialogOpen"
+      @close-dialog="closeRemoveDialog"
     />
   </div>
 </template>
@@ -14,11 +24,13 @@
 import ProductSearch from "@/components/store/storeComponents/ProductSearch.vue";
 import ExerciseActions from "./actions/ExerciseActions.vue";
 import ExerciseDialog from "./actions/ExerciseDialog.vue";
+import RemoveItem from "./actions/removeItem/RemoveItem.vue";
 export default {
   components: {
     ProductSearch,
     ExerciseActions,
     ExerciseDialog,
+    RemoveItem,
   },
   data() {
     return {
@@ -26,6 +38,7 @@ export default {
       exercise: [], // Your array of exercises
       selectedExercise: null,
       dialogOpen: false,
+      removeDialogOpen: false,
     };
   },
   computed: {
@@ -41,8 +54,14 @@ export default {
     closeEditDialog() {
       this.dialogOpen = false;
     },
+    openRemoveDialog(exercise) {
+      this.selectedExercise = exercise;
+      this.removeDialogOpen = true;
+    },
+    closeRemoveDialog() {
+      this.removeDialogOpen = false;
+    },
     handleSearch(searchItem) {
-      console.log(searchItem);
       this.selectedItem = searchItem;
 
       this.fetchExercisesWithFilters({ name: this.selectedItem });
