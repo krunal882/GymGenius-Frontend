@@ -1,37 +1,74 @@
 import axios, { AxiosResponse } from "axios";
-import { TrackOpTypes } from "vue";
 import { Commit, Dispatch } from "vuex";
-
-interface User {
+interface UserInfo {
   _id: string;
   name: string;
   email: string;
   age: number;
+  number: number;
   role: string;
+  password: string;
+}
+
+interface ProductInfo {
+  _id: string;
+  category: string;
+  src: string;
+  title: string;
+  price: number;
+  original_price: string;
+  off: string;
   state: string;
 }
 
+interface OrderData {
+  userId: string;
+  productInfo: ProductInfo[];
+}
+
 interface State {
-  user: User | null;
+  userInfo: UserInfo[];
+  productData: OrderData[];
 }
 
 const state: State = {
-  user: null, // Initialize user as null
+  userInfo: [],
+  productData: [],
 };
 
 const mutations = {
   setUsers(state: State, data: any) {
-    state.user = data;
-    console.log(state.user);
+    state.userInfo = data;
+  },
+  setOrders(state: State, products: any) {
+    state.productData = products;
   },
 };
 const actions = {
-  async getAllUser({ commit }: { commit: Commit }) {
+  async getAllUser(
+    {
+      commit,
+    }: {
+      commit: Commit;
+    },
+    { page, limit }: { page: number; limit: number }
+  ) {
     try {
-      const url = "http://localhost:3000/auth/users";
+      const url = `http://localhost:3000/auth/users?page=1&limit=10`;
       const response = await axios.get(url);
       const users = response.data;
       commit("setUsers", users);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
+  async getAllOrders({ commit }: { commit: Commit }) {
+    try {
+      const url = "http://localhost:3000/store/orders";
+      const response = await axios.get(url);
+      const products = response.data;
+      commit("setOrders", products);
     } catch (error) {
       console.log(error);
     }

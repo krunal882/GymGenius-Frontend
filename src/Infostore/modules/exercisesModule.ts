@@ -15,7 +15,8 @@ interface Exercise {
 }
 
 interface State {
-  exercises: any[]; // Adjust the type according to your exercise object structure
+  exercises: any[];
+  exerciseSearch: any[];
 }
 
 interface FilteredFilters {
@@ -24,12 +25,15 @@ interface FilteredFilters {
 
 const state: State = {
   exercises: [],
+  exerciseSearch: [],
 };
 
 const mutations = {
   setExercises(state: State, exercises: any[]) {
-    // Adjust the type according to your exercise object structure
     state.exercises = exercises;
+  },
+  setExerciseSearch(state: State, exercises: any[]) {
+    state.exerciseSearch = exercises;
   },
 };
 
@@ -39,20 +43,15 @@ const actions = {
     filteredFilters: FilteredFilters
   ) {
     try {
-      // console.log(filteredFilters);
       let url = "http://localhost:3000/exercises";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
-        // Construct the query parameters from filteredFilters object
         const queryParams = Object.entries(filteredFilters)
           .map(([key, value]) => {
-            // Check if the value is an array
             if (Array.isArray(value)) {
-              // If it's an array, create separate parameters for each value
               return value
                 .map((v) => `${key}=${encodeURIComponent(v)}`)
                 .join("&");
             } else {
-              // Otherwise, create a single parameter
               return `${key}=${encodeURIComponent(value)}`;
             }
           })
@@ -64,26 +63,27 @@ const actions = {
       }
 
       const response: AxiosResponse = await axios.get(url);
-      console.log(response.data);
       commit("setExercises", response.data);
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
   },
+  async searchExercise({ commit }: { commit: Commit }, name: string) {
+    const url = `http://localhost:3000/exercises/filtered?name=${name}`;
+    const response = await axios.get(url);
+    commit("setExerciseSearch", response.data);
+  },
+
   async editExercise(
     { commit }: { commit: Commit },
     { id, exercise }: { id: string; exercise: Exercise }
   ) {
-    console.log(exercise);
     const url = `http://localhost:3000/exercises/updateExercise?id=${id}`;
     const response = await axios.patch(url, exercise);
-    console.log(response.data);
   },
   async removeExercise({ commit }: { commit: Commit }, { id }: { id: string }) {
-    console.log(id);
     const url = `http://localhost:3000/exercises/deleteExercise?id=${id}`;
     const response = await axios.delete(url);
-    console.log(response.data);
   },
 };
 

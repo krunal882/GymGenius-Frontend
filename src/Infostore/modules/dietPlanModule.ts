@@ -3,6 +3,7 @@ import { Commit } from "vuex";
 
 interface State {
   dietPlan: any[];
+  dietSearch: any[];
 }
 
 interface FilteredFilters {
@@ -11,11 +12,15 @@ interface FilteredFilters {
 
 const state: State = {
   dietPlan: [],
+  dietSearch: [],
 };
 
 const mutations = {
   setDietPlan(state: State, dietPlan: any[]) {
     state.dietPlan = dietPlan;
+  },
+  setDietSearch(state: State, dietPlan: any[]) {
+    state.dietSearch = dietPlan;
   },
 };
 
@@ -47,10 +52,15 @@ const actions = {
       console.error("Error fetching dietPlan:", error);
     }
   },
+  async searchDiet({ commit }: { commit: Commit }, name: string) {
+    const url = `http://localhost:3000/diet-plans/filter?name=${name}`;
+    const response = await axios.get(url);
+    commit("setDietSearch", response.data);
+  },
+
   async removeDiet({ commit }: { commit: Commit }, { id }: { id: string }) {
     const url = `http://localhost:3000/diet-plans/delete?id=${id}`;
     const response = await axios.delete(url);
-    console.log(response);
   },
 };
 

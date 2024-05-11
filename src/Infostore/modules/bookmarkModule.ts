@@ -35,7 +35,6 @@ const mutations = {
       default:
         console.error("Invalid category:", payload.category);
     }
-    console.log(state);
   },
 };
 

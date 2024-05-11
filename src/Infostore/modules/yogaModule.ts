@@ -13,7 +13,8 @@ interface Yoga {
 }
 
 interface State {
-  yoga: any[]; // Adjust the type according to your Yoga object structure
+  yoga: any[];
+  yogaSearch: any[];
 }
 
 interface FilteredFilters {
@@ -22,12 +23,15 @@ interface FilteredFilters {
 
 const state: State = {
   yoga: [],
+  yogaSearch: [],
 };
 
 const mutations = {
   setYoga(state: State, yoga: any[]) {
-    // Adjust the type according to your Yoga object structure
     state.yoga = yoga;
+  },
+  setYogaSearch(state: State, yoga: any[]) {
+    state.yogaSearch = yoga;
   },
 };
 const actions = {
@@ -53,33 +57,33 @@ const actions = {
         url += `/filtered?${queryParams}`;
       } else {
         url += "?limit=10";
-        console.log(url);
       }
 
-      // Make the GET request with the constructed URL
       const response: AxiosResponse = await axios.get(url);
 
-      // Commit mutation to update state with fetched Yoga
       commit("setYoga", response.data);
     } catch (error) {
       console.error("Error fetching yoga-poses:", error);
     }
   },
+
+  async searchYoga({ commit }: { commit: Commit }, name: string) {
+    const url = `http://localhost:3000/yoga-poses/filtered?name=${name}`;
+    const response = await axios.get(url);
+    commit("setYogaSearch", response.data);
+  },
+
   async editYoga(
     { commit }: { commit: Commit },
     { id, yoga }: { id: string; yoga: Yoga }
   ) {
-    console.log(yoga, id);
     const url = `http://localhost:3000/yoga-poses/updateYoga?id=${id}`;
     const response = await axios.patch(url, yoga);
-    console.log(response.data);
   },
 
   async removeYoga({ commit }: { commit: Commit }, { id }: { id: string }) {
-    console.log(id);
     const url = `http://localhost:3000/yoga-poses/deleteYoga?id=${id}`;
     const response = await axios.delete(url);
-    console.log(response);
   },
 };
 

@@ -1,12 +1,12 @@
 import axios, { AxiosResponse } from "axios";
-import { Commit, GetterTree, ActionTree } from "vuex";
+import { Commit, GetterTree } from "vuex";
 
 interface State {
   product: any[]; // Adjust the type according to your product object structure
 }
 
 interface FilteredFilters {
-  [key: string]: string | string[];
+  [key: string]: boolean | number;
 }
 
 const state: State = {
@@ -29,8 +29,6 @@ const actions = {
   ) {
     try {
       let url = "http://localhost:3000/store";
-
-      // If filters are provided, add them to the URL
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
         const queryParams = Object.entries(filteredFilters)
           .map(([key, value]) => {
@@ -45,7 +43,6 @@ const actions = {
           .join("&");
 
         url += `/filtered?${queryParams}`;
-        // If limit is specified, add it as a query parameter
       } else {
         // If no filters are provided, and limit is specified, construct the URL accordingly
         if (limit) {

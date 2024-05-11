@@ -1,12 +1,16 @@
-import ForgotPassword from "@/pages/userAuth/ForgotPassword.vue";
 import axios, { AxiosResponse } from "axios";
 import { Commit, GetterTree, ActionTree } from "vuex";
-import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
+// import { toast } from "vue3-toastify";
+import Cookies from "js-cookie";
 
 interface State {
-  user: object;
-  token: string; // Adjust the type according to your product object structure
+  userId: string;
+  role: string;
+  token: string;
+  name: string; // Adjust the type according to your product object structure
+  email: string;
+  age: number;
+  number: number;
 }
 
 // interface User {
@@ -42,50 +46,54 @@ interface Age {
 }
 
 const state: State = {
-  user: {},
+  userId: "",
+  role: "",
   token: "",
+  name: "",
+  email: "",
+  age: 0,
+  number: 0,
 };
 
 const mutations = {
+  setToken(state: State, data: any) {
+    state.token = data.token;
+    Cookies.set("token", data.token, { expires: 30 });
+  },
   setUser(state: State, data: any) {
-    const userInfo = JSON.parse(localStorage.getItem("userInfo") || "{}");
-    if (
-      userInfo &&
-      userInfo.userModule &&
-      userInfo.userModule.user &&
-      userInfo.userModule.user._id &&
-      data.user &&
-      data.user._id &&
-      userInfo.userModule.user._id === data.user._id
-    ) {
-      return;
-    } else {
-      console.log(data.user);
-      state.user = data.user;
-      state.token = data.token;
-      localStorage.setItem("userInfo", JSON.stringify(data));
-    }
-    document.cookie = `Authorization=Bearer ${data.token}`; // 604800 seconds = 7 days
+    state.name = data.name;
+    state.email = data.email;
+    state.age = data.age;
+    state.number = data.number;
   },
 };
 
 const actions = {
+  async fetchUser({ commit }: { commit: Commit }, { id }: { id: string }) {
+    try {
+      const url = `http://localhost:3000/auth/filtered?id=${id}`;
+      const response = await axios.get(url);
+      commit("setUser", response.data[0]);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async userLogin(
     { commit }: { commit: Commit },
     { email, password }: { email: Email; password: Password }
   ) {
     try {
-      console.log(email);
       const url = "http://localhost:3000/auth/login";
 
       const response = await axios.post(url, {
         email,
         password,
       });
-      console.log(response.data);
       const subject = "Account Login";
       const html = "<p>successfully loggedIn to your account</p>";
-      commit("setUser", response.data);
+      const token = response.data.token;
+      commit("setToken", response.data);
       // await axios.post("http://localhost:3000/mailer/email", {
       //   recipients: email,
       //   subject,
@@ -114,10 +122,8 @@ const actions = {
       number: string;
     }
   ) {
-    console.log(name, email, password, name, age, confirmPassword);
     try {
       const url = "http://localhost:3000/auth/signup";
-      console.log(url);
       const response = await axios.post(url, {
         name,
         email,
@@ -126,8 +132,7 @@ const actions = {
         age,
         number,
       });
-      console.log(response);
-      commit("setUser", response.data);
+      commit("setToken", response.data);
       const subject = "Account Signup";
       const html = "<p>successfully created account</p>";
       // await axios.post("http://localhost:3000/mailer/email", {
@@ -146,11 +151,9 @@ const actions = {
   ) {
     try {
       const url = "http://localhost:3000/auth/forgotPassword";
-      console.log(email);
       const response = await axios.post(url, {
         email,
       });
-      console.log(response.data);
 
       const subject = "Reset Password";
       const link = `http://localhost:8081/resetPassword/${response.data}`;
@@ -162,12 +165,12 @@ const actions = {
         html,
       });
 
-      if (response.status === 201) {
-        toast.success("Password reset email sent successfully");
-      } else {
-        console.log("Error in sending mail");
-        // Show an error message to the user if the request was not successful
-      }
+      // if (response.status === 201) {
+      //   toast.success("Password reset email sent successfully");
+      // } else {
+      //   console.log("Error in sending mail");
+      //   // Show an error message to the user if the request was not successful
+      // }
     } catch (error) {
       console.log("Error in sending mail");
     }
@@ -188,13 +191,11 @@ const actions = {
     try {
       const url = "http://localhost:3000/auth/resetPassword";
 
-      console.log(newPassword, newConfirmPassword);
       const response = await axios.post(url, {
         newPassword,
         newConfirmPassword,
         resetPasswordToken,
       });
-      console.log(response);
     } catch (error) {
       console.log("Error in Resetting password", error);
     }
@@ -206,26 +207,29 @@ const actions = {
       name,
       age,
       id,
-    }: { email: Email; name: string; age: Number; id: string }
+      number,
+      role,
+    }: {
+      email: Email;
+      name: string;
+      age: Number;
+      id: string;
+      number: Number;
+      role: string;
+    }
   ) {
     try {
       const url = `http://localhost:3000/auth/updateUser?id=${id}`;
-      console.log(url);
       const response = await axios.patch(url, {
         email,
         name,
         age,
+        number,
+        role,
       });
-      console.log(age);
     } catch (error) {
       console.log("error in update user information", error);
     }
-  },
-};
-
-const getters: GetterTree<State, any> = {
-  getProduct(state: State): any {
-    return state.user;
   },
 };
 
@@ -233,5 +237,4 @@ export default {
   state,
   mutations,
   actions,
-  getters,
 };

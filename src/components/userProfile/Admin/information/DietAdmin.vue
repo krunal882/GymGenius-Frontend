@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     dietPlans() {
-      return this.$store.state.dietPlanModule.dietPlan;
+      return this.$store.state.dietPlanModule.dietSearch;
     },
   },
   methods: {
@@ -62,14 +62,13 @@ export default {
       this.removeDialogOpen = false;
     },
     handleSearch(searchItem) {
-      console.log(searchItem);
       this.selectedItem = searchItem;
 
-      this.fetchDietPlanWithFilters({ name: this.selectedItem });
+      this.fetchDietPlanWithFilters(this.selectedItem);
     },
-    async fetchDietPlanWithFilters(filteredFilters) {
+    async fetchDietPlanWithFilters(name) {
       try {
-        await this.$store.dispatch("fetchDietPlan", filteredFilters);
+        await this.$store.dispatch("searchDiet", name);
       } catch (error) {
         console.error("Error fetching fetchDietPlan with filters:", error);
       }
