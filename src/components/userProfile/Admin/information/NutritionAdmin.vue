@@ -43,7 +43,7 @@ export default {
   },
   computed: {
     foodItems() {
-      return this.$store.state.foodItemModule.foodItem;
+      return this.$store.state.foodItemModule.searchFoodItem;
     },
   },
   methods: {
@@ -62,14 +62,13 @@ export default {
       this.removeDialogOpen = false;
     },
     handleSearch(searchItem) {
-      console.log(searchItem);
       this.selectedItem = searchItem;
 
-      this.fetchFoodItemWithFilters({ name: this.selectedItem });
+      this.fetchFoodItemWithFilters(this.selectedItem);
     },
-    async fetchFoodItemWithFilters(filteredFilters) {
+    async fetchFoodItemWithFilters(name) {
       try {
-        await this.$store.dispatch("fetchFoodItem", filteredFilters);
+        await this.$store.dispatch("searchFoodItem", name);
       } catch (error) {
         console.error("Error fetching exercises with filters:", error);
       }
