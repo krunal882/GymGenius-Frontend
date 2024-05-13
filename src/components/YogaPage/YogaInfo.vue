@@ -28,7 +28,6 @@
           "
         />
 
-        <!-- Content container -->
         <div style="flex: 1; padding: 16px">
           <v-card-title class="pt-4"
             >Category: {{ yoga.category_name }}</v-card-title
@@ -46,7 +45,6 @@
           >
 
           <v-card-actions style="justify-content: space-between">
-            <!-- Emit an event when the Explore button is clicked -->
             <v-btn color="orange" @click="exploreClicked(yoga)">Explore</v-btn>
             <v-btn color="orange" @click="bookmark(yoga)">Bookmark</v-btn>
           </v-card-actions>
@@ -76,12 +74,10 @@ export default {
   },
   methods: {
     exploreClicked(yoga) {
-      // Emit an event named "explore" when the button is clicked
       this.$emit("explore", yoga);
     },
     bookmark(yoga) {
       const userId = this.$store.state.userModule.userId;
-      console.log(userId, yoga._id);
       const yogaId = yoga._id;
       this.$store.dispatch("bookmarkItem", {
         userId,

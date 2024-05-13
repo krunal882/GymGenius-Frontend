@@ -72,13 +72,11 @@ export default {
   methods: {
     resetPassword() {
       const resetToken = this.$route.params.token;
-      console.log(this.password, this.confirmPassword, resetToken);
       this.$store.dispatch("resetPassword", {
         newPassword: this.password,
         newConfirmPassword: this.confirmPassword,
         resetPasswordToken: resetToken,
       });
-      // Perform password reset logic here
     },
     togglePasswordVisibility() {
       this.passwordVisible = !this.passwordVisible;

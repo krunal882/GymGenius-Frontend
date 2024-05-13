@@ -4,7 +4,6 @@
     max-width="1500"
     @click:outside="handleClickOutside"
   >
-    <!-- Adjusted max-width to 800 for a larger dialog -->
     <v-card>
       <v-card-title> Edit FoodItem </v-card-title>
       <v-card-text>
@@ -246,8 +245,7 @@ export default {
     },
     async add(foodItem) {
       console.log(foodItem);
-      // const funFactsArray = foodItem.fun_facts_and_trivia.split("\n");
-      // foodItem.fun_facts_and_trivia = funFactsArray;
+
       await this.$store.dispatch("addFoodItem", { foodItem });
     },
   },

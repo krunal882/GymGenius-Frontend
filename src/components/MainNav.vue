@@ -43,16 +43,21 @@
           </li>
         </ul>
       </div>
-      <router-link class="" to="/authentication">
-        <v-btn variant="outlined" color="white">Login/Register</v-btn>
-      </router-link>
+      <div v-if="!this.$store.state.userModule.userId">
+        <router-link class="" to="/authentication">
+          <v-btn variant="outlined" color="white">Login/Register</v-btn>
+        </router-link>
+      </div>
     </div>
     <ProfileMenu style="margin-right: 0" />
   </nav>
 </template>
 
 <script>
+import Cookies from "js-cookie";
+
 import ProfileMenu from "./ProfileMenu.vue";
+import { jwtDecode } from "jwt-decode";
 
 export default {
   components: {
@@ -63,18 +68,18 @@ export default {
       activeNavItem: 0,
       navItems: [
         { label: "Home", route: "/" },
-        { label: "Exercises" },
-        { label: "Yoga" },
-        { label: "Nutrition" },
-        { label: "Shop", route: "store" },
-        { label: "Blogs" },
+        { label: "Exercises", route: "/exercise" },
+        { label: "Yoga", route: "/YogaPoses" },
+        { label: "Nutrition", route: "/foodSection" },
+        { label: "Shop", route: "/store" },
         { label: "Analyzer", route: "/fitnessTrackers" },
-      ], // Track the active navigation item
+      ],
+      user: null,
     };
   },
   methods: {
     setActiveNavItem(index) {
-      this.activeNavItem = index; // Update active navigation item
+      this.activeNavItem = index;
     },
   },
   watch: {
@@ -86,7 +91,6 @@ export default {
     },
   },
   created() {
-    // Set activeNavItem based on initial route
     switch (this.$route.path) {
       case "/":
         this.activeNavItem = 0;
@@ -97,7 +101,7 @@ export default {
       case "/yoga":
         this.activeNavItem = 2;
         break;
-      case "/nutrition":
+      case "/foodSection":
         this.activeNavItem = 3;
         break;
       case "/store":
@@ -111,24 +115,24 @@ export default {
         break;
 
       case "/authentication":
-        this.activeNavItem = -1; // Set activeNavItem to -1 for the login/register route
+        this.activeNavItem = -1; 
         break;
 
       default:
     }
   },
-  // mounted() {
-  //   const script = document.createElement("script");
-  //   script.src = "https://www.chatbase.co/embed.min.js";
-  //   script.defer = true;
-  //   script.setAttribute("chatbotId", "_goC7mZy5K-mr7xGihzhw");
-  //   script.setAttribute("domain", "www.chatbase.co");
-  //   document.body.appendChild(script);
-  // },
+  mounted() {
+    const token = Cookies.get("token");
+    if (token) {
+      const decodedToken = jwtDecode(token); 
+      this.$store.dispatch("fetchUser", { id: decodedToken.userId });
+      this.$store.state.userModule.userId = decodedToken.userId;
+      this.$store.state.userModule.role = decodedToken.role;
+    }
+  },
 };
 </script>
 
-<!-- Add "scoped" attribute to limit CSS to this component only -->
 <style scoped>
 @import url("https://fonts.googleapis.com/css?family=Poppins:400,500,600,700&display=swap");
 
@@ -139,7 +143,7 @@ body {
 .my-navbar {
   background-color: #1c2331;
   width: 100%;
-  z-index: 1000; /* Ensure navbar stays on top */
+  z-index: 1000;
 }
 .nav-item.active .nav-link {
   color: rgb(250, 0, 0) !important;
@@ -148,6 +152,7 @@ body {
 }
 
 .navbar-brand {
+  margin-left: 10px;
   font-weight: bold;
 }
 .nav-link {

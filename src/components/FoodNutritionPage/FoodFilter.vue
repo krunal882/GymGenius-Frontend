@@ -233,21 +233,20 @@ export default {
         filteredFilters.name = this.selectedItem;
       }
 
-      // Check if protein range is modified before adding it to filteredFilters
       if (
         this.caloriesRange[0] !== this.minCalories ||
         this.caloriesRange[1] !== this.maxCalories
       ) {
         filteredFilters.calories_min = this.caloriesRange[0];
-        filteredFilters.calories_max = this.caloriesRange[1]; // Assign the maximum value of the protein range to protein_max
+        filteredFilters.calories_max = this.caloriesRange[1];
       }
 
       if (
         this.proteinRange[0] !== this.minProtein ||
         this.proteinRange[1] !== this.maxProtein
       ) {
-        filteredFilters.protein_min = this.proteinRange[0]; // Assign the minimum value of the protein range to protein_min
-        filteredFilters.protein_max = this.proteinRange[1]; // Assign the maximum value of the protein range to protein_max
+        filteredFilters.protein_min = this.proteinRange[0];
+        filteredFilters.protein_max = this.proteinRange[1];
       }
 
       if (Object.keys(filteredFilters).length > 0) {
@@ -257,7 +256,6 @@ export default {
       }
     },
     handleReset() {
-      // Reset all filter values to defaults
       this.caloriesRange = [this.minCalories, this.maxCalories];
       this.proteinRange = [this.minProtein, this.maxProtein];
 

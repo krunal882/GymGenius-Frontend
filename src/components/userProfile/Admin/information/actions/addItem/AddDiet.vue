@@ -1,6 +1,5 @@
 <template>
   <v-dialog v-model="dialog" max-width="1500">
-    <!-- Adjusted max-width to 800 for a larger dialog -->
     <v-card>
       <v-card-title> Edit DietPlan </v-card-title>
       <v-card-text>

@@ -53,15 +53,14 @@ const router = createRouter({
       name: "GymGenius",
     },
     {
-      path: "/:catchAll(.*)", // Wildcard path to match any route
-      component: NotFoundPage, // Render the 404 page component
+      path: "/:catchAll(.*)",
+      component: NotFoundPage,
       name: "NotFound",
     },
   ],
 });
 
 router.beforeEach((to, from, next) => {
-  // Scroll to the top of the page
   window.scrollTo(0, 0);
   next();
 });

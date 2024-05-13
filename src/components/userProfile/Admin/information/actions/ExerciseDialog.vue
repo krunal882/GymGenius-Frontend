@@ -4,7 +4,6 @@
     max-width="800"
     @click:outside="handleClickOutside"
   >
-    <!-- Adjusted max-width to 800 for a larger dialog -->
     <v-card>
       <v-card-title> Edit Exercise </v-card-title>
       <v-card-text>
@@ -107,7 +106,7 @@ export default {
   data() {
     return {
       forceTypes: ["push", "pull", "static"],
-      levelTypes: ["beginner", "intermediate", "expert"], // Values for the level types
+      levelTypes: ["beginner", "intermediate", "expert"], 
       dialog: false,
       valid: true,
       exercise: {

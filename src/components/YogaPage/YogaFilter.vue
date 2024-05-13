@@ -52,7 +52,6 @@ export default {
   data() {
     return {
       selectedFilters: {
-        // Initialize with default filter values if needed
       },
       selectedCategory: [],
 
@@ -87,7 +86,6 @@ export default {
       }
     },
     handleReset() {
-      // Reset all filter values to defaults
       this.selectedCategory = [];
     },
   },

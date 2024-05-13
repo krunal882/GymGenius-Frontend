@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1 class="headline mb-5">Your Shopping Cart</h1>
+    <h1 class="headline mb-5 text-center">Your Shopping Cart</h1>
 
     <div>
       <CartProduct :product="cartItems" />
@@ -17,10 +17,9 @@ export default {
   components: {
     CartProduct,
   },
-  mounted() {
-    // Fetch product data when the component is mounted
-    // this.fetchCart(this.cartItem._id);
-    console.log(this.$store.user);
+  created() {
+    const id = this.$store.state.userModule.userId;
+    this.$store.dispatch("fetchCart", { userId: id, status: "pending" });
   },
   computed: {
     cartItems() {

@@ -91,7 +91,7 @@ export default {
       gender: "Male",
       loading: false,
       fatResult: null,
-      activityFactor: 1.2, // Adding activityFactor field
+      activityFactor: 1.2, 
     };
   },
   methods: {
@@ -99,14 +99,12 @@ export default {
       this.fatResult = null;
       this.loading = true;
       setTimeout(() => {
-        // Calculate BMR based on Mifflin-St Jeor equation
         let bmr;
         if (this.gender === "Male") {
           bmr = 10 * this.weight + 6.25 * this.height - 5 * this.age + 5;
         } else {
           bmr = 10 * this.weight + 6.25 * this.height - 5 * this.age - 161;
         }
-        // Adjust BMR based on activity level (activityFactor)
         const activityFactor = this.activityFactor;
         const totalCalories = bmr * activityFactor;
         this.fatResult = totalCalories;

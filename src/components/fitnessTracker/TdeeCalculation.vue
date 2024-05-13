@@ -137,11 +137,11 @@ export default {
     getGoalAdjustment(goal) {
       switch (goal) {
         case "Lose Weight":
-          return 0.9; // Subtract 10%
+          return 0.9;
         case "Maintain Weight":
-          return 1; // Keep as is
+          return 1; 
         case "Gain Muscle":
-          return 1.1; // Add 10%
+          return 1.1; 
         default:
           return 1;
       }

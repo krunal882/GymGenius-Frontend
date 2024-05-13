@@ -3,7 +3,6 @@
     <div v-if="bookmarkedYogas.length != 0">
       <v-col v-for="yoga in bookmarkedYogas" :key="yoga.id" cols="4">
         <v-card class="" width="900" style="display: flex">
-          <!-- Image container -->
           <div style="flex: 1; padding-right: 16px">
             <v-img height="300" :src="yoga.url_png">
               <v-card-title class="text-center"></v-card-title>
@@ -18,7 +17,6 @@
             "
           />
 
-          <!-- Content container -->
           <div style="flex: 1; padding: 16px">
             <v-card-title class="pt-4"
               >Category: {{ yoga.category_name }}</v-card-title
@@ -36,7 +34,6 @@
             >
 
             <v-card-actions style="justify-content: space-between">
-              <!-- Emit an event when the Explore button is clicked -->
               <v-btn color="orange" @click="undoBookmark(yoga)"
                 >Undo Bookmark</v-btn
               >

@@ -9,7 +9,7 @@
 
     <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading">
+        <h2 class="featurette-heading mt-0">
           Our Mission
           <span class="text-muted"
             >Empowering individuals to achieve their fitness goals.</span
@@ -24,12 +24,12 @@
           athlete, we're here to help you succeed every step of the way.
         </p>
       </div>
-      <div class="col-md-5">
-        <img
-          class="featurette-image img-fluid mx-auto"
-          src="https://via.placeholder.com/500"
+      <div class="col-md-5" style="height: fit-content">
+        <v-img
+          class="featurette-image img-fluid mx-auto image-hover-effect"
+          src="../assets/img/anastase-maragos-FP7cfYPPUKM-unsplash.jpg"
           alt="Generic placeholder image"
-        />
+        ></v-img>
       </div>
     </div>
 
@@ -37,7 +37,7 @@
 
     <div class="row featurette">
       <div class="col-md-7 order-md-2">
-        <h2 class="featurette-heading">
+        <h2 class="featurette-heading mt-0">
           Our Vision
           <span class="text-muted"
             >To become a leading provider of fitness solutions worldwide.</span
@@ -54,9 +54,9 @@
         </p>
       </div>
       <div class="col-md-5 order-md-1">
-        <img
-          class="featurette-image img-fluid mx-auto"
-          src="https://via.placeholder.com/500"
+        <v-img
+          class="featurette-image img-fluid mx-auto image-hover-effect"
+          src="../assets/img/values.jpg"
           alt="Generic placeholder image"
         />
       </div>
@@ -66,7 +66,7 @@
 
     <div class="row featurette">
       <div class="col-md-7">
-        <h2 class="featurette-heading">
+        <h2 class="featurette-heading mt-0">
           Our Values
           <span class="text-muted">Integrity, Innovation, Excellence.</span>
         </h2>
@@ -83,11 +83,11 @@
         </p>
       </div>
       <div class="col-md-5">
-        <img
-          class="featurette-image img-fluid mx-auto"
-          src="https://via.placeholder.com/500"
+        <v-img
+          class="featurette-image img-fluid mx-auto image-hover-effect"
+          src="../assets/img/landing page/values.jpg"
           alt="Generic placeholder image"
-        />
+        ></v-img>
       </div>
     </div>
 
@@ -100,25 +100,23 @@ export default {};
 </script>
 
 <style scoped>
-/* Featurettes
-------------------------- */
+
 
 .featurette-divider {
-  margin: 5rem 0; /* Space out the Bootstrap <hr> more */
+  margin: 5rem 0; 
 }
 
-/* Thin out the marketing headings */
 .featurette-heading {
   font-weight: 300;
   line-height: 1;
   letter-spacing: -0.05rem;
 }
 
-/* RESPONSIVE CSS
-  -------------------------------------------------- */
+.image-hover-effect:hover {
+  transform: scale(1.1);
+}
 
 @media (min-width: 40em) {
-  /* Bump up size of carousel content */
   .carousel-caption p {
     margin-bottom: 1.25rem;
     font-size: 1.25rem;

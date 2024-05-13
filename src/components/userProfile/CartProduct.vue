@@ -1,31 +1,30 @@
 <template>
   <v-container>
     <!-- Cart Items -->
-    <v-row class="mb-5">
-      {{ console.log(cartItems) }}
-      <v-col cols="12">
+    <v-row class="mb-5" v-if="product.length > 0">
+      <v-col cols="12" v-for="(item, index) in this.product" :key="index">
         <v-card class="cart-item">
           <v-row>
             <v-col cols="4">
               <v-img
-                :src="imgPath(cartItems.src, cartItems.category)"
+                :src="imgPath(item.src, item.category)"
                 aspect-ratio="1"
               ></v-img>
             </v-col>
             <v-col cols="8">
               <div class="item-details">
-                <h3>{{ cartItems.title }}</h3>
+                <h3>{{ item.title }}</h3>
                 <v-card-text class="pt-0">
                   <div class="d-flex flex-wrap">
                     <span
                       >Price:
-                      <v-chip color="green">{{ cartItems.price }}</v-chip></span
+                      <v-chip color="green">{{ item.price }}</v-chip></span
                     >
                     <span class="mx-4">
                       <v-chip
                         color="red"
                         style="text-decoration: line-through"
-                        >{{ cartItems.original_price }}</v-chip
+                        >{{ item.original_price }}</v-chip
                       >
                     </span>
                   </div>
@@ -33,18 +32,40 @@
                 <v-card-text>
                   <span
                     >Discount:
-                    <v-chip color="blue">{{ cartItems.off }}</v-chip></span
+                    <v-chip color="blue">{{ item.off }}</v-chip></span
                   >
                 </v-card-text>
-                <v-text-field
-                  key="cartItems._id"
-                  label="Quantity"
-                  type="number"
-                  outlined
-                  dense
-                  min="1"
-                ></v-text-field>
-                <v-btn @click="removeItem(item)" color="error" small
+                <div class="input-group plus-minus">
+                  <button
+                    class="btn btn-outline-secondary"
+                    :class="loading ? 'disabled' : ''"
+                    @click="addOrRemove(index, -1)"
+                    type="button"
+                  >
+                    -
+                  </button>
+                  <input
+                    type="number"
+                    v-model="qty[index]"
+                    class="form-control form-control-sm text-center"
+                    placeholder="1"
+                    aria-label="Example text with button addon"
+                    aria-describedby="button-addon1"
+                  />
+                  <button
+                    class="btn btn-outline-secondary"
+                    :class="loading ? 'disabled' : ''"
+                    @click="addOrRemove(index, 1)"
+                    type="button"
+                  >
+                    +
+                  </button>
+                </div>
+                <v-btn
+                  @click="removeItem(item)"
+                  color="error"
+                  small
+                  style="margin-top: 10px"
                   >Remove</v-btn
                 >
               </div>
@@ -54,16 +75,17 @@
       </v-col>
     </v-row>
 
-    <!-- Empty Cart Message -->
-    <!-- <v-alert v-else type="info" class="mb-5">Your cart is empty.</v-alert> -->
+    <v-alert v-else type="info" class="mb-5">
+      Your cart is empty. Feel free to explore our products and add them to your
+      cart.
+    </v-alert>
 
-    <!-- Cart Summary -->
     <v-card v-if="product.length > 0" class="cart-summary">
       <v-card-text>
         <h3 class="mb-3">Cart Summary</h3>
         <p>Total Items: {{ totalItems }}</p>
-        <p>Total Price: {{ totalPrice }}</p>
-        <v-btn color="primary" @click="proceedToCheckout"
+        <p>Total Price: {{ totalPrice }} ₹</p>
+        <v-btn color="primary" @click="proceedToCheckout(index)"
           >Proceed to Checkout</v-btn
         >
       </v-card-text>
@@ -72,75 +94,74 @@
 </template>
 
 <script>
-import { mapGetters, mapActions } from "vuex";
+import { mapActions } from "vuex";
 
 export default {
   props: {
-    product: { type: Object, required: true },
+    product: { type: Array, required: true },
   },
   data() {
-    // Initialize quantity for each item to 1
-    const quantity = {};
-    // this.product.forEach((item) => {
-    //   quantity[item.id] = 1;
-    // });
-
     return {
-      quantity: quantity,
+      loading: false,
+      qty: [],
     };
   },
   computed: {
-    ...mapGetters(["getCartItems", "totalItems", "totalPrice"]),
-    cartItems() {
-      return this.getCartItems;
-    },
     totalItems() {
-      return Object.values(this.quantity).reduce(
-        (total, qty) => total + qty,
-        0
-      );
+      return this.qty.reduce((total, qty) => total + qty, 0);
     },
     totalPrice() {
       return this.product.reduce(
-        (total, item) => total + item.price * this.quantity[item.id],
+        (total, item, index) => total + item.price * this.qty[index],
         0
       );
     },
   },
   methods: {
-    ...mapActions(["fetchCart", "proceedToCheckout"]),
+    ...mapActions(["fetchCart", "removeCart", "proceedToCheckout"]),
 
-    removeItem(item) {
-      const index = this.cartItems.findIndex((i) => i.id === item.id);
-      if (index !== -1) {
-        this.cartItems.splice(index, 1);
+    async addOrRemove(index, number) {
+      if (number == 1 && this.qty[index] < 10) {
+        this.qty[index]++;
+      } else if (number == -1 && this.qty[index] > 1) {
+        this.qty[index]--;
       }
     },
+    async removeItem(item) {
+      const id = item._id;
+      const userId = this.$store.state.userModule.userId;
+      this.removeCart({ productId: id, userId });
+    },
+
     imgPath(src, category) {
       const imgPath = `../../assets/img/products/${category}/${src}.jpg`;
+
       return imgPath;
     },
     proceedToCheckout() {
-      // Redirect to checkout page or perform necessary actions
-      console.log("Proceed to checkout");
+      const id = this.product.map((item) => item._id);
+      const userId = this.$store.state.userModule.userId;
+
+      this.$store.dispatch("purchase", {
+        title: "GymGenius products",
+        price: this.totalPrice,
+        quantity: this.totalItems,
+        productId: id,
+        userId: userId,
+      });
     },
   },
   watch: {
-    quantity: {
+    product: {
       handler() {
-        // Recalculate totalItems whenever the quantity changes
-        this.$nextTick(() => {
-          this.$forceUpdate();
-        });
+        this.qty = new Array(this.product.length).fill(1);
       },
+      immediate: true,
+      deep: true,
     },
   },
-  created() {
-    console.log("hi");
-    console.log(this.cartItem);
-    // Fetch cart items when the component is created
-    this.fetchCart({ id: this.product._id });
-    console.log(this.product._id);
+  mounted() {
+    this.qty = new Array(this.product.length).fill(1);
   },
 };
 </script>
@@ -170,5 +191,8 @@ export default {
   background-color: #f5f5f5;
   border-radius: 8px;
   padding: 20px;
+}
+.plus-minus input {
+  max-width: 50px;
 }
 </style>

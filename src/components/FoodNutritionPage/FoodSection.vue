@@ -13,7 +13,6 @@
           carbohydrates, fiber, protein, and fat content.Dive into a
           comprehensive overview of the food item recipes and serving ideas.
         </v-card-text>
-        <!-- <v-btn color="orange-lighten-2" variant="text"> Explore </v-btn> -->
       </v-card>
       <v-card width="400" class="mx-10 my-10 image-hover-effect">
         <router-link :to="{ name: 'dietPlan' }">
@@ -28,14 +27,6 @@
           serving sizes, and suggested meal ideas. Discover how this food can be
           incorporated into your diet for a healthier lifestyle.
         </v-card-text>
-        <!-- <v-btn
-          color="orange-lighten-2"
-          variant="text"
-          class="text-center"
-          style="justify-content-center"
-        >
-          Explore
-        </v-btn> -->
       </v-card>
     </v-row>
   </v-container>

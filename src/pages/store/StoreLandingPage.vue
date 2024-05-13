@@ -3,25 +3,49 @@
     <StoreCarousel />
     <p class="container slider">
       EQUIPMENTS
-      <a href="/" class="viewAll">view more</a>
+      <router-link class="viewAll" :to="{ name: 'equipments' }"
+        >view more</router-link
+      >
     </p>
-    <ProductCarousel :product="product" category="equipments" />
+    <ProductCarousel
+      :product="product"
+      category="equipments"
+      @product-selected="onProductSelected"
+    />
     <p class="container slider">
       SUPPLEMENTS
-      <a href="/" class="viewAll">view more</a>
+      <router-link class="viewAll" :to="{ name: 'supplements' }"
+        >view more</router-link
+      >
     </p>
-    <ProductCarousel :product="product" category="supplements" />
+    <ProductCarousel
+      :product="product"
+      category="supplements"
+      @product-selected="onProductSelected"
+    />
 
     <p class="container slider">
       CYCLES
-      <a href="/" class="viewAll">view more</a>
+      <router-link class="viewAll" :to="{ name: 'cycles' }"
+        >view more</router-link
+      >
     </p>
-    <ProductCarousel :product="product" category="cycles" />
+    <ProductCarousel
+      :product="product"
+      category="cycles"
+      @product-selected="onProductSelected"
+    />
     <p class="container slider">
       CARDIO
-      <a href="/" class="viewAll">view more</a>
+      <router-link class="viewAll" :to="{ name: 'cardio' }"
+        >view more</router-link
+      >
     </p>
-    <ProductCarousel :product="product" category="cardio" />
+    <ProductCarousel
+      :product="product"
+      category="cardio"
+      @product-selected="onProductSelected"
+    />
     <p class="container slider" style="font-size: 30px">SHOP BY WORKOUT</p>
     <ShopByCategory />
     <p class="container slider" style="font-size: 30px; margin-top: 40px">
@@ -37,7 +61,9 @@ import StoreCarousel from "../../components/store/storeComponents/StoreCarousel.
 import ProductCarousel from "../../components/store/ProductCarousel.vue";
 import ShopByCategory from "../../components/store/ShopByCategory.vue";
 import SpotLight from "../../components/store/SpotLight.vue";
+import storeFilterMixin from "@/components/store/storeFilterMixin";
 export default {
+  mixins: [storeFilterMixin],
   components: {
     StoreCarousel,
     ProductCarousel,
@@ -50,9 +76,8 @@ export default {
     },
   },
   mounted() {
-    const filteredFilters = {}; // You need to define your filter criteria
-    const limit = 12; // Specify the limit here
-
+    const filteredFilters = {}; 
+    const limit = 15; 
     this.$store
       .dispatch("fetchProduct", { filteredFilters, limit })
       .catch((error) => {

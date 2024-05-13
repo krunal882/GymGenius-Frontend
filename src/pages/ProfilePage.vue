@@ -1,4 +1,3 @@
-/* eslint-disable */
 <template>
   <v-app id="inspire">
     <v-app-bar-nav-icon
@@ -6,10 +5,10 @@
       z-index="1"
     ></v-app-bar-nav-icon>
 
-    <v-navigation-drawer v-model="drawer" z-index="2" persistent app>
+    <v-navigation-drawer v-model="drawer" app absolute bottom>
       <v-sheet class="pa-4" color="grey-lighten-4">
         <v-avatar class="mb-4" color="grey-darken-1" size="64"></v-avatar>
-        <div>john@google.com</div>
+        <div>{{ $store.state.userModule.email }}</div>
       </v-sheet>
 
       <v-list>
@@ -23,12 +22,22 @@
           @click="selectedItem = index"
         ></v-list-item>
       </v-list>
+      <h4 class="text-center">Admin section</h4>
+      <v-list>
+        <v-list-item
+          v-for="(link, index) in admin"
+          :key="index"
+          router
+          :to="{ name: link.route }"
+          :prepend-icon="link.icon"
+          :title="link.text"
+          @click="selectedItem = index"
+        >
+        </v-list-item>
+      </v-list>
     </v-navigation-drawer>
 
     <v-main>
-      <v-container class="py-8 px-6" fluid>
-        <!-- Render different content based on selected item -->
-      </v-container>
       <router-view></router-view>
     </v-main>
   </v-app>
@@ -44,12 +53,20 @@ const links = [
     route: "personalInfo",
   },
   { icon: "mdi-inbox-arrow-down", text: "Cart", route: "cart" },
-  { icon: "mdi-send", text: "Setting", route: "setting" },
   { icon: "mdi-delete", text: "Bookmarked", route: "bookmark" },
   { icon: "mdi-alert-octagon", text: "purchase", route: "purchase" },
   { icon: "mdi-alert-octagon", text: "logout", route: "logout" },
 ];
 
+const admin = [
+  {
+    icon: "mdi-inbox-arrow-down",
+    text: "Your users",
+    route: "users-admin",
+  },
+  { icon: "mdi-delete", text: "Orders", route: "orders" },
+  { icon: "mdi-delete", text: "Info Section ", route: "Info-admin" },
+];
 const drawer = ref(true);
 const selectedItem = ref(
   links.findIndex((link) => link.text === "Personal Info")

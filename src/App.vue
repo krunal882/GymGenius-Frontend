@@ -1,10 +1,11 @@
 <template>
   <div>
-    <main-nav-wrapper>
+    <main-nav-wrapper v-if="!isAuthPage && !isForgot && !isReset">
       <footer-wrapper>
         <router-view></router-view>
       </footer-wrapper>
     </main-nav-wrapper>
+    <router-view v-if="isAuthPage || isForgot || isReset" />
   </div>
 </template>
 
@@ -16,6 +17,17 @@ export default {
   components: {
     MainNavWrapper,
     FooterWrapper,
+  },
+  computed: {
+    isAuthPage() {
+      return this.$route.path === "/authentication";
+    },
+    isForgot() {
+      return this.$route.path === "/forgotPassword";
+    },
+    isReset() {
+      return this.$route.path.startsWith("/resetPassword/");
+    },
   },
 };
 </script>

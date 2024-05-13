@@ -77,12 +77,9 @@ export default {
       this.waterIntakeResult = null;
       this.loading = true;
       setTimeout(() => {
-        // Calculate baseline water intake based on weight
-        let baselineWaterIntake = this.weight * 35; // Assuming hydration factor of 35 ml/kg/day
-        // Adjust water intake based on activity level
+        let baselineWaterIntake = this.weight * 35;
         const activityFactor = this.activityFactor;
         const adjustedWaterIntake = baselineWaterIntake * activityFactor;
-        // Adjust water intake based on climate and temperature
         const climateFactor = this.climateFactor;
         const temperature = this.temperature;
         const temperatureAdjustment =
@@ -94,8 +91,7 @@ export default {
       }, 1000);
     },
     getTemperatureAdjustment(temperature) {
-      // Assuming a linear adjustment with temperature
-      return 1.2 * (temperature - 25); // Adjusting 1.2 ml per degree Celsius change from 25°C
+      return 1.2 * (temperature - 25);
     },
   },
 };

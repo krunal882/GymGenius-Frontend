@@ -41,12 +41,10 @@ export default {
   },
   methods: {
     applyFilters(filteredFilters) {
-      // Your filtering logic here
       this.fetchDietPlanWithFilters(filteredFilters);
     },
     async fetchDietPlanWithFilters(filteredFilters) {
       try {
-        // Dispatch the fetchExercises action with the filtered filters
         await this.$store.dispatch("fetchDietPlan", filteredFilters);
       } catch (error) {
         console.error("Error fetching DietPlans with filters:", error);

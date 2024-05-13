@@ -5,8 +5,18 @@
       color="grey-darken-1"
       size="200"
       style="border: 6px solid #64dd17"
-    ></v-avatar>
+    >
+      <img :src="userAvatarUrl" alt="User Avatar" v-if="userAvatarUrl" />
+      <v-icon v-else size="200px">mdi-account-circle</v-icon>
+    </v-avatar>
 
+    <v-badge color="primary darken-2" overlap @click="openImageUploadDialog">
+      <template v-slot:badge>
+        <v-icon color="white" size="50" style="font-size: large"
+          >mdi-pencil</v-icon
+        >
+      </template>
+    </v-badge>
     <v-divider></v-divider>
     <div>
       <v-row class="text-center">
@@ -18,6 +28,7 @@
             readonly
           ></v-text-field>
         </v-col>
+
         <v-col cols="12" sm="3">
           <v-text-field
             label="email"
@@ -79,11 +90,10 @@
           <v-text-field
             label="Age"
             variant="outlined"
-            v-model="editedUser.age"
+            :rules="ageRules"
+            v-model.number="editedUser.age"
             required
           ></v-text-field>
-
-          <!-- Form for editing user details -->
         </v-card-text>
         <v-card-actions>
           <v-btn color="primary" :disabled="isSaveDisabled" @click="saveChanges"
@@ -93,18 +103,27 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <input
+      type="file"
+      ref="fileInput"
+      style="display: none"
+      @change="uploadImage"
+    />
   </div>
 </template>
 
 <script>
+import axios from "axios";
+import Cookies from "js-cookie";
+
 export default {
   data() {
     return {
       user: {
-        name: "John Doe",
-        email: "john@example.com",
-        age: 30,
-        number: 9265635978,
+        name: "",
+        email: "",
+        age: "",
+        number: 0,
       },
       editedUser: {
         name: "",
@@ -129,26 +148,73 @@ export default {
         (v) => !!v || "Age is required",
         (v) => (v && v >= 18 && v <= 120) || "Age must be between 12 and 120",
       ],
+      userAvatarUrl: null,
     };
   },
   methods: {
     saveChanges() {
-      // Here you can implement logic to save the edited user details
-      // For example, you can update the user object with editedUser values
       this.user.name = this.editedUser.name;
       this.user.email = this.editedUser.email;
       this.user.age = this.editedUser.age;
       this.user.number = this.editedUser.number;
+      this.$store.dispatch("userUpdate", {
+        email: this.editedUser.email,
+        name: this.editedUser.name,
+        age: +this.editedUser.age,
+        id: this.$store.state.userModule.userId,
+        number: +this.editedUser.number,
+      });
 
-      // Close the dialog
       this.dialog = false;
+    },
+    openImageUploadDialog() {
+      this.$refs.fileInput.click();
+    },
+    createAxiosConfig() {
+      const token = Cookies.get("token");
+      return {
+        withCredentials: true,
+        headers: {
+          Authorization: `Bearer ${token}`,
+        },
+      };
+    },
+    uploadImage(event) {
+      const config = this.createAxiosConfig();
+      const file = event.target.files[0];
+      const formData = new FormData();
+      formData.append("file", file);
+      axios
+        .post(
+          "http://localhost:3000/auth/upload",
+          formData,
+          {
+            headers: {
+              "Content-Type": "multipart/form-data",
+            },
+            responseType: "blob",
+          },
+          config
+        )
+        .then((response) => {
+          const blobUrl = URL.createObjectURL(response.data);
+          this.userAvatarUrl = blobUrl;
+        })
+        .catch((error) => {
+          console.error("Error uploading image:", error);
+        });
     },
   },
   computed: {
     isSaveDisabled() {
-      // Check if any field in the editedUser object is empty
       return Object.values(this.editedUser).some((value) => !value);
     },
+  },
+  mounted() {
+    this.user.name = this.$store.state.userModule.name;
+    this.user.email = this.$store.state.userModule.email;
+    this.user.age = this.$store.state.userModule.age;
+    this.user.number = this.$store.state.userModule.number;
   },
 };
 </script>

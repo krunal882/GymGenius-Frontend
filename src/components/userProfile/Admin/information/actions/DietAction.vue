@@ -25,12 +25,10 @@
           >
           </v-img>
 
-          <!-- Plan Name -->
           <v-card-title class="text-center plan-name">Plan Name: </v-card-title>
           <v-card-text class="text-center pb-0" style="font-weight: 500">{{
             dietPlan.plan_name
           }}</v-card-text>
-          <!-- Diet Type and Purpose -->
           <v-card-text class="d-flex info pb-0">
             <v-card-text style="font-weight: 450" class="p-0"
               >Diet Type: <br />{{ dietPlan.diet_type }}</v-card-text
@@ -40,7 +38,6 @@
             >
           </v-card-text>
 
-          <!-- Explore Button -->
           <v-card-actions style="justify-content: space-between">
             <v-btn color="primary" @click="editClick(dietPlan)">
               <v-icon left>mdi-pencil</v-icon> Edit</v-btn
@@ -104,18 +101,17 @@ export default {
 
 <style scoped>
 .plan-name {
-  font-size: 20px; /* Larger font size for plan name */
-  font-weight: bold; /* Bold font weight */
+  font-size: 20px;
+  font-weight: bold;
 }
 
 .info {
-  font-size: 16px; /* Font size for info text */
-  justify-content: space-between; /* Align items evenly */
+  font-size: 16px;
+  justify-content: space-between;
 }
 
-/* Style the button */
 .v-btn {
-  width: 200px; /* Set button width */
+  width: 200px;
 }
 .image-hover-effect:hover {
   transform: scale(1.1);

@@ -10,7 +10,6 @@
       <v-card-text style="padding-right: 25px; padding-left: 25px">
         <v-window v-model="tab">
           <v-window-item value="one">
-            <!-- Render TabContent component when "Item One" tab is clicked -->
             <YogaHistory />
           </v-window-item>
 
@@ -43,14 +42,14 @@ export default {
 
 <style>
 .custom-wrapper {
-  margin-left: 20px; /* Set left margin */
-  margin-right: 20px; /* Set right margin */
-  margin-top: 10px; /* Set top margin */
-  margin-bottom: 10px; /* Set bottom margin */
-  padding-left: 10px; /* Set left padding */
-  padding-right: 10px; /* Set right padding */
-  padding-top: 5px; /* Set top padding */
-  padding-bottom: 5px; /* Set bottom padding */
+  margin-left: 20px;
+  margin-right: 20px;
+  margin-top: 10px;
+  margin-bottom: 10px;
+  padding-left: 10px;
+  padding-right: 10px;
+  padding-top: 5px;
+  padding-bottom: 5px;
 }
 .card-text {
   font-size: 16px;

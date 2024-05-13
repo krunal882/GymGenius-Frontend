@@ -81,7 +81,7 @@ export default {
       gender: "Male",
       loading: false,
       caloriesResult: null,
-      activityFactor: 1.2, // Adding activityFactor field
+      activityFactor: 1.2, 
     };
   },
   methods: {
@@ -89,24 +89,20 @@ export default {
       this.caloriesResult = null;
       this.loading = true;
       setTimeout(() => {
-        // Calculate BMR based on Mifflin-St Jeor equation
         let bmr;
         if (this.gender === "Male") {
-          // Harris-Benedict Equation for men
           bmr =
             88.362 +
             13.397 * this.weight +
             4.799 * this.height -
             5.677 * this.age;
         } else {
-          // Harris-Benedict Equation for women
           bmr =
             447.593 +
             9.247 * this.weight +
             3.098 * this.height -
             4.33 * this.age;
         }
-        // Adjust BMR based on activity level (activityFactor)
         const activityFactor = this.activityFactor;
         const totalCalories = bmr * activityFactor;
         this.caloriesResult = totalCalories;

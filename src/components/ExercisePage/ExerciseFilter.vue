@@ -179,14 +179,12 @@ export default {
       }
 
       if (Object.keys(filteredFilters).length > 0) {
-        console.log(filteredFilters);
         this.$emit("filters-applied", filteredFilters);
       } else {
         console.log("No filters selected.");
       }
     },
     handleReset() {
-      // Reset all filter values to defaults
       this.selectedCategory = null;
       this.selectedForce = [];
       this.selectedLevel = [];

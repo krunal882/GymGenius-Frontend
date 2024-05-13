@@ -9,6 +9,24 @@
         />
       </div>
     </div>
+    <v-row justify="center" dense>
+      <v-col class="mt-5 d-flex" cols="4">
+        <v-text-field
+          v-model="selectedItem"
+          class="mx-auto"
+          dense
+          placeholder="Type food-item name here"
+          append-outer-icon="mdi-magnify"
+          style="max-width: 350px"
+          variant="outlined"
+          rounded
+        >
+          <template v-slot:append>
+            <v-btn @click="search" color="success">Search</v-btn>
+          </template>
+        </v-text-field>
+      </v-col>
+    </v-row>
     <div class="flex-row">
       <FoodFilter @filters-applied="applyFilters" />
       <div class="flex-column mt-10">
@@ -35,19 +53,21 @@ import NutritionPreview from "./NutritionPreview.vue";
 export default {
   data() {
     return {
+      selectedItem: null,
       exploreClicked: false,
       selectedFoodItem: null,
       filteredFoodItem: null,
     };
   },
   methods: {
+    search() {
+      this.fetchFoodItemWithFilters({ name: this.selectedItem });
+    },
     applyFilters(filteredFilters) {
-      // Your filtering logic here
       this.fetchFoodItemWithFilters(filteredFilters);
     },
     async fetchFoodItemWithFilters(filteredFilters) {
       try {
-        // Dispatch the fetchExercises action with the filtered filters
         await this.$store.dispatch("fetchFoodItem", filteredFilters);
       } catch (error) {
         console.error("Error fetching food-item with filters:", error);
@@ -70,7 +90,7 @@ export default {
     NutritionPreview,
   },
   mounted() {
-    this.$store.dispatch("fetchFoodItem"); // Fetch exercises data when the component is mounted
+    this.$store.dispatch("fetchFoodItem"); 
   },
 };
 </script>
@@ -82,7 +102,7 @@ export default {
 }
 
 .carousel-image {
-  border-radius: 10px; /* Add rounded corners to the carousel image */
+  border-radius: 10px;
 }
 
 .iframe-style {

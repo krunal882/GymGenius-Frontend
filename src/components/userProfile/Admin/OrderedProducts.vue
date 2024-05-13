@@ -1,6 +1,5 @@
-
 <template>
-  <div class="container pr-0 pl-0 ml-0 mr-0 mt-10 d-flex">
+  <div class="container pr-0 pl-0 ml-0 mr-0 mt-5">
     <v-row class="d-flex">
       <v-col v-for="product in product?.length" :key="product.id" cols="12">
         <v-row>
@@ -98,7 +97,6 @@ export default {
       return imgPath;
     },
     number() {
-      console.log(this.product.products.length);
       return this.product.products.length;
     },
   },

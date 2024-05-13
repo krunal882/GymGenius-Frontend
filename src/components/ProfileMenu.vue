@@ -2,13 +2,12 @@
   <v-row>
     <v-col cols="12" offset-sm="3" sm="6">
       <v-menu>
-        <template v-slot:activator="{ on, props }">
+        <template v-slot:activator="{ props }">
           <v-avatar>
             <v-img
               alt="John"
               v-bind="props"
               src="https://cdn.vuetifyjs.com/images/john.jpg"
-              v-on="on"
             ></v-img>
           </v-avatar>
         </template>
@@ -34,13 +33,12 @@ export default {
   data: () => ({
     items: [
       { title: "Your Profile", route: "/profile" },
-      { title: "Cart", route: "/cart" },
-      { title: "Logout", route: "/logout" },
+      { title: "Cart", route: "/profile/cart" },
+      { title: "Logout", route: "/profile/logout" },
     ],
   }),
   methods: {
     getRoute(title) {
-      // Find the route for the given title
       const item = this.items.find((item) => item.title === title);
       return item ? item.route : "/";
     },
@@ -50,13 +48,12 @@ export default {
 
 <style scoped>
 .custom-list-item {
-  /* Add your custom styles for list items here */
-  padding: 10px 0; /* Example: Add padding to list items */
-  transition: background-color 0.3s; /* Smooth transition effect */
+  padding: 10px 0;
+  transition: background-color 0.3s;
 }
 
 .custom-list-item:hover {
-  background-color: #f0f0f0; /* Background color on hover */
+  background-color: #f0f0f0;
 }
 
 .item {

@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- Cart Items -->
-    <v-row class="mb-5">
+    <v-row class="mb-5" v-if="product.length > 0">
       <v-col cols="12" v-for="(item, index) in this.product" :key="index">
         <v-card class="cart-item">
           <v-row>
@@ -51,9 +51,7 @@
     </v-row>
 
     <!-- Empty Cart Message -->
-    <!-- <v-alert v-else type="info" class="mb-5">Your cart is empty.</v-alert> -->
-
-    <!-- Cart Summary -->
+    <v-alert v-else type="info" class="mb-5">Your cart is empty.</v-alert>
   </v-container>
 </template>
 

@@ -21,9 +21,28 @@
         />
       </div>
     </div>
-    <div class="flex-row">
+    <v-row justify="center" dense>
+      <v-col class="mt-5 d-flex" cols="4">
+        <v-text-field
+          v-model="selectedItem"
+          class="mx-auto"
+          dense
+          placeholder="Type exercise name here"
+          append-outer-icon="mdi-magnify"
+          style="max-width: 350px"
+          variant="outlined"
+          rounded
+        >
+          <template v-slot:append>
+            <v-btn @click="search" color="success">Search</v-btn>
+          </template>
+        </v-text-field>
+      </v-col>
+    </v-row>
+
+    <div class="flex-row mt-0">
       <ExerciseFilter @filters-applied="applyFilters" />
-      <div class="flex-column mt-10">
+      <div class="flex-column">
         <ExercisePreview
           v-if="!exploreClicked"
           :exercises="exercises"
@@ -36,7 +55,6 @@
         />
       </div>
     </div>
-    <!-- Iframe (hidden by default) -->
   </div>
 </template>
 
@@ -48,19 +66,21 @@ import ExercisePreview from "./ExercisePreview.vue";
 export default {
   data() {
     return {
+      selectedItem: null,
       exploreClicked: false,
       selectedExercise: null,
       filteredExercises: null,
     };
   },
   methods: {
+    search() {
+      this.fetchExercisesWithFilters({ name: this.selectedItem });
+    },
     applyFilters(filteredFilters) {
-      // Your filtering logic here
       this.fetchExercisesWithFilters(filteredFilters);
     },
     async fetchExercisesWithFilters(filteredFilters) {
       try {
-        // Dispatch the fetchExercises action with the filtered filters
         await this.$store.dispatch("fetchExercises", filteredFilters);
       } catch (error) {
         console.error("Error fetching exercises with filters:", error);
@@ -83,7 +103,7 @@ export default {
     ExerciseDetail,
   },
   mounted() {
-    this.$store.dispatch("fetchExercises"); // Fetch exercises data when the component is mounted
+    this.$store.dispatch("fetchExercises");
   },
 };
 </script>
@@ -95,7 +115,7 @@ export default {
 }
 
 .carousel-image {
-  border-radius: 10px; /* Add rounded corners to the carousel image */
+  border-radius: 10px;
 }
 
 .iframe-style {

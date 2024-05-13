@@ -202,17 +202,17 @@ export default {
 
 .custom-title {
   font-size: 24px;
-  color: #333; /* Custom color */
+  color: #333; 
 }
 
 .custom-subtitle {
   font-size: 18px;
-  color: #666; /* Custom color */
+  color: #666;
 }
 
 .custom-text {
   padding: 16px;
   font-size: 16px;
-  color: #444; /* Custom color */
+  color: #444; 
 }
 </style>

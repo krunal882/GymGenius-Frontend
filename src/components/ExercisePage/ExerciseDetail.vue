@@ -1,6 +1,5 @@
 <template>
   <v-card class="" width="auto" style="display: flex">
-    <!-- Image container -->
     <div style="flex: 1; padding-right: 16px; position: relative">
       <v-card class="mx-auto" elevation="24" width="auto">
         <v-carousel
@@ -19,7 +18,6 @@
           </v-carousel-item>
         </v-carousel>
       </v-card>
-      <!-- Pose Benefits -->
       <div
         style="
           bottom: 0;
@@ -52,7 +50,6 @@
       "
     />
 
-    <!-- Content container -->
     <div style="flex: 1; padding: 16px; overflow: auto">
       <v-card-title class="pt-4">Name: {{ exercise.name }}</v-card-title>
       <v-card-text class="pt-4">Level: {{ exercise.level }}</v-card-text>
@@ -86,7 +83,6 @@
       <v-card-text>Category : {{ exercise.category }}</v-card-text>
 
       <v-card-actions style="justify-content: space-between">
-        <!-- Emit an event when the Explore button is clicked -->
         <v-btn color="orange" @click="exploreClicked">Go Back</v-btn>
         <v-btn color="orange" @click="bookmark(exercise)">Bookmark</v-btn>
       </v-card-actions>
@@ -112,7 +108,6 @@ export default {
     },
     bookmark(exercise) {
       const userId = this.$store.state.userModule.userId;
-      console.log(userId, exercise._id);
       const exerciseId = exercise._id;
       this.$store.dispatch("bookmarkItem", {
         userId,
@@ -123,9 +118,6 @@ export default {
     async loadImages(exerciseName) {
       const formatedName = exerciseName.replace(/ /g, "_").replace(/\//g, "_");
       try {
-        console.log(
-          `../../assets/img/workout-exercise/${formatedName}/images/${exerciseName}0.jpg`
-        );
         const image1 = await import(
           `../../assets/img/workout-exercise/${formatedName}/images/${exerciseName}0.jpg`
         );
@@ -141,7 +133,6 @@ export default {
     },
   },
   created() {
-    // Load images when the component is created
     this.loadImages(this.exercise.name);
   },
 };

@@ -1,5 +1,5 @@
 <template>
-  <h3>Customer Orders</h3>
+  <h1 class="subheading grey--text text-center">Customer Orders</h1>
   <v-container>
     <OrderedProducts :product="orders" />
   </v-container>

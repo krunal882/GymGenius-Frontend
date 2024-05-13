@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       selectedItem: null,
-      yoga: [], // Your array of exercises
+      yoga: [], 
       selectedYoga: null,
       dialogOpen: false,
       removeDialogOpen: false,

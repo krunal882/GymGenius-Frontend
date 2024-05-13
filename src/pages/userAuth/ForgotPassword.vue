@@ -46,7 +46,6 @@ export default {
     reset() {
       const email = this.resetEmail;
       // this.$store.dispatch("forgotPassword", { email: this.resetEmail });
-      console.log(email);
       this.$store.dispatch("forgotPassword", {
         email: email,
         // password: this.loginPassword,

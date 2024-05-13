@@ -1,6 +1,6 @@
 <template>
   <div class="layout">
-    <HelloWorld />
+    <MainNav />
     <div class="content">
       <slot></slot>
     </div>
@@ -8,10 +8,10 @@
 </template>
 
 <script>
-import HelloWorld from "./MainNav.vue";
+import MainNav from "./MainNav.vue";
 export default {
   components: {
-    HelloWorld,
+    MainNav,
   },
 };
 </script>

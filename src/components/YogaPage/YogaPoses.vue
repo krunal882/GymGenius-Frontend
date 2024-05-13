@@ -1,6 +1,5 @@
 <template>
   <div>
-    <!-- Carousel -->
     <div id="carouselExampleIndicators" class="carousel slide">
       <div class="carousel-inner">
         <div class="carousel-item active">
@@ -14,6 +13,24 @@
     </div>
 
     <YogaInfoTabs />
+    <v-row justify="center" dense>
+      <v-col class="mt-5 d-flex" cols="4">
+        <v-text-field
+          v-model="selectedItem"
+          class="mx-auto"
+          dense
+          placeholder="Type exercise name here"
+          append-outer-icon="mdi-magnify"
+          style="max-width: 350px"
+          variant="outlined"
+          rounded
+        >
+          <template v-slot:append>
+            <v-btn @click="search" color="success">Search</v-btn>
+          </template>
+        </v-text-field>
+      </v-col>
+    </v-row>
     <div class="flex-row">
       <YogaFilter @filters-applied="applyFilters" />
       <div class="flex-column">
@@ -29,11 +46,6 @@
         />
       </div>
     </div>
-    <!-- Yoga Poses or Details -->
-    <!-- <div class="flex-row">
-      <YogaPoses v-if="!exploreClicked" @explore="handleExploreClick" />
-      <YogaDetails v-else @explore="handleExploreClick" />
-    </div> -->
   </div>
 </template>
 
@@ -46,8 +58,9 @@ import YogaInfoTabs from "./YogaInfoTabs.vue";
 export default {
   data() {
     return {
+      selectedItem: null,
       exploreClicked: false,
-      selectedCategory: null, // Initialize exploreClicked to false
+      selectedCategory: null, 
     };
   },
   components: {
@@ -57,17 +70,18 @@ export default {
     YogaInfoTabs,
   },
   methods: {
+    search() {
+      this.fetchYogaWithFilters({ name: this.selectedItem });
+    },
     handleExploreClick(yoga) {
       this.exploreClicked = !this.exploreClicked;
       this.selectedCategory = yoga;
     },
     applyFilters(filteredFilters) {
-      // Your filtering logic here
       this.fetchYogaWithFilters(filteredFilters);
     },
     async fetchYogaWithFilters(filteredFilters) {
       try {
-        // Dispatch the fetchYoga action with the filtered filters
         await this.$store.dispatch("fetchYoga", filteredFilters);
       } catch (error) {
         console.error("Error fetching yoga with filters:", error);

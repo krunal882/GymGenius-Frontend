@@ -260,6 +260,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie";
 export default {
   data() {
     return {
@@ -308,22 +309,23 @@ export default {
       const options = `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
       window.open(url, `${provider}Window`, options);
     },
-    // Other computed properties
 
-    login() {
-      console.log(this.loginEmail, this.loginPassword);
-      // Perform login authentication
-      this.$store.dispatch("userLogin", {
+    async login() {
+      await this.$store.dispatch("userLogin", {
         email: this.loginEmail,
         password: this.loginPassword,
       });
-      // if (document.cookie.includes("Authorization")) {
-      //   this.$router.push("/GymGenius");
-      //   this.state.token;
-      // }
+      const token = Cookies.get("token");
+      if (token) {
+        // const userInfo = JSON.parse(user);
+        // const token = userInfo.userModule.token;
+        if (token && token !== undefined) {
+          this.$router.replace("/GymGenius");
+        }
+      }
     },
-    signUp() {
-      this.$store.dispatch("userSignup", {
+    async signUp() {
+      await this.$store.dispatch("userSignup", {
         email: this.signUpEmail,
         password: this.signUpPassword,
         name: this.fullName,
@@ -331,6 +333,14 @@ export default {
         number: this.number,
         confirmPassword: this.confirmPassword,
       });
+      const user = localStorage.getItem("userInfo");
+      if (user) {
+        const userInfo = JSON.parse(user);
+        const token = userInfo.userModule.token;
+        if (token && token !== undefined) {
+          this.$router.replace("/GymGenius");
+        }
+      }
     },
   },
   computed: {},

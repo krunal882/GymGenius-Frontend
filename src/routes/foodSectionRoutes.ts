@@ -2,9 +2,9 @@ import DietPlan from "../components/DietplanPage/DietPlan.vue";
 import FoodNutrition from "../components/FoodNutritionPage/FoodNutrition.vue";
 import FoodSection from "../components/FoodNutritionPage/FoodSection.vue";
 import FoodItemPage from "../pages/foodSection/FoodItemPage.vue";
-import { createRouter, createWebHistory } from "vue-router";
+import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
-const routes = [
+const routes: Array<RouteRecordRaw> = [
   {
     path: "/foodSection",
     component: FoodItemPage,

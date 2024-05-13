@@ -4,7 +4,6 @@
     max-width="1500"
     @click:outside="handleClickOutside"
   >
-    <!-- Adjusted max-width to 800 for a larger dialog -->
     <v-card>
       <v-card-title> Edit DietPlan </v-card-title>
       <v-card-text>
@@ -223,7 +222,7 @@ export default {
 </script>
 <style scoped>
 .custom-border {
-  border: 1px solid #333; /* Darker border color */
+  border: 1px solid #333;
   padding: 1rem;
 }
 </style>

@@ -3,7 +3,7 @@
     <v-card
       v-for="(item, index) in tracker"
       :key="index"
-      class="mx-auto"
+      class="mx-auto image-hover-effect"
       max-width="400"
       style="margin: 10px; cursor: pointer"
       @click="handleCardClick(item)"
@@ -37,19 +37,19 @@ export default {
         },
         {
           title: "BMR CALCULATOR",
-          image: require("../../assets/img/fitnessTrackers/bmr-calculator.webp"), // Using require to correctly resolve the image path
+          image: require("../../assets/img/fitnessTrackers/bmr-calculator.webp"),
         },
         {
           title: "WATER INTAKE CALCULATOR",
-          image: require("../../assets/img/fitnessTrackers/woman-drinking-water.webp"), // Using require to correctly resolve the image path},
+          image: require("../../assets/img/fitnessTrackers/woman-drinking-water.webp"),
         },
         {
           title: "BODY FAT CALCULATOR",
-          image: require("../../assets/img/fitnessTrackers/body-fat-calculator.webp"), // Using require to correctly resolve the image path},
+          image: require("../../assets/img/fitnessTrackers/body-fat-calculator.webp"),
         },
         {
           title: "TDEE CALCULATOR",
-          image: require("../../assets/img/fitnessTrackers/tdee-calculator.webp"), // Using require to correctly resolve the image path},
+          image: require("../../assets/img/fitnessTrackers/tdee-calculator.webp"),
         },
       ],
     };
@@ -77,14 +77,17 @@ export default {
 
 <style scoped>
 .d-flex {
-  display: flex; /* Use Flexbox layout */
+  display: flex;
 }
 
 .flex-wrap {
-  flex-wrap: wrap; /* Allow items to wrap to the next line */
+  flex-wrap: wrap;
 }
 
 .justify-center {
-  justify-content: center; /* Center items horizontally */
+  justify-content: center;
+}
+.image-hover-effect:hover {
+  transform: scale(1.1);
 }
 </style>

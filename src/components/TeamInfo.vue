@@ -1,6 +1,5 @@
 <template>
   <div class="col-lg-3 col-md-6 mb-4 mb-lg-0">
-    <!-- Card-->
     <div class="card shadow-sm border-1 rounded">
       <div class="card-body p-0">
         <img

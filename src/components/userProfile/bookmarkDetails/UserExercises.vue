@@ -63,7 +63,6 @@ export default {
     bookmarkedExercises() {
       return this.$store.state.bookmarkModule.exercise;
     },
-    // Other computed properties remain the same
   },
 
   methods: {

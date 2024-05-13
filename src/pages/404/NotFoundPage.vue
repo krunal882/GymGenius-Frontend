@@ -23,9 +23,7 @@
 </template>
 
 <script>
-export default {
-  // Add any necessary component options here
-};
+export default {};
 </script>
 
 <style scoped>
