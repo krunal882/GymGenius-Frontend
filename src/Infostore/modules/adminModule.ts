@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit, Dispatch } from "vuex";
+import Cookies from "js-cookie";
+
 interface UserInfo {
   _id: string;
   name: string;
@@ -36,6 +38,16 @@ const state: State = {
   productData: [],
 };
 
+const createAxiosConfig = () => {
+  const token = Cookies.get("token");
+  return {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 const mutations = {
   setUsers(state: State, data: any) {
     state.userInfo = data;
@@ -55,7 +67,8 @@ const actions = {
   ) {
     try {
       const url = `http://localhost:3000/auth/users?page=1&limit=10`;
-      const response = await axios.get(url);
+      const config = createAxiosConfig();
+      const response = await axios.get(url, config);
       const users = response.data;
       commit("setUsers", users);
     } catch (error) {
@@ -66,7 +79,8 @@ const actions = {
   async getAllOrders({ commit }: { commit: Commit }) {
     try {
       const url = "http://localhost:3000/store/orders";
-      const response = await axios.get(url);
+      const config = createAxiosConfig();
+      const response = await axios.get(url, config);
       const products = response.data;
       commit("setOrders", products);
     } catch (error) {

@@ -55,6 +55,16 @@ const state: State = {
   number: 0,
 };
 
+const createAxiosConfig = () => {
+  const token = Cookies.get("token");
+  return {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 const mutations = {
   setToken(state: State, data: any) {
     state.token = data.token;
@@ -71,8 +81,9 @@ const mutations = {
 const actions = {
   async fetchUser({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
+      const config = createAxiosConfig();
       const url = `http://localhost:3000/auth/filtered?id=${id}`;
-      const response = await axios.get(url);
+      const response = await axios.get(url, config);
       commit("setUser", response.data[0]);
     } catch (error) {
       console.log(error);
@@ -84,12 +95,17 @@ const actions = {
     { email, password }: { email: Email; password: Password }
   ) {
     try {
+      const config = createAxiosConfig();
       const url = "http://localhost:3000/auth/login";
 
-      const response = await axios.post(url, {
-        email,
-        password,
-      });
+      const response = await axios.post(
+        url,
+        {
+          email,
+          password,
+        },
+        config
+      );
       const subject = "Account Login";
       const html = "<p>successfully loggedIn to your account</p>";
       const token = response.data.token;
@@ -123,15 +139,20 @@ const actions = {
     }
   ) {
     try {
+      const config = createAxiosConfig();
       const url = "http://localhost:3000/auth/signup";
-      const response = await axios.post(url, {
-        name,
-        email,
-        password,
-        confirmPassword,
-        age,
-        number,
-      });
+      const response = await axios.post(
+        url,
+        {
+          name,
+          email,
+          password,
+          confirmPassword,
+          age,
+          number,
+        },
+        config
+      );
       commit("setToken", response.data);
       const subject = "Account Signup";
       const html = "<p>successfully created account</p>";
@@ -150,20 +171,29 @@ const actions = {
     { email }: { email: string }
   ) {
     try {
+      const config = createAxiosConfig();
       const url = "http://localhost:3000/auth/forgotPassword";
-      const response = await axios.post(url, {
-        email,
-      });
+      const response = await axios.post(
+        url,
+        {
+          email,
+        },
+        config
+      );
 
       const subject = "Reset Password";
       const link = `http://localhost:8081/resetPassword/${response.data}`;
       const html = `Forgot your password? Click <a href="${link}">here</a> to reset your password.`;
 
-      await axios.post("http://localhost:3000/mailer/email", {
-        recipients: email,
-        subject,
-        html,
-      });
+      await axios.post(
+        "http://localhost:3000/mailer/email",
+        {
+          recipients: email,
+          subject,
+          html,
+        },
+        config
+      );
 
       // if (response.status === 201) {
       //   toast.success("Password reset email sent successfully");
@@ -189,13 +219,18 @@ const actions = {
     }
   ) {
     try {
+      const config = createAxiosConfig();
       const url = "http://localhost:3000/auth/resetPassword";
 
-      const response = await axios.post(url, {
-        newPassword,
-        newConfirmPassword,
-        resetPasswordToken,
-      });
+      const response = await axios.post(
+        url,
+        {
+          newPassword,
+          newConfirmPassword,
+          resetPasswordToken,
+        },
+        config
+      );
     } catch (error) {
       console.log("Error in Resetting password", error);
     }
@@ -219,14 +254,19 @@ const actions = {
     }
   ) {
     try {
+      const config = createAxiosConfig();
       const url = `http://localhost:3000/auth/updateUser?id=${id}`;
-      const response = await axios.patch(url, {
-        email,
-        name,
-        age,
-        number,
-        role,
-      });
+      const response = await axios.patch(
+        url,
+        {
+          email,
+          name,
+          age,
+          number,
+          role,
+        },
+        config
+      );
     } catch (error) {
       console.log("error in update user information", error);
     }

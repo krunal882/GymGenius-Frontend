@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit } from "vuex";
+import Cookies from "js-cookie";
+
 interface FoodItem {
   _id: string;
   name: string;
@@ -41,6 +43,16 @@ const state: State = {
   searchFoodItem: [],
 };
 
+const createAxiosConfig = () => {
+  const token = Cookies.get("token");
+  return {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 const mutations = {
   setFoodItem(state: State, foodItem: any[]) {
     state.foodItem = foodItem;
@@ -56,6 +68,7 @@ const actions = {
     filteredFilters: FilteredFilters
   ) {
     try {
+      const config = createAxiosConfig();
       let url = "http://localhost:3000/foodNutrition";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
         const queryParams = Object.entries(filteredFilters)
@@ -74,7 +87,7 @@ const actions = {
       } else {
         url += "?limit=10";
       }
-      const response: AxiosResponse = await axios.get(url);
+      const response: AxiosResponse = await axios.get(url, config);
 
       commit("setFoodItem", response.data);
     } catch (error) {
@@ -86,28 +99,31 @@ const actions = {
     { commit }: { commit: Commit },
     { foodItem }: { foodItem: FoodItem }
   ) {
-    console.log(foodItem);
+    const config = createAxiosConfig();
     const url = "http://localhost:3000/foodNutrition/addFoodItem";
-    const response = await axios.post(url, foodItem);
+    const response = await axios.post(url, foodItem, config);
   },
 
   async searchFoodItem({ commit }: { commit: Commit }, name: string) {
+    const config = createAxiosConfig();
     const url = `http://localhost:3000/foodNutrition/filtered?name=${name}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, config);
     commit("setFoodItemSearch", response.data);
   },
   async editFoodItem(
     { commit }: { commit: Commit },
     { foodItem }: { foodItem: FoodItem }
   ) {
+    const config = createAxiosConfig();
     console.log(foodItem);
     const url = `http://localhost:3000/foodNutrition/updateFoodItem?id=${foodItem._id}`;
-    const response = await axios.patch(url, foodItem);
+    const response = await axios.patch(url, foodItem, config);
   },
 
   async removeFoodItem({ commit }: { commit: Commit }, { id }: { id: string }) {
+    const config = createAxiosConfig();
     const url = `http://localhost:3000/foodNutrition/deleteFoodItem?id=${id}`;
-    const response = await axios.delete(url);
+    const response = await axios.delete(url, config);
   },
 };
 

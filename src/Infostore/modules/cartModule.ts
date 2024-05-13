@@ -1,5 +1,6 @@
 import axios from "axios";
 import { Commit, Dispatch, GetterTree } from "vuex";
+import Cookies from "js-cookie";
 
 interface State {
   cartItems: any[];
@@ -9,6 +10,16 @@ interface State {
 const state: State = {
   cartItems: [],
   history: [],
+};
+
+const createAxiosConfig = () => {
+  const token = Cookies.get("token");
+  return {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 };
 
 const mutations = {
@@ -34,10 +45,16 @@ const actions = {
     }: { productId: string; status: string; userId: string }
   ) {
     try {
-      await axios.post("http://localhost:3000/store/addToCart", {
-        userId,
-        product: [{ status, productId }],
-      });
+      const config = createAxiosConfig();
+
+      await axios.post(
+        "http://localhost:3000/store/addToCart",
+        {
+          userId,
+          product: [{ status, productId }],
+        },
+        config
+      );
 
       console.log("product added into cart ");
     } catch (error) {
@@ -49,8 +66,10 @@ const actions = {
     { userId, status }: { userId: any; status: string }
   ) {
     try {
+      const config = createAxiosConfig();
       const response = await axios.get(
-        `http://localhost:3000/store/cart?userId=${userId}`
+        `http://localhost:3000/store/cart?userId=${userId}`,
+        config
       );
       const allProducts = response.data[0].product;
       const filteredProducts = allProducts.filter(
@@ -62,7 +81,8 @@ const actions = {
       if (id.length != 0) {
         const idParams = id.map((id: any) => `id=${id}`).join("&");
         const getProduct = await axios.get(
-          `http://localhost:3000/store/filtered?${idParams}`
+          `http://localhost:3000/store/filtered?${idParams}`,
+          config
         );
         if (status == "pending") {
           commit("setCartItems", getProduct.data);
@@ -80,7 +100,10 @@ const actions = {
     { productId, userId }: { productId: string; userId: string }
   ) {
     try {
+      const config = createAxiosConfig();
       await axios.delete("http://localhost:3000/store/removeCart", {
+        ...config,
+
         data: {
           userId,
           productId,
@@ -98,10 +121,16 @@ const actions = {
     { productId, userId }: { productId: string; userId: string }
   ) {
     try {
-      await axios.patch("http://localhost:3000/store/updateCart", {
-        userId,
-        productId,
-      });
+      const config = createAxiosConfig();
+
+      await axios.patch(
+        "http://localhost:3000/store/updateCart",
+        {
+          userId,
+          productId,
+        },
+        config
+      );
       console.log("product added to history ");
     } catch (error) {
       console.error("Error adding product to history:", error);
@@ -128,6 +157,7 @@ const actions = {
       if (productId.length === 1) {
         await dispatch("addToCart", { userId, productId, status: "done" });
       }
+      const config = createAxiosConfig();
 
       // const response = await axios.patch(
       //   "http://localhost:3000/store/purchase",
@@ -135,7 +165,7 @@ const actions = {
       //     price,
       //     quantity,
       //     title,
-      //   }
+      //   },config
       // );
       // commit("buyProduct", response.data);
       if (productId.length > 1) {

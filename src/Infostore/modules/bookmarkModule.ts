@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit, Dispatch } from "vuex";
+import Cookies from "js-cookie";
+
 // import { toast } from "vue3-toastify";
 // import "vue3-toastify/dist/index.css";
 
@@ -15,6 +17,16 @@ const state: State = {
   nutrition: [],
   yoga: [],
   diet: [],
+};
+
+const createAxiosConfig = () => {
+  const token = Cookies.get("token");
+  return {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
 };
 
 const mutations = {
@@ -44,8 +56,9 @@ const actions = {
     { userId }: { userId: string }
   ) {
     try {
+      const config = createAxiosConfig();
       const url = `http://localhost:3000/bookmark/getBookmarked?userId=${userId}`;
-      const response = await axios.get(url);
+      const response = await axios.get(url, config);
 
       if (response.data.length === 0) {
         console.log("No bookmarked items found.");
@@ -63,7 +76,6 @@ const actions = {
       const nutritionIds = itemId.nutrition;
       const dietPlanIds = itemId.diet;
 
-      // Fetch and accumulate exercises
       if (exerciseIds && exerciseIds.length !== 0) {
         let exerciseUrl = "http://localhost:3000/exercises/filtered?";
         exerciseIds.forEach((id: string) => {
@@ -72,7 +84,7 @@ const actions = {
         if (exerciseUrl.endsWith("&")) {
           exerciseUrl = exerciseUrl.slice(0, -1);
         }
-        const exercisesResponse = await axios.get(exerciseUrl);
+        const exercisesResponse = await axios.get(exerciseUrl, config);
         exerciseItems.push(...exercisesResponse.data);
         commit("setBookmarked", { category: "exercise", data: exerciseItems });
       }
@@ -86,7 +98,7 @@ const actions = {
         if (yogaUrl.endsWith("&")) {
           yogaUrl = yogaUrl.slice(0, -1);
         }
-        const yogaResponse = await axios.get(yogaUrl);
+        const yogaResponse = await axios.get(yogaUrl, config);
         yogaItems.push(...yogaResponse.data);
         commit("setBookmarked", { category: "yoga", data: yogaItems });
       }
@@ -100,7 +112,7 @@ const actions = {
         if (nutritionUrl.endsWith("&")) {
           nutritionUrl = nutritionUrl.slice(0, -1);
         }
-        const nutritionResponse = await axios.get(nutritionUrl);
+        const nutritionResponse = await axios.get(nutritionUrl, config);
         nutritionItems.push(...nutritionResponse.data);
         commit("setBookmarked", {
           category: "nutrition",
@@ -117,7 +129,7 @@ const actions = {
         if (dietPlanUrl.endsWith("&")) {
           dietPlanUrl = dietPlanUrl.slice(0, -1);
         }
-        const dietPlanResponse = await axios.get(dietPlanUrl);
+        const dietPlanResponse = await axios.get(dietPlanUrl, config);
         dietItems.push(...dietPlanResponse.data);
         commit("setBookmarked", { category: "diet", data: dietItems });
       }
@@ -136,11 +148,17 @@ const actions = {
     try {
       const url = "http://localhost:3000/bookmark/addBookmark";
 
-      await axios.post(url, {
-        userId,
-        itemId,
-        itemType,
-      });
+      const config = createAxiosConfig();
+
+      await axios.post(
+        url,
+        {
+          userId,
+          itemId,
+          itemType,
+        },
+        config
+      );
       // switch (itemType) {
       //   case "exercise":
       //     toast.success("Exercise bookmarked");
@@ -173,11 +191,17 @@ const actions = {
     try {
       const url = "http://localhost:3000/bookmark/undoBookmark";
 
-      await axios.post(url, {
-        userId,
-        itemId,
-        itemType,
-      });
+      const config = createAxiosConfig();
+
+      await axios.post(
+        url,
+        {
+          userId,
+          itemId,
+          itemType,
+        },
+        config
+      );
       await dispatch("fetchBookmarked", { userId });
     } catch (error) {
       console.log(error);

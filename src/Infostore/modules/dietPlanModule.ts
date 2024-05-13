@@ -1,5 +1,7 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit } from "vuex";
+import Cookies from "js-cookie";
+import { config } from "@fortawesome/fontawesome-svg-core";
 
 interface DietPlan {
   _id: string;
@@ -30,6 +32,16 @@ const state: State = {
   dietSearch: [],
 };
 
+const createAxiosConfig = () => {
+  const token = Cookies.get("token");
+  return {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 const mutations = {
   setDietPlan(state: State, dietPlan: any[]) {
     state.dietPlan = dietPlan;
@@ -45,6 +57,7 @@ const actions = {
     filteredFilters: FilteredFilters
   ) {
     try {
+      const config = createAxiosConfig();
       let url = "http://localhost:3000/diet-plans";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
         const queryParams = Object.entries(filteredFilters)
@@ -61,15 +74,16 @@ const actions = {
 
         url += `/filter?${queryParams}`;
       }
-      const response: AxiosResponse = await axios.get(url);
+      const response: AxiosResponse = await axios.get(url, config);
       commit("setDietPlan", response.data);
     } catch (error) {
       console.error("Error fetching dietPlan:", error);
     }
   },
   async searchDiet({ commit }: { commit: Commit }, name: string) {
+    const config = createAxiosConfig();
     const url = `http://localhost:3000/diet-plans/filter?name=${name}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, config);
     commit("setDietSearch", response.data);
   },
 
@@ -77,9 +91,9 @@ const actions = {
     { commit }: { commit: Commit },
     { dietPlan }: { dietPlan: DietPlan }
   ) {
-    console.log(dietPlan);
+    const config = createAxiosConfig();
     const url = "http://localhost:3000/diet-plans/add";
-    const response = await axios.post(url, dietPlan);
+    const response = await axios.post(url, dietPlan, config);
     console.log(response);
   },
 
@@ -87,14 +101,16 @@ const actions = {
     { commit }: { commit: Commit },
     { id, dietPlan }: { id: string; dietPlan: DietPlan }
   ) {
+    const config = createAxiosConfig();
     const url = `http://localhost:3000/diet-plans/update?id=${id}`;
-    const response = await axios.patch(url, dietPlan);
+    const response = await axios.patch(url, dietPlan, config);
     console.log(response);
   },
 
   async removeDiet({ commit }: { commit: Commit }, { id }: { id: string }) {
+    const config = createAxiosConfig();
     const url = `http://localhost:3000/diet-plans/delete?id=${id}`;
-    const response = await axios.delete(url);
+    const response = await axios.delete(url, config);
   },
 };
 

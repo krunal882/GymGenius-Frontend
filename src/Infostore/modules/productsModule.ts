@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit, GetterTree } from "vuex";
+import Cookies from "js-cookie";
 
 interface State {
   product: any[]; // Adjust the type according to your product object structure
@@ -13,9 +14,18 @@ const state: State = {
   product: [],
 };
 
+const createAxiosConfig = () => {
+  const token = Cookies.get("token");
+  return {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 const mutations = {
   setProduct(state: State, product: any[]) {
-    // Adjust the type according to your product object structure
     state.product = product;
   },
 };
@@ -28,6 +38,7 @@ const actions = {
     }: { filteredFilters: FilteredFilters; limit?: number }
   ) {
     try {
+      const config = createAxiosConfig();
       let url = "http://localhost:3000/store";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
         const queryParams = Object.entries(filteredFilters)
@@ -44,13 +55,12 @@ const actions = {
 
         url += `/filtered?${queryParams}`;
       } else {
-        // If no filters are provided, and limit is specified, construct the URL accordingly
         if (limit) {
           url += `?limit=${limit}`;
         }
       }
 
-      const response: AxiosResponse = await axios.get(url);
+      const response: AxiosResponse = await axios.get(url, config);
 
       commit("setProduct", response.data);
     } catch (error) {

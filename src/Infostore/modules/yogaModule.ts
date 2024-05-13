@@ -1,5 +1,6 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit } from "vuex";
+import Cookies from "js-cookie";
 
 interface Yoga {
   category_name: string;
@@ -26,6 +27,16 @@ const state: State = {
   yogaSearch: [],
 };
 
+const createAxiosConfig = () => {
+  const token = Cookies.get("token");
+  return {
+    withCredentials: true,
+    headers: {
+      Authorization: `Bearer ${token}`,
+    },
+  };
+};
+
 const mutations = {
   setYoga(state: State, yoga: any[]) {
     state.yoga = yoga;
@@ -40,6 +51,7 @@ const actions = {
     filteredFilters: FilteredFilters
   ) {
     try {
+      const config = createAxiosConfig();
       let url = "http://localhost:3000/yoga-poses";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
         const queryParams = Object.entries(filteredFilters)
@@ -59,24 +71,24 @@ const actions = {
         url += "?limit=10";
       }
 
-      const response: AxiosResponse = await axios.get(url);
+      const response: AxiosResponse = await axios.get(url, config);
 
       commit("setYoga", response.data);
     } catch (error) {
       console.error("Error fetching yoga-poses:", error);
     }
   },
-
   async searchYoga({ commit }: { commit: Commit }, name: string) {
+    const config = createAxiosConfig();
     const url = `http://localhost:3000/yoga-poses/filtered?name=${name}`;
-    const response = await axios.get(url);
+    const response = await axios.get(url, config);
     commit("setYogaSearch", response.data);
   },
 
   async addYoga({ commit }: { commit: Commit }, { yoga }: { yoga: Yoga }) {
-    console.log(yoga);
+    const config = createAxiosConfig();
     const url = "http://localhost:3000/yoga-poses/addYoga";
-    const response = await axios.post(url, yoga);
+    const response = await axios.post(url, yoga, config);
     console.log(response);
   },
 
@@ -84,13 +96,15 @@ const actions = {
     { commit }: { commit: Commit },
     { id, yoga }: { id: string; yoga: Yoga }
   ) {
+    const config = createAxiosConfig();
     const url = `http://localhost:3000/yoga-poses/updateYoga?id=${id}`;
-    const response = await axios.patch(url, yoga);
+    const response = await axios.patch(url, yoga, config);
   },
 
   async removeYoga({ commit }: { commit: Commit }, { id }: { id: string }) {
+    const config = createAxiosConfig();
     const url = `http://localhost:3000/yoga-poses/deleteYoga?id=${id}`;
-    const response = await axios.delete(url);
+    const response = await axios.delete(url, config);
   },
 };
 
