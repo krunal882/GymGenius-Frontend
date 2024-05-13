@@ -73,6 +73,13 @@ const actions = {
     commit("setYogaSearch", response.data);
   },
 
+  async addYoga({ commit }: { commit: Commit }, { yoga }: { yoga: Yoga }) {
+    console.log(yoga);
+    const url = "http://localhost:3000/yoga-poses/addYoga";
+    const response = await axios.post(url, yoga);
+    console.log(response);
+  },
+
   async editYoga(
     { commit }: { commit: Commit },
     { id, yoga }: { id: string; yoga: Yoga }

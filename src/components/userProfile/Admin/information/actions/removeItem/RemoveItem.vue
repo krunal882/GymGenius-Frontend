@@ -60,9 +60,7 @@ export default {
       this.$emit("close-dialog");
     },
     remove() {
-      console.log(this.action);
       this.$store.dispatch(this.action, { id: this.Item._id });
-      console.log(this.Item);
     },
     handleClickOutside() {
       if (this.dialog) {
@@ -70,7 +68,6 @@ export default {
       }
     },
     initializeFormFields() {
-      console.log(this.item);
       this.Item = { ...this.item };
     },
   },

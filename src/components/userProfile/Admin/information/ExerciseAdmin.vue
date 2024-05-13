@@ -1,6 +1,7 @@
 <template>
   <div>
-    <ProductSearch @search="handleSearch" />
+    <ProductSearch @search="handleSearch" @add="openAddDialog" />
+    <AddExercise :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
     <ExerciseActions
       :exercises="exercises"
       @edit-exercise="openEditDialog"
@@ -12,7 +13,7 @@
       @close-dialog="closeEditDialog"
     />
     <RemoveItem
-      :action="removeExercise"
+      action="removeExercise"
       :item="selectedExercise"
       :dialogOpen="removeDialogOpen"
       @close-dialog="closeRemoveDialog"
@@ -25,25 +26,28 @@ import ProductSearch from "@/components/store/storeComponents/ProductSearch.vue"
 import ExerciseActions from "./actions/ExerciseActions.vue";
 import ExerciseDialog from "./actions/ExerciseDialog.vue";
 import RemoveItem from "./actions/removeItem/RemoveItem.vue";
+import AddExercise from "./actions/addItem/AddExercise.vue";
 export default {
   components: {
     ProductSearch,
     ExerciseActions,
     ExerciseDialog,
     RemoveItem,
+    AddExercise,
   },
   data() {
     return {
       selectedItem: null,
-      exercise: [], // Your array of exercises
+      exercise: [],
       selectedExercise: null,
       dialogOpen: false,
       removeDialogOpen: false,
+      addDialogOpen: false,
     };
   },
   computed: {
     exercises() {
-      return this.$store.state.exercisesModule.exercises;
+      return this.$store.state.exercisesModule.exerciseSearch;
     },
   },
   methods: {
@@ -61,14 +65,20 @@ export default {
     closeRemoveDialog() {
       this.removeDialogOpen = false;
     },
+    openAddDialog() {
+      this.addDialogOpen = true;
+    },
+    closeAddDialog() {
+      this.addDialogOpen = false;
+    },
     handleSearch(searchItem) {
       this.selectedItem = searchItem;
 
-      this.fetchExercisesWithFilters({ name: this.selectedItem });
+      this.fetchExercisesWithFilters(this.selectedItem);
     },
-    async fetchExercisesWithFilters(filteredFilters) {
+    async fetchExercisesWithFilters(name) {
       try {
-        await this.$store.dispatch("fetchExercises", filteredFilters);
+        await this.$store.dispatch("searchExercise", name);
       } catch (error) {
         console.error("Error fetching exercises with filters:", error);
       }

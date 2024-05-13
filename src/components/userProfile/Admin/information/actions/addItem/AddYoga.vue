@@ -4,95 +4,83 @@
     max-width="800"
     @click:outside="handleClickOutside"
   >
-    <!-- Adjusted max-width to 800 for a larger dialog -->
     <v-card>
-      <v-card-title> Edit Exercise </v-card-title>
+      <v-card-title> Edit Yoga </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <div class="d-flex flex-wrap">
             <v-text-field
               :rules="Rules"
-              v-model="exercise.name"
-              label="Name"
+              v-model="yoga.category_name"
+              label="yoga name"
               variant="outlined"
               required
               class="mr-4 mb-4"
             ></v-text-field>
             <v-text-field
               :rules="Rules"
-              v-model="exercise.category"
-              label="Category"
+              v-model="yoga.category_description"
+              label="yoga category"
               variant="outlined"
               required
               class="mb-4"
             ></v-text-field>
           </div>
           <div class="d-flex">
-            <v-select
-              v-model="exercise.force"
+            <v-text-field
+              v-model="yoga.english_name"
               :items="forceTypes"
-              label="Force"
+              label="english name of yoga"
               required
               variant="outlined"
               class="mr-4 mb-4"
-            ></v-select>
-            <v-select
-              v-model="exercise.level"
-              :items="levelTypes"
-              label="Level"
+            ></v-text-field>
+            <v-text-field
+              v-model="yoga.sanskrit_name_adapted"
+              label="adapted name of yoga"
               required
               variant="outlined"
               class="mb-4"
-            ></v-select>
+            ></v-text-field>
           </div>
           <div class="d-flex">
             <v-text-field
               :rules="Rules"
-              v-model="exercise.mechanic"
-              label="Mechanic"
+              v-model="yoga.sanskrit_name"
+              label="sanskrit name of yoga"
               variant="outlined"
               required
               class="mr-4 mb-4"
             ></v-text-field>
             <v-text-field
               :rules="Rules"
-              v-model="exercise.equipment"
+              v-model="yoga.translation_name"
               variant="outlined"
-              label="Equipment"
+              label="translation of name"
               required
               class="mb-4"
             ></v-text-field>
           </div>
-          <div class="d-flex flex-wrap justify-space-between">
-            <v-text-field
-              :rules="Rules"
-              v-model="exercise.primaryMuscles"
-              label="Primary Muscles"
-              variant="outlined"
-              required
-              class="mr-4 mb-4"
-            ></v-text-field>
-            <v-text-field
-              v-model="exercise.secondaryMuscles"
-              label="Secondary Muscles"
-              variant="outlined"
-              class="mb-4"
-            ></v-text-field>
-          </div>
-
           <v-textarea
             :rules="Rules"
-            v-model="exercise.instructions"
-            label="Instructions"
+            v-model="yoga.pose_description"
+            label="description of yoga pose"
             variant="outlined"
             required
+            class="mr-4 mb-4"
+          ></v-textarea>
+          <v-textarea
+            v-model="yoga.pose_benefits"
+            label="yoga pose benefits"
+            variant="outlined"
+            class="mb-4"
           ></v-textarea>
         </v-form>
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="save(exercise)">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="save(yoga)">Save</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -101,25 +89,21 @@
 <script>
 export default {
   props: {
-    exerciseData: Object,
     dialogOpen: Boolean,
   },
   data() {
     return {
-      forceTypes: ["push", "pull", "static"],
-      levelTypes: ["beginner", "intermediate", "expert"], // Values for the level types
       dialog: false,
       valid: true,
-      exercise: {
-        name: "",
-        force: "Force",
-        level: "beginner",
-        mechanic: "",
-        equipment: "",
-        primaryMuscles: "",
-        secondaryMuscles: "",
-        instructions: "",
-        category: "",
+      yoga: {
+        category_name: "",
+        category_description: "",
+        english_name: "",
+        sanskrit_name: "",
+        sanskrit_name_adapted: "",
+        translation_name: "",
+        pose_description: "",
+        pose_benefits: "",
       },
       Rules: [
         (v) => !!v || "Field is Required",
@@ -130,9 +114,6 @@ export default {
   watch: {
     dialogOpen(value) {
       this.dialog = value;
-      if (value && this.exerciseData) {
-        this.initializeFormFields();
-      }
     },
   },
   methods: {
@@ -144,15 +125,12 @@ export default {
         this.closeDialog();
       }
     },
-    initializeFormFields() {
-      this.exercise = { ...this.exerciseData };
-    },
     cancel() {
       this.dialog = true;
       this.$refs.form.reset();
     },
-    async save(exercise) {
-      await this.$store.dispatch("editExercise", exercise);
+    async save(yoga) {
+      await this.$store.dispatch("addYoga", { yoga });
     },
   },
 };

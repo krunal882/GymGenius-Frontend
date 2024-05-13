@@ -8,9 +8,9 @@ interface Exercise {
   level: string;
   mechanic: string;
   equipment: string;
-  primaryMuscles: string;
-  secondaryMuscles: string;
-  instructions: string;
+  primaryMuscles: [];
+  secondaryMuscles: [];
+  instructions: [];
   category: string;
 }
 
@@ -74,11 +74,21 @@ const actions = {
     commit("setExerciseSearch", response.data);
   },
 
+  async addExercise(
+    { commit }: { commit: Commit },
+    { exercise }: { exercise: Exercise }
+  ) {
+    console.log(exercise);
+    const url = "http://localhost:3000/exercises/addExercise";
+    const response = await axios.post(url, exercise);
+    console.log(response);
+  },
+
   async editExercise(
     { commit }: { commit: Commit },
-    { id, exercise }: { id: string; exercise: Exercise }
+    { exercise }: { exercise: Exercise }
   ) {
-    const url = `http://localhost:3000/exercises/updateExercise?id=${id}`;
+    const url = `http://localhost:3000/exercises/updateExercise?id=${exercise._id}`;
     const response = await axios.patch(url, exercise);
   },
   async removeExercise({ commit }: { commit: Commit }, { id }: { id: string }) {

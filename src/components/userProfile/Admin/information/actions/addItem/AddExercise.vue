@@ -92,7 +92,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="save(exercise)">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="add(exercise)">Add</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -101,7 +101,6 @@
 <script>
 export default {
   props: {
-    exerciseData: Object,
     dialogOpen: Boolean,
   },
   data() {
@@ -116,9 +115,9 @@ export default {
         level: "beginner",
         mechanic: "",
         equipment: "",
-        primaryMuscles: "",
-        secondaryMuscles: "",
-        instructions: "",
+        primaryMuscles: [],
+        secondaryMuscles: [],
+        instructions: [],
         category: "",
       },
       Rules: [
@@ -130,9 +129,6 @@ export default {
   watch: {
     dialogOpen(value) {
       this.dialog = value;
-      if (value && this.exerciseData) {
-        this.initializeFormFields();
-      }
     },
   },
   methods: {
@@ -144,15 +140,13 @@ export default {
         this.closeDialog();
       }
     },
-    initializeFormFields() {
-      this.exercise = { ...this.exerciseData };
-    },
+
     cancel() {
       this.dialog = true;
       this.$refs.form.reset();
     },
-    async save(exercise) {
-      await this.$store.dispatch("editExercise", exercise);
+    async add(exercise) {
+      await this.$store.dispatch("addExercise", { exercise });
     },
   },
 };

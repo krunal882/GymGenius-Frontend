@@ -77,11 +77,6 @@ export default {
     },
   },
   methods: {
-    exploreClicked(yoga) {
-      // Emit an event named "explore" when the button is clicked
-      this.$emit("explore", yoga);
-    },
-
     editClick(yoga) {
       this.$emit("edit-yoga", yoga);
     },

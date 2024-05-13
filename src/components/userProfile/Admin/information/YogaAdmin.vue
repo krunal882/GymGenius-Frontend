@@ -1,6 +1,7 @@
 <template>
   <div>
-    <ProductSearch @search="handleSearch" />
+    <ProductSearch @search="handleSearch" @add="openAddDialog" />
+    <AddYoga :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
     <YogaAction
       :yogas="yogas"
       @edit-yoga="openEditDialog"
@@ -12,7 +13,7 @@
       @close-dialog="closeEditDialog"
     />
     <RemoveItem
-      :action="removeYoga()"
+      action="removeYoga"
       :item="selectedYoga"
       :dialogOpen="removeDialogOpen"
       @close-dialog="closeRemoveDialog"
@@ -25,12 +26,14 @@ import ProductSearch from "@/components/store/storeComponents/ProductSearch.vue"
 import YogaAction from "./actions/YogaAction.vue";
 import YogaDialog from "./actions/YogaDialog.vue";
 import RemoveItem from "./actions/removeItem/RemoveItem.vue";
+import AddYoga from "./actions/addItem/AddYoga.vue";
 export default {
   components: {
     ProductSearch,
     YogaAction,
     YogaDialog,
     RemoveItem,
+    AddYoga,
   },
   data() {
     return {
@@ -39,18 +42,15 @@ export default {
       selectedYoga: null,
       dialogOpen: false,
       removeDialogOpen: false,
+      addDialogOpen: false,
     };
   },
   computed: {
     yogas() {
-      console.log(this.$store.state.yogaModule.yoga);
-      return this.$store.state.yogaModule.yoga;
+      return this.$store.state.yogaModule.yogaSearch;
     },
   },
   methods: {
-    removeYoga() {
-      return "removeYoga";
-    },
     openEditDialog(yoga) {
       this.selectedYoga = yoga;
       this.dialogOpen = true;
@@ -65,14 +65,20 @@ export default {
     closeRemoveDialog() {
       this.removeDialogOpen = false;
     },
+    openAddDialog() {
+      this.addDialogOpen = true;
+    },
+    closeAddDialog() {
+      this.addDialogOpen = false;
+    },
     handleSearch(searchItem) {
       this.selectedItem = searchItem;
 
-      this.fetchYogaWithFilters({ name: this.selectedItem });
+      this.fetchYogaWithFilters(this.selectedItem);
     },
-    async fetchYogaWithFilters(filteredFilters) {
+    async fetchYogaWithFilters(name) {
       try {
-        await this.$store.dispatch("fetchYoga", filteredFilters);
+        await this.$store.dispatch("searchYoga", name);
       } catch (error) {
         console.error("Error fetching exercises with filters:", error);
       }
