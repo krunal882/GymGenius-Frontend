@@ -7,7 +7,7 @@
       <section class="">
         <div class="container text-center text-md-start mt-5">
           <div class="row mt-3">
-            <div class="col-md-3 col-lg-4 col-xl-3 mx-auto mb-4">
+            <div class="col-md-3 col-lg-4 col-xl-3 mb-2">
               <h6 class="text-uppercase fw-bold pt-12">GymGenius</h6>
               <hr
                 class="mb-4 mt-0 d-inline-block mx-auto"
@@ -19,83 +19,30 @@
                 help you achieve your health and wellness goals.
               </p>
             </div>
-
-            <div class="col-md-2 col-lg-2 col-xl-2 mx-auto mb-4">
-              <h6 class="text-uppercase fw-bold pt-12">Products</h6>
+            <div
+              v-for="(section, index) in sections"
+              :key="index"
+              :class="section.class"
+            >
+              <h6 class="text-uppercase fw-bold pt-12">{{ section.title }}</h6>
               <hr
                 class="mb-4 mt-0 d-inline-block mx-auto"
                 style="width: 60px; background-color: #7c4dff; height: 2px"
               />
-              <p>
-                <router-link to="/gym-equipments" class="link"
-                  >Gym Equipments</router-link
+              <template v-for="(link, linkIndex) in section.links">
+                <p
+                  v-if="section.title === 'Contact'"
+                  :key="'icon-' + linkIndex"
                 >
-              </p>
-              <p>
-                <router-link to="/gym-wear" class="link">Gym Wear</router-link>
-              </p>
-              <p>
-                <router-link to="/yoga-needs" class="link"
-                  >Yoga needs</router-link
-                >
-              </p>
-              <p>
-                <router-link to="/gym-supplements" class="link"
-                  >Gym Supplements</router-link
-                >
-              </p>
-            </div>
-
-            <div class="col-md-3 col-lg-2 col-xl-2 mx-auto mb-4">
-              <h6 class="text-uppercase fw-bold pt-12">Services</h6>
-              <hr
-                class="mb-4 mt-0 d-inline-block mx-auto"
-                style="width: 60px; background-color: #7c4dff; height: 2px"
-              />
-              <p>
-                <router-link :to="{ name: 'dietPlan' }" class="link"
-                  >Diet Plans</router-link
-                >
-              </p>
-              <p>
-                <router-link :to="{ name: 'exerciseInfo' }" class="link"
-                  >Fitness Exercises</router-link
-                >
-              </p>
-              <p>
-                <router-link :to="{ name: 'yogaPoses' }" class="link"
-                  >Yoga Poses</router-link
-                >
-              </p>
-              <p>
-                <router-link :to="{ name: 'foodNutrition' }" class="link"
-                  >Food Nutrition</router-link
-                >
-              </p>
-            </div>
-
-            <div class="col-md-4 col-lg-3 col-xl-3 mx-auto mb-md-0 mb-4">
-              <h6 class="text-uppercase fw-bold pt-12">Contact</h6>
-              <hr
-                class="mb-4 mt-0 d-inline-block mx-auto"
-                style="width: 60px; background-color: #7c4dff; height: 2px"
-              />
-              <p>
-                <font-awesome-icon :icon="icons.faHome" class="mr-3" /> New
-                York, NY 10012, US
-              </p>
-              <p>
-                <font-awesome-icon :icon="icons.faEnvelope" class="mr-3" />
-                gymgenius@gmail.com
-              </p>
-              <p>
-                <font-awesome-icon :icon="icons.faPhone" class="mr-3" /> +91
-                9265635978
-              </p>
-              <p>
-                <font-awesome-icon :icon="icons.faPrint" class="mr-3" /> +91
-                9265635978
-              </p>
+                  <font-awesome-icon :icon="link.icon" class="mr-3" />
+                  {{ link.text }}
+                </p>
+                <p v-else :key="'link-' + linkIndex">
+                  <router-link :to="{ name: link.to }" class="link">
+                    {{ link.text }}
+                  </router-link>
+                </p>
+              </template>
             </div>
           </div>
         </div>
@@ -122,12 +69,41 @@ import {
 export default {
   data() {
     return {
-      icons: {
-        faHome,
-        faEnvelope,
-        faPhone,
-        faPrint,
-      },
+      sections: [
+        {
+          title: "Products",
+          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4",
+          icon: false,
+          links: [
+            { to: "equipments", text: "Gym Equipments" },
+            { to: "running", text: "Gym Wear" },
+            { to: "yoga", text: "Yoga needs" },
+            { to: "supplements", text: "Gym Supplements" },
+          ],
+        },
+        {
+          title: "Services",
+          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4",
+          icon: false,
+          links: [
+            { to: "dietPlan", text: "Diet Plans" },
+            { to: "exerciseInfo", text: "Fitness Exercises" },
+            { to: "yogaPoses", text: "Yoga Poses" },
+            { to: "foodNutrition", text: "Food Nutrition" },
+          ],
+        },
+        {
+          title: "Contact",
+          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4",
+          icon: true,
+          links: [
+            { text: "New York, NY 10012, US", icon: faHome },
+            { text: "gymgenius@gmail.com", icon: faEnvelope },
+            { text: "+91 9265635978", icon: faPhone },
+            { text: "+91 9265635978", icon: faPrint },
+          ],
+        },
+      ],
     };
   },
 };

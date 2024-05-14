@@ -1,21 +1,13 @@
 <template>
-  <nav class="navbar my-navbar navbar-expand-lg navbar-light">
+  <nav class="navbar my-navbar navbar-expand-md navbar-light">
     <div class="container">
       <router-link class="navbar-brand" to="/GymGenius">
         <img src="@/assets/logo.png" alt="Logo" style="width: 220px" />
       </router-link>
-      <button
-        class="navbar-toggler border-0"
-        type="button"
-        data-toggle="collapse"
-        data-target="#navbarNav"
-        aria-controls="navbarNav"
-        aria-expanded="false"
-        aria-label="Toggle navigation"
+      <div
+        :class="{ collapse: isMenuVisible, 'navbar-collapse': true }"
+        id="navbarNav"
       >
-        <v-app-bar-nav-icon class="iconify bar-icon"></v-app-bar-nav-icon>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
         <ul class="navbar-nav ml-auto">
           <li
             v-for="(navItem, index) in navItems"
@@ -33,13 +25,6 @@
             >
               {{ navItem.label }}
             </router-link>
-            <a
-              v-else
-              class="nav-link"
-              href="#"
-              @click="setActiveNavItem(index)"
-              >{{ navItem.label }}</a
-            >
           </li>
         </ul>
       </div>
@@ -115,7 +100,7 @@ export default {
         break;
 
       case "/authentication":
-        this.activeNavItem = -1; 
+        this.activeNavItem = -1;
         break;
 
       default:
@@ -124,7 +109,7 @@ export default {
   mounted() {
     const token = Cookies.get("token");
     if (token) {
-      const decodedToken = jwtDecode(token); 
+      const decodedToken = jwtDecode(token);
       this.$store.dispatch("fetchUser", { id: decodedToken.userId });
       this.$store.state.userModule.userId = decodedToken.userId;
       this.$store.state.userModule.role = decodedToken.role;

@@ -22,6 +22,11 @@
               <p class="small text-muted">{{ trainer.position }}</p>
               <li class="list-inline-item m-0">
                 <a :href="twitterLink" class="social-link">
+                  <font-awesome-icon :icon="icons.faFacebookF" />
+                </a>
+              </li>
+              <li class="list-inline-item m-0">
+                <a :href="twitterLink" class="social-link">
                   <font-awesome-icon :icon="icons.faTwitter" />
                 </a>
               </li>
