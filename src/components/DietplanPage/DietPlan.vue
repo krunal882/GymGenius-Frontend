@@ -1,8 +1,16 @@
 <template>
-  <div style="height: 800">
-    <v-img :src="poster" alt="diet plan poster" class="stretch-image" />
+  <div class="carousel-inner">
+    <div class="carousel-item active">
+      <img
+        src="../../assets/img/diet-banner.jpg"
+        height="600px"
+        class="d-block w-100 carousel-image"
+        alt="..."
+      />
+    </div>
   </div>
-  <div class="flex-row">
+  <UserSearch @search="handleSearch" />
+  <div class="flex-row mt-0">
     <DietFilter @filters-applied="applyFilters" />
     <div class="flex-column mt-10">
       <DietPreview
@@ -25,6 +33,7 @@ import dietPoster from "../../assets/img/diet-plan-poster2.png";
 import DietFilter from "./DietFilter.vue";
 import DietDisplay from "./DietDisplay.vue";
 import DietPreview from "./DietPreview.vue";
+import UserSearch from "../common-components/UserSearch.vue";
 export default {
   data() {
     return {
@@ -32,14 +41,21 @@ export default {
       exploreClicked: false,
       selectedDietPlan: null,
       filteredDietPlan: null,
+      searchTimeout: null,
     };
   },
   components: {
     DietFilter,
     DietDisplay,
     DietPreview,
+    UserSearch,
   },
   methods: {
+    handleSearch(searchTerm) {
+      if (searchTerm) {
+        this.fetchDietPlanWithFilters({ name: searchTerm });
+      }
+    },
     applyFilters(filteredFilters) {
       this.fetchDietPlanWithFilters(filteredFilters);
     },
@@ -62,14 +78,14 @@ export default {
   },
 
   mounted() {
-    this.$store.dispatch("fetchDietPlan"); // Fetch exercises data when the component is mounted
+    this.$store.dispatch("fetchDietPlan");
   },
 };
 </script>
 
 <style scoped>
 .stretch-image {
-  max-height: 680px; /* Adjust as needed */
+  max-height: 680px;
 }
 
 .flex-row {
