@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ProductSearch @search="handleSearch" @add="openAddDialog" />
+    <ItemSearch @search="handleSearch" @add="openAddDialog" />
     <AddYoga :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
     <YogaAction
       :yogas="yogas"
@@ -22,14 +22,14 @@
 </template>
 
 <script>
-import ProductSearch from "@/components/store/storeComponents/ProductSearch.vue";
+import ItemSearch from "@/components/common-components/ItemSearch.vue";
 import YogaAction from "./actions/YogaAction.vue";
 import YogaDialog from "./actions/YogaDialog.vue";
 import RemoveItem from "./actions/removeItem/RemoveItem.vue";
 import AddYoga from "./actions/addItem/AddYoga.vue";
 export default {
   components: {
-    ProductSearch,
+    ItemSearch,
     YogaAction,
     YogaDialog,
     RemoveItem,
@@ -38,7 +38,7 @@ export default {
   data() {
     return {
       selectedItem: null,
-      yoga: [], 
+      yoga: [],
       selectedYoga: null,
       dialogOpen: false,
       removeDialogOpen: false,

@@ -13,24 +13,7 @@
     </div>
 
     <YogaInfoTabs />
-    <v-row justify="center" dense>
-      <v-col class="mt-5 d-flex" cols="4">
-        <v-text-field
-          v-model="selectedItem"
-          class="mx-auto"
-          dense
-          placeholder="Type exercise name here"
-          append-outer-icon="mdi-magnify"
-          style="max-width: 350px"
-          variant="outlined"
-          rounded
-        >
-          <template v-slot:append>
-            <v-btn @click="search" color="success">Search</v-btn>
-          </template>
-        </v-text-field>
-      </v-col>
-    </v-row>
+    <UserSearch @search="handleSearch" />
     <div class="flex-row">
       <YogaFilter @filters-applied="applyFilters" />
       <div class="flex-column">
@@ -54,13 +37,14 @@ import YogaInfo from "./YogaInfo.vue";
 import YogaDetails from "./YogaDetails.vue";
 import YogaFilter from "./YogaFilter.vue";
 import YogaInfoTabs from "./YogaInfoTabs.vue";
+import UserSearch from "../common-components/UserSearch.vue";
 
 export default {
   data() {
     return {
       selectedItem: null,
       exploreClicked: false,
-      selectedCategory: null, 
+      selectedCategory: null,
     };
   },
   components: {
@@ -68,10 +52,13 @@ export default {
     YogaDetails,
     YogaFilter,
     YogaInfoTabs,
+    UserSearch,
   },
   methods: {
-    search() {
-      this.fetchYogaWithFilters({ name: this.selectedItem });
+    handleSearch(searchTerm) {
+      if (searchTerm) {
+        this.fetchYogaWithFilters({ name: searchTerm });
+      }
     },
     handleExploreClick(yoga) {
       this.exploreClicked = !this.exploreClicked;

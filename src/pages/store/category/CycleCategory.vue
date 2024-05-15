@@ -1,6 +1,6 @@
 <template>
   <CategoryCarousel :images="carouselImages" />
-  <ProductSearch @search="handleSearch" />
+  <UserSearch @search="handleSearch" />
 
   <div class="d-flex">
     <ProductFilter @filters-applied="applyFilters" />
@@ -16,7 +16,7 @@ import CategoryProduct from "../../../components/store/CategoryProduct.vue";
 import CategoryCarousel from "../../../components/store/CategoryCarousel.vue";
 import ProductFilter from "../../../components/store/man/ProductFilter.vue";
 import storeFilterMixin from "../../../components/store/storeFilterMixin";
-import ProductSearch from "@/components/store/storeComponents/ProductSearch.vue";
+import UserSearch from "@/components/common-components/UserSearch.vue";
 export default {
   mixins: [storeFilterMixin],
 
@@ -24,7 +24,7 @@ export default {
     CategoryCarousel,
     ProductFilter,
     CategoryProduct,
-    ProductSearch,
+    UserSearch,
   },
   data() {
     return {
@@ -37,9 +37,10 @@ export default {
     };
   },
   methods: {
-    handleSearch(searchItem) {
-      this.selectedItem = searchItem;
-      this.search();
+    handleSearch(searchTerm) {
+      if (searchTerm) {
+        this.fetchProductWithFilters({ name: searchTerm });
+      }
     },
   },
 };

@@ -21,25 +21,8 @@
         />
       </div>
     </div>
-    <v-row justify="center" dense>
-      <v-col class="mt-5 d-flex" cols="4">
-        <v-text-field
-          v-model="selectedItem"
-          class="mx-auto"
-          dense
-          placeholder="Type exercise name here"
-          append-outer-icon="mdi-magnify"
-          style="max-width: 350px"
-          variant="outlined"
-          rounded
-        >
-          <template v-slot:append>
-            <v-btn @click="search" color="success">Search</v-btn>
-          </template>
-        </v-text-field>
-      </v-col>
-    </v-row>
-
+    <UserSearch @search="handleSearch" />
+    <v-card-title>Filter Exercise</v-card-title>
     <div class="flex-row mt-0">
       <ExerciseFilter @filters-applied="applyFilters" />
       <div class="flex-column">
@@ -62,6 +45,7 @@
 import ExerciseFilter from "./ExerciseFilter.vue";
 import ExerciseDetail from "./ExerciseDetail.vue";
 import ExercisePreview from "./ExercisePreview.vue";
+import UserSearch from "../common-components/UserSearch.vue";
 
 export default {
   data() {
@@ -70,11 +54,14 @@ export default {
       exploreClicked: false,
       selectedExercise: null,
       filteredExercises: null,
+      searchTimeout: null,
     };
   },
   methods: {
-    search() {
-      this.fetchExercisesWithFilters({ name: this.selectedItem });
+    handleSearch(searchTerm) {
+      if (searchTerm) {
+        this.fetchExercisesWithFilters({ name: searchTerm });
+      }
     },
     applyFilters(filteredFilters) {
       this.fetchExercisesWithFilters(filteredFilters);
@@ -101,6 +88,7 @@ export default {
     ExerciseFilter,
     ExercisePreview,
     ExerciseDetail,
+    UserSearch,
   },
   mounted() {
     this.$store.dispatch("fetchExercises");

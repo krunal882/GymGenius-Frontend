@@ -9,24 +9,7 @@
         />
       </div>
     </div>
-    <v-row justify="center" dense>
-      <v-col class="mt-5 d-flex" cols="4">
-        <v-text-field
-          v-model="selectedItem"
-          class="mx-auto"
-          dense
-          placeholder="Type food-item name here"
-          append-outer-icon="mdi-magnify"
-          style="max-width: 350px"
-          variant="outlined"
-          rounded
-        >
-          <template v-slot:append>
-            <v-btn @click="search" color="success">Search</v-btn>
-          </template>
-        </v-text-field>
-      </v-col>
-    </v-row>
+    <UserSearch @search="handleSearch" />
     <div class="flex-row">
       <FoodFilter @filters-applied="applyFilters" />
       <div class="flex-column mt-10">
@@ -49,6 +32,7 @@
 import FoodFilter from "./FoodFilter.vue";
 import NutritionDetail from "./NutritionDetail.vue";
 import NutritionPreview from "./NutritionPreview.vue";
+import UserSearch from "../common-components/UserSearch.vue";
 
 export default {
   data() {
@@ -60,8 +44,10 @@ export default {
     };
   },
   methods: {
-    search() {
-      this.fetchFoodItemWithFilters({ name: this.selectedItem });
+    handleSearch(searchTerm) {
+      if (searchTerm) {
+        this.fetchFoodItemWithFilters({ name: searchTerm });
+      }
     },
     applyFilters(filteredFilters) {
       this.fetchFoodItemWithFilters(filteredFilters);
@@ -88,9 +74,10 @@ export default {
     FoodFilter,
     NutritionDetail,
     NutritionPreview,
+    UserSearch,
   },
   mounted() {
-    this.$store.dispatch("fetchFoodItem"); 
+    this.$store.dispatch("fetchFoodItem");
   },
 };
 </script>

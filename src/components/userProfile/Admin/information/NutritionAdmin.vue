@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ProductSearch @search="handleSearch" @add="openAddDialog" />
+    <ItemSearch @search="handleSearch" @add="openAddDialog" />
     <AddFoodItem :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
     <NutritionAction
       :foodItem="foodItems"
@@ -22,14 +22,14 @@
 </template>
 
 <script>
-import ProductSearch from "@/components/store/storeComponents/ProductSearch.vue";
+import ItemSearch from "@/components/common-components/ItemSearch.vue";
 import NutritionAction from "./actions/NutritionAction.vue";
 import NutritionDialog from "./actions/NutritionDialog.vue";
 import RemoveItem from "./actions/removeItem/RemoveItem.vue";
 import AddFoodItem from "./actions/addItem/AddFoodItem.vue";
 export default {
   components: {
-    ProductSearch,
+    ItemSearch,
     NutritionAction,
     NutritionDialog,
     RemoveItem,

@@ -1,6 +1,6 @@
 <template>
   <div>
-    <ProductSearch @search="handleSearch" @add="openAddDialog" />
+    <ItemSearch @search="handleSearch" @add="openAddDialog" />
     <AddExercise :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
     <ExerciseActions
       :exercises="exercises"
@@ -22,14 +22,14 @@
 </template>
 
 <script>
-import ProductSearch from "@/components/store/storeComponents/ProductSearch.vue";
+import ItemSearch from "@/components/common-components/ItemSearch.vue";
 import ExerciseActions from "./actions/ExerciseActions.vue";
 import ExerciseDialog from "./actions/ExerciseDialog.vue";
 import RemoveItem from "./actions/removeItem/RemoveItem.vue";
 import AddExercise from "./actions/addItem/AddExercise.vue";
 export default {
   components: {
-    ProductSearch,
+    ItemSearch,
     ExerciseActions,
     ExerciseDialog,
     RemoveItem,
