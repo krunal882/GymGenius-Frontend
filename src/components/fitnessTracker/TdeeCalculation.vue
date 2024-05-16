@@ -47,7 +47,6 @@
     <div class="d-flex flex-wrap justify-center mt-5">
       <div class="mb-4" style="margin-right: 20px">
         <v-select
-          clearable
           label="Gender"
           v-model="gender"
           :items="['Male', 'Female']"
@@ -56,7 +55,6 @@
       </div>
       <div class="mb-4" style="margin-right: 20px">
         <v-select
-          clearable
           label="Activity Level"
           v-model="activityFactor"
           :items="[1.2, 1.375, 1.55, 1.725, 1.9]"
@@ -65,7 +63,6 @@
       </div>
       <div class="mb-4">
         <v-select
-          clearable
           label="Goal Adjustment"
           v-model="goalAdjustment"
           :items="['Lose Weight', 'Maintain Weight', 'Gain Muscle']"
@@ -139,9 +136,9 @@ export default {
         case "Lose Weight":
           return 0.9;
         case "Maintain Weight":
-          return 1; 
+          return 1;
         case "Gain Muscle":
-          return 1.1; 
+          return 1.1;
         default:
           return 1;
       }

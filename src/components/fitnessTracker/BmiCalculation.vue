@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex flex-wrap justify-center">
     <div>
       <Knob
         v-model="weight"
@@ -14,7 +14,7 @@
       />
       <label class="bold-label">Weight: {{ weight }} kg</label>
     </div>
-    <div style="margin-left: 200px">
+    <div style="margin-left: 5%">
       <Knob
         v-model="height"
         :size="200"
@@ -28,7 +28,7 @@
       />
       <label class="bold-label">Height: {{ height }} cm</label>
     </div>
-    <div class="text-center calculate">
+    <div class="text-center mt-5" style="margin-left: 5%">
       <v-btn :loading="loading" @click="calculateBMI">
         Calculate Your BMI
         <template v-slot:loader>
@@ -87,15 +87,5 @@ export default {
 .bmi-result {
   font-weight: bold;
   margin-top: 20px;
-}
-.calculate {
-  margin: auto;
-  margin-top: 0px;
-  width: 200px;
-  height: 50px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-.calculate:hover span {
-  color: white;
 }
 </style>

@@ -39,7 +39,7 @@
         outlined
       ></v-text-field>
     </div>
-    <div class="text-center ml-5">
+    <div class="text-center ml-5 mt-2">
       <v-btn :loading="loading" @click="calculateWaterIntake">
         Calculate Water Intake
         <template v-slot:loader>

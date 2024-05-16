@@ -44,7 +44,6 @@
     </div>
     <div class="mb-4" style="margin-left: 40px">
       <v-select
-        clearable
         label="Gender"
         v-model="gender"
         :items="['Male', 'Female']"
@@ -53,14 +52,13 @@
     </div>
     <div class="mb-4" style="margin-left: 40px">
       <v-select
-        clearable
         label="Activity Factor"
         v-model="activityFactor"
         :items="[1.2, 1.375, 1.55, 1.725, 1.9]"
         variant="outlined"
       ></v-select>
     </div>
-    <div class="text-center mt-4 calculate">
+    <div class="text-center mt-4" style="margin-left: 3%">
       <v-btn :loading="loading" @click="calculateFat">
         Calculate Body Fat
         <template v-slot:loader>
@@ -91,7 +89,7 @@ export default {
       gender: "Male",
       loading: false,
       fatResult: null,
-      activityFactor: 1.2, 
+      activityFactor: 1.2,
     };
   },
   methods: {
@@ -130,15 +128,5 @@ export default {
 .calorie-result {
   font-weight: bold;
   margin-top: 20px;
-}
-.calculate {
-  margin: auto;
-  margin-top: 0px;
-  width: fit-content;
-  height: 50px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-.calculate:hover span {
-  color: white;
 }
 </style>

@@ -1,5 +1,5 @@
 <template>
-  <div class="d-flex">
+  <div class="d-flex flex-wrap justify-center">
     <div>
       <Knob
         v-model="weight"
@@ -14,7 +14,7 @@
       />
       <label class="bold-label">Weight: {{ weight }} kg</label>
     </div>
-    <div style="margin-left: 100px">
+    <div style="margin-left: 5%">
       <Knob
         v-model="height"
         :size="200"
@@ -28,7 +28,7 @@
       />
       <label class="bold-label">Height: {{ height }} cm</label>
     </div>
-    <div style="margin-left: 100px">
+    <div style="margin-left: 5%">
       <Knob
         v-model="age"
         :size="200"
@@ -42,16 +42,15 @@
       />
       <label class="bold-label">Age: {{ age }} year</label>
     </div>
-    <div style="margin-left: 50px; width: 148px">
+    <div class="mt-5" style="margin-left: 50px; width: 148px">
       <v-select
-        clearable
         label="Gender"
         v-model="gender"
         :items="['Male', 'Female']"
         variant="outlined"
       ></v-select>
     </div>
-    <div class="text-center calculate">
+    <div class="text-center mt-5" style="margin-left: 5%">
       <v-btn :loading="loading" @click="calculateCalories">
         Calculate Your BMR
         <template v-slot:loader>
@@ -81,7 +80,7 @@ export default {
       gender: "Male",
       loading: false,
       caloriesResult: null,
-      activityFactor: 1.2, 
+      activityFactor: 1.2,
     };
   },
   methods: {
@@ -121,15 +120,5 @@ export default {
 .calorie-result {
   font-weight: bold;
   margin-top: 20px;
-}
-.calculate {
-  margin: auto;
-  margin-top: 0px;
-  width: fit-content;
-  height: 50px;
-  font-family: Arial, Helvetica, sans-serif;
-}
-.calculate:hover span {
-  color: white;
 }
 </style>
