@@ -1,5 +1,17 @@
 <template>
-  <v-container>
+  <div>
+    <div id="carouselExampleIndicators" class="carousel slide">
+      <div class="carousel-inner">
+        <div class="carousel-item active">
+          <img
+            src="../../assets/img/nutritions99.jpg"
+            class="d-block w-100"
+            style="height: 600px"
+            alt="..."
+          />
+        </div>
+      </div>
+    </div>
     <v-row justify="center">
       <v-card width="400" class="mx-10 my-10 image-hover-effect">
         <router-link :to="{ name: 'foodNutrition' }">
@@ -29,7 +41,7 @@
         </v-card-text>
       </v-card>
     </v-row>
-  </v-container>
+  </div>
   <div>
     <TabView />
     <HealthBenifits />

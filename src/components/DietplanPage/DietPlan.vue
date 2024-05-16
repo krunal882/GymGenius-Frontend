@@ -1,18 +1,20 @@
 <template>
-  <div class="carousel-inner">
-    <div class="carousel-item active">
-      <img
-        src="../../assets/img/diet-banner.jpg"
-        height="600px"
-        class="d-block w-100 carousel-image"
-        alt="..."
-      />
+  <div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img
+          src="../../assets/img/diet-banner.jpg"
+          class="d-block w-100 carousel-image"
+          alt="..."
+        />
+      </div>
     </div>
-  </div>
-  <UserSearch @search="handleSearch" />
-  <div class="flex-row mt-0">
-    <DietFilter @filters-applied="applyFilters" />
-    <div class="flex-column mt-10">
+    <div class="d-flex flex-wrap justify-content-center">
+      <UserSearch @search="handleSearch" />
+      <DietFilter @filters-applied="applyFilters" />
+    </div>
+
+    <div class="d-flex flex-wrap justify-content-center">
       <DietPreview
         v-if="!exploreClicked"
         :dietPlan="dietPlan"

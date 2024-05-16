@@ -1,25 +1,39 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row v-if="loading">
-      <v-col v-for="n in this.foodItem.length" :key="n" cols="4">
+      <v-col
+        v-for="n in this.foodItem.length"
+        :key="n"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
         <v-skeleton-loader
           class="mx-auto border"
           max-width="300"
-          type="image, article, chip@2"
+          type="image"
         ></v-skeleton-loader>
       </v-col>
     </v-row>
-    <v-row v-else style="justify-content: space-between">
-      <v-col v-for="foodItem in foodItem" :key="foodItem.id" cols="4">
-        <v-card class="text-black my-4 mx-2 image-hover-effect" min-width="350">
+    <v-row v-else class="d-flex flex-wrap">
+      <v-col
+        v-for="foodItem in foodItem"
+        :key="foodItem.id"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
+        <v-card width="100%" class="text-black my-4 mx-2 image-hover-effect">
           <v-img
             class="align-end text-white"
-            height="200"
+            height="250"
             :src="imgPath(foodItem.name)"
             cover
             @click="exploreClicked(foodItem)"
           >
-            <v-card-title>{{ foodItem.name }}</v-card-title>
+            <v-card-title class="caption">{{ foodItem.name }}</v-card-title>
           </v-img>
         </v-card>
       </v-col>
@@ -95,5 +109,13 @@ export default {
 
 .image-hover-effect:hover {
   transform: scale(1.1);
+}
+.caption {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px;
 }
 </style>

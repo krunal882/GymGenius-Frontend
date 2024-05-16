@@ -3,27 +3,27 @@
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img
-          src="../../assets/img/exercise-header.png"
+          src="../../assets/img/nutritions.jpg"
           class="d-block w-100 carousel-image"
           alt="..."
         />
       </div>
     </div>
-    <UserSearch @search="handleSearch" />
-    <div class="flex-row">
+    <div class="d-flex flex-wrap justify-content-center">
+      <UserSearch @search="handleSearch" />
       <FoodFilter @filters-applied="applyFilters" />
-      <div class="flex-column mt-10">
-        <NutritionPreview
-          v-if="!exploreClicked"
-          :foodItem="foodItem"
-          @explore="handleExploreClick"
-        />
-        <NutritionDetail
-          v-else
-          @explore="handleExploreClick"
-          :foodItem="selectedFoodItem"
-        />
-      </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-center">
+      <NutritionPreview
+        v-if="!exploreClicked"
+        :foodItem="foodItem"
+        @explore="handleExploreClick"
+      />
+      <NutritionDetail
+        v-else
+        @explore="handleExploreClick"
+        :foodItem="selectedFoodItem"
+      />
     </div>
   </div>
 </template>

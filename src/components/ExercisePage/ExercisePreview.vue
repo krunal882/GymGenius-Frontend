@@ -12,7 +12,7 @@
     </v-row>
 
     <!-- Cards for Exercise Info -->
-    <v-row v-else>
+    <v-row v-else class="d-flex flex-wrap">
       <v-col
         v-for="exercise in exercises"
         :key="exercise.id"
@@ -21,35 +21,20 @@
         md="4"
         lg="4"
       >
-        <v-card
-          width="300"
-          height="auto"
-          class="text-black my-4 mx-2 image-hover-effect"
-        >
+        <v-card width="100%" class="text-black my-4 mx-2 image-hover-effect">
           <v-img
             :src="getExerciseImagePath(exercise.name)"
-            style="height: 200px; width: 100%; object-fit: cover"
+            style="height: 300px"
           >
-            <div
-              style="
-                position: absolute;
-                bottom: 0;
-                left: 0;
-                right: 0;
-                background-color: rgba(0, 0, 0, 0.6);
-                color: white;
-                padding: 8px;
-              "
-            >
-              {{ exercise.name }}
-            </div>
+            <div class="overlay"></div>
+            <div class="caption">{{ exercise.name }}</div>
           </v-img>
           <v-card-text>
             <div class="subtitle-row">
               <v-card-subtitle>Level: {{ exercise.level }}</v-card-subtitle>
               <v-card-subtitle>Force: {{ exercise.force }}</v-card-subtitle>
             </div>
-            <div class="d-flex">
+            <div class="mt-3 d-flex">
               Primary Muscle:
               <ul>
                 <li v-for="muscle in exercise.primaryMuscles" :key="muscle">
@@ -57,9 +42,9 @@
                 </li>
               </ul>
             </div>
-            <div>Equipment needed: {{ exercise.equipment }}</div>
+            <div>Equipment needed : {{ exercise.equipment }}</div>
           </v-card-text>
-          <v-card-actions style="justify-content: space-between">
+          <v-card-actions>
             <v-btn color="orange" @click="exploreClicked(exercise)"
               >Explore</v-btn
             >
@@ -138,5 +123,15 @@ export default {
 
 .image-hover-effect:hover {
   transform: scale(1.1);
+}
+
+.caption {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px;
 }
 </style>

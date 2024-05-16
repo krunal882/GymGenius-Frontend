@@ -21,22 +21,21 @@
         />
       </div>
     </div>
-    <UserSearch @search="handleSearch" />
-    <v-card-title>Filter Exercise</v-card-title>
-    <div class="flex-row mt-0">
+    <div class="d-flex flex-wrap justify-content-center">
+      <UserSearch @search="handleSearch" />
       <ExerciseFilter @filters-applied="applyFilters" />
-      <div class="flex-column">
-        <ExercisePreview
-          v-if="!exploreClicked"
-          :exercises="exercises"
-          @explore="handleExploreClick"
-        />
-        <ExerciseDetail
-          v-else
-          @explore="handleExploreClick"
-          :exercise="selectedExercise"
-        />
-      </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-center">
+      <ExercisePreview
+        v-if="!exploreClicked"
+        :exercises="exercises"
+        @explore="handleExploreClick"
+      />
+      <ExerciseDetail
+        v-else
+        @explore="handleExploreClick"
+        :exercise="selectedExercise"
+      />
     </div>
   </div>
 </template>
@@ -100,10 +99,6 @@ export default {
 .custom-button-style {
   background-color: blue;
   color: white;
-}
-
-.carousel-image {
-  border-radius: 10px;
 }
 
 .iframe-style {

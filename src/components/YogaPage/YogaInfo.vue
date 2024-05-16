@@ -1,7 +1,14 @@
 <template>
   <v-container>
     <v-row v-if="loading">
-      <v-col v-for="n in this.yoga.length" :key="n" cols="4">
+      <v-col
+        v-for="n in this.yoga.length"
+        :key="n"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
         <v-skeleton-loader
           class="mx-auto border"
           max-width="300"
@@ -10,7 +17,13 @@
       </v-col>
     </v-row>
 
-    <v-col v-else v-for="yoga in yoga" :key="yoga.id" cols="4">
+    <v-col
+      v-else
+      class="flex-wrap"
+      v-for="yoga in yoga"
+      :key="yoga.id"
+      cols="4"
+    >
       <v-card class="image-hover-effect" width="900" style="display: flex">
         <div style="flex: 1; padding-right: 16px">
           <v-img height="300" :src="yoga.url_png">

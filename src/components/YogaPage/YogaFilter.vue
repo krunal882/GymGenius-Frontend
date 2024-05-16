@@ -1,48 +1,67 @@
 <template>
-  <div>
-    <v-container
-      class="ml-10"
-      style="width: 332px; margin-right: 0px; margin-top: 25px"
-    >
-      <form @submit.prevent="submit">
-        <div class="row">
-          <div
-            class="col-md-3 col-sm-3 col-xs-12"
-            style="width: 300px; margin-right: 0px"
+  <div class="d-flex justify-content-center align-items-center">
+    <v-container class="ml-10" style="width: 152px; padding-bottom: 15px">
+      <div class="d-flex align-items-center">
+        <v-chip color="blue">
+          <v-icon
+            class="menu-icon"
+            @click="toggleFilter"
+            style="color: black; font-size: 24px"
+            >mdi-menu</v-icon
           >
-            <v-card outlined>
-              <v-card-title>Filter Yoga</v-card-title>
-              <v-divider></v-divider>
+          <span class="ml-1" style="color: black"> Filters</span>
+        </v-chip>
+      </div>
+      <transition name="filter" :duration="{ enter: 1000, leave: 500 }">
+        <form
+          v-if="showFilter"
+          @submit.prevent="submit"
+          class="row filter-section"
+        >
+          <div class="row">
+            <div
+              class="col-md-3 col-sm-3 col-xs-12"
+              style="
+                width: 300px;
+                margin-right: 0px;
+                position: relative;
+                z-index: 100;
+              "
+            >
+              <v-card outlined>
+                <v-card-title>Filter Yoga</v-card-title>
+                <v-divider></v-divider>
 
-              <v-card-title>Yoga Category</v-card-title>
-              <v-select
-                v-model="selectedCategory"
-                :items="category"
-                hint="Core yoga / Seated yoga"
-                label="Category"
-                multiple
-                persistent-hint
-              ></v-select>
+                <v-card-title>Yoga Category</v-card-title>
+                <v-select
+                  v-model="selectedCategory"
+                  :items="category"
+                  hint="Core yoga / Seated yoga"
+                  label="Category"
+                  multiple
+                  persistent-hint
+                ></v-select>
 
-              <v-divider></v-divider>
-              <div
-                class="container d-flex justify-center align-item-center pb-5"
-              >
-                <v-btn
-                  color="primary darken-2"
-                  class="me-4 tonal"
-                  @click="applyFilters"
+                <v-divider></v-divider>
+                <div
+                  class="container d-flex justify-center align-item-center pb-5"
                 >
-                  Apply
-                </v-btn>
-                <v-btn color="error darken-2" @click="handleReset">
-                  Clear
-                </v-btn>
-              </div>
-            </v-card>
+                  <v-btn
+                    color="primary darken-2"
+                    class="me-4 tonal"
+                    @click="applyFilters"
+                  >
+                    Apply
+                  </v-btn>
+                  <v-btn color="error darken-2" @click="handleReset">
+                    Clear
+                  </v-btn>
+                </div>
+              </v-card>
+            </div>
           </div>
-        </div>
-      </form>
+        </form>
+      </transition>
     </v-container>
   </div>
 </template>
@@ -51,8 +70,8 @@
 export default {
   data() {
     return {
-      selectedFilters: {
-      },
+      showFilter: false,
+      selectedFilters: {},
       selectedCategory: [],
 
       category: [
@@ -72,18 +91,22 @@ export default {
   },
   computed: {},
   methods: {
+    toggleFilter() {
+      this.showFilter = !this.showFilter;
+    },
     applyFilters() {
       const filteredFilters = {};
 
       if (this.selectedCategory.length > 0) {
         filteredFilters.category = this.selectedCategory;
       }
-    
+
       if (Object.keys(filteredFilters).length > 0) {
         this.$emit("filters-applied", filteredFilters);
       } else {
         console.log("No filters selected.");
       }
+      this.showFilter = !this.showFilter;
     },
     handleReset() {
       this.selectedCategory = [];
@@ -92,4 +115,21 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.menu-icon {
+  cursor: pointer;
+}
+.filter-section {
+  position: absolute;
+  z-index: 100;
+}
+
+.filter-enter-active,
+.filter-leave-active {
+  transition: opacity 0.3s ease;
+}
+.filter-enter,
+.filter-leave-to {
+  opacity: 0;
+}
+</style>

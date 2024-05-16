@@ -1,33 +1,31 @@
 <template>
   <div>
-    <div id="carouselExampleIndicators" class="carousel slide">
-      <div class="carousel-inner">
-        <div class="carousel-item active">
-          <img
-            src="../../assets/img/yoga-wide_generated.jpg"
-            class="d-block w-100"
-            alt="..."
-          />
-        </div>
+    <div class="carousel-inner">
+      <div class="carousel-item active">
+        <img
+          src="../../assets/img/yoga-wide_generated.jpg"
+          class="d-block w-100 carousel-image"
+          alt="..."
+        />
       </div>
     </div>
 
     <YogaInfoTabs />
-    <UserSearch @search="handleSearch" />
-    <div class="flex-row">
+    <div class="d-flex flex-wrap justify-content-center">
+      <UserSearch @search="handleSearch" />
       <YogaFilter @filters-applied="applyFilters" />
-      <div class="flex-column">
-        <YogaInfo
-          v-if="!exploreClicked"
-          :yoga="yoga"
-          @explore="handleExploreClick"
-        />
-        <YogaDetails
-          v-else
-          @explore="handleExploreClick"
-          :yoga="selectedCategory"
-        />
-      </div>
+    </div>
+    <div class="d-flex flex-wrap justify-content-center">
+      <YogaInfo
+        v-if="!exploreClicked"
+        :yoga="yoga"
+        @explore="handleExploreClick"
+      />
+      <YogaDetails
+        v-else
+        @explore="handleExploreClick"
+        :yoga="selectedCategory"
+      />
     </div>
   </div>
 </template>

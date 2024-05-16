@@ -1,7 +1,14 @@
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row v-if="loading">
-      <v-col v-for="n in this.dietPlan.length" :key="n" cols="4">
+      <v-col
+        v-for="n in this.dietPlan.length"
+        :key="n"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
         <v-skeleton-loader
           class="mx-auto border"
           max-width="300"
@@ -10,22 +17,21 @@
       </v-col>
     </v-row>
 
-    <v-row v-else style="justify-content: space-between">
-      <v-col v-for="dietPlan in dietPlan" :key="dietPlan.id" cols="4">
-        <v-card
-          class="text-black my-4 mx-2 image-hover-effect"
-          min-width="350"
-          height="400"
-        >
-          <v-img
-            class="align-end text-white"
-            style="height: 200px; width: 100%; object-fit: cover"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
-            cover
-          >
+    <v-row v-else class="d-flex flex-wrap">
+      <v-col
+        v-for="dietPlan in dietPlan"
+        :key="dietPlan.id"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
+        <v-card class="text-black my-4 mx-2 image-hover-effect" width="100%">
+          <v-img style="height: 200px" :src="getImgPath(dietPlan.src)" cover>
           </v-img>
-
-          <v-card-title class="text-center plan-name">Plan Name: </v-card-title>
+          <v-card-title class="text-center plan-name caption"
+            >Plan Name:
+          </v-card-title>
           <v-card-text class="text-center pb-0" style="font-weight: 500">{{
             dietPlan.plan_name
           }}</v-card-text>
@@ -69,6 +75,9 @@ export default {
     },
   },
   methods: {
+    getImgPath(src) {
+      return `../../../assets/img/dietPlan/${src}`;
+    },
     exploreClicked(dietPlan) {
       this.$emit("explore", dietPlan);
     },

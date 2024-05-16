@@ -1,99 +1,114 @@
 <template>
-  <v-container
-    class="ml-10"
-    style="width: 332px; margin-right: 0px; margin-top: 25px"
-  >
-    <v-icon
-      class="menu-icon"
-      @click="toggleFilter"
-      style="color: black; font-size: 24px"
-      >mdi-menu</v-icon
-    >
-
-    <form v-if="showFilter" @submit.prevent="submit">
-      <div class="row">
-        <div
-          class="col-md-3 col-sm-3 col-xs-12"
-          style="width: 300px; margin-right: 0px"
-        >
-          <v-card outlined>
-            <v-card-title>Filter Exercise</v-card-title>
-            <v-divider></v-divider>
-
-            <v-card-title>Equipment Needed</v-card-title>
-            <v-select
-              v-model="selectedEquipment"
-              :items="equipment"
-              hint="Dumbbell / Cable"
-              label="Equipment"
-              multiple
-              persistent-hint
-            ></v-select>
-
-            <v-divider></v-divider>
-            <v-card-title>Force Type</v-card-title>
-            <v-select
-              v-model="selectedForce"
-              :items="force"
-              hint="Push / Pull / Static"
-              label="Force Type"
-              multiple
-              persistent-hint
-            ></v-select>
-
-            <v-divider></v-divider>
-            <v-card-title>Muscle Target</v-card-title>
-            <v-select
-              v-model="selectedMuscle"
-              :items="muscle"
-              hint="Shoulders / Chest / Back"
-              label="Force Type"
-              persistent-hint
-              multiple
-            ></v-select>
-
-            <v-divider></v-divider>
-
-            <v-card-title>Exercise Level</v-card-title>
-            <v-divider></v-divider>
-
-            <v-select
-              v-model="selectedLevel"
-              :items="level"
-              hint="Beginner / Intermediate / Expert"
-              label="Exercise Level"
-              persistent-hint
-              multiple
-            ></v-select>
-
-            <v-divider></v-divider>
-            <v-card-title>Exercise Category</v-card-title>
-            <v-divider></v-divider>
-            <v-select
-              v-model="selectedCategory"
-              :items="category"
-              hint="Strength / Cardio / Weightlifting"
-              label="Exercise Category"
-              multiple
-              persistent-hint
-            ></v-select>
-
-            <v-divider></v-divider>
-            <div class="container d-flex justify-center align-item-center pb-5">
-              <v-btn
-                color="primary darken-2"
-                class="me-4 tonal"
-                @click="applyFilters"
-              >
-                Apply
-              </v-btn>
-              <v-btn color="error darken-2" @click="handleReset"> Clear </v-btn>
-            </div>
-          </v-card>
-        </div>
+  <div class="d-flex justify-content-center align-items-center">
+    <v-container class="ml-10" style="width: 152px; padding-bottom: 15px">
+      <div class="d-flex align-items-center">
+        <v-chip color="blue">
+          <v-icon
+            class="menu-icon"
+            @click="toggleFilter"
+            style="color: black; font-size: 24px"
+            >mdi-menu</v-icon
+          >
+          <span class="ml-1" style="color: black"> Filters</span>
+        </v-chip>
       </div>
-    </form>
-  </v-container>
+      <transition name="filter" :duration="{ enter: 1000, leave: 500 }">
+        <form
+          v-if="showFilter"
+          @submit.prevent="submit"
+          class="row filter-section"
+        >
+          <div class="row">
+            <div
+              class="col-md-3 col-sm-3 col-xs-12"
+              style="
+                width: 300px;
+                margin-right: 0px;
+                position: relative;
+                z-index: 100;
+              "
+            >
+              <v-card outlined>
+                <v-card-title>Equipment Needed</v-card-title>
+                <v-select
+                  v-model="selectedEquipment"
+                  :items="equipment"
+                  hint="Dumbbell / Cable"
+                  label="Equipment"
+                  multiple
+                  persistent-hint
+                ></v-select>
+
+                <v-divider></v-divider>
+                <v-card-title>Force Type</v-card-title>
+                <v-select
+                  v-model="selectedForce"
+                  :items="force"
+                  hint="Push / Pull / Static"
+                  label="Force Type"
+                  multiple
+                  persistent-hint
+                ></v-select>
+
+                <v-divider></v-divider>
+                <v-card-title>Muscle Target</v-card-title>
+                <v-select
+                  v-model="selectedMuscle"
+                  :items="muscle"
+                  hint="Shoulders / Chest / Back"
+                  label="Force Type"
+                  persistent-hint
+                  multiple
+                ></v-select>
+
+                <v-divider></v-divider>
+
+                <v-card-title>Exercise Level</v-card-title>
+                <v-divider></v-divider>
+
+                <v-select
+                  v-model="selectedLevel"
+                  :items="level"
+                  hint="Beginner / Intermediate / Expert"
+                  label="Exercise Level"
+                  persistent-hint
+                  multiple
+                ></v-select>
+
+                <v-divider></v-divider>
+                <v-card-title>Exercise Category</v-card-title>
+                <v-divider></v-divider>
+                <v-select
+                  v-model="selectedCategory"
+                  :items="category"
+                  hint="Strength / Cardio / Weightlifting"
+                  label="Exercise Category"
+                  multiple
+                  persistent-hint
+                ></v-select>
+
+                <v-divider></v-divider>
+                <div
+                  class="container d-flex justify-center align-item-center pb-5"
+                >
+                  <v-btn
+                    color="primary darken-2"
+                    class="me-4 tonal"
+                    @click="applyFilters"
+                  >
+                    Apply
+                  </v-btn>
+                  <v-btn color="error darken-2" @click="handleReset">
+                    Clear
+                  </v-btn>
+                </div>
+              </v-card>
+            </div>
+          </div>
+        </form>
+      </transition>
+    </v-container>
+  </div>
 </template>
 
 <script>
@@ -153,7 +168,7 @@ export default {
   computed: {},
   methods: {
     toggleFilter() {
-      this.showFilter = !this.showFilter; // Toggle filter visibility
+      this.showFilter = !this.showFilter;
     },
     applyFilters() {
       const filteredFilters = {};
@@ -183,6 +198,7 @@ export default {
       } else {
         console.log("No filters selected.");
       }
+      this.showFilter = !this.showFilter;
     },
     handleReset() {
       this.selectedCategory = null;
@@ -199,5 +215,18 @@ export default {
 <style scoped>
 .menu-icon {
   cursor: pointer;
+}
+.filter-section {
+  position: absolute;
+  z-index: 100;
+}
+
+.filter-enter-active,
+.filter-leave-active {
+  transition: opacity 0.3s ease;
+}
+.filter-enter,
+.filter-leave-to {
+  opacity: 0;
 }
 </style>

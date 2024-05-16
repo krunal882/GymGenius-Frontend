@@ -5,7 +5,7 @@
       class="mx-auto"
       dense
       style="max-width: 350px; min-width: 150px"
-      placeholder="Type here for search"
+      placeholder="Search Hear"
       append-outer-icon="mdi-magnify"
       variant="outlined"
       rounded
