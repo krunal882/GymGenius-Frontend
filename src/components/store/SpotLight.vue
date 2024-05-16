@@ -1,17 +1,9 @@
 <template>
   <div class="container">
-    <div class="card-container mt-10">
-      <v-row cols="100%" md="20">
-        <v-card class="mx-auto" v-for="(image, i) in images" :key="i">
-          <img
-            :key="i"
-            class="align-end text-white"
-            height="360"
-            :src="image"
-            cover
-          />
-        </v-card>
-      </v-row>
+    <div class="image-container">
+      <v-card class="image-card" v-for="(image, i) in images" :key="i">
+        <img :src="image" alt="Image" />
+      </v-card>
     </div>
   </div>
 </template>
@@ -24,22 +16,35 @@ export default {
     };
   },
   async created() {
-    // Load images asynchronously using dynamic import
     const [image1, image2] = await Promise.all([
       import("../../assets/img/store/spotlight2.webp"),
-
       import("../../assets/img/store/spotlight1.webp"),
     ]);
-    // Set the images array once both images are loaded
     this.images = [image1.default, image2.default];
   },
 };
 </script>
 
-<style>
-.card-container {
+<style scoped>
+.image-container {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.image-card {
+  flex: 0 0 calc(50% - 10px);
+  margin-bottom: 20px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .image-card {
+    flex-basis: 100%;
+  }
 }
 </style>

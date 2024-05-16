@@ -1,19 +1,17 @@
 <template>
-  <v-row justify="center" dense>
-    <v-col class="mt-5 d-flex" cols="4">
-      <v-text-field
-        v-model="searchTerm"
-        class="mx-auto"
-        dense
-        style="max-width: 350px; min-width: 250px"
-        placeholder="Type here for search"
-        append-outer-icon="mdi-magnify"
-        variant="outlined"
-        rounded
-        @input="handleSearchInput"
-      />
-    </v-col>
-  </v-row>
+  <v-col class="mt-5 d-flex flex-wrap" cols="4">
+    <v-text-field
+      v-model="searchTerm"
+      class="mx-auto"
+      dense
+      style="max-width: 350px; min-width: 150px"
+      placeholder="Type here for search"
+      append-outer-icon="mdi-magnify"
+      variant="outlined"
+      rounded
+      @input="handleSearchInput"
+    />
+  </v-col>
 </template>
 
 <script>

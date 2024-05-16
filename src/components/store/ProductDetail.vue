@@ -46,7 +46,7 @@
             size="large"
             color="red"
             block
-            @click="addToCartClicked"
+            @click="addToCartClicked(product)"
           >
             {{ addedToCart ? "Added to Cart" : "Add to Cart" }}
           </v-btn>
@@ -86,13 +86,12 @@
 <script>
 import { mapGetters } from "vuex";
 import { toast } from "vue3-toastify";
-import "vue3-toastify/dist/index.css";
 
 export default {
   data() {
     return {
       addedToCart: false,
-      pincode: "", // To store the value of the pincode
+      pincode: "",
       isPincodeValid: null,
       rules: {
         onlyNumbers: (value) =>
@@ -107,34 +106,41 @@ export default {
     await this.fetchProduct(id);
   },
   methods: {
-    addToCartClicked() {
+    addToCartClicked(product) {
       this.$store.dispatch("addToCart", {
-        product: this.product,
-        user: this.user,
+        productId: product._id,
+        status: "pending",
+        userId: this.$store.state.userModule.userId,
+        product,
       });
 
       toast.success("Product added to cart");
-      this.addedToCart = true; // Disable the button after adding the product to the cart
+      this.addedToCart = true;
     },
     buyProduct() {
-      this.$store.dispatch("purchase", { product: this.product });
+      this.$store.dispatch("purchase", {
+        price: this.product.price,
+        title: this.product.title,
+        quantity: 1,
+        productId: [this.product._id],
+        userId: this.$store.state.userModule.userId,
+      });
     },
 
     async fetchProduct(productId) {
       try {
         const filteredFilters = { id: productId };
-        await this.$store.dispatch("fetchProduct", { filteredFilters });
+        await this.$store.dispatch("fetchProduct", {
+          filteredFilters,
+        });
       } catch (error) {
         console.error("Error fetching product:", error);
       }
     },
     checkPincode() {
-      // Check if the pincode is valid
       if (!this.$refs.pincodeField.validate()) {
-        // If valid, set the flag to true
         this.isPincodeValid = true;
       } else {
-        // If not valid, set the flag to false
         this.isPincodeValid = false;
       }
     },
@@ -142,7 +148,7 @@ export default {
   computed: {
     ...mapGetters(["getProduct"]),
     product() {
-      return this.getProduct[0]; // Assuming you are fetching an array with one product object
+      return this.getProduct[0];
     },
     productImg() {
       return `../../assets/img/products/${this.product.category}/${this.product.src}.jpg`;

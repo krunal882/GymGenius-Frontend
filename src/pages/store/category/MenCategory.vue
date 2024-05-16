@@ -1,8 +1,10 @@
 <template>
   <ManCarousal :images="carouselImages" />
-  <UserSearch @search="handleSearch" />
-  <div class="d-flex">
+  <div class="d-flex flex-wrap justify-content-center">
+    <UserSearch @search="handleSearch" />
     <ProductFilter @filters-applied="applyFilters" />
+  </div>
+  <div class="d-flex flex-wrap justify-content-center">
     <CategoryProduct
       :product="filteredProducts"
       @product-selected="onProductSelected"

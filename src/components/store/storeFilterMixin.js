@@ -40,10 +40,10 @@ export default {
         }
     },
     created() {
-        const filteredFilters = {}; // Initialize with an empty object
+        const filteredFilters = {};
         const limit = 15;
         this.$store
-            .dispatch("fetchProduct", { filteredFilters, limit }) // Pass the filteredFilters object
+            .dispatch("fetchProduct", { filteredFilters, limit })
             .catch((error) => {
                 console.error("Error fetching product:", error);
             });

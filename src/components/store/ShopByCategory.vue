@@ -1,14 +1,20 @@
 <template>
   <div class="card-container mt-10">
     <v-row cols="100%" md="20">
-      <v-card class="mx-auto" v-for="(image, i) in images" :key="i">
-        <img
-          :key="i"
-          class="align-end text-white"
-          height="500"
-          :src="image"
-          cover
-        />
+      <v-card
+        class="mx-auto image-hover-effect"
+        v-for="(image, i) in images"
+        :key="i"
+      >
+        <router-link :to="{ name: pageRoutes[i] }">
+          <img
+            :key="i"
+            class="align-end text-white"
+            height="500"
+            :src="image"
+            cover
+          />
+        </router-link>
       </v-card>
     </v-row>
   </div>
@@ -19,16 +25,15 @@ export default {
   data() {
     return {
       images: [],
+      pageRoutes: ["strength", "running", "yoga"],
     };
   },
   async created() {
-    // Load images asynchronously using dynamic import
     const [image1, image2, image3] = await Promise.all([
       import("../../assets/img/store/strength.webp"),
       import("../../assets/img/store/running.webp"),
       import("../../assets/img/store/YogaCategory.jpeg"),
     ]);
-    // Set the images array once both images are loaded
     this.images = [image1.default, image2.default, image3.default];
   },
 };
@@ -37,7 +42,27 @@ export default {
 <style scoped>
 .card-container {
   display: flex;
-  flex-direction: row;
+  flex-wrap: wrap;
   justify-content: space-between;
+}
+
+.image-hover-effect:hover {
+  transform: scale(1.1);
+}
+
+.v-card {
+  flex: 0 0 calc(33.33% - 20px);
+  margin-bottom: 20px;
+}
+
+img {
+  width: 100%;
+  height: auto;
+}
+
+@media (max-width: 768px) {
+  .v-card {
+    flex-basis: calc(50% - 20px);
+  }
 }
 </style>

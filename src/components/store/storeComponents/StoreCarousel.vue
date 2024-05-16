@@ -58,13 +58,11 @@ export default {
   },
   components: {},
   async created() {
-    // Load images asynchronously using dynamic import
     const [image1, image2, image3] = await Promise.all([
       import("../../../assets/img/store-crousel-img2.png"),
       import("../../../assets/img/store-crousel-img3.png"),
       import("../../../assets/img/store-crousel-img4.png"),
     ]);
-    // Set the images array once both images are loaded
     this.images = [image1.default, image2.default, image3.default];
   },
 };
