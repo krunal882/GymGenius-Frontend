@@ -17,10 +17,6 @@ export default {
   components: {
     CartProduct,
   },
-  created() {
-    const id = this.$store.state.userModule.userId;
-    this.$store.dispatch("fetchCart", { userId: id, status: "pending" });
-  },
   computed: {
     cartItems() {
       return this.$store.state.cartModule.cartItems;

@@ -113,6 +113,10 @@ export default {
       this.$store.dispatch("fetchUser", { id: decodedToken.userId });
       this.$store.state.userModule.userId = decodedToken.userId;
       this.$store.state.userModule.role = decodedToken.role;
+      this.$store.dispatch("fetchCart", {
+        userId: decodedToken.userId,
+        status: "pending",
+      });
     }
   },
 };
