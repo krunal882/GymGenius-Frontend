@@ -15,7 +15,7 @@
 <script>
 import CategoryProduct from "../../../components/store/CategoryProduct.vue";
 import ManCarousal from "../../../components/store/CategoryCarousel.vue";
-import ProductFilter from "../../../components/store/man/ProductFilter.vue";
+import ProductFilter from "../../../components/store/ProductFilter.vue";
 import storeFilterMixin from "../../../components/store/storeFilterMixin";
 import UserSearch from "@/components/common-components/UserSearch.vue";
 export default {
