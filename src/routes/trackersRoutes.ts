@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import BmiCalculator from "../pages/fitness-trackers/BmiCalculator.vue";
 import BmrCalculator from "../pages/fitness-trackers/BmrCalculator.vue";
 import CalorieCalculator from "../pages/fitness-trackers/CalorieCalculator.vue";
@@ -8,10 +9,19 @@ import TrackerLandingPage from "../pages/fitness-trackers/TrackerLandingPage.vue
 import WaterCalculator from "../pages/fitness-trackers/WaterCalculator.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
+const ifAuthenticated = (to, from, next) => {
+  if (Cookies.get("token")) {
+    next();
+  } else {
+    next("/authentication");
+  }
+};
+
 const routes = [
   {
     path: "/fitnessTrackers",
     component: FitnessTrackers,
+    beforeEnter: ifAuthenticated,
     children: [
       { path: "", component: TrackerLandingPage, name: "fitnessTrackers" },
       {

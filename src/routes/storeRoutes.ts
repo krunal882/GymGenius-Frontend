@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import ProductDetail from "../components/store/ProductDetail.vue";
 import AccessoryCategory from "../pages/store/category/AccessoryCategory.vue";
 import CardioCategory from "../pages/store/category/CardioCategory.vue";
@@ -13,10 +14,18 @@ import StoreLandingPage from "../pages/store/StoreLandingPage.vue";
 import StorePage from "../pages/store/StorePage.vue";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
+const ifAuthenticated = (to, from, next) => {
+  if (Cookies.get("token")) {
+    next();
+  } else {
+    next("/authentication");
+  }
+};
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/store",
     component: StorePage,
+    beforeEnter: ifAuthenticated,
     children: [
       { path: "", component: StoreLandingPage, name: "store" },
       { path: "men", component: MenCategory, name: "men" },

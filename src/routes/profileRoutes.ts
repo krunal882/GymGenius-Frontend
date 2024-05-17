@@ -1,3 +1,4 @@
+import Cookies from "js-cookie";
 import InfoSection from "../components/userProfile/Admin/InfoSection.vue";
 import UsersSection from "../components/userProfile/Admin/UsersSection.vue";
 import BookMarkSection from "../components/userProfile/BookMarkSection.vue";
@@ -8,6 +9,14 @@ import PurchaseSection from "../components/userProfile/PurchaseSection.vue";
 import ProfilePage from "../pages/ProfilePage.vue";
 import OrdersSection from "@/components/userProfile/Admin/OrdersSection.vue";
 import { createRouter, createWebHistory } from "vue-router";
+
+const ifAuthenticated = (to, from, next) => {
+  if (Cookies.get("token")) {
+    next();
+  } else {
+    next("/authentication");
+  }
+};
 
 const routes = [
   {
