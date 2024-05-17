@@ -34,7 +34,11 @@
                           dense
                           color="blue"
                           autocomplete="false"
-                          type="password"
+                          :type="loginPasswordVisible ? 'text' : 'password'"
+                          :append-inner-icon="
+                            loginPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
+                          "
+                          @click:append="toggleLoginPasswordVisibility"
                           :rules="passwordRules"
                         />
                         <v-row>
@@ -57,50 +61,6 @@
                         <v-btn color="blue" dark block tile @click="login"
                           >Log in</v-btn
                         >
-
-                        <h5 class="text-center grey--text mt-4 mb-3">
-                          Or Log in using
-                        </h5>
-                        <div
-                          class="d-flex justify-space-between align-center mx-10 mb-16"
-                        >
-                          <v-btn
-                            depressed
-                            outlined
-                            color="white"
-                            @click="
-                              openPopup('https://www.google.com', 'Google')
-                            "
-                          >
-                            <v-icon color="red" size="30px"
-                              >mdi mdi-google</v-icon
-                            >
-                          </v-btn>
-                          <v-btn
-                            depressed
-                            outlined
-                            color="white"
-                            @click="
-                              openPopup('https://www.facebook.com', 'Facebook')
-                            "
-                          >
-                            <v-icon color="blue" size="30px"
-                              >mdi mdi-facebook</v-icon
-                            >
-                          </v-btn>
-                          <v-btn
-                            depressed
-                            outlined
-                            color="white"
-                            @click="
-                              openPopup('https://www.twitter.com', 'Twitter')
-                            "
-                          >
-                            <v-icon color="light-blue lighten-3" size="30px"
-                              >mdi mdi-twitter</v-icon
-                            >
-                          </v-btn>
-                        </div>
                       </v-col>
                     </v-row>
                   </v-card-text>
@@ -193,7 +153,11 @@
                       dense
                       color="blue"
                       autocomplete="false"
-                      type="password"
+                      :type="signUpPasswordVisible ? 'text' : 'password'"
+                      :append-inner-icon="
+                        signUpPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
+                      "
+                      @click:append="toggleSignUpPasswordVisibility"
                       :rules="passwordRules"
                     />
                     <v-text-field
@@ -203,51 +167,17 @@
                       dense
                       color="blue"
                       autocomplete="false"
-                      type="password"
+                      :type="confirmPasswordVisible ? 'text' : 'password'"
+                      :append-inner-icon="
+                        confirmPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
+                      "
+                      @click:append="toggleConfirmPasswordVisibility"
                       :rules="confirmPasswordRules"
                     />
 
                     <v-btn color="blue" dark block tile @click="signUp"
                       >Sign up</v-btn
                     >
-
-                    <h5 class="text-center grey--text mt-4 mb-3">
-                      Or Sign up using
-                    </h5>
-                    <div
-                      class="d-flex justify-space-between align-center mx-10 mb-11"
-                    >
-                      <v-btn
-                        depressed
-                        outlined
-                        color="white"
-                        @click="openPopup('https://www.google.com', 'Google')"
-                      >
-                        <v-icon color="red" size="30px">mdi mdi-google</v-icon>
-                      </v-btn>
-                      <v-btn
-                        depressed
-                        outlined
-                        color="white"
-                        @click="
-                          openPopup('https://www.facebook.com', 'Facebook')
-                        "
-                      >
-                        <v-icon color="blue" size="30px"
-                          >mdi mdi-facebook</v-icon
-                        >
-                      </v-btn>
-                      <v-btn
-                        depressed
-                        outlined
-                        color="white"
-                        @click="openPopup('https://www.twitter.com', 'Twitter')"
-                      >
-                        <v-icon color="light-blue lighten-3" size="30px"
-                          >mdi mdi-twitter</v-icon
-                        >
-                      </v-btn>
-                    </div>
                   </v-card-text>
                 </v-col>
               </v-row>
@@ -269,6 +199,9 @@ export default {
       age: null,
       number: null,
       loginPassword: "",
+      loginPasswordVisible: false,
+      signUpPasswordVisible: false,
+      confirmPasswordVisible: false,
       confirmPassword: "",
       rememberMe: false,
       fullName: "",
@@ -301,27 +234,14 @@ export default {
     };
   },
   methods: {
-    openPopup(url, provider) {
-      const width = 600;
-      const height = 400;
-      const left = (window.innerWidth - width) / 2;
-      const top = (window.innerHeight - height) / 2;
-      const options = `width=${width},height=${height},left=${left},top=${top},resizable=yes,scrollbars=yes,status=yes`;
-      window.open(url, `${provider}Window`, options);
-    },
-
     async login() {
       await this.$store.dispatch("userLogin", {
         email: this.loginEmail,
         password: this.loginPassword,
       });
       const token = Cookies.get("token");
-      if (token) {
-        // const userInfo = JSON.parse(user);
-        // const token = userInfo.userModule.token;
-        if (token && token !== undefined) {
-          this.$router.replace("/GymGenius");
-        }
+      if (token && token !== undefined) {
+        this.$router.replace("/GymGenius");
       }
     },
     async signUp() {
@@ -333,14 +253,19 @@ export default {
         number: this.number,
         confirmPassword: this.confirmPassword,
       });
-      const user = localStorage.getItem("userInfo");
-      if (user) {
-        const userInfo = JSON.parse(user);
-        const token = userInfo.userModule.token;
-        if (token && token !== undefined) {
-          this.$router.replace("/GymGenius");
-        }
+      const token = Cookies.get("token");
+      if (token && token !== undefined) {
+        this.$router.replace("/GymGenius");
       }
+    },
+    toggleLoginPasswordVisibility() {
+      this.loginPasswordVisible = !this.loginPasswordVisible;
+    },
+    toggleSignUpPasswordVisibility() {
+      this.signUpPasswordVisible = !this.signUpPasswordVisible;
+    },
+    toggleConfirmPasswordVisibility() {
+      this.confirmPasswordVisible = !this.confirmPasswordVisible;
     },
   },
   computed: {},
