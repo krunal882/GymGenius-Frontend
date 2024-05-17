@@ -48,24 +48,28 @@ import { ref } from "vue";
 
 const links = [
   {
-    icon: "mdi-inbox-arrow-down",
+    icon: "mdi-account",
     text: "Personal Info",
     route: "personalInfo",
   },
-  { icon: "mdi-inbox-arrow-down", text: "Cart", route: "cart" },
-  { icon: "mdi-delete", text: "Bookmarked", route: "bookmark" },
-  { icon: "mdi-alert-octagon", text: "purchase", route: "purchase" },
-  { icon: "mdi-alert-octagon", text: "logout", route: "logout" },
+  { icon: "mdi-cart", text: "Cart", route: "cart" },
+  { icon: "mdi-bookmark", text: "Bookmarked", route: "bookmark" },
+  { icon: "mdi-currency-inr", text: "purchase", route: "purchase" },
+  { icon: "mdi-logout", text: "logout", route: "logout" },
 ];
 
 const admin = [
   {
-    icon: "mdi-inbox-arrow-down",
+    icon: "mdi-account-group",
     text: "Your users",
     route: "users-admin",
   },
-  { icon: "mdi-delete", text: "Orders", route: "orders" },
-  { icon: "mdi-delete", text: "Info Section ", route: "Info-admin" },
+  { icon: "mdi-cart-outline", text: "Orders", route: "orders" },
+  {
+    icon: "mdi-information-outline",
+    text: "Info Section ",
+    route: "Info-admin",
+  },
 ];
 const drawer = ref(true);
 const selectedItem = ref(
