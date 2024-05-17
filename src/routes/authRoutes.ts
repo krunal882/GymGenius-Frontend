@@ -2,17 +2,33 @@ import ForgotPassword from "../pages/userAuth/ForgotPassword.vue";
 import ResetPassword from "../pages/userAuth/ResetPassword.vue";
 import UserAuth from "../pages/userAuth/UserAuth.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import Cookies from "js-cookie";
+
+const ifNotAuthenticated = (to, from, next) => {
+  if (!Cookies.get("token") || Cookies.get("token").length === 0) {
+    next();
+  } else {
+    next("/GymGenius");
+  }
+};
 
 const routes = [
-  { path: "/authentication", component: UserAuth, name: "authentication" },
+  {
+    path: "/authentication",
+    component: UserAuth,
+    beforeEnter: ifNotAuthenticated,
+    name: "authentication",
+  },
   {
     path: "/forgotPassword",
     component: ForgotPassword,
+    beforeEnter: ifNotAuthenticated,
     name: "forgotPassword",
   },
   {
     path: "/resetPassword/:token",
     component: ResetPassword,
+    beforeEnter: ifNotAuthenticated,
     name: "resetPassword",
   },
 ];

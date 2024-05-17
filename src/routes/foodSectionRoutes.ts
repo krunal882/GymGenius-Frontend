@@ -29,7 +29,11 @@ const routes: Array<RouteRecordRaw> = [
         component: FoodNutrition,
         name: "foodNutrition",
       },
-      { path: "dietPlan", component: DietPlan, name: "dietPlan" },
+      {
+        path: "dietPlan",
+        component: DietPlan,
+        name: "dietPlan",
+      },
     ],
   },
 ];

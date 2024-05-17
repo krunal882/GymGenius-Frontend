@@ -22,6 +22,8 @@ const routes = [
   {
     path: "/profile",
     component: ProfilePage,
+    beforeEnter: ifAuthenticated,
+    redirect: "/profile/personalInfo",
     children: [
       {
         path: "personalInfo",
