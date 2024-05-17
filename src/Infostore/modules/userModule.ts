@@ -76,6 +76,10 @@ const mutations = {
     state.age = data.age;
     state.number = data.number;
   },
+  setUserDeleted(state, isDeleted) {
+    state.userId = null;
+    state.userDeleted = isDeleted;
+  },
 };
 
 const actions = {
@@ -244,6 +248,7 @@ const actions = {
       id,
       number,
       role,
+      state,
     }: {
       email: Email;
       name: string;
@@ -251,6 +256,7 @@ const actions = {
       id: string;
       number: Number;
       role: string;
+      state: string;
     }
   ) {
     try {
@@ -264,11 +270,26 @@ const actions = {
           age,
           number,
           role,
+          state,
         },
         config
       );
     } catch (error) {
       console.log("error in update user information", error);
+    }
+  },
+
+  async userDelete({ commit }: { commit: Commit }, { id }: { id: string }) {
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/auth/deleteUser?id=${id}`;
+      const response = await axios.delete(url, config);
+      if (response.status === 200) {
+        Cookies.remove("token");
+        commit("setUserDeleted", true);
+      }
+    } catch (error) {
+      console.log(error);
     }
   },
 };

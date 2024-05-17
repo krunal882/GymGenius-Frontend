@@ -17,7 +17,7 @@
         >
       </template>
     </v-badge>
-    <v-divider></v-divider>
+    <v-divider class="mb-10"></v-divider>
     <div>
       <v-row class="text-center">
         <v-col cols="12" sm="3">
@@ -103,6 +103,11 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+    <v-divider class="mb-10"></v-divider>
+    <div class="d-flex flex-wrap just">
+      <h6 class="mt-2">Want to delete your account ?</h6>
+      <v-btn class="ml-10" color="error" @click="deleteAccount">DELETE</v-btn>
+    </div>
     <input
       type="file"
       ref="fileInput"
@@ -166,6 +171,14 @@ export default {
       });
 
       this.dialog = false;
+    },
+    deleteAccount() {
+      const id = this.$store.state.userModule.userId;
+      this.$store.dispatch("userDelete", { id }).then(() => {
+        if (this.$store.state.userModule.userDeleted) {
+          this.$router.replace("/");
+        }
+      });
     },
     openImageUploadDialog() {
       this.$refs.fileInput.click();
