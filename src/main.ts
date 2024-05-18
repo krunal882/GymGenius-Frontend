@@ -52,8 +52,9 @@ const router = createRouter({
       component: LandingPage,
       name: "GymGenius",
     },
+    { path: "/:catchAll(.*)", redirect: "/404" },
     {
-      path: "/:catchAll(.*)",
+      path: "/404",
       component: NotFoundPage,
       name: "NotFound",
     },

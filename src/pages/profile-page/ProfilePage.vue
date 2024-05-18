@@ -22,19 +22,21 @@
           @click="selectedItem = index"
         ></v-list-item>
       </v-list>
-      <h4 class="text-center">Admin section</h4>
-      <v-list>
-        <v-list-item
-          v-for="(link, index) in admin"
-          :key="index"
-          router
-          :to="{ name: link.route }"
-          :prepend-icon="link.icon"
-          :title="link.text"
-          @click="selectedItem = index"
-        >
-        </v-list-item>
-      </v-list>
+      <div v-if="this.$store.state.userModule.role === 'owner'">
+        <h4 class="text-center">Admin section</h4>
+        <v-list>
+          <v-list-item
+            v-for="(link, index) in admin"
+            :key="index"
+            router
+            :to="{ name: link.route }"
+            :prepend-icon="link.icon"
+            :title="link.text"
+            @click="selectedItem = index"
+          >
+          </v-list-item>
+        </v-list>
+      </div>
     </v-navigation-drawer>
 
     <v-main>
