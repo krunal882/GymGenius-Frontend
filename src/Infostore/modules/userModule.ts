@@ -305,6 +305,55 @@ const actions = {
       console.log(error);
     }
   },
+
+  async getContact(
+    { commit }: { commit: Commit },
+    { fullName, email, phoneNumber, subject, message }
+  ) {
+    try {
+      const config = createAxiosConfig();
+      const html = ` <html>
+    <body>
+      <h1>Contact Request</h1>
+      <p>A new contact request has been received with the following details:</p>
+      <table border="1" cellspacing="0" cellpadding="5">
+      <tr>
+      <td><strong>Subject:</strong></td>
+      <td>${subject}</td>
+    </tr>
+        <tr>
+          <td><strong>Name:</strong></td>
+          <td>${fullName}</td>
+        </tr>
+        <tr>
+          <td><strong>Email:</strong></td>
+          <td>${email}</td>
+        </tr>
+        <tr>
+          <td><strong>Phone Number:</strong></td>
+          <td>${phoneNumber}</td>
+        </tr>
+        <tr>
+          <td><strong>Message:</strong></td>
+          <td>${message}</td>
+        </tr>
+      </table>
+    </body>
+  </html>`;
+
+      await axios.post(
+        "http://localhost:3000/mailer/email",
+        {
+          recipients: "krunalvekariya254@gmail.com",
+          subject,
+          html,
+        },
+        config
+      );
+    } catch (error) {
+      console.log(error);
+    }
+  },
 };
 
 export default {

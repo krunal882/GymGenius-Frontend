@@ -28,7 +28,11 @@
           <v-row justify="center">
             <v-col cols="12" xl="11">
               <v-card class="bg-white border rounded shadow-sm">
-                <v-form @submit.prevent="submitForm">
+                <v-form
+                  ref="contactForm"
+                  v-model="formValid"
+                  @submit.prevent="submitForm"
+                >
                   <v-card-text class="p-4 p-xl-5">
                     <v-row class="gy-4 gy-xl-5">
                       <v-col cols="12">
@@ -79,7 +83,12 @@
                         ></v-textarea>
                       </v-col>
                       <v-col cols="12">
-                        <v-btn color="primary" class="btn-lg" type="submit">
+                        <v-btn
+                          :disabled="!isFormValid"
+                          color="primary"
+                          class="btn-lg"
+                          type="submit"
+                        >
                           Get in touch
                         </v-btn>
                       </v-col>
@@ -104,6 +113,7 @@ export default {
       phoneNumber: "",
       subject: "",
       message: "",
+      formValid: false,
       fullNameRules: [
         (v) => !!v || "Full name is required",
         (v) =>
@@ -129,8 +139,46 @@ export default {
       ],
     };
   },
+  computed: {
+    isFormValid() {
+      return (
+        this.fullName &&
+        this.email &&
+        this.phoneNumber &&
+        this.subject &&
+        this.message &&
+        this.validateForm()
+      );
+    },
+  },
   methods: {
-    submitForm() {},
+    validateForm() {
+      return (
+        this.fullNameRules.every((rule) => rule(this.fullName) === true) &&
+        this.emailRules.every((rule) => rule(this.email) === true) &&
+        this.phoneNumberRules.every(
+          (rule) => rule(this.phoneNumber) === true
+        ) &&
+        this.subjectRules.every((rule) => rule(this.subject) === true) &&
+        this.messageRules.every((rule) => rule(this.message) === true)
+      );
+    },
+    submitForm() {
+      if (this.isFormValid) {
+        this.$store
+          .dispatch("getContact", {
+            fullName: this.fullName,
+            email: this.email,
+            phoneNumber: this.phoneNumber,
+            subject: this.subject,
+            message: this.message,
+          })
+
+          .catch((error) => {
+            console.error("Error sending contact form:", error);
+          });
+      }
+    },
   },
 };
 </script>
