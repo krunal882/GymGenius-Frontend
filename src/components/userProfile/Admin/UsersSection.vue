@@ -5,7 +5,7 @@
         <h3>Your Users</h3>
       </v-col>
       <v-col cols="6" class="text-right">
-        <v-btn color="success" @click="addUser">Add User</v-btn>
+        <v-btn color="success" @click="addUser()">Add User</v-btn>
       </v-col>
     </v-row>
     <v-data-table-server
@@ -15,9 +15,18 @@
       :headers="headers"
       @update:options="loadItems"
     >
-      <template v-slot:headers="{ column }">
-        {{ column }}
+      <template v-slot:headers="{ headers }">
+        <tr>
+          <th
+            v-for="(header, index) in headers[0]"
+            :key="index"
+            :class="`text-${header.align}`"
+          >
+            {{ header.text }}
+          </th>
+        </tr>
       </template>
+
       <template v-slot:item="{ item, index }">
         <tr>
           <td>{{ index + 1 }}</td>
@@ -27,6 +36,7 @@
           <td>{{ item.age }}</td>
           <td>{{ item.number }}</td>
           <td>{{ item.role }}</td>
+          <td>{{ item.state }}</td>
           <td>
             <v-icon color="blue" class="mr-5" @click="openDialog(item)"
               >mdi-pencil</v-icon
@@ -38,11 +48,9 @@
         </tr>
       </template>
     </v-data-table-server>
+    <DeleteUserDialog :id="userToDelete" v-model:dialog="deleteDialog" />
+    <AddUser v-model:addDialog="addDialog" />
     <v-dialog v-model="dialog" max-width="500px">
-      <template v-slot:activator>
-        <v-btn color="primary" dark>Edit</v-btn>
-      </template>
-
       <v-card>
         <v-card-title>Edit Details</v-card-title>
         <v-card-text>
@@ -87,7 +95,13 @@
           <v-select
             label="Role"
             v-model="editedUser.role"
-            :items="['user', 'owner ']"
+            :items="['user', 'owner']"
+            required
+          ></v-select>
+          <v-select
+            label="State"
+            v-model="editedUser.state"
+            :items="['active', 'inactive']"
             required
           ></v-select>
         </v-card-text>
@@ -107,10 +121,18 @@
 
 <script>
 import { mapActions } from "vuex";
-
+import DeleteUserDialog from "../DeleteUserDialog.vue";
+import AddUser from "./information/actions/addItem/AddUser.vue";
 export default {
+  components: {
+    DeleteUserDialog,
+    AddUser,
+  },
   data() {
     return {
+      addDialog: false,
+      deleteDialog: false,
+      userToDelete: null,
       loading: false,
       dialog: false,
       editedUser: {},
@@ -125,6 +147,7 @@ export default {
         { text: "Age", align: "start", sortable: false },
         { text: "Phone", align: "start", sortable: false },
         { text: "Role", align: "start", sortable: false },
+        { text: "State", align: "start", sortable: false },
         { text: "Actions", align: "start", sortable: false },
       ],
     };
@@ -146,23 +169,20 @@ export default {
         this.loading = false;
       }
     },
-    validateFields() {
-      const { name, email, number, age, role } = this.editedUser;
-      this.validationErrors =
-        !name ||
-        !email ||
-        !/.+@.+\..+/.test(email) ||
-        !number ||
-        !/^\d{10}$/.test(number) ||
-        !age ||
-        !/^\d+$/.test(age) ||
-        !role;
-    },
+
     editItem(item) {
       this.openDialog(item);
     },
-    deleteItem(item) {
-      console.log("Delete item:", item);
+    openDeleteDialog(user) {
+      this.userToDelete = user._id;
+      this.deleteDialog = true;
+    },
+    closeDeleteDialog() {
+      this.deleteDialog = false;
+      this.userToDelete = null;
+    },
+    addUser() {
+      this.addDialog = true;
     },
     openDialog(item) {
       this.editedUser = { ...item };
@@ -174,6 +194,7 @@ export default {
       const age = this.editedUser.age;
       const number = this.editedUser.number;
       const role = this.editedUser.role;
+      const state = this.editedUser.state;
       const updatedUser = {
         _id: id,
         name,
@@ -181,6 +202,7 @@ export default {
         age,
         number,
         role,
+        state,
       };
       this.$store.dispatch("userUpdate", {
         email,
@@ -188,19 +210,19 @@ export default {
         age,
         number,
         role,
+        state,
         id,
       });
       this.updateUserLocally(updatedUser);
 
       this.dialog = false;
     },
-    addUser() {},
     updateUserLocally(updatedUser) {
       const index = this.users.findIndex(
         (user) => user._id === updatedUser._id
       );
       if (index !== -1) {
-        this.$set(this.users, index, updatedUser);
+        this.users[index] = updatedUser;
       }
     },
   },

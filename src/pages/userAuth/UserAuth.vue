@@ -38,7 +38,7 @@
                           :append-inner-icon="
                             loginPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
                           "
-                          @click:append="toggleLoginPasswordVisibility"
+                          @click:append-inner="toggleLoginPasswordVisibility"
                           :rules="passwordRules"
                         />
                         <v-row>
@@ -157,7 +157,7 @@
                       :append-inner-icon="
                         signUpPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
                       "
-                      @click:append="toggleSignUpPasswordVisibility"
+                      @click:append-inner="toggleSignUpPasswordVisibility"
                       :rules="passwordRules"
                     />
                     <v-text-field
@@ -171,7 +171,7 @@
                       :append-inner-icon="
                         confirmPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
                       "
-                      @click:append="toggleConfirmPasswordVisibility"
+                      @click:append-inner="toggleConfirmPasswordVisibility"
                       :rules="confirmPasswordRules"
                     />
 
@@ -215,6 +215,9 @@ export default {
       passwordRules: [
         (v) => !!v || "Password is required",
         (v) => (v && v.length >= 8) || "Password must be at least 8 characters",
+        (v) =>
+          /[A-Z]/.test(v) ||
+          "Password must contain at least one uppercase letter",
       ],
       nameRules: [(v) => !!v || "Name is required"],
       ageRules: [

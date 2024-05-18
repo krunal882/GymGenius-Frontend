@@ -174,7 +174,8 @@ export default {
     },
     deleteAccount() {
       const id = this.$store.state.userModule.userId;
-      this.$store.dispatch("userDelete", { id }).then(() => {
+      const role = this.$store.state.userModule.role;
+      this.$store.dispatch("userDelete", { id, role, master: "" }).then(() => {
         if (this.$store.state.userModule.userDeleted) {
           this.$router.replace("/");
         }

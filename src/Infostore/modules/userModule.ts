@@ -13,17 +13,16 @@ interface State {
   number: number;
 }
 
-// interface User {
-//   _id: string;
-//   name: string;
-//   email: string;
-//   age: number;
-//   role: string;
-//   password: string;
-//   confirmPassword: string;
-//   state: string;
-//   __v: number;
-// }
+interface User {
+  name: string;
+  email: string;
+  age: number;
+  number: string;
+  role: string;
+  password: string;
+  confirmPassword: string;
+  state: string;
+}
 
 interface Email {
   [key: string]: string;
@@ -239,6 +238,17 @@ const actions = {
       console.log("Error in Resetting password", error);
     }
   },
+
+  async userAdd({ commit }: { commit: Commit }, { user }: { user: User }) {
+    try {
+      const config = createAxiosConfig();
+      const url = "http://localhost:3000/auth/addUser";
+      await axios.post(url, user, config);
+    } catch (error) {
+      console.log(error);
+    }
+  },
+
   async userUpdate(
     { commit }: { commit: Commit },
     {
@@ -279,12 +289,15 @@ const actions = {
     }
   },
 
-  async userDelete({ commit }: { commit: Commit }, { id }: { id: string }) {
+  async userDelete(
+    { commit }: { commit: Commit },
+    { id, role, master }: { id: string; role: string; master: string }
+  ) {
     try {
       const config = createAxiosConfig();
-      const url = `http://localhost:3000/auth/deleteUser?id=${id}`;
+      const url = `http://localhost:3000/auth/deleteUser?id=${id}&role=${role}`;
       const response = await axios.delete(url, config);
-      if (response.status === 200) {
+      if (response.status === 200 && role === "user" && master === "") {
         Cookies.remove("token");
         commit("setUserDeleted", true);
       }
