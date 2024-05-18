@@ -20,7 +20,7 @@
           <img
             class="img-fluid rounded image-hover-effect"
             loading="lazy"
-            src="../assets/contact_form.png"
+            src="../../assets/contact_form.png"
             alt="Get in Touch"
           />
         </div>
@@ -130,8 +130,7 @@ export default {
     };
   },
   methods: {
-    submitForm() {
-    },
+    submitForm() {},
   },
 };
 </script>

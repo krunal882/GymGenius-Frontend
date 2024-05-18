@@ -4,10 +4,7 @@
       <router-link class="navbar-brand" to="/GymGenius">
         <img src="@/assets/logo.png" alt="Logo" style="width: 220px" />
       </router-link>
-      <div
-        :class="{ collapse: isMenuVisible, 'navbar-collapse': true }"
-        id="navbarNav"
-      >
+      <div :class="{ collapse: isMenuVisible, 'navbar-collapse': true }">
         <ul class="navbar-nav ml-auto">
           <li
             v-for="(navItem, index) in navItems"
@@ -28,13 +25,13 @@
           </li>
         </ul>
       </div>
-      <div v-if="!this.$store.state.userModule.userId">
-        <router-link class="" to="/authentication">
+      <div v-if="!userId" class="d-flex flex-wrap">
+        <router-link to="/authentication">
           <v-btn variant="outlined" color="white">Login/Register</v-btn>
         </router-link>
       </div>
     </div>
-    <ProfileMenu style="margin-right: 0" />
+    <ProfileMenu v-if="userId" />
   </nav>
 </template>
 
@@ -67,6 +64,12 @@ export default {
       this.activeNavItem = index;
     },
   },
+  computed: {
+    userId() {
+      return this.$store.state.userModule.userId?.length > 0;
+    },
+  },
+
   watch: {
     $route() {
       const routeIndex = this.navItems.findIndex(
