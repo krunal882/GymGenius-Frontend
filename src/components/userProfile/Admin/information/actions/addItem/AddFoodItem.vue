@@ -5,7 +5,7 @@
     @click:outside="handleClickOutside"
   >
     <v-card>
-      <v-card-title> Edit FoodItem </v-card-title>
+      <v-card-title> Add FoodItem </v-card-title>
       <v-card-text>
         <v-form ref="form">
           <div class="d-flex flex-wrap">

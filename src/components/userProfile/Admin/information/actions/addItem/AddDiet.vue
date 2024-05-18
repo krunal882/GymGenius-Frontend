@@ -1,7 +1,7 @@
 <template>
   <v-dialog v-model="dialog" max-width="1500">
     <v-card>
-      <v-card-title> Edit DietPlan </v-card-title>
+      <v-card-title> Add DietPlan </v-card-title>
       <v-card-text>
         <v-form ref="form">
           <div class="d-flex flex-wrap">
@@ -156,7 +156,7 @@ export default {
         "Saturday",
         "Sunday",
       ],
-      time: ["Breakfast", "Lunch", "Dinnner"],
+      time: ["Breakfast", "Lunch", "Dinner"],
       dietPlan: {
         plan_name: "",
         diet_type: "",

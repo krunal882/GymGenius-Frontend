@@ -5,7 +5,7 @@
     @click:outside="handleClickOutside"
   >
     <v-card>
-      <v-card-title> Edit Yoga </v-card-title>
+      <v-card-title> Add Yoga </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <div class="d-flex flex-wrap">
@@ -80,7 +80,7 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="save(yoga)">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="save(yoga)">Add</v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>

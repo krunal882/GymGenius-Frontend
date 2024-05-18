@@ -85,7 +85,7 @@
       <div class="col-md-5">
         <v-img
           class="featurette-image img-fluid mx-auto image-hover-effect"
-          src="../assets/img/landing page/values.jpg"
+          src="../assets/img/landingPage/values.jpg"
           alt="Generic placeholder image"
         ></v-img>
       </div>
@@ -100,10 +100,8 @@ export default {};
 </script>
 
 <style scoped>
-
-
 .featurette-divider {
-  margin: 5rem 0; 
+  margin: 5rem 0;
 }
 
 .featurette-heading {
