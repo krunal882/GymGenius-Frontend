@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit, Dispatch } from "vuex";
 import Cookies from "js-cookie";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 interface UserInfo {
   _id: string;
@@ -72,7 +74,7 @@ const actions = {
       const users = response.data;
       commit("setUsers", users);
     } catch (error) {
-      console.log(error);
+      useToast().error("Error in fetching users");
     }
   },
 
@@ -84,7 +86,7 @@ const actions = {
       const products = response.data;
       commit("setOrders", products);
     } catch (error) {
-      console.log(error);
+      useToast().error("Error in fetching orders");
     }
   },
 };

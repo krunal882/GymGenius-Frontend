@@ -135,7 +135,6 @@ const actions = {
         { userId, itemId, itemType },
         config
       );
-      console.log(response);
 
       if (response.status === 201) {
         switch (itemType) {
@@ -157,7 +156,6 @@ const actions = {
         }
       }
     } catch (error) {
-      console.log(error);
       useToast().error("An error occurred while bookmarking the item.");
     }
   },
@@ -188,7 +186,7 @@ const actions = {
       }
       await dispatch("fetchBookmarked", { userId });
     } catch (error) {
-      console.log(error);
+      useToast().error("Error in fetching bookmarked item");
     }
   },
 };

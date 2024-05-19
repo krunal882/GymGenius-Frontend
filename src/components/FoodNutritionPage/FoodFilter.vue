@@ -146,6 +146,8 @@
 </template>
 
 <script>
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 export default {
   data() {
     return {
@@ -279,7 +281,7 @@ export default {
       if (Object.keys(filteredFilters).length > 0) {
         this.$emit("filters-applied", filteredFilters);
       } else {
-        console.log("No filters selected.");
+        useToast().error("No filters selected");
       }
       this.showFilter = !this.showFilter;
     },

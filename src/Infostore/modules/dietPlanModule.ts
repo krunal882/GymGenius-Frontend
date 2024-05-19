@@ -97,7 +97,6 @@ const actions = {
     if (response.status === 201) {
       useToast().success("New Diet-plan added successfully");
     }
-    console.log(response);
   },
 
   async editDietPlan(

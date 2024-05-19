@@ -95,7 +95,7 @@ const actions = {
       const response = await axios.get(url, config);
       commit("setUser", response.data[0]);
     } catch (error) {
-      console.log(error);
+      useToast().error("Error in fetching users");
     }
   },
 
@@ -128,7 +128,7 @@ const actions = {
       //   html,
       // });
     } catch (error) {
-      console.log("Error in login", error);
+      useToast().error("Error in login");
     }
   },
 
@@ -177,7 +177,7 @@ const actions = {
       //   html,
       // });
     } catch (error) {
-      console.log("error in signup", error);
+      useToast().error("Error in signup");
     }
   },
 
@@ -201,7 +201,7 @@ const actions = {
         );
       }
     } catch (error) {
-      console.log("Error in sending mail");
+      useToast().error("Error in sending mail");
     }
   },
 
@@ -234,7 +234,7 @@ const actions = {
         useToast().success("password reset successful");
       }
     } catch (error) {
-      console.log("Error in Resetting password", error);
+      useToast().error("Error in reset password");
     }
   },
 
@@ -247,7 +247,7 @@ const actions = {
         useToast().success("New user added successfully");
       }
     } catch (error) {
-      console.log(error);
+      useToast().error("Error in user creation");
     }
   },
 
@@ -290,7 +290,7 @@ const actions = {
         useToast().success(" User updated successfully");
       }
     } catch (error) {
-      console.log("error in update user information", error);
+      useToast().error("Error in update user information");
     }
   },
 
@@ -310,7 +310,7 @@ const actions = {
         commit("setUserDeleted", true);
       }
     } catch (error) {
-      console.log(error);
+      useToast().error("Error in user delete");
     }
   },
 
@@ -364,7 +364,7 @@ const actions = {
         );
       }
     } catch (error) {
-      console.log(error);
+      useToast().error("Error in sending connect request");
     }
   },
 };

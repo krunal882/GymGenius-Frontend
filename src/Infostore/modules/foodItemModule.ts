@@ -113,9 +113,7 @@ const actions = {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/foodNutrition/filtered?name=${name}`;
     const response = await axios.get(url, config);
-    if (response.status === 200) {
-      useToast().success(" Food-item updated successfully");
-    }
+
     commit("setFoodItemSearch", response.data);
   },
 
@@ -124,7 +122,6 @@ const actions = {
     { foodItem }: { foodItem: FoodItem }
   ) {
     const config = createAxiosConfig();
-    console.log(foodItem);
     const url = `http://localhost:3000/foodNutrition/updateFoodItem?id=${foodItem._id}`;
     const response = await axios.patch(url, foodItem, config);
   },

@@ -206,7 +206,6 @@ export default {
     },
     initializeFormFields() {
       this.dietPlan = { ...this.dietPlanData };
-      console.log(this.dietPlan);
     },
     cancel() {
       this.dialog = true;

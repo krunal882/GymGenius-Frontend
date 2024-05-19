@@ -76,7 +76,6 @@ const actions = {
       if (response.status === 201) {
         useToast().success("Product added to cart successfully");
       }
-      console.log("product added into cart ");
     } catch (error) {
       console.error("Error adding product to cart:", error);
     }
@@ -138,7 +137,6 @@ const actions = {
         useToast().success("Product removed from cart");
       }
       await dispatch("fetchCart", { userId, status: "pending" });
-      console.log("product removed from cart ");
     } catch (error) {
       console.error("Error removing product from cart:", error);
     }
@@ -159,7 +157,6 @@ const actions = {
         },
         config
       );
-      console.log("product added to history ");
     } catch (error) {
       console.error("Error adding product to history:", error);
     }

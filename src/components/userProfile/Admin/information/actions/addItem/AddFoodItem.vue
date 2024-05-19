@@ -244,8 +244,6 @@ export default {
       this.$refs.form.reset();
     },
     async add(foodItem) {
-      console.log(foodItem);
-
       await this.$store.dispatch("addFoodItem", { foodItem });
     },
   },
