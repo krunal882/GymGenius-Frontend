@@ -29,7 +29,7 @@ import { RouteRecordRaw, Router } from "vue-router";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
-function addRoutes(router: Router, ...routeCollections: any[]): void {
+function addRoutes(router: Router, ...routeCollections: Router[]): void {
   routeCollections.forEach((routes) => {
     routes.getRoutes().forEach((route: RouteRecordRaw) => {
       router.addRoute(route);

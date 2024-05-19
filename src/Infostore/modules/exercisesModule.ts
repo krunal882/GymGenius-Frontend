@@ -18,8 +18,8 @@ interface Exercise {
 }
 
 interface State {
-  exercises: any[];
-  exerciseSearch: any[];
+  exercises: Exercise[];
+  exerciseSearch: Exercise[];
 }
 
 interface FilteredFilters {
@@ -42,10 +42,10 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setExercises(state: State, exercises: any[]) {
+  setExercises(state: State, exercises: Exercise[]) {
     state.exercises = exercises;
   },
-  setExerciseSearch(state: State, exercises: any[]) {
+  setExerciseSearch(state: State, exercises: Exercise[]) {
     state.exerciseSearch = exercises;
   },
 };

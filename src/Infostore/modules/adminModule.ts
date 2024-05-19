@@ -49,10 +49,10 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setUsers(state: State, data: any) {
+  setUsers(state: State, data: UserInfo[]) {
     state.userInfo = data;
   },
-  setOrders(state: State, products: any) {
+  setOrders(state: State, products: OrderData[]) {
     state.productData = products;
   },
 };

@@ -32,8 +32,8 @@ interface FoodItem {
 }
 
 interface State {
-  foodItem: any[];
-  searchFoodItem: any[];
+  foodItem: FoodItem[];
+  searchFoodItem: FoodItem[];
 }
 
 interface FilteredFilters {
@@ -56,10 +56,10 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setFoodItem(state: State, foodItem: any[]) {
+  setFoodItem(state: State, foodItem: FoodItem[]) {
     state.foodItem = foodItem;
   },
-  setFoodItemSearch(state: State, foodItem: any[]) {
+  setFoodItemSearch(state: State, foodItem: FoodItem[]) {
     state.searchFoodItem = foodItem;
   },
 };

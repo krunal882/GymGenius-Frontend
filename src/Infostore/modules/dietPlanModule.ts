@@ -19,8 +19,8 @@ interface DietPlan {
 }
 
 interface State {
-  dietPlan: any[];
-  dietSearch: any[];
+  dietPlan: DietPlan[];
+  dietSearch: DietPlan[];
 }
 
 interface FilteredFilters {
@@ -43,10 +43,10 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setDietPlan(state: State, dietPlan: any[]) {
+  setDietPlan(state: State, dietPlan: DietPlan[]) {
     state.dietPlan = dietPlan;
   },
-  setDietSearch(state: State, dietPlan: any[]) {
+  setDietSearch(state: State, dietPlan: DietPlan[]) {
     state.dietSearch = dietPlan;
   },
 };

@@ -4,9 +4,20 @@ import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+interface Product {
+  _id: string;
+  category: string;
+  src: string;
+  title: string;
+  price: number;
+  original_price: string;
+  off: string;
+  state: string;
+}
+
 interface State {
-  cartItems: any[];
-  history: any[];
+  cartItems: Product[];
+  history: Product[];
 }
 
 const state: State = {
@@ -25,17 +36,17 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setCartItems(state: State, cartItems: any) {
+  setCartItems(state: State, cartItems: Product[]) {
     state.cartItems = cartItems;
   },
   buyProduct(state: State, data: any) {
     const paymentUrl = data.message.url;
     window.location.href = paymentUrl;
   },
-  setHistory(state: State, history: any) {
+  setHistory(state: State, history: Product[]) {
     state.history = history;
   },
-  addToCartItems(state: State, product: any) {
+  addToCartItems(state: State, product: Product) {
     state.cartItems.push(product);
   },
 };
@@ -48,7 +59,7 @@ const actions = {
       status,
       userId,
       product,
-    }: { productId: string; status: string; userId: string; product: any }
+    }: { productId: string; status: string; userId: string; product: Product }
   ) {
     try {
       const config = createAxiosConfig();
@@ -72,7 +83,7 @@ const actions = {
   },
   async fetchCart(
     { commit }: { commit: Commit },
-    { userId, status }: { userId: any; status: string }
+    { userId, status }: { userId: string; status: string }
   ) {
     try {
       const config = createAxiosConfig();
@@ -89,7 +100,7 @@ const actions = {
           (item: { productId: string }) => item.productId
         );
         if (id.length != 0) {
-          const idParams = id.map((id: any) => `id=${id}`).join("&");
+          const idParams = id.map((id: string) => `id=${id}`).join("&");
           const getProduct = await axios.get(
             `http://localhost:3000/store/filtered?${idParams}`,
             config
@@ -197,12 +208,6 @@ const actions = {
     }
   },
 };
-
-// const getters: GetterTree<State, any> = {
-//   getCartItems(state: State): any[] {
-//     return state.cartItems;
-//   },
-// };
 
 export default {
   state,

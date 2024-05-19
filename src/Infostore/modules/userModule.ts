@@ -11,7 +11,7 @@ interface State {
   name: string;
   email: string;
   age: number;
-  number: number;
+  number: string;
 }
 
 interface User {
@@ -23,6 +23,11 @@ interface User {
   password: string;
   confirmPassword: string;
   state: string;
+}
+
+interface signup {
+  token: string;
+  user: User;
 }
 
 interface Email {
@@ -52,7 +57,7 @@ const state: State = {
   name: "",
   email: "",
   age: 0,
-  number: 0,
+  number: "",
 };
 
 const createAxiosConfig = () => {
@@ -66,11 +71,11 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setToken(state: State, data: any) {
+  setToken(state: State, data: signup) {
     state.token = data.token;
     Cookies.set("token", data.token, { expires: 30 });
   },
-  setUser(state: State, data: any) {
+  setUser(state: State, data: User) {
     state.name = data.name;
     state.email = data.email;
     state.age = data.age;

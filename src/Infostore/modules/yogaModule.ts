@@ -16,8 +16,8 @@ interface Yoga {
 }
 
 interface State {
-  yoga: any[];
-  yogaSearch: any[];
+  yoga: Yoga[];
+  yogaSearch: Yoga[];
 }
 
 interface FilteredFilters {
@@ -40,10 +40,10 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setYoga(state: State, yoga: any[]) {
+  setYoga(state: State, yoga: Yoga[]) {
     state.yoga = yoga;
   },
-  setYogaSearch(state: State, yoga: any[]) {
+  setYogaSearch(state: State, yoga: Yoga[]) {
     state.yogaSearch = yoga;
   },
 };

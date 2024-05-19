@@ -2,8 +2,19 @@ import axios, { AxiosResponse } from "axios";
 import { Commit, GetterTree } from "vuex";
 import Cookies from "js-cookie";
 
+interface Product {
+  _id: string;
+  category: string;
+  src: string;
+  title: string;
+  price: number;
+  original_price: string;
+  off: string;
+  state: string;
+}
+
 interface State {
-  product: any[];
+  product: Product[];
 }
 
 interface FilteredFilters {
@@ -25,7 +36,7 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setProduct(state: State, product: any[]) {
+  setProduct(state: State, product: Product[]) {
     state.product = product;
   },
 };
@@ -69,8 +80,8 @@ const actions = {
   },
 };
 
-const getters: GetterTree<State, any> = {
-  getProduct(state: State): any[] {
+const getters: GetterTree<State, Product> = {
+  getProduct(state: State): Product[] {
     return state.product;
   },
 };
