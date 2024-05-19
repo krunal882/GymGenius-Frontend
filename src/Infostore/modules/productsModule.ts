@@ -3,7 +3,7 @@ import { Commit, GetterTree } from "vuex";
 import Cookies from "js-cookie";
 
 interface State {
-  product: any[]; // Adjust the type according to your product object structure
+  product: any[];
 }
 
 interface FilteredFilters {

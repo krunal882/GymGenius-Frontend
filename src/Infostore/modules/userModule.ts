@@ -113,6 +113,9 @@ const actions = {
       const subject = "Account Login";
       const html = "<p>successfully loggedIn to your account</p>";
       const token = response.data.token;
+      if (response.status === 201) {
+        useToast().success("Login successful! Welcome back.");
+      }
       commit("setToken", response.data);
       // await axios.post("http://localhost:3000/mailer/email", {
       //   recipients: email,
@@ -158,6 +161,9 @@ const actions = {
         config
       );
       commit("setToken", response.data);
+      if (response.status === 201) {
+        useToast().success("Account created successfully! Welcome aboard.");
+      }
       const subject = "Account Signup";
       const html = "<p>successfully created account</p>";
       // await axios.post("http://localhost:3000/mailer/email", {
@@ -184,27 +190,11 @@ const actions = {
         },
         config
       );
-
-      const subject = "Reset Password";
-      const link = `http://localhost:8081/resetPassword/${response.data}`;
-      const html = `Forgot your password? Click <a href="${link}">here</a> to reset your password.`;
-
-      await axios.post(
-        "http://localhost:3000/mailer/email",
-        {
-          recipients: email,
-          subject,
-          html,
-        },
-        config
-      );
-
-      // if (response.status === 201) {
-      //   toast.success("Password reset email sent successfully");
-      // } else {
-      //   console.log("Error in sending mail");
-      //   // Show an error message to the user if the request was not successful
-      // }
+      if (response.status === 201) {
+        useToast().success(
+          "password reset link sent to your mail successfully"
+        );
+      }
     } catch (error) {
       console.log("Error in sending mail");
     }
@@ -235,6 +225,9 @@ const actions = {
         },
         config
       );
+      if (response.status === 201) {
+        useToast().success("password reset successful");
+      }
     } catch (error) {
       console.log("Error in Resetting password", error);
     }
@@ -244,7 +237,10 @@ const actions = {
     try {
       const config = createAxiosConfig();
       const url = "http://localhost:3000/auth/addUser";
-      await axios.post(url, user, config);
+      const response = await axios.post(url, user, config);
+      if (response.status === 201) {
+        useToast().success("New user added successfully");
+      }
     } catch (error) {
       console.log(error);
     }
@@ -285,6 +281,9 @@ const actions = {
         },
         config
       );
+      if (response.status === 200) {
+        useToast().success(" User updated successfully");
+      }
     } catch (error) {
       console.log("error in update user information", error);
     }
@@ -300,6 +299,9 @@ const actions = {
       const response = await axios.delete(url, config);
       if (response.status === 200 && role === "user" && master === "") {
         Cookies.remove("token");
+        if (response.status === 200) {
+          useToast().success(" User deleted successfully");
+        }
         commit("setUserDeleted", true);
       }
     } catch (error) {

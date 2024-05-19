@@ -137,7 +137,6 @@ const actions = {
       );
       console.log(response);
 
-      // Dismiss all opened toast immediately
       if (response.status === 201) {
         switch (itemType) {
           case "exercise":

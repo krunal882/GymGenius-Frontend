@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 interface FoodItem {
   _id: string;
@@ -102,14 +104,21 @@ const actions = {
     const config = createAxiosConfig();
     const url = "http://localhost:3000/foodNutrition/addFoodItem";
     const response = await axios.post(url, foodItem, config);
+    if (response.status === 201) {
+      useToast().success("New Food-item added successfully");
+    }
   },
 
   async searchFoodItem({ commit }: { commit: Commit }, name: string) {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/foodNutrition/filtered?name=${name}`;
     const response = await axios.get(url, config);
+    if (response.status === 200) {
+      useToast().success(" Food-item updated successfully");
+    }
     commit("setFoodItemSearch", response.data);
   },
+
   async editFoodItem(
     { commit }: { commit: Commit },
     { foodItem }: { foodItem: FoodItem }
@@ -124,6 +133,9 @@ const actions = {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/foodNutrition/deleteFoodItem?id=${id}`;
     const response = await axios.delete(url, config);
+    if (response.status === 200) {
+      useToast().success(" Food-item removed successfully");
+    }
   },
 };
 

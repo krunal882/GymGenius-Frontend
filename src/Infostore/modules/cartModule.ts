@@ -1,6 +1,8 @@
 import axios from "axios";
-import { Commit, Dispatch, GetterTree } from "vuex";
+import { Commit, Dispatch } from "vuex";
 import Cookies from "js-cookie";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 interface State {
   cartItems: any[];
@@ -33,6 +35,9 @@ const mutations = {
   setHistory(state: State, history: any) {
     state.history = history;
   },
+  addToCartItems(state: State, product: any) {
+    state.cartItems.push(product);
+  },
 };
 
 const actions = {
@@ -42,12 +47,13 @@ const actions = {
       productId,
       status,
       userId,
-    }: { productId: string; status: string; userId: string }
+      product,
+    }: { productId: string; status: string; userId: string; product: any }
   ) {
     try {
       const config = createAxiosConfig();
 
-      await axios.post(
+      const response = await axios.post(
         "http://localhost:3000/store/addToCart",
         {
           userId,
@@ -55,7 +61,10 @@ const actions = {
         },
         config
       );
-
+      commit("addToCartItems", product);
+      if (response.status === 201) {
+        useToast().success("Product added to cart successfully");
+      }
       console.log("product added into cart ");
     } catch (error) {
       console.error("Error adding product to cart:", error);
@@ -71,23 +80,25 @@ const actions = {
         `http://localhost:3000/store/cart?userId=${userId}`,
         config
       );
-      const allProducts = response.data[0].product;
-      const filteredProducts = allProducts.filter(
-        (item: { status: string }) => item.status === status
-      );
-      const id = filteredProducts.map(
-        (item: { productId: string }) => item.productId
-      );
-      if (id.length != 0) {
-        const idParams = id.map((id: any) => `id=${id}`).join("&");
-        const getProduct = await axios.get(
-          `http://localhost:3000/store/filtered?${idParams}`,
-          config
+      if (response?.data[0]?.product?.length > 0) {
+        const allProducts = response.data[0].product;
+        const filteredProducts = allProducts.filter(
+          (item: { status: string }) => item.status === status
         );
-        if (status == "pending") {
-          commit("setCartItems", getProduct.data);
-        } else if (status == "done") {
-          commit("setHistory", getProduct.data);
+        const id = filteredProducts.map(
+          (item: { productId: string }) => item.productId
+        );
+        if (id.length != 0) {
+          const idParams = id.map((id: any) => `id=${id}`).join("&");
+          const getProduct = await axios.get(
+            `http://localhost:3000/store/filtered?${idParams}`,
+            config
+          );
+          if (status == "pending") {
+            commit("setCartItems", getProduct.data);
+          } else if (status == "done") {
+            commit("setHistory", getProduct.data);
+          }
         }
       }
     } catch (error) {
@@ -101,14 +112,20 @@ const actions = {
   ) {
     try {
       const config = createAxiosConfig();
-      await axios.delete("http://localhost:3000/store/removeCart", {
-        ...config,
+      const response = await axios.delete(
+        "http://localhost:3000/store/removeCart",
+        {
+          ...config,
 
-        data: {
-          userId,
-          productId,
-        },
-      });
+          data: {
+            userId,
+            productId,
+          },
+        }
+      );
+      if (response.status === 200) {
+        useToast().success("Product removed from cart");
+      }
       await dispatch("fetchCart", { userId, status: "pending" });
       console.log("product removed from cart ");
     } catch (error) {
@@ -145,12 +162,14 @@ const actions = {
       quantity,
       productId,
       userId,
+      email,
     }: {
       price: number;
       quantity: string;
       title: string;
       productId: string[];
       userId: string;
+      email: string;
     }
   ) {
     try {
@@ -159,15 +178,17 @@ const actions = {
       }
       const config = createAxiosConfig();
 
-      // const response = await axios.patch(
-      //   "http://localhost:3000/store/purchase",
-      //   {
-      //     price,
-      //     quantity,
-      //     title,
-      //   },config
-      // );
-      // commit("buyProduct", response.data);
+      const response = await axios.patch(
+        "http://localhost:3000/store/purchase",
+        {
+          price,
+          quantity,
+          title,
+          email,
+        },
+        config
+      );
+      commit("buyProduct", response.data);
       if (productId.length > 1) {
         await dispatch("addHistory", { productId, userId });
       }

@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 interface Yoga {
   category_name: string;
@@ -89,7 +91,9 @@ const actions = {
     const config = createAxiosConfig();
     const url = "http://localhost:3000/yoga-poses/addYoga";
     const response = await axios.post(url, yoga, config);
-    console.log(response);
+    if (response.status === 201) {
+      useToast().success("New Yoga-pose added successfully");
+    }
   },
 
   async editYoga(
@@ -99,12 +103,18 @@ const actions = {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/yoga-poses/updateYoga?id=${id}`;
     const response = await axios.patch(url, yoga, config);
+    if (response.status === 200) {
+      useToast().success(" Yoga-pose updated successfully");
+    }
   },
 
   async removeYoga({ commit }: { commit: Commit }, { id }: { id: string }) {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/yoga-poses/deleteYoga?id=${id}`;
     const response = await axios.delete(url, config);
+    if (response.status === 200) {
+      useToast().success(" Yoga-pose removed successfully");
+    }
   },
 };
 

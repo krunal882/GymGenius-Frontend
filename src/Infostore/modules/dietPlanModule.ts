@@ -1,8 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
-import { config } from "@fortawesome/fontawesome-svg-core";
-
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 interface DietPlan {
   _id: string;
   name: string;
@@ -94,6 +94,9 @@ const actions = {
     const config = createAxiosConfig();
     const url = "http://localhost:3000/diet-plans/add";
     const response = await axios.post(url, dietPlan, config);
+    if (response.status === 201) {
+      useToast().success("New Diet-plan added successfully");
+    }
     console.log(response);
   },
 
@@ -104,13 +107,18 @@ const actions = {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/diet-plans/update?id=${id}`;
     const response = await axios.patch(url, dietPlan, config);
-    console.log(response);
+    if (response.status === 200) {
+      useToast().success(" Diet-plan updated successfully");
+    }
   },
 
   async removeDiet({ commit }: { commit: Commit }, { id }: { id: string }) {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/diet-plans/delete?id=${id}`;
     const response = await axios.delete(url, config);
+    if (response.status === 200) {
+      useToast().success(" Diet-plan removed successfully");
+    }
   },
 };
 

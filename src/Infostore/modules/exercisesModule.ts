@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 interface Exercise {
   _id: string;
@@ -94,7 +96,9 @@ const actions = {
     const config = createAxiosConfig();
     const url = "http://localhost:3000/exercises/addExercise";
     const response = await axios.post(url, exercise, config);
-    console.log(response);
+    if (response.status === 201) {
+      useToast().success("New Exercise added successfully");
+    }
   },
 
   async editExercise(
@@ -104,11 +108,17 @@ const actions = {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/exercises/updateExercise?id=${exercise._id}`;
     const response = await axios.patch(url, exercise, config);
+    if (response.status === 200) {
+      useToast().success(" Exercise updated successfully");
+    }
   },
   async removeExercise({ commit }: { commit: Commit }, { id }: { id: string }) {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/exercises/deleteExercise?id=${id}`;
     const response = await axios.delete(url, config);
+    if (response.status === 200) {
+      useToast().success(" Exercise removed successfully");
+    }
   },
 };
 
