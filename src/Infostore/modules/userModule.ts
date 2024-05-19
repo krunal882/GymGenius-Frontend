@@ -1,13 +1,14 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit, GetterTree, ActionTree } from "vuex";
-// import { toast } from "vue3-toastify";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 import Cookies from "js-cookie";
 
 interface State {
   userId: string;
   role: string;
   token: string;
-  name: string; // Adjust the type according to your product object structure
+  name: string;
   email: string;
   age: number;
   number: number;
@@ -341,7 +342,7 @@ const actions = {
     </body>
   </html>`;
 
-      await axios.post(
+      const response = await axios.post(
         "http://localhost:3000/mailer/email",
         {
           recipients: "krunalvekariya254@gmail.com",
@@ -350,6 +351,11 @@ const actions = {
         },
         config
       );
+      if (response.status === 201) {
+        useToast().success(
+          "Thank you for your message! We'll get back to you shortly."
+        );
+      }
     } catch (error) {
       console.log(error);
     }
