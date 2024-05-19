@@ -1,17 +1,6 @@
 <template>
   <div>
-    <!-- Button to toggle the iframe -->
-
-    <!-- <iframe
-      v-if="showIframe"
-      src="https://www.chatbase.co/chatbot-iframe/_goC7mZy5K-mr7xGihzhw"
-      title="Chatbot"
-      width="30%"
-      class="iframe-style"
-      frameborder="0"
-    ></iframe> -->
     <!-- Carousel -->
-
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img

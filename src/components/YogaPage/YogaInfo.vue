@@ -26,7 +26,7 @@
     >
       <v-card class="image-hover-effect" width="900" style="display: flex">
         <div style="flex: 1; padding-right: 16px">
-          <v-img height="300" :src="yoga.url_png">
+          <v-img height="300" :src="yoga.url_png" @click="exploreClicked(yoga)">
             <v-card-title class="text-center">{{
               yoga.sanskrit_name
             }}</v-card-title>

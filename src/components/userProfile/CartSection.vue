@@ -5,7 +5,6 @@
     <div>
       <CartProduct :product="cartItems" />
     </div>
-    <!-- <p v-else>NO Product in the cart</p> -->
   </div>
 </template>
 

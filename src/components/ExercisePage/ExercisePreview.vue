@@ -25,6 +25,7 @@
           <v-img
             :src="getExerciseImagePath(exercise.name)"
             style="height: 300px"
+            @click="exploreClicked(exercise)"
           >
             <div class="overlay"></div>
             <div class="caption">{{ exercise.name }}</div>

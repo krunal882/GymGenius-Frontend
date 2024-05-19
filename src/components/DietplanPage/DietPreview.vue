@@ -27,7 +27,12 @@
         lg="4"
       >
         <v-card class="text-black my-4 mx-2 image-hover-effect" width="100%">
-          <v-img style="height: 200px" :src="getImgPath(dietPlan.src)" cover>
+          <v-img
+            style="height: 200px"
+            :src="getImgPath(dietPlan.src)"
+            cover
+            @click="exploreClicked(dietPlan)"
+          >
           </v-img>
           <v-card-title class="text-center plan-name caption"
             >Plan Name:

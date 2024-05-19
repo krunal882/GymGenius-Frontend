@@ -140,14 +140,14 @@ export default {
     },
     proceedToCheckout() {
       const id = this.product.map((item) => item._id);
-      const userId = this.$store.state.userModule.userId;
 
       this.$store.dispatch("purchase", {
         title: "GymGenius products",
         price: this.totalPrice,
         quantity: this.totalItems,
         productId: id,
-        userId: userId,
+        userId: this.$store.state.userModule.userId,
+        email: this.$store.state.userModule.email,
       });
     },
   },

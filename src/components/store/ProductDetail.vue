@@ -57,18 +57,18 @@
         <v-text-field
           ref="pincodeField"
           v-model="pincode"
-          :rules="[rules.onlyNumbers, rules.indianPincode]"
-          counter="6"
+          :rules="indianPincode"
           label="Enter Pincode"
           placeholder="Enter your pincode"
           outlined
           dense
+          type="text"
           maxlength="6"
           style="width: 150px"
         ></v-text-field>
         <v-btn color="secondary" height="55" @click="checkPincode">Check</v-btn>
       </div>
-      <p v-if="isPincodeValid" class="green-text">
+      <p v-if="isPincodeValid === true" class="green-text">
         You are eligible for delivery
       </p>
       <p v-else-if="isPincodeValid === false" class="red-text">
@@ -85,7 +85,6 @@
 
 <script>
 import { mapGetters } from "vuex";
-import { toast } from "vue3-toastify";
 
 export default {
   data() {
@@ -93,12 +92,7 @@ export default {
       addedToCart: false,
       pincode: "",
       isPincodeValid: null,
-      rules: {
-        onlyNumbers: (value) =>
-          /^\d+$/.test(value) || "Only numbers are allowed",
-        indianPincode: (value) =>
-          /^[1-9][0-9]{5}$/.test(value) || "Enter a valid Indian pincode",
-      },
+      indianPincode: [(value) => /^[1-9][0-9]{5}$/.test(value) || false],
     };
   },
   async created() {
@@ -113,8 +107,6 @@ export default {
         userId: this.$store.state.userModule.userId,
         product,
       });
-
-      toast.success("Product added to cart");
       this.addedToCart = true;
     },
     buyProduct() {
@@ -124,9 +116,9 @@ export default {
         quantity: 1,
         productId: [this.product._id],
         userId: this.$store.state.userModule.userId,
+        email: this.$store.state.userModule.email,
       });
     },
-
     async fetchProduct(productId) {
       try {
         const filteredFilters = { id: productId };
@@ -138,11 +130,11 @@ export default {
       }
     },
     checkPincode() {
-      if (!this.$refs.pincodeField.validate()) {
-        this.isPincodeValid = true;
-      } else {
-        this.isPincodeValid = false;
-      }
+      this.isPincodeValid = this.indianPincode[0](this.pincode);
+
+      setTimeout(() => {
+        this.isPincodeValid = null;
+      }, 2000);
     },
   },
   computed: {
