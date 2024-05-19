@@ -1,24 +1,8 @@
-import axios, { AxiosResponse } from "axios";
-import { Commit, Dispatch } from "vuex";
+import axios from "axios";
 import Cookies from "js-cookie";
-
-// import { toast } from "vue3-toastify";
-// import "vue3-toastify/dist/index.css";
-
-interface State {
-  exercise: any[];
-  nutrition: any[];
-  yoga: any[];
-  diet: any[];
-}
-
-const state: State = {
-  exercise: [],
-  nutrition: [],
-  yoga: [],
-  diet: [],
-};
-
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
+import { Commit, Dispatch } from "vuex";
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -29,8 +13,15 @@ const createAxiosConfig = () => {
   };
 };
 
+const state = {
+  exercise: [],
+  nutrition: [],
+  yoga: [],
+  diet: [],
+};
+
 const mutations = {
-  setBookmarked(state: State, payload: { category: string; data: any[] }) {
+  setBookmarked(state, payload) {
     switch (payload.category) {
       case "exercise":
         state.exercise = payload.data;
@@ -51,10 +42,7 @@ const mutations = {
 };
 
 const actions = {
-  async fetchBookmarked(
-    { commit }: { commit: Commit },
-    { userId }: { userId: string }
-  ) {
+  async fetchBookmarked({ commit }, { userId }) {
     try {
       const config = createAxiosConfig();
       const url = `http://localhost:3000/bookmark/getBookmarked?userId=${userId}`;
@@ -137,47 +125,41 @@ const actions = {
       console.error("Error fetching bookmarked items:", error);
     }
   },
-  async bookmarkItem(
-    { commit }: { commit: Commit },
-    {
-      itemId,
-      userId,
-      itemType,
-    }: { itemId: string; userId: string; itemType: string }
-  ) {
+  async bookmarkItem({ commit }, { itemId, userId, itemType }) {
     try {
       const url = "http://localhost:3000/bookmark/addBookmark";
-
       const config = createAxiosConfig();
 
-      await axios.post(
+      const response = await axios.post(
         url,
-        {
-          userId,
-          itemId,
-          itemType,
-        },
+        { userId, itemId, itemType },
         config
       );
-      // switch (itemType) {
-      //   case "exercise":
-      //     toast.success("Exercise bookmarked");
-      //     break;
-      //   case "diet":
-      //     toast.success("Diet-plan bookmarked");
-      //     break;
-      //   case "yoga":
-      //     toast.success("Yoga-pose bookmarked");
-      //     break;
-      //   case "nutrition":
-      //     toast.success("Food-item bookmarked");
-      //     break;
-      //   default:
-      //     toast.success("Item bookmarked");
-      //     break;
-      // }
+      console.log(response);
+
+      // Dismiss all opened toast immediately
+      if (response.status === 201) {
+        switch (itemType) {
+          case "exercise":
+            useToast().success("Exercise Bookmarked successfully");
+            break;
+          case "diet":
+            useToast().success("Diet-plan Bookmarked successfully");
+            break;
+          case "yoga":
+            useToast().success("Yoga-pose Bookmarked successfully");
+            break;
+          case "nutrition":
+            useToast().success("Food-item Bookmarked successfully");
+            break;
+          default:
+            useToast().success("Item Bookmarked successfully");
+            break;
+        }
+      }
     } catch (error) {
       console.log(error);
+      useToast().error("An error occurred while bookmarking the item.");
     }
   },
   async undoBookmark(
@@ -193,7 +175,7 @@ const actions = {
 
       const config = createAxiosConfig();
 
-      await axios.post(
+      const response = await axios.post(
         url,
         {
           userId,
@@ -202,12 +184,16 @@ const actions = {
         },
         config
       );
+      if (response.status === 201) {
+        useToast().success("Bookmark removed successfully");
+      }
       await dispatch("fetchBookmarked", { userId });
     } catch (error) {
       console.log(error);
     }
   },
 };
+
 export default {
   state,
   mutations,

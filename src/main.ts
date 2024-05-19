@@ -19,6 +19,9 @@ import App from "./App.vue";
 
 import "vuetify/styles";
 import { createVuetify } from "vuetify";
+import ToastPlugin from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-bootstrap.css";
+
 import * as components from "vuetify/components";
 import * as directives from "vuetify/directives";
 
@@ -82,6 +85,7 @@ addRoutes(
 app.use(vuetify);
 app.use(router);
 app.use(store);
+app.use(ToastPlugin, { position: "top-right" });
 
 app.component("font-awesome-icon", FontAwesomeIcon);
 
