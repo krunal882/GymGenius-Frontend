@@ -5,10 +5,15 @@
     <ProductFilter @filters-applied="applyFilters" />
   </div>
   <div class="d-flex flex-wrap justify-content-center">
-    <CategoryProduct
-      :product="filteredProducts"
-      @product-selected="onProductSelected"
-    />
+    <v-infinite-scroll @load="loadMoreProducts">
+      <CategoryProduct
+        :products="filteredProducts"
+        @product-selected="onProductSelected"
+      />
+      <template v-slot:empty>
+        <v-alert type="warning">No more products!</v-alert>
+      </template>
+    </v-infinite-scroll>
   </div>
 </template>
 
@@ -36,13 +41,6 @@ export default {
       ],
       category: "women",
     };
-  },
-  methods: {
-    handleSearch(searchTerm) {
-      if (searchTerm) {
-        this.fetchProductWithFilters({ name: searchTerm });
-      }
-    },
   },
 };
 </script>

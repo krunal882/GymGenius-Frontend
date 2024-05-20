@@ -76,10 +76,11 @@ export default {
     },
   },
   mounted() {
-    const filteredFilters = {}; 
-    const limit = 15; 
+    const filteredFilters = {};
+    const limit = 15;
+    const url = "http://localhost:3000/store";
     this.$store
-      .dispatch("fetchProduct", { filteredFilters, limit })
+      .dispatch("fetchProduct", { filteredFilters, limit ,url})
       .catch((error) => {
         console.error("Error fetching product:", error);
       });

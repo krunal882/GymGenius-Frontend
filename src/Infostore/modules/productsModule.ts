@@ -42,38 +42,48 @@ const mutations = {
 };
 const actions = {
   async fetchProduct(
-    { commit }: { commit: Commit },
+    { commit, state }: { commit: Commit; state: any },
     {
       filteredFilters,
       limit,
-    }: { filteredFilters: FilteredFilters; limit?: number }
+      page,
+      url,
+    }: {
+      filteredFilters: FilteredFilters;
+      limit?: number;
+      page?: number;
+      url: string;
+    }
   ) {
     try {
       const config = createAxiosConfig();
-      let url = "http://localhost:3000/store";
-      if (filteredFilters && Object.keys(filteredFilters).length > 0) {
-        const queryParams = Object.entries(filteredFilters)
-          .map(([key, value]) => {
-            if (Array.isArray(value)) {
-              return value
-                .map((v) => `${key}=${encodeURIComponent(v)}`)
-                .join("&");
-            } else {
-              return `${key}=${encodeURIComponent(value)}`;
-            }
-          })
-          .join("&");
+      const params: Record<string, any> = { ...filteredFilters, limit, page };
 
-        url += `/filtered?${queryParams}`;
-      } else {
-        if (limit) {
-          url += `?limit=${limit}`;
-        }
+      const queryParams = Object.entries(params)
+        .filter(([, value]) => value !== undefined && value !== null)
+        .map(([key, value]) => {
+          if (Array.isArray(value)) {
+            return value
+              .map((v) => `${key}=${encodeURIComponent(v)}`)
+              .join("&");
+          } else {
+            return `${key}=${encodeURIComponent(value)}`;
+          }
+        })
+        .join("&");
+
+      if (queryParams) {
+        url += `?${queryParams}`;
       }
-
       const response: AxiosResponse = await axios.get(url, config);
 
-      commit("setProduct", response.data);
+      const newProducts = response.data;
+      const currentProducts = state.product || [];
+
+      const updatedProducts =
+        page && page > 1 ? [...currentProducts, ...newProducts] : newProducts;
+
+      commit("setProduct", updatedProducts);
     } catch (error) {
       console.error("Error fetching product:", error);
     }

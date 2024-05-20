@@ -5,10 +5,15 @@
     <ProductFilter @filters-applied="applyFilters" />
   </div>
   <div class="d-flex flex-wrap justify-content-center">
-    <CategoryProduct
-      :product="filteredProducts"
-      @product-selected="onProductSelected"
-    />
+    <v-infinite-scroll @load="loadMoreProducts">
+      <CategoryProduct
+        :products="filteredProducts"
+        @product-selected="onProductSelected"
+      />
+      <template v-slot:empty>
+        <v-alert type="warning">No more products!</v-alert>
+      </template>
+    </v-infinite-scroll>
   </div>
 </template>
 
@@ -18,9 +23,9 @@ import CategoryCarousel from "../../../components/store/CategoryCarousel.vue";
 import ProductFilter from "../../../components/store/ProductFilter.vue";
 import storeFilterMixin from "../../../components/store/storeFilterMixin";
 import UserSearch from "@/components/common-components/UserSearch.vue";
+
 export default {
   mixins: [storeFilterMixin],
-
   components: {
     CategoryCarousel,
     ProductFilter,
@@ -36,14 +41,12 @@ export default {
         require("../../../assets/img/man/man-carousal3.webp"),
       ],
       category: "men",
+      page: 1,
+      loading: false,
+      allLoaded: false,
+      searchTerm: "",
+      currentFilters: {},
     };
-  },
-  methods: {
-    handleSearch(searchTerm) {
-      if (searchTerm) {
-        this.fetchProductWithFilters({ name: searchTerm });
-      }
-    },
   },
 };
 </script>
