@@ -56,7 +56,7 @@
                   v-model="selectedMuscle"
                   :items="muscle"
                   hint="Shoulders / Chest / Back"
-                  label="Force Type"
+                  label="Muscle Target"
                   persistent-hint
                   multiple
                 ></v-select>
@@ -167,7 +167,6 @@ export default {
       ],
     };
   },
-  computed: {},
   methods: {
     toggleFilter() {
       this.showFilter = !this.showFilter;
@@ -194,7 +193,7 @@ export default {
       if (this.selectedMuscle.length > 0) {
         filteredFilters.muscle = this.selectedMuscle;
       }
-
+      console.log(filteredFilters);
       if (Object.keys(filteredFilters).length > 0) {
         this.$emit("filters-applied", filteredFilters);
       } else {
@@ -203,7 +202,6 @@ export default {
       this.showFilter = !this.showFilter;
     },
     handleReset() {
-      this.selectedCategory = null;
       this.selectedForce = [];
       this.selectedLevel = [];
       this.selectedEquipment = [];
@@ -213,6 +211,25 @@ export default {
   },
 };
 </script>
+
+<style scoped>
+.menu-icon {
+  cursor: pointer;
+}
+.filter-section {
+  position: absolute;
+  z-index: 100;
+}
+
+.filter-enter-active,
+.filter-leave-active {
+  transition: opacity 0.3s ease;
+}
+.filter-enter,
+.filter-leave-to {
+  opacity: 0;
+}
+</style>
 
 <style scoped>
 .menu-icon {

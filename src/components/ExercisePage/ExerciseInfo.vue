@@ -15,16 +15,21 @@
       <ExerciseFilter @filters-applied="applyFilters" />
     </div>
     <div class="d-flex flex-wrap justify-content-center">
-      <ExercisePreview
-        v-if="!exploreClicked"
-        :exercises="exercises"
-        @explore="handleExploreClick"
-      />
-      <ExerciseDetail
-        v-else
-        @explore="handleExploreClick"
-        :exercise="selectedExercise"
-      />
+      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
+        <ExercisePreview
+          v-if="!exploreClicked"
+          :exercises="exercises"
+          @explore="handleExploreClick"
+        />
+        <ExerciseDetail
+          v-else
+          @explore="handleExploreClick"
+          :exercise="selectedExercise"
+        />
+        <template v-slot:empty>
+          <v-alert type="warning">No more products!</v-alert>
+        </template>
+      </v-infinite-scroll>
     </div>
   </div>
 </template>
@@ -41,37 +46,118 @@ export default {
       selectedItem: null,
       exploreClicked: false,
       selectedExercise: null,
-      filteredExercises: null,
-      searchTimeout: null,
+      limit: 10,
+      page: 1,
+      loading: false,
+      searchTerm: "",
+      filterTerm: "",
+      allLoaded: false,
+      localExercises: [],
     };
   },
   methods: {
     handleSearch(searchTerm) {
-      if (searchTerm) {
-        this.fetchExercisesWithFilters({ name: searchTerm });
-      }
+      this.searchTerm = searchTerm;
+      this.page = 1;
+      this.allLoaded = false;
+      this.localExercises = [];
+      this.fetchExercisesWithFilters();
     },
     applyFilters(filteredFilters) {
-      this.fetchExercisesWithFilters(filteredFilters);
+      this.filterTerm = filteredFilters;
+      this.page = 1;
+      this.allLoaded = false;
+      this.localExercises = [];
+      this.fetchExercisesWithFilters();
     },
-    async fetchExercisesWithFilters(filteredFilters) {
+    async fetchExercisesWithFilters() {
+      this.loading = true;
       try {
-        await this.$store.dispatch("fetchExercises", filteredFilters);
+        const filter = {};
+        if (this.searchTerm) {
+          filter.name = this.searchTerm;
+        }
+        if (this.filterTerm) {
+          Object.assign(filter, this.filterTerm);
+        }
+        const response = await this.$store.dispatch("fetchExercises", {
+          filteredFilters: filter,
+          limit: this.limit,
+          page: this.page,
+        });
+        if (this.page === 1) {
+          this.localExercises = response;
+        } else {
+          this.localExercises = [...this.localExercises, ...response];
+        }
+        this.allLoaded = response.length < this.limit;
+        this.page += 1;
       } catch (error) {
         console.error("Error fetching exercises with filters:", error);
+      } finally {
+        this.loading = false;
       }
     },
     handleExploreClick(exercise) {
       this.selectedExercise = exercise;
       this.exploreClicked = !this.exploreClicked;
     },
-  },
-  computed: {
-    exercises() {
-      return this.$store.state.exercisesModule.exercises;
+    async loadMoreProducts({ done }) {
+      if (this.allLoaded || this.loading) {
+        done("empty");
+        return;
+      }
+
+      this.loading = true;
+      try {
+        let filter = {};
+        if (this.searchTerm) {
+          filter.name = this.searchTerm;
+        }
+        if (this.filterTerm) {
+          filter = { ...filter, ...this.filterTerm };
+        }
+
+        const response = await this.$store.dispatch("fetchExercises", {
+          filteredFilters: filter,
+          limit: this.limit,
+          page: this.page,
+        });
+
+        if (response.length === 0) {
+          this.allLoaded = true;
+        } else {
+          this.localExercises = [...this.localExercises, ...response];
+          this.page += 1;
+        }
+
+        done(this.allLoaded ? "empty" : null);
+      } catch (error) {
+        console.error("Error loading more exercises:", error);
+        done("error");
+      } finally {
+        this.loading = false;
+      }
     },
   },
-
+  computed: {
+    exercises: {
+      get() {
+        return this.localExercises;
+      },
+      set(value) {
+        this.localExercises = value;
+      },
+    },
+  },
+  watch: {
+    "$store.state.exercisesModule.exercises": {
+      handler(newVal) {
+        this.localExercises = newVal;
+      },
+      immediate: true,
+    },
+  },
   components: {
     ExerciseFilter,
     ExercisePreview,
@@ -79,7 +165,7 @@ export default {
     UserSearch,
   },
   mounted() {
-    this.$store.dispatch("fetchExercises");
+    this.fetchExercisesWithFilters();
   },
 };
 </script>

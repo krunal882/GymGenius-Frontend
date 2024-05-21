@@ -14,16 +14,21 @@
       <FoodFilter @filters-applied="applyFilters" />
     </div>
     <div class="d-flex flex-wrap justify-content-center">
-      <NutritionPreview
-        v-if="!exploreClicked"
-        :foodItem="foodItem"
-        @explore="handleExploreClick"
-      />
-      <NutritionDetail
-        v-else
-        @explore="handleExploreClick"
-        :foodItem="selectedFoodItem"
-      />
+      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
+        <NutritionPreview
+          v-if="!exploreClicked"
+          :foodItem="foodItem"
+          @explore="handleExploreClick"
+        />
+        <NutritionDetail
+          v-else
+          @explore="handleExploreClick"
+          :foodItem="selectedFoodItem"
+        />
+        <template v-slot:empty>
+          <v-alert type="warning">No more products!</v-alert>
+        </template>
+      </v-infinite-scroll>
     </div>
   </div>
 </template>
@@ -40,33 +45,116 @@ export default {
       selectedItem: null,
       exploreClicked: false,
       selectedFoodItem: null,
-      filteredFoodItem: null,
+      limit: 10,
+      page: 1,
+      loading: false,
+      searchTerm: "",
+      filterTerm: "",
+      allLoaded: false,
+      localFoodItem: [],
     };
   },
   methods: {
     handleSearch(searchTerm) {
-      if (searchTerm) {
-        this.fetchFoodItemWithFilters({ name: searchTerm });
-      }
+      this.searchTerm = searchTerm;
+      this.page = 1;
+      this.allLoaded = false;
+      this.localFoodItem = [];
+      this.fetchFoodItemWithFilters();
     },
     applyFilters(filteredFilters) {
-      this.fetchFoodItemWithFilters(filteredFilters);
+      this.filterTerm = filteredFilters;
+      this.page = 1;
+      this.allLoaded = false;
+      this.localFoodItem = [];
+      this.fetchFoodItemWithFilters();
     },
-    async fetchFoodItemWithFilters(filteredFilters) {
+    async fetchFoodItemWithFilters() {
+      this.loading = true;
       try {
-        await this.$store.dispatch("fetchFoodItem", filteredFilters);
+        const filter = {};
+        if (this.searchTerm) {
+          filter.name = this.searchTerm;
+        }
+        if (this.filterTerm) {
+          Object.assign(filter, this.filterTerm);
+        }
+        const response = await this.$store.dispatch("fetchFoodItem", {
+          filteredFilters: filter,
+          limit: this.limit,
+          page: this.page,
+        });
+        if (this.page === 1) {
+          this.localFoodItem = response;
+        } else {
+          this.localFoodItem = [...this.localFoodItem, ...response];
+        }
+        this.allLoaded = response.length < this.limit;
+        this.page += 1;
       } catch (error) {
         console.error("Error fetching food-item with filters:", error);
+      } finally {
+        this.loading = false;
       }
     },
     handleExploreClick(foodItem) {
       this.selectedFoodItem = foodItem;
       this.exploreClicked = !this.exploreClicked;
     },
+    async loadMoreProducts({ done }) {
+      if (this.allLoaded || this.loading) {
+        done("empty");
+        return;
+      }
+
+      this.loading = true;
+      try {
+        let filter = {};
+        if (this.searchTerm) {
+          filter.name = this.searchTerm;
+        }
+        if (this.filterTerm) {
+          filter = { ...filter, ...this.filterTerm };
+        }
+
+        const response = await this.$store.dispatch("fetchFoodItem", {
+          filteredFilters: filter,
+          limit: this.limit,
+          page: this.page,
+        });
+
+        if (response.length === 0) {
+          this.allLoaded = true;
+        } else {
+          this.localFoodItem = [...this.localFoodItem, ...response];
+          this.page += 1;
+        }
+
+        done(this.allLoaded ? "empty" : null);
+      } catch (error) {
+        console.error("Error loading more food-item :", error);
+        done("error");
+      } finally {
+        this.loading = false;
+      }
+    },
   },
   computed: {
-    foodItem() {
-      return this.$store.state.foodItemModule.foodItem;
+    foodItem: {
+      get() {
+        return this.localFoodItem;
+      },
+      set(value) {
+        this.localFoodItem = value;
+      },
+    },
+  },
+  watch: {
+    "$store.state.foodItemModule.foodItem": {
+      handler(newVal) {
+        this.localFoodItem = newVal;
+      },
+      immediate: true,
     },
   },
 
@@ -77,7 +165,7 @@ export default {
     UserSearch,
   },
   mounted() {
-    this.$store.dispatch("fetchFoodItem");
+    this.fetchFoodItemWithFilters();
   },
 };
 </script>

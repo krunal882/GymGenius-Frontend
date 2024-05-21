@@ -15,17 +15,22 @@
     </div>
 
     <div class="d-flex flex-wrap justify-content-center">
-      <DietPreview
-        v-if="!exploreClicked"
-        :dietPlan="dietPlan"
-        @explore="handleExploreClick"
-      />
-      <DietDisplay
-        v-else
-        @explore="handleExploreClick"
-        :dietPlan="selectedDietPlan"
-        :meals="selectedDietPlan.meals"
-      />
+      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
+        <DietPreview
+          v-if="!exploreClicked"
+          :dietPlan="dietPlan"
+          @explore="handleExploreClick"
+        />
+        <DietDisplay
+          v-else
+          @explore="handleExploreClick"
+          :dietPlan="selectedDietPlan"
+          :meals="selectedDietPlan.meals"
+        />
+        <template v-slot:empty>
+          <v-alert type="warning">No more products!</v-alert>
+        </template>
+      </v-infinite-scroll>
     </div>
   </div>
 </template>
@@ -44,6 +49,13 @@ export default {
       selectedDietPlan: null,
       filteredDietPlan: null,
       searchTimeout: null,
+      limit: 10,
+      page: 1,
+      loading: false,
+      searchTerm: "",
+      filterTerm: "",
+      allLoaded: false,
+      localDiet: [],
     };
   },
   components: {
@@ -54,33 +66,108 @@ export default {
   },
   methods: {
     handleSearch(searchTerm) {
-      if (searchTerm) {
-        this.fetchDietPlanWithFilters({ name: searchTerm });
-      }
+      this.searchTerm = searchTerm;
+      this.page = 1;
+      this.allLoaded = false;
+      this.localExercises = [];
+      this.fetchDietPlanWithFilters();
     },
     applyFilters(filteredFilters) {
-      this.fetchDietPlanWithFilters(filteredFilters);
+      this.filterTerm = filteredFilters;
+      this.page = 1;
+      this.allLoaded = false;
+      this.localExercises = [];
+      this.fetchDietPlanWithFilters();
     },
-    async fetchDietPlanWithFilters(filteredFilters) {
+    async fetchDietPlanWithFilters() {
+      this.loading = true;
       try {
-        await this.$store.dispatch("fetchDietPlan", filteredFilters);
+        const filter = {};
+        if (this.searchTerm) {
+          filter.name = this.searchTerm;
+        }
+        if (this.filterTerm) {
+          Object.assign(filter, this.filterTerm);
+        }
+        const response = await this.$store.dispatch("fetchDietPlan", {
+          filteredFilters: filter,
+          limit: this.limit,
+          page: this.page,
+        });
+        if (this.page === 1) {
+          this.localDiet = response;
+        } else {
+          this.localDiet = [...this.localDiet, ...response];
+        }
+        this.allLoaded = response.length < this.limit;
+        this.page += 1;
       } catch (error) {
         console.error("Error fetching DietPlans with filters:", error);
+      } finally {
+        this.loading = false;
       }
     },
     handleExploreClick(dietPlan) {
       this.selectedDietPlan = dietPlan;
       this.exploreClicked = !this.exploreClicked;
     },
+    async loadMoreProducts({ done }) {
+      if (this.allLoaded || this.loading) {
+        done("empty");
+
+        return;
+      }
+
+      this.loading = true;
+      try {
+        let filter = {};
+        if (this.searchTerm) {
+          filter.name = this.searchTerm;
+        }
+        if (this.filterTerm) {
+          filter = { ...filter, ...this.filterTerm };
+        }
+        const response = await this.$store.dispatch("fetchDietPlan", {
+          filteredFilters: filter,
+          limit: this.limit,
+          page: this.page,
+        });
+        if (response.length === 0) {
+          this.allLoaded = true;
+        } else {
+          this.localDiet = [...this.localDiet, ...response];
+          this.page += 1;
+        }
+
+        done(this.allLoaded ? "empty" : null);
+      } catch (error) {
+        console.error("Error loading more products:", error);
+      } finally {
+        this.loading = false;
+      }
+    },
   },
   computed: {
-    dietPlan() {
-      return this.$store.state.dietPlanModule.dietPlan;
+    dietPlan: {
+      get() {
+        return this.localDiet;
+      },
+      set(value) {
+        this.localDiet = value;
+      },
+    },
+  },
+  watch: {
+    "$store.state.dietPlanModule.dietPlan": {
+      handler(newVal) {
+        this.localDiet = newVal;
+      },
+      immediate: true,
     },
   },
 
   mounted() {
-    this.$store.dispatch("fetchDietPlan");
+    this.fetchDietPlanWithFilters();
   },
 };
 </script>

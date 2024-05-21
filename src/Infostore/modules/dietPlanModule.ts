@@ -49,14 +49,22 @@ const mutations = {
   setDietSearch(state: State, dietPlan: DietPlan[]) {
     state.dietSearch = dietPlan;
   },
+  appendDiet(state, diet) {
+    state.dietPlan = [...state.dietPlan, ...diet];
+  },
 };
 
 const actions = {
   async fetchDietPlan(
     { commit }: { commit: Commit },
-    filteredFilters: FilteredFilters
+    {
+      filteredFilters,
+      page,
+      limit,
+    }: { filteredFilters?: FilteredFilters; page: number; limit: number }
   ) {
     try {
+      console.log(filteredFilters);
       const config = createAxiosConfig();
       let url = "http://localhost:3000/diet-plans";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
@@ -72,10 +80,17 @@ const actions = {
           })
           .join("&");
 
-        url += `/filter?${queryParams}`;
+        url += `/filter?${queryParams}&page=${page}&limit=${limit}`;
+      } else {
+        url += `?page=${page}&limit=${limit}`;
       }
       const response: AxiosResponse = await axios.get(url, config);
-      commit("setDietPlan", response.data);
+      if (page === 1) {
+        commit("setDietPlan", response.data);
+      } else {
+        commit("appendDiet", response.data);
+      }
+      return response.data;
     } catch (error) {
       console.error("Error fetching dietPlan:", error);
     }
@@ -84,6 +99,7 @@ const actions = {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/diet-plans/filter?name=${name}`;
     const response = await axios.get(url, config);
+    console.log(response);
     commit("setDietSearch", response.data);
   },
 

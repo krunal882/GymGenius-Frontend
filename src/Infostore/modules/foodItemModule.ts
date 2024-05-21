@@ -62,12 +62,19 @@ const mutations = {
   setFoodItemSearch(state: State, foodItem: FoodItem[]) {
     state.searchFoodItem = foodItem;
   },
+  appendFoodItem(state, foodItem) {
+    state.foodItem = [...state.foodItem, ...foodItem];
+  },
 };
 
 const actions = {
   async fetchFoodItem(
     { commit }: { commit: Commit },
-    filteredFilters: FilteredFilters
+    {
+      filteredFilters,
+      page,
+      limit,
+    }: { filteredFilters: FilteredFilters; page: number; limit: number }
   ) {
     try {
       const config = createAxiosConfig();
@@ -85,13 +92,18 @@ const actions = {
           })
           .join("&");
 
-        url += `/filtered?${queryParams}`;
+        url += `/filtered?${queryParams}&page=${page}&limit=${limit}`;
       } else {
-        url += "?limit=10";
+        url += `?page=${page}&limit=${limit}`;
       }
       const response: AxiosResponse = await axios.get(url, config);
 
-      commit("setFoodItem", response.data);
+      if (page === 1) {
+        commit("setFoodItem", response.data);
+      } else {
+        commit("appendFoodItem", response.data);
+      }
+      return response.data;
     } catch (error) {
       console.error("Error fetching foodItem:", error);
     }

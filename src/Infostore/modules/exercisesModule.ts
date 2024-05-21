@@ -48,12 +48,19 @@ const mutations = {
   setExerciseSearch(state: State, exercises: Exercise[]) {
     state.exerciseSearch = exercises;
   },
+  appendExercises(state, exercises) {
+    state.exercises = [...state.exercises, ...exercises];
+  },
 };
 
 const actions = {
   async fetchExercises(
     { commit }: { commit: Commit },
-    filteredFilters: FilteredFilters
+    {
+      filteredFilters,
+      page,
+      limit,
+    }: { filteredFilters: FilteredFilters; page: number; limit: number }
   ) {
     try {
       const config = createAxiosConfig();
@@ -70,14 +77,18 @@ const actions = {
             }
           })
           .join("&");
-
-        url += `/filtered?${queryParams}`;
+        url += `/filtered?${queryParams}&page=${page}&limit=${limit}`;
       } else {
-        url += "?limit=10";
+        url += `?page=${page}&limit=${limit}`;
       }
 
       const response: AxiosResponse = await axios.get(url, config);
-      commit("setExercises", response.data);
+      if (page === 1) {
+        commit("setExercises", response.data);
+      } else {
+        commit("appendExercises", response.data);
+      }
+      return response.data;
     } catch (error) {
       console.error("Error fetching exercises:", error);
     }
