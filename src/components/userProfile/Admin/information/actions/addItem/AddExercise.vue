@@ -5,7 +5,7 @@
     @click:outside="handleClickOutside"
   >
     <v-card>
-      <v-card-title> Edit Exercise </v-card-title>
+      <v-card-title> Add Exercise </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <div class="d-flex flex-wrap">
@@ -105,7 +105,7 @@ export default {
   data() {
     return {
       forceTypes: ["push", "pull", "static"],
-      levelTypes: ["beginner", "intermediate", "expert"], 
+      levelTypes: ["beginner", "intermediate", "expert"],
       dialog: false,
       valid: true,
       exercise: {
@@ -133,21 +133,33 @@ export default {
   methods: {
     closeDialog() {
       this.$emit("close-dialog");
+      this.resetForm();
     },
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
       }
     },
-
-    cancel() {
-      this.dialog = true;
-      this.$refs.form.reset();
+    resetForm() {
+      this.exercise = {
+        name: "",
+        force: "Force",
+        level: "beginner",
+        mechanic: "",
+        equipment: "",
+        primaryMuscles: [],
+        secondaryMuscles: [],
+        instructions: [],
+        category: "",
+      };
+      this.$refs.form.resetValidation();
     },
     async add(exercise) {
       await this.$store.dispatch("addExercise", { exercise });
+      this.closeDialog();
     },
   },
 };
 </script>
+
 <style scoped></style>

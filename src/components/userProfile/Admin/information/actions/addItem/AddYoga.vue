@@ -118,6 +118,7 @@ export default {
   },
   methods: {
     closeDialog() {
+      this.dialog = false;
       this.$emit("close-dialog");
     },
     handleClickOutside() {
@@ -131,6 +132,7 @@ export default {
     },
     async save(yoga) {
       await this.$store.dispatch("addYoga", { yoga });
+      this.closeDialog();
     },
   },
 };

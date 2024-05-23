@@ -1,7 +1,7 @@
 <template>
   <v-container>
     <!-- <v-row v-if="loading">
-      <v-col v-for="n in this.dietPlan.length" :key="n" cols="4">
+      <v-col v-for="n in this.dietPlan.length" :key="n" cols="12" md="6" lg="4">
         <v-skeleton-loader
           class="mx-auto border"
           max-width="300"
@@ -10,18 +10,21 @@
       </v-col>
     </v-row> -->
 
-    <v-row style="justify-content: space-between">
-      <v-col v-for="dietPlan in dietPlan" :key="dietPlan.id" cols="4">
-        <v-card
-          class="text-black my-4 mx-2 image-hover-effect"
-          min-width="350"
-          height="400"
-        >
+    <v-row class="d-flex flex-wrap" style="justify-content: space-between">
+      <v-col
+        v-for="dietPlan in dietPlan"
+        :key="dietPlan.id"
+        cols="12"
+        md="6"
+        lg="4"
+      >
+        <v-card class="text-black my-4 mx-2" min-width="350" height="400">
           <v-img
             class="align-end text-white"
-            style="height: 200px; width: 100%; object-fit: cover"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            style="height: 200px"
+            :src="getImgPath(dietPlan.src)"
             cover
+            alt="pic"
           >
           </v-img>
 
@@ -40,17 +43,18 @@
 
           <v-card-actions style="justify-content: space-between">
             <v-btn color="primary" @click="editClick(dietPlan)">
-              <v-icon left>mdi-pencil</v-icon> Edit</v-btn
-            >
+              <v-icon left>mdi-pencil</v-icon> Edit
+            </v-btn>
             <v-btn color="error" @click="deleteClick(dietPlan)">
-              <v-icon left>mdi-delete</v-icon> Delete</v-btn
-            >
+              <v-icon left>mdi-delete</v-icon> Delete
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
     </v-row>
   </v-container>
 </template>
+
 <script>
 export default {
   props: {
@@ -64,12 +68,10 @@ export default {
       loading: true,
     };
   },
-  computed: {
-    skeletonCount() {
-      return this.loading ? this.dietPlan.length : 0;
-    },
-  },
   methods: {
+    getImgPath(src) {
+      return require(`@/assets/img/dietPlan/${src}`);
+    },
     editClick(dietPlan) {
       this.$emit("edit-dietPlan", dietPlan);
     },
@@ -80,6 +82,11 @@ export default {
       setTimeout(() => {
         this.loading = false;
       }, 2000);
+    },
+  },
+  computed: {
+    skeletonCount() {
+      return this.loading ? this.dietPlan.length : 0;
     },
   },
   watch: {
@@ -113,6 +120,7 @@ export default {
 .v-btn {
   width: 200px;
 }
+
 .image-hover-effect:hover {
   transform: scale(1.1);
 }

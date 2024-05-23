@@ -59,8 +59,9 @@ export default {
       this.dialog = false;
       this.$emit("close-dialog");
     },
-    remove() {
-      this.$store.dispatch(this.action, { id: this.Item._id });
+    async remove() {
+      await this.$store.dispatch(this.action, { id: this.Item._id });
+      this.closeDialog();
     },
     handleClickOutside() {
       if (this.dialog) {

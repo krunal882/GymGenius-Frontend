@@ -245,6 +245,7 @@ export default {
     },
     async add(foodItem) {
       await this.$store.dispatch("addFoodItem", { foodItem });
+      this.closeDialog();
     },
   },
 };

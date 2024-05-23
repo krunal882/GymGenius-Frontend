@@ -10,6 +10,7 @@
     </v-row>
     <v-data-table-server
       v-model:items-per-page="itemsPerPage"
+      :items-length="totalItems"
       :items="users"
       :loading="loading"
       :headers="headers"
@@ -29,8 +30,7 @@
 
       <template v-slot:item="{ item, index }">
         <tr>
-          <td>{{ index + 1 }}</td>
-          <td>{{ item._id }}</td>
+          <td>{{ (page - 1) * itemsPerPage + index + 1 }}</td>
           <td>{{ item.name }}</td>
           <td>{{ item.email }}</td>
           <td>{{ item.age }}</td>
@@ -50,7 +50,7 @@
     </v-data-table-server>
     <DeleteUserDialog :id="userToDelete" v-model:dialog="deleteDialog" />
     <AddUser v-model:addDialog="addDialog" />
-    <v-dialog v-model="dialog" max-width="500px">
+    <v-dialog v-model="dialog" :persistent="false" max-width="500px">
       <v-card>
         <v-card-title>Edit Details</v-card-title>
         <v-card-text>
@@ -109,10 +109,10 @@
           <v-btn
             color="primary"
             :disabled="validationErrors"
-            @click="saveChanges(editedUser._id)"
+            @click="saveChanges(editedUser)"
             >Save</v-btn
           >
-          <v-btn @click="dialog = false">Cancel</v-btn>
+          <v-btn @click="closeDialog">Cancel</v-btn>
         </v-card-actions>
       </v-card>
     </v-dialog>
@@ -123,6 +123,7 @@
 import { mapActions } from "vuex";
 import DeleteUserDialog from "../DeleteUserDialog.vue";
 import AddUser from "./information/actions/addItem/AddUser.vue";
+
 export default {
   components: {
     DeleteUserDialog,
@@ -141,7 +142,6 @@ export default {
       page: 1,
       headers: [
         { text: "No", align: "start", sortable: false },
-        { text: "ID", align: "start", sortable: false },
         { text: "Name", align: "start", sortable: false },
         { text: "Email", align: "start", sortable: false },
         { text: "Age", align: "start", sortable: false },
@@ -156,6 +156,9 @@ export default {
     users() {
       return this.$store.state.adminModule.userInfo || [];
     },
+    totalItems() {
+      return this.$store.state.adminModule.total;
+    },
   },
   methods: {
     ...mapActions(["getAllUser", "userUpdate", "userSignup"]),
@@ -164,6 +167,7 @@ export default {
       try {
         await this.getAllUser({ page, limit: itemsPerPage });
         this.loading = false;
+        this.page = page;
       } catch (error) {
         console.error("Error loading items:", error);
         this.loading = false;
@@ -188,36 +192,18 @@ export default {
       this.editedUser = { ...item };
       this.dialog = true;
     },
-    saveChanges(id) {
-      const email = this.editedUser.email;
-      const name = this.editedUser.name;
-      const age = this.editedUser.age;
-      const number = this.editedUser.number;
-      const role = this.editedUser.role;
-      const state = this.editedUser.state;
-      const updatedUser = {
-        _id: id,
-        name,
-        email,
-        age,
-        number,
-        role,
-        state,
-      };
-      this.$store.dispatch("userUpdate", {
-        email,
-        name,
-        age,
-        number,
-        role,
-        state,
-        id,
-      });
+    closeDialog() {
+      this.dialog = false;
+    },
+    saveChanges({ _id, email, name, age, number, role, state }) {
+      const updatedUser = { _id, email, name, age, number, role, state };
+      console.log(updatedUser);
+      this.$store.dispatch("userUpdate", { updatedUser });
       this.updateUserLocally(updatedUser);
-
       this.dialog = false;
     },
     updateUserLocally(updatedUser) {
+      console.log(updatedUser);
       const index = this.users.findIndex(
         (user) => user._id === updatedUser._id
       );

@@ -215,6 +215,7 @@ export default {
       }
     },
     closeDialog() {
+      this.dialog = false;
       this.$emit("close-dialog");
     },
     handleClickOutside() {
@@ -229,6 +230,7 @@ export default {
     },
     async add(dietPlan) {
       await this.$store.dispatch("addDietPlan", { dietPlan });
+      this.closeDialog();
     },
   },
 };
