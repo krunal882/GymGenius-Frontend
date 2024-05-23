@@ -4,11 +4,7 @@
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-avatar>
-            <v-img
-              alt="John"
-              v-bind="props"
-              src="https://cdn.vuetifyjs.com/images/john.jpg"
-            ></v-img>
+            <v-img alt="John" v-bind="props" :src="userAvatarUrl"></v-img>
           </v-avatar>
         </template>
 
@@ -30,17 +26,26 @@
 
 <script>
 export default {
-  data: () => ({
-    items: [
-      { title: "Your Profile", route: "/profile" },
-      { title: "Cart", route: "/profile/cart" },
-      { title: "Logout", route: "/profile/logout" },
-    ],
-  }),
+  data() {
+    return {
+      userAvatarUrl: this.$store.state.userModule.userAvatarUrl,
+      items: [
+        { title: "Your Profile", route: "/profile" },
+        { title: "Cart", route: "/profile/cart" },
+        { title: "Logout", route: "/profile/logout" },
+      ],
+    };
+  },
   methods: {
     getRoute(title) {
       const item = this.items.find((item) => item.title === title);
       return item ? item.route : "/";
+    },
+  },
+
+  watch: {
+    "$store.state.userModule.userAvatarUrl"(newUrl) {
+      this.userAvatarUrl = newUrl
     },
   },
 };

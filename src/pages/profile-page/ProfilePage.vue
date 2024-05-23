@@ -7,7 +7,9 @@
 
     <v-navigation-drawer v-model="drawer" app absolute bottom>
       <v-sheet class="pa-4" color="grey-lighten-4">
-        <v-avatar class="mb-4" color="grey-darken-1" size="64"></v-avatar>
+        <v-avatar class="mb-4" color="grey-darken-1" size="64">
+          <v-img alt="Profile image" :src="userAvatarUrl"></v-img>
+        </v-avatar>
         <div>{{ $store.state.userModule.email }}</div>
       </v-sheet>
 
@@ -22,7 +24,7 @@
           @click="selectedItem = index"
         ></v-list-item>
       </v-list>
-      <div v-if="this.$store.state.userModule.role === 'owner'">
+      <div v-if="$store.state.userModule.role === 'owner'">
         <h4 class="text-center">Admin section</h4>
         <v-list>
           <v-list-item
@@ -80,7 +82,16 @@ const selectedItem = ref(
 </script>
 <script>
 export default {
-  components: {},
+  data() {
+    return {
+      userAvatarUrl: this.$store.state.userModule.userAvatarUrl,
+    };
+  },
+  watch: {
+    "$store.state.userModule.userAvatarUrl"(newUrl) {
+      this.userAvatarUrl = newUrl;
+    },
+  },
 };
 </script>
 
