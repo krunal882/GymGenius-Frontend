@@ -2,22 +2,27 @@
   <div>
     <ItemSearch @search="handleSearch" @add="openAddDialog" />
     <AddDiet :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
-    <DietAction
-      :dietPlan="dietPlans"
-      @edit-dietPlan="openEditDialog"
-      @remove-dietPlan="openRemoveDialog"
-    />
-    <DietDialog
-      :dietPlanData="selectedDietPlan"
-      :dialogOpen="dialogOpen"
-      @close-dialog="closeEditDialog"
-    />
-    <RemoveItem
-      action="removeDiet"
-      :item="selectedDietPlan"
-      :dialogOpen="removeDialogOpen"
-      @close-dialog="closeRemoveDialog"
-    />
+    <div v-if="dietPlans.length > 0">
+      <DietAction
+        :dietPlan="dietPlans"
+        @edit-dietPlan="openEditDialog"
+        @remove-dietPlan="openRemoveDialog"
+      />
+      <DietDialog
+        :dietPlanData="selectedDietPlan"
+        :dialogOpen="dialogOpen"
+        @close-dialog="closeEditDialog"
+      />
+      <RemoveItem
+        action="removeDiet"
+        :item="selectedDietPlan"
+        :dialogOpen="removeDialogOpen"
+        @close-dialog="closeRemoveDialog"
+      />
+    </div>
+    <div v-else class="no-item-container">
+      <p class="no-item-text">Search something for result</p>
+    </div>
   </div>
 </template>
 
@@ -73,7 +78,6 @@ export default {
     },
     handleSearch(searchItem) {
       this.selectedItem = searchItem;
-
       this.fetchDietPlanWithFilters(this.selectedItem);
     },
     async fetchDietPlanWithFilters(name) {
@@ -87,4 +91,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.no-item-container {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.no-item-text {
+  font-size: 24px;
+  color: #000000;
+}
+</style>

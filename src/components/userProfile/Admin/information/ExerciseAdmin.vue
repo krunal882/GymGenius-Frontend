@@ -2,22 +2,27 @@
   <div>
     <ItemSearch @search="handleSearch" @add="openAddDialog" />
     <AddExercise :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
-    <ExerciseActions
-      :exercises="exercises"
-      @edit-exercise="openEditDialog"
-      @remove-exercise="openRemoveDialog"
-    />
-    <ExerciseDialog
-      :exerciseData="selectedExercise"
-      :dialogOpen="dialogOpen"
-      @close-dialog="closeEditDialog"
-    />
-    <RemoveItem
-      action="removeExercise"
-      :item="selectedExercise"
-      :dialogOpen="removeDialogOpen"
-      @close-dialog="closeRemoveDialog"
-    />
+    <div v-if="exercises.length > 0">
+      <ExerciseActions
+        :exercises="exercises"
+        @edit-exercise="openEditDialog"
+        @remove-exercise="openRemoveDialog"
+      />
+      <ExerciseDialog
+        :exerciseData="selectedExercise"
+        :dialogOpen="dialogOpen"
+        @close-dialog="closeEditDialog"
+      />
+      <RemoveItem
+        action="removeExercise"
+        :item="selectedExercise"
+        :dialogOpen="removeDialogOpen"
+        @close-dialog="closeRemoveDialog"
+      />
+    </div>
+    <div v-else class="no-item-container">
+      <p class="no-item-text">Search something for result</p>
+    </div>
   </div>
 </template>
 
@@ -87,4 +92,15 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.no-item-container {
+  text-align: center;
+  margin-top: 50px;
+  margin-bottom: 50px;
+}
+
+.no-item-text {
+  font-size: 24px;
+  color: #000000;
+}
+</style>
