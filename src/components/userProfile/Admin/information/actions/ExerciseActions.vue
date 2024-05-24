@@ -12,7 +12,7 @@
       </v-row> -->
 
     <!-- Cards for Exercise Info -->
-    <v-row>
+    <v-row class="d-flex flex-wrap">
       <v-col
         v-for="exercise in exercises"
         :key="exercise.id"
@@ -21,14 +21,11 @@
         md="4"
         lg="4"
       >
-        <v-card
-          width="300"
-          height="auto"
-          class="text-black my-4 mx-2 image-hover-effect"
-        >
+        <v-card width="100%" class="text-black my-4 mx-2 image-hover-effect">
           <v-img
+            class="align-end text-white"
+            height="200"
             :src="getExerciseImagePath(exercise.name, exercise.cloudImg)"
-            style="height: 200px; width: 100%; object-fit: cover"
           >
             <div
               style="

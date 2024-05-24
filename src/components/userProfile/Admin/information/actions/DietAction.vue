@@ -10,18 +10,19 @@
       </v-col>
     </v-row> -->
 
-    <v-row class="d-flex flex-wrap" style="justify-content: space-between">
+    <v-row class="d-flex flex-wrap">
       <v-col
         v-for="dietPlan in dietPlan"
         :key="dietPlan.id"
         cols="12"
-        md="6"
+        sm="6"
+        md="4"
         lg="4"
       >
-        <v-card class="text-black my-4 mx-2" min-width="350" height="400">
+        <v-card width="100%" class="text-black my-4 mx-2">
           <v-img
             class="align-end text-white"
-            style="height: 200px"
+            height="200"
             :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
             cover
             alt="pic"
@@ -111,18 +112,15 @@ export default {
 </script>
 
 <style scoped>
+.row-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+}
+
 .plan-name {
   font-size: 20px;
   font-weight: bold;
-}
-
-.info {
-  font-size: 16px;
-  justify-content: space-between;
-}
-
-.v-btn {
-  width: 200px;
 }
 
 .image-hover-effect:hover {

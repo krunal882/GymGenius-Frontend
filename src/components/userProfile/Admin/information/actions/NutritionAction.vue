@@ -9,9 +9,16 @@
           ></v-skeleton-loader>
         </v-col>
       </v-row> -->
-    <v-row style="justify-content: space-between">
-      <v-col v-for="foodItem in foodItem" :key="foodItem.id" cols="4">
-        <v-card class="text-black my-4 mx-2 image-hover-effect" min-width="350">
+    <v-row class="d-flex flex-wrap">
+      <v-col
+        v-for="foodItem in foodItem"
+        :key="foodItem.id"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
+        <v-card width="100%" class="text-black my-4 mx-2 image-hover-effect">
           <v-img
             class="align-end text-white"
             height="200"
@@ -73,16 +80,16 @@ export default {
         this.loading = false;
       }, 2000);
     },
-    watch: {
-      foodItem: {
-        handler(newValue, oldValue) {
-          if (newValue !== oldValue) {
-            this.loading = true;
-            this.loadData();
-          }
-        },
-        immediate: true,
+  },
+  watch: {
+    foodItem: {
+      handler(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          this.loading = true;
+          this.loadData();
+        }
       },
+      immediate: true,
     },
   },
   created() {
@@ -97,17 +104,6 @@ export default {
   justify-content: space-between;
   align-items: flex-start;
 }
-
-.content {
-  flex: 1;
-  padding: 16px;
-}
-
-.subtitle-row {
-  display: flex;
-  justify-content: space-between;
-}
-
 .image-hover-effect:hover {
   transform: scale(1.1);
 }
