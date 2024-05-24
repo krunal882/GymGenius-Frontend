@@ -11,7 +11,6 @@
       >
         <v-skeleton-loader
           class="mx-auto border"
-          max-width="300"
           type="image"
         ></v-skeleton-loader>
       </v-col>
@@ -29,7 +28,7 @@
           <v-img
             class="align-end text-white"
             height="250"
-            :src="imgPath(foodItem.name)"
+            :src="imgPath(foodItem.name, foodItem.cloudImg)"
             cover
             @click="exploreClicked(foodItem)"
           >
@@ -63,9 +62,13 @@ export default {
     exploreClicked(foodItem) {
       this.$emit("explore", foodItem);
     },
-    imgPath(foodItemName) {
-      const imgPath = `../../assets/img/foodItem/${foodItemName}.jpg`;
-      return imgPath;
+    imgPath(foodItemName, cloudImg) {
+      if (cloudImg === undefined) {
+        const imgPath = `../../assets/img/foodItem/${foodItemName}.jpg`;
+        return imgPath;
+      } else {
+        return cloudImg;
+      }
     },
     loadData() {
       setTimeout(() => {
@@ -91,17 +94,6 @@ export default {
 </script>
 
 <style scoped>
-.row-flex {
-  display: flex;
-  justify-content: space-between;
-  align-items: flex-start;
-}
-
-.content {
-  flex: 1;
-  padding: 16px;
-}
-
 .subtitle-row {
   display: flex;
   justify-content: space-between;

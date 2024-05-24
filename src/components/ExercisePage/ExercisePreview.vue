@@ -1,17 +1,13 @@
 <template>
   <v-container fluid>
-    <!-- Skeleton Loader -->
     <v-row v-if="loading">
       <v-col v-for="n in skeletonCount" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
           class="mx-auto border"
-          max-width="300"
           type="image, article, chip@2"
         ></v-skeleton-loader>
       </v-col>
     </v-row>
-
-    <!-- Cards for Exercise Info -->
     <v-row v-else class="d-flex flex-wrap">
       <v-col
         v-for="exercise in exercises"
@@ -23,7 +19,7 @@
       >
         <v-card width="100%" class="text-black my-4 mx-2 image-hover-effect">
           <v-img
-            :src="getExerciseImagePath(exercise.name)"
+            :src="getExerciseImagePath(exercise.name, exercise.cloudImg)"
             style="height: 300px"
             @click="exploreClicked(exercise)"
           >
@@ -72,14 +68,20 @@ export default {
   },
   computed: {
     skeletonCount() {
-      return this.loading ? this.exercises.length : 0;
+      return this.loading ? 6 : 0;
     },
   },
   methods: {
-    getExerciseImagePath(exerciseName) {
-      const formattedName = exerciseName.replace(/ /g, "_").replace(/\//g, "_");
-      const imgPath = `../../../assets/img/workout-exercise/${formattedName}/images/${exerciseName}0.jpg`;
-      return imgPath;
+    getExerciseImagePath(exerciseName, cloudImg) {
+      if (cloudImg === undefined) {
+        const formattedName = exerciseName
+          .replace(/ /g, "_")
+          .replace(/\//g, "_");
+        const imgPath = `../../../assets/img/workout-exercise/${formattedName}/images/${exerciseName}0.jpg`;
+        return imgPath;
+      } else {
+        return cloudImg;
+      }
     },
     exploreClicked(exercise) {
       this.$emit("explore", exercise);
@@ -96,7 +98,7 @@ export default {
     loadData() {
       setTimeout(() => {
         this.loading = false;
-      }, 2000);
+      }, 1000);
     },
   },
   watch: {

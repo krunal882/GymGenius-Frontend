@@ -4,7 +4,7 @@
       class="align-end text-white"
       height="300"
       max-width="400"
-      :src="imgPath(foodItem.name)"
+      :src="imgPath(foodItem.name, foodItem.cloudImg)"
       cover
     ></v-img>
     <div class="custom-content">
@@ -187,9 +187,13 @@ export default {
         itemType: "nutrition",
       });
     },
-    imgPath(foodItemName) {
-      const imgPath = `../../../assets/img/foodItem/${foodItemName}.jpg`;
-      return imgPath;
+    imgPath(foodItemName, cloudImg) {
+      if (cloudImg === undefined) {
+        const imgPath = `../../../assets/img/foodItem/${foodItemName}.jpg`;
+        return imgPath;
+      } else {
+        return cloudImg;
+      }
     },
   },
 };
@@ -202,7 +206,7 @@ export default {
 
 .custom-title {
   font-size: 24px;
-  color: #333; 
+  color: #333;
 }
 
 .custom-subtitle {
@@ -213,6 +217,6 @@ export default {
 .custom-text {
   padding: 16px;
   font-size: 16px;
-  color: #444; 
+  color: #444;
 }
 </style>

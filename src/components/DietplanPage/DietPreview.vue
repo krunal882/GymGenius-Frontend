@@ -29,7 +29,7 @@
         <v-card class="text-black my-4 mx-2 image-hover-effect" width="100%">
           <v-img
             style="height: 200px"
-            :src="getImgPath(dietPlan.src)"
+            :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
             cover
             @click="exploreClicked(dietPlan)"
           >
@@ -80,8 +80,12 @@ export default {
     },
   },
   methods: {
-    getImgPath(src) {
-      return `../../../assets/img/dietPlan/${src}`;
+    getImgPath(src, cloudImg) {
+      if (cloudImg === undefined) {
+        return `../../../assets/img/dietPlan/${src}`;
+      } else {
+        return cloudImg;
+      }
     },
     exploreClicked(dietPlan) {
       this.$emit("explore", dietPlan);

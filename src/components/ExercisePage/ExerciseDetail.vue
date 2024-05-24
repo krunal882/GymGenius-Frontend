@@ -115,25 +115,31 @@ export default {
         itemType: "exercise",
       });
     },
-    async loadImages(exerciseName) {
-      const formatedName = exerciseName.replace(/ /g, "_").replace(/\//g, "_");
-      try {
-        const image1 = await import(
-          `../../assets/img/workout-exercise/${formatedName}/images/${exerciseName}0.jpg`
-        );
-        const image2 = await import(
-          `../../assets/img/workout-exercise/${formatedName}/images/${exerciseName}1.jpg`
-        );
-        const imageURL1 = image1.default.replace(/%20/g, " ");
-        const imageURL2 = image2.default.replace(/%20/g, " ");
-        this.images = [imageURL1, imageURL2];
-      } catch (error) {
-        console.error("Error loading images:", error);
+    async loadImages(exerciseName, cloudImg) {
+      if (cloudImg === undefined) {
+        const formatedName = exerciseName
+          .replace(/ /g, "_")
+          .replace(/\//g, "_");
+        try {
+          const image1 = await import(
+            `../../assets/img/workout-exercise/${formatedName}/images/${exerciseName}0.jpg`
+          );
+          const image2 = await import(
+            `../../assets/img/workout-exercise/${formatedName}/images/${exerciseName}1.jpg`
+          );
+          const imageURL1 = image1.default.replace(/%20/g, " ");
+          const imageURL2 = image2.default.replace(/%20/g, " ");
+          this.images = [imageURL1, imageURL2];
+        } catch (error) {
+          console.error("Error loading images:", error);
+        }
+      } else {
+        this.images = cloudImg;
       }
     },
   },
   created() {
-    this.loadImages(this.exercise.name);
+    this.loadImages(this.exercise.name, this.exercise.cloudImg);
   },
 };
 </script>
