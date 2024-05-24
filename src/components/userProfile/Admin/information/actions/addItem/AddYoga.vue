@@ -142,13 +142,12 @@ export default {
       this.$refs.form.reset();
     },
     async save(yoga) {
-      const upload_preset = "gymgenius";
-      const cloud_name = "dflto7hyt";
+      const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
+      const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
       const uploadData = new FormData();
       uploadData.append("file", this.image);
       if (upload_preset && cloud_name) {
         uploadData.append("upload_preset", upload_preset);
-        uploadData.append("api", "538769229598131");
         uploadData.append("cloud_name", cloud_name);
       }
       const { data } = await axios.post(

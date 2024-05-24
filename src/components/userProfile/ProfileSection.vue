@@ -6,7 +6,12 @@
       size="200"
       style="border: 6px solid #64dd17"
     >
-      <img :src="userAvatarUrl" alt="User Avatar" v-if="userAvatarUrl" />
+      <img
+        :src="userAvatarUrl"
+        alt="User Avatar"
+        v-if="userAvatarUrl"
+        :style="{ height: '200px', width: '200px' }"
+      />
       <v-icon v-else size="200px">mdi-account-circle</v-icon>
     </v-avatar>
 
@@ -118,9 +123,10 @@
 </template>
 
 <script>
-import axios from "axios";
 import Cookies from "js-cookie";
-
+import axios from "axios";
+// import { storage } from "../../firebase.ts";
+// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export default {
   data() {
     return {
@@ -153,21 +159,28 @@ export default {
         (v) => !!v || "Age is required",
         (v) => (v && v >= 18 && v <= 120) || "Age must be between 12 and 120",
       ],
-      userAvatarUrl: null,
+      userAvatarUrl: this.$store.state.userModule.userAvatarUrl,
+      profileImg: ``,
     };
+  },
+  watch: {
+    "$store.state.userModule.userAvatarUrl"(newUrl) {
+      this.userAvatarUrl = newUrl;
+    },
   },
   methods: {
     saveChanges() {
-      this.user.name = this.editedUser.name;
-      this.user.email = this.editedUser.email;
-      this.user.age = this.editedUser.age;
-      this.user.number = this.editedUser.number;
+      const { name, email, age, number } = this.editedUser;
+      const userId = this.$store.state.userModule.userId;
+      this.user = { ...this.user, name, email, age, number };
       this.$store.dispatch("userUpdate", {
-        email: this.editedUser.email,
-        name: this.editedUser.name,
-        age: +this.editedUser.age,
-        id: this.$store.state.userModule.userId,
-        number: +this.editedUser.number,
+        updatedUser: {
+          _id: userId,
+          name,
+          email,
+          age: +age,
+          number: number,
+        },
       });
 
       this.dialog = false;
@@ -193,30 +206,44 @@ export default {
         },
       };
     },
-    uploadImage(event) {
-      const config = this.createAxiosConfig();
+
+    async uploadImage(event) {
       const file = event.target.files[0];
-      const formData = new FormData();
-      formData.append("file", file);
-      axios
-        .post(
-          "http://localhost:3000/auth/upload",
-          formData,
-          {
-            headers: {
-              "Content-Type": "multipart/form-data",
-            },
-            responseType: "blob",
-          },
-          config
-        )
-        .then((response) => {
-          const blobUrl = URL.createObjectURL(response.data);
-          this.userAvatarUrl = blobUrl;
-        })
-        .catch((error) => {
-          console.error("Error uploading image:", error);
-        });
+      if (!file) return;
+
+      const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
+      if (!allowedTypes.includes(file.type)) {
+        console.error(
+          "Invalid file type. Only JPEG, PNG, and GIF are allowed."
+        );
+        return;
+      }
+
+      const maxSizeInMB = 5;
+      if (file.size > maxSizeInMB * 1024 * 1024) {
+        console.error("File size exceeds the 5MB limit.");
+        return;
+      }
+
+      const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
+      const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
+      const uploadData = new FormData();
+      uploadData.append("file", file);
+      if (upload_preset && cloud_name) {
+        uploadData.append("upload_preset", upload_preset);
+        uploadData.append("cloud_name", cloud_name);
+      }
+      console.log(uploadData);
+      const { data } = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        uploadData
+      );
+
+      this.saveAvatarUrl(data.url);
+    },
+    saveAvatarUrl(imgUrl) {
+      const userId = this.$store.state.userModule.userId;
+      this.$store.dispatch("addImage", { userId, imgUrl });
     },
   },
   computed: {
@@ -232,5 +259,3 @@ export default {
   },
 };
 </script>
-
-<style></style>

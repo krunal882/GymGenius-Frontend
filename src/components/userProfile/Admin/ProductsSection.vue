@@ -4,11 +4,16 @@
     <ItemSearch @search="handleSearch" @add="openAddDialog" />
     <AddProduct :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
     <div v-if="products.length > 0">
-      <ProductAction
-        :products="products"
-        @edit-product="openEditDialog"
-        @remove-product="openRemoveDialog"
-      />
+      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
+        <ProductAction
+          :products="products"
+          @edit-product="openEditDialog"
+          @remove-product="openRemoveDialog"
+        />
+        <template v-slot:empty>
+          <v-alert type="warning">No more products!</v-alert>
+        </template>
+      </v-infinite-scroll>
       <ProductDialog
         :productData="selectedProduct"
         :dialogOpen="dialogOpen"
@@ -50,11 +55,14 @@ export default {
       removeDialogOpen: false,
       addDialogOpen: false,
       page: 1,
+      loading: false,
+      searchTerm: "",
+      allLoaded: false,
     };
   },
   computed: {
     products() {
-      return this.$store.state.productsModule.product;
+      return this.$store.state.productsModule.adminProduct;
     },
   },
   methods: {
@@ -78,23 +86,71 @@ export default {
     closeAddDialog() {
       this.addDialogOpen = false;
     },
-    handleSearch(searchItem) {
-      this.selectedItem = searchItem;
+    handleSearch(selectedItem) {
+      this.selectedItem = selectedItem;
+      this.page = 1;
+      this.allLoaded = false;
 
-      this.fetchProductsWithFilters({ name: this.selectedItem });
+      this.fetchProductsWithFilters();
     },
-    async fetchProductsWithFilters(filteredFilters) {
+
+    async loadMoreProducts({ done }) {
+      if (this.allLoaded || this.loading) {
+        done("empty");
+        return;
+      }
+
+      this.loading = true;
       try {
+        let filter = {};
+        if (this.selectedItem) {
+          filter.name = this.selectedItem;
+        }
+        const url = "http://localhost:3000/store/filtered";
+
+        const response = await this.$store.dispatch("fetchProduct", {
+          filteredFilters: filter,
+          limit: 10,
+          page: this.page,
+          url,
+          role: "admin",
+        });
+        console.log(response);
+        if (response.length === 0) {
+          this.allLoaded = true;
+        } else {
+          this.page += 1;
+        }
+      } catch (error) {
+        console.error("Error loading more products:", error);
+        done("error");
+      } finally {
+        this.loading = false;
+        done(this.allLoaded ? "empty" : null);
+      }
+    },
+
+    async fetchProductsWithFilters() {
+      try {
+        this.loading = true;
+        const filter = {};
+        if (this.selectedItem) {
+          filter.name = this.selectedItem;
+        }
         const url = "http://localhost:3000/store/filtered";
         await this.$store.dispatch("fetchProduct", {
-          filteredFilters,
+          filteredFilters: filter,
           page: this.page,
           url,
           limit: 10,
+          role: "admin",
         });
+
         this.page += 1;
       } catch (error) {
         console.error("Error fetching product with filters:", error);
+      } finally {
+        this.loading = false;
       }
     },
   },

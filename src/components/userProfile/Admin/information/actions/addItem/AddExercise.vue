@@ -165,21 +165,20 @@ export default {
       this.$refs.form.resetValidation();
     },
     async add(exercise) {
-      const upload_preset = "gymgenius";
-      const cloud_name = "dflto7hyt";
+      const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
+      const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
       const uploadData = new FormData();
       uploadData.append("file", this.image);
       if (upload_preset && cloud_name) {
         uploadData.append("upload_preset", upload_preset);
-        uploadData.append("api", "538769229598131");
         uploadData.append("cloud_name", cloud_name);
       }
       const { data } = await axios.post(
         `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
         uploadData
       );
-      const imgUrl = data.url;
-      exercise.cloudImg = imgUrl;
+      console.log(data);
+      exercise.cloudImg = data.url;
       await this.$store.dispatch("addExercise", { exercise });
       this.closeDialog();
     },
