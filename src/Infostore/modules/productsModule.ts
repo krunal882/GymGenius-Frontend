@@ -57,6 +57,17 @@ const mutations = {
   appendAdminProduct(state: State, product: Product[]) {
     state.adminProduct = [...state.adminProduct, ...product];
   },
+  editProduct(state: State, product: Product) {
+    const index = state.adminProduct.findIndex(
+      (item) => item._id === product._id
+    );
+    if (index !== -1) {
+      state.adminProduct[index] = product;
+    }
+  },
+  removeProduct(state: State, id: string) {
+    state.adminProduct = state.adminProduct.filter((item) => item._id !== id);
+  },
 };
 const actions = {
   async fetchProduct(
@@ -132,7 +143,8 @@ const actions = {
     const url = `http://localhost:3000/store/updateProduct?id=${product._id}`;
     const response = await axios.patch(url, product, config);
     if (response.status === 200) {
-      useToast().success(" Exercise updated successfully");
+      commit("editProduct", product);
+      useToast().success(" Product updated successfully");
     }
   },
 
@@ -141,7 +153,8 @@ const actions = {
     const url = `http://localhost:3000/store/removeProduct?id=${id}`;
     const response = await axios.delete(url, config);
     if (response.status === 200) {
-      useToast().success(" Exercise removed successfully");
+      commit("removeProduct", id);
+      useToast().success(" Product removed successfully");
     }
   },
 };

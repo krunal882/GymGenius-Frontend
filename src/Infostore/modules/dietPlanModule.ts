@@ -50,8 +50,17 @@ const mutations = {
   setDietSearch(state: State, dietPlan: DietPlan[]) {
     state.dietSearch = dietPlan;
   },
-  appendDiet(state, diet) {
+  appendDiet(state: State, diet: DietPlan[]) {
     state.dietPlan = [...state.dietPlan, ...diet];
+  },
+  removeDiet(state: State, id: string) {
+    state.dietSearch = state.dietSearch.filter((item) => item._id !== id);
+  },
+  editDiet(state: State, { id, dietPlan }: { id: string; dietPlan: DietPlan }) {
+    const index = state.dietSearch.findIndex((diet) => diet._id === id);
+    if (index !== -1) {
+      state.dietSearch[index] = dietPlan;
+    }
   },
 };
 
@@ -65,7 +74,6 @@ const actions = {
     }: { filteredFilters?: FilteredFilters; page: number; limit: number }
   ) {
     try {
-      console.log(filteredFilters);
       const config = createAxiosConfig();
       let url = "http://localhost:3000/diet-plans";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
@@ -100,7 +108,6 @@ const actions = {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/diet-plans/filter?name=${name}`;
     const response = await axios.get(url, config);
-    console.log(response);
     commit("setDietSearch", response.data);
   },
 
@@ -124,6 +131,7 @@ const actions = {
     const url = `http://localhost:3000/diet-plans/update?id=${id}`;
     const response = await axios.patch(url, dietPlan, config);
     if (response.status === 200) {
+      commit("editDiet", { id, dietPlan });
       useToast().success(" Diet-plan updated successfully");
     }
   },
@@ -133,6 +141,7 @@ const actions = {
     const url = `http://localhost:3000/diet-plans/delete?id=${id}`;
     const response = await axios.delete(url, config);
     if (response.status === 200) {
+      commit("removeDiet", id);
       useToast().success(" Diet-plan removed successfully");
     }
   },

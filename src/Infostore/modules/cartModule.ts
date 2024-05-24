@@ -49,6 +49,9 @@ const mutations = {
   addToCartItems(state: State, product: Product) {
     state.cartItems.push(product);
   },
+  removeCartItem(state: State, id: string) {
+    state.cartItems = state.cartItems.filter((item) => item._id !== id);
+  },
 };
 
 const actions = {
@@ -116,7 +119,7 @@ const actions = {
   },
 
   async removeCart(
-    { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
+    { commit }: { commit: Commit },
     { productId, userId }: { productId: string; userId: string }
   ) {
     try {
@@ -133,9 +136,9 @@ const actions = {
         }
       );
       if (response.status === 200) {
+        commit("removeCartItem", productId);
         useToast().success("Product removed from cart");
       }
-      await dispatch("fetchCart", { userId, status: "pending" });
     } catch (error) {
       console.error("Error removing product from cart:", error);
     }

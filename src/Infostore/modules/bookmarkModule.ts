@@ -39,6 +39,27 @@ const mutations = {
         console.error("Invalid category:", payload.category);
     }
   },
+  undoBookmark(state, payload) {
+    const category = payload.itemType;
+    const itemId = payload.itemId;
+    console.log(category, itemId);
+    switch (category) {
+      case "exercise":
+        state.exercise = state.exercise.filter((item) => item._id !== itemId);
+        break;
+      case "nutrition":
+        state.nutrition = state.nutrition.filter((item) => item._id !== itemId);
+        break;
+      case "yoga":
+        state.yoga = state.yoga.filter((item) => item._id !== itemId);
+        break;
+      case "diet":
+        state.diet = state.diet.filter((item) => item._id !== itemId);
+        break;
+      default:
+        console.error("Invalid category:", category);
+    }
+  },
 };
 
 const actions = {
@@ -182,9 +203,9 @@ const actions = {
         config
       );
       if (response.status === 201) {
+        commit("undoBookmark", { itemType, itemId });
         useToast().success("Bookmark removed successfully");
       }
-      await dispatch("fetchBookmarked", { userId });
     } catch (error) {
       useToast().error("Error in fetching bookmarked item");
     }

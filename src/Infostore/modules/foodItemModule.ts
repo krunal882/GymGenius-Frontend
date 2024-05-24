@@ -66,6 +66,19 @@ const mutations = {
   appendFoodItem(state, foodItem) {
     state.foodItem = [...state.foodItem, ...foodItem];
   },
+  editFoodItem(state: State, foodItem: FoodItem) {
+    const index = state.searchFoodItem.findIndex(
+      (food) => food._id === foodItem._id
+    );
+    if (index !== -1) {
+      state.searchFoodItem[index] = foodItem;
+    }
+  },
+  removeFoodItem(state: State, id: string) {
+    state.searchFoodItem = state.searchFoodItem.filter(
+      (item) => item._id !== id
+    );
+  },
 };
 
 const actions = {
@@ -137,6 +150,10 @@ const actions = {
     const config = createAxiosConfig();
     const url = `http://localhost:3000/foodNutrition/updateFoodItem?id=${foodItem._id}`;
     const response = await axios.patch(url, foodItem, config);
+    if (response.status === 200) {
+      commit("editFoodItem", foodItem);
+      useToast().success(" Food-item updated successfully");
+    }
   },
 
   async removeFoodItem({ commit }: { commit: Commit }, { id }: { id: string }) {
@@ -144,6 +161,7 @@ const actions = {
     const url = `http://localhost:3000/foodNutrition/deleteFoodItem?id=${id}`;
     const response = await axios.delete(url, config);
     if (response.status === 200) {
+      commit("removeFoodItem", id);
       useToast().success(" Food-item removed successfully");
     }
   },

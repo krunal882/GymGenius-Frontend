@@ -86,10 +86,7 @@ const mutations = {
     state.number = data.number;
     state.userAvatarUrl = data.src;
   },
-  setUserDeleted(state, isDeleted) {
-    state.userId = null;
-    state.userDeleted = isDeleted;
-  },
+
   setUserAvatarUrl(state, url) {
     state.userAvatarUrl = url;
   },
@@ -246,19 +243,6 @@ const actions = {
     }
   },
 
-  async userAdd({ commit }: { commit: Commit }, { user }: { user: User }) {
-    try {
-      const config = createAxiosConfig();
-      const url = "http://localhost:3000/auth/addUser";
-      const response = await axios.post(url, user, config);
-      if (response.status === 201) {
-        useToast().success("New user added successfully");
-      }
-    } catch (error) {
-      useToast().error("Error in user creation");
-    }
-  },
-
   async userUpdate(
     { commit }: { commit: Commit },
     {
@@ -272,6 +256,7 @@ const actions = {
       const url = `http://localhost:3000/auth/updateUser?id=${updatedUser._id}`;
       const response = await axios.patch(url, updatedUser, config);
       if (response.status === 200) {
+        commit("setUser", updatedUser);
         useToast().success(" User updated successfully");
       }
     } catch (error) {
@@ -279,25 +264,6 @@ const actions = {
     }
   },
 
-  async userDelete(
-    { commit }: { commit: Commit },
-    { id, role, master }: { id: string; role: string; master: string }
-  ) {
-    try {
-      const config = createAxiosConfig();
-      const url = `http://localhost:3000/auth/deleteUser?id=${id}&role=${role}`;
-      const response = await axios.delete(url, config);
-      if (response.status === 200 && role === "user" && master === "") {
-        Cookies.remove("token");
-        if (response.status === 200) {
-          useToast().success(" User deleted successfully");
-        }
-        commit("setUserDeleted", true);
-      }
-    } catch (error) {
-      useToast().error("Error in user delete");
-    }
-  },
   async addImage(
     { commit }: { commit: Commit },
     { userId, imgUrl }: { userId: string; imgUrl: string }

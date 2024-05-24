@@ -5,6 +5,7 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 interface Yoga {
+  _id: string;
   category_name: string;
   english_name: string;
   sanskrit_name_adapted: string;
@@ -47,8 +48,19 @@ const mutations = {
   setYogaSearch(state: State, yoga: Yoga[]) {
     state.yogaSearch = yoga;
   },
-  appendYoga(state, yoga) {
+  appendYoga(state: State, yoga: Yoga[]) {
     state.yoga = [...state.yoga, ...yoga];
+  },
+
+  editYoga(state: State, yoga: Yoga) {
+    const index = state.yogaSearch.findIndex((item) => item._id === yoga._id);
+    console.log(index);
+    if (index !== -1) {
+      state.yogaSearch[index] = yoga;
+    }
+  },
+  removeYoga(state: State, id: string) {
+    state.yogaSearch = state.yogaSearch.filter((item) => item._id !== id);
   },
 };
 const actions = {
@@ -108,23 +120,23 @@ const actions = {
     }
   },
 
-  async editYoga(
-    { commit }: { commit: Commit },
-    { id, yoga }: { id: string; yoga: Yoga }
-  ) {
+  async editYoga({ commit }: { commit: Commit }, { yoga }: { yoga: Yoga }) {
     const config = createAxiosConfig();
-    const url = `http://localhost:3000/yoga-poses/updateYoga?id=${id}`;
+    const url = `http://localhost:3000/yoga-poses/updateYoga?id=${yoga._id}`;
     const response = await axios.patch(url, yoga, config);
     if (response.status === 200) {
+      commit("editYoga", yoga);
       useToast().success(" Yoga-pose updated successfully");
     }
   },
 
   async removeYoga({ commit }: { commit: Commit }, { id }: { id: string }) {
     const config = createAxiosConfig();
+    console.log(id);
     const url = `http://localhost:3000/yoga-poses/deleteYoga?id=${id}`;
     const response = await axios.delete(url, config);
     if (response.status === 200) {
+      commit("removeYoga", id);
       useToast().success(" Yoga-pose removed successfully");
     }
   },

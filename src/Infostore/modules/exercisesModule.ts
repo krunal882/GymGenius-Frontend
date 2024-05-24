@@ -49,8 +49,21 @@ const mutations = {
   setExerciseSearch(state: State, exercises: Exercise[]) {
     state.exerciseSearch = exercises;
   },
-  appendExercises(state, exercises) {
+  appendExercises(state: State, exercises: Exercise[]) {
     state.exercises = [...state.exercises, ...exercises];
+  },
+  editExercise(state: State, exercise: Exercise) {
+    const index = state.exerciseSearch.findIndex(
+      (exercise) => exercise._id === exercise._id
+    );
+    if (index !== -1) {
+      state.exerciseSearch[index] = exercise;
+    }
+  },
+  removeExercise(state: State, id: string) {
+    state.exerciseSearch = state.exerciseSearch.filter(
+      (item) => item._id !== id
+    );
   },
 };
 
@@ -118,10 +131,12 @@ const actions = {
     { commit }: { commit: Commit },
     { exercise }: { exercise: Exercise }
   ) {
+    console.log(exercise);
     const config = createAxiosConfig();
     const url = `http://localhost:3000/exercises/updateExercise?id=${exercise._id}`;
     const response = await axios.patch(url, exercise, config);
     if (response.status === 200) {
+      commit("editExercise", exercise);
       useToast().success(" Exercise updated successfully");
     }
   },
@@ -130,6 +145,7 @@ const actions = {
     const url = `http://localhost:3000/exercises/deleteExercise?id=${id}`;
     const response = await axios.delete(url, config);
     if (response.status === 200) {
+      commit("removeExercise", id);
       useToast().success(" Exercise removed successfully");
     }
   },
