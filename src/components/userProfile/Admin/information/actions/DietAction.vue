@@ -22,7 +22,7 @@
           <v-img
             class="align-end text-white"
             style="height: 200px"
-            :src="getImgPath(dietPlan.src)"
+            :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
             cover
             alt="pic"
           >
@@ -69,8 +69,12 @@ export default {
     };
   },
   methods: {
-    getImgPath(src) {
-      return require(`@/assets/img/dietPlan/${src}`);
+    getImgPath(src, cloudImg) {
+      if (cloudImg === undefined) {
+        return require(`@/assets/img/dietPlan/${src}`);
+      } else {
+        return cloudImg;
+      }
     },
     editClick(dietPlan) {
       this.$emit("edit-dietPlan", dietPlan);

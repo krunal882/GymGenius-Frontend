@@ -18,6 +18,7 @@ interface FoodItem {
     magnesium: number;
     phosphorus: number;
     vitamin_B6: number;
+    cloudImg: string;
   };
   culinary_uses: string;
   varieties: string;

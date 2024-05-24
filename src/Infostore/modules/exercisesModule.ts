@@ -15,6 +15,7 @@ interface Exercise {
   secondaryMuscles: [];
   instructions: [];
   category: string;
+  cloudImg: string;
 }
 
 interface State {
@@ -104,6 +105,7 @@ const actions = {
     { commit }: { commit: Commit },
     { exercise }: { exercise: Exercise }
   ) {
+    console.log(exercise);
     const config = createAxiosConfig();
     const url = "http://localhost:3000/exercises/addExercise";
     const response = await axios.post(url, exercise, config);

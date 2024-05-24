@@ -12,9 +12,11 @@ interface State {
   email: string;
   age: number;
   number: string;
+  userAvatarUrl: string;
 }
 
 interface User {
+  _id: string;
   name: string;
   email: string;
   age: number;
@@ -23,6 +25,7 @@ interface User {
   password: string;
   confirmPassword: string;
   state: string;
+  src: string;
 }
 
 interface signup {
@@ -58,6 +61,7 @@ const state: State = {
   email: "",
   age: 0,
   number: "",
+  userAvatarUrl: "",
 };
 
 const createAxiosConfig = () => {
@@ -80,10 +84,14 @@ const mutations = {
     state.email = data.email;
     state.age = data.age;
     state.number = data.number;
+    state.userAvatarUrl = data.src;
   },
   setUserDeleted(state, isDeleted) {
     state.userId = null;
     state.userDeleted = isDeleted;
+  },
+  setUserAvatarUrl(state, url) {
+    state.userAvatarUrl = url;
   },
 };
 
@@ -254,38 +262,15 @@ const actions = {
   async userUpdate(
     { commit }: { commit: Commit },
     {
-      email,
-      name,
-      age,
-      id,
-      number,
-      role,
-      state,
+      updatedUser,
     }: {
-      email: Email;
-      name: string;
-      age: Number;
-      id: string;
-      number: Number;
-      role: string;
-      state: string;
+      updatedUser: User;
     }
   ) {
     try {
       const config = createAxiosConfig();
-      const url = `http://localhost:3000/auth/updateUser?id=${id}`;
-      const response = await axios.patch(
-        url,
-        {
-          email,
-          name,
-          age,
-          number,
-          role,
-          state,
-        },
-        config
-      );
+      const url = `http://localhost:3000/auth/updateUser?id=${updatedUser._id}`;
+      const response = await axios.patch(url, updatedUser, config);
       if (response.status === 200) {
         useToast().success(" User updated successfully");
       }
@@ -311,6 +296,19 @@ const actions = {
       }
     } catch (error) {
       useToast().error("Error in user delete");
+    }
+  },
+  async addImage(
+    { commit }: { commit: Commit },
+    { userId, imgUrl }: { userId: string; imgUrl: string }
+  ) {
+    try {
+      const config = createAxiosConfig();
+      const url = "http://localhost:3000/auth/upload";
+      const response = await axios.post(url, { userId, imgUrl }, config);
+      commit("setUserAvatarUrl", response.data);
+    } catch (error) {
+      console.log(error);
     }
   },
 

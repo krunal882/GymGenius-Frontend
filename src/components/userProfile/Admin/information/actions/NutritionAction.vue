@@ -15,7 +15,7 @@
           <v-img
             class="align-end text-white"
             height="200"
-            :src="imgPath(foodItem.name)"
+            :src="imgPath(foodItem.name, foodItem.cloudImg)"
             cover
             @click="exploreClicked(foodItem)"
           >
@@ -54,16 +54,19 @@ export default {
     },
   },
   methods: {
-    imgPath(foodItemName) {
-      const imgPath = `../../assets/img/foodItem/${foodItemName}.jpg`;
-      return imgPath;
+    imgPath(foodItemName, cloudImg) {
+      if (cloudImg === undefined) {
+        const imgPath = `../../assets/img/foodItem/${foodItemName}.jpg`;
+        return imgPath;
+      } else {
+        return cloudImg;
+      }
     },
     editClick(foodItem) {
       this.$emit("edit-foodItem", foodItem);
     },
     deleteClick(foodItem) {
       this.$emit("remove-foodItem", foodItem);
-
     },
     loadData() {
       setTimeout(() => {

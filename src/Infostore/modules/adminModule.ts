@@ -11,7 +11,7 @@ interface UserInfo {
   age: number;
   number: number;
   role: string;
-  password: string;
+  state: string;
 }
 
 interface ProductInfo {
@@ -33,11 +33,13 @@ interface OrderData {
 interface State {
   userInfo: UserInfo[];
   productData: OrderData[];
+  total: number;
 }
 
 const state: State = {
   userInfo: [],
   productData: [],
+  total: 0,
 };
 
 const createAxiosConfig = () => {
@@ -57,6 +59,9 @@ const mutations = {
   setOrders(state: State, products: OrderData[]) {
     state.productData = products;
   },
+  setTotalItems(state: State, total: number) {
+    state.total = total;
+  },
 };
 const actions = {
   async getAllUser(
@@ -68,11 +73,13 @@ const actions = {
     { page, limit }: { page: number; limit: number }
   ) {
     try {
-      const url = `http://localhost:3000/auth/users?page=1&limit=10`;
+      const url = `http://localhost:3000/auth/users?page=${page}&limit=${limit}`;
       const config = createAxiosConfig();
       const response = await axios.get(url, config);
-      const users = response.data;
+      const users = response.data.users;
+      const totalItems = response.data.total;
       commit("setUsers", users);
+      commit("setTotalItems", totalItems);
     } catch (error) {
       useToast().error("Error in fetching users");
     }

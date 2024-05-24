@@ -27,7 +27,7 @@
           class="text-black my-4 mx-2 image-hover-effect"
         >
           <v-img
-            :src="getExerciseImagePath(exercise.name)"
+            :src="getExerciseImagePath(exercise.name, exercise.cloudImg)"
             style="height: 200px; width: 100%; object-fit: cover"
           >
             <div
@@ -92,10 +92,16 @@ export default {
     },
   },
   methods: {
-    getExerciseImagePath(exerciseName) {
-      const formattedName = exerciseName.replace(/ /g, "_").replace(/\//g, "_");
-      const imgPath = `../../../assets/img/workout-exercise/${formattedName}/images/${exerciseName}0.jpg`;
-      return imgPath;
+    getExerciseImagePath(exerciseName, cloudImg) {
+      if (cloudImg === undefined) {
+        const formattedName = exerciseName
+          .replace(/ /g, "_")
+          .replace(/\//g, "_");
+        const imgPath = `../../../assets/img/workout-exercise/${formattedName}/images/${exerciseName}0.jpg`;
+        return imgPath;
+      } else {
+        return cloudImg;
+      }
     },
     editClick(exercise) {
       this.$emit("edit-exercise", exercise);

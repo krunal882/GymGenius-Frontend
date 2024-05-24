@@ -18,7 +18,7 @@
             <v-img
               class="align-end text-white"
               height="346"
-              :src="imgPath(product.src, product.category)"
+              :src="imgPath(product.src, product.category, product.cloudImg)"
               cover
             ></v-img>
             <v-card-title class="pb-0">{{ product.title }}</v-card-title>
@@ -59,9 +59,14 @@ export default {
     products: { type: Array, required: true },
   },
   methods: {
-    imgPath(src, category) {
-      const imgPath = `../../../../../assets/img/products/${category}/${src}.jpg`;
-      return imgPath;
+    imgPath(src, category, cloudImg) {
+      if (cloudImg === undefined) {
+        const imgPath = `../../../../../assets/img/products/${category}/${src}.jpg`;
+        return imgPath;
+      } else {
+        const imgPath = cloudImg;
+        return imgPath;
+      }
     },
     viewProduct(product) {
       this.$emit("product-selected", product);

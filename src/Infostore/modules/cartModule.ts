@@ -63,7 +63,6 @@ const actions = {
   ) {
     try {
       const config = createAxiosConfig();
-
       const response = await axios.post(
         "http://localhost:3000/store/addToCart",
         {
@@ -182,7 +181,7 @@ const actions = {
   ) {
     try {
       if (productId.length === 1) {
-        await dispatch("addToCart", { userId, productId, status: "done" });
+        await dispatch("addToCart", { userId, productId, status: "pending" });
       }
       const config = createAxiosConfig();
 
@@ -193,13 +192,12 @@ const actions = {
           quantity,
           title,
           email,
+          productId,
+          userId,
         },
         config
       );
       commit("buyProduct", response.data);
-      if (productId.length > 1) {
-        await dispatch("addHistory", { productId, userId });
-      }
     } catch (error) {
       console.error("Error while buying product to cart:", error);
     }

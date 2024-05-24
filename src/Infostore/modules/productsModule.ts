@@ -1,6 +1,8 @@
 import axios, { AxiosResponse } from "axios";
 import { Commit, GetterTree } from "vuex";
 import Cookies from "js-cookie";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 interface Product {
   _id: string;
@@ -15,14 +17,18 @@ interface Product {
 
 interface State {
   product: Product[];
+  productSearch: Product[];
+  adminProduct: Product[];
 }
 
 interface FilteredFilters {
-  [key: string]: boolean | number;
+  [key: string]: boolean | number | string;
 }
 
 const state: State = {
   product: [],
+  productSearch: [],
+  adminProduct: [],
 };
 
 const createAxiosConfig = () => {
@@ -39,6 +45,18 @@ const mutations = {
   setProduct(state: State, product: Product[]) {
     state.product = product;
   },
+  appendProducts(state, product) {
+    state.product = [...state.product, ...product];
+  },
+  resetProducts(state) {
+    state.product = [];
+  },
+  setAdminProduct(state: State, product: Product[]) {
+    state.adminProduct = product;
+  },
+  appendAdminProduct(state: State, product: Product[]) {
+    state.adminProduct = [...state.adminProduct, ...product];
+  },
 };
 const actions = {
   async fetchProduct(
@@ -48,11 +66,13 @@ const actions = {
       limit,
       page,
       url,
+      role,
     }: {
       filteredFilters: FilteredFilters;
       limit?: number;
       page?: number;
       url: string;
+      role?: string;
     }
   ) {
     try {
@@ -71,29 +91,65 @@ const actions = {
           }
         })
         .join("&");
-
       if (queryParams) {
         url += `?${queryParams}`;
       }
       const response: AxiosResponse = await axios.get(url, config);
 
-      const newProducts = response.data;
-      const currentProducts = state.product || [];
+      if (role === "admin" && page === 1) {
+        commit("setAdminProduct", response.data);
+      } else if (role === "admin" && page > 1) {
+        commit("appendAdminProduct", response.data);
+      } else if (role === "" && page === 1) {
+        commit("setProduct", response.data);
+      } else {
+        commit("appendProducts", response.data);
+      }
 
-      const updatedProducts =
-        page && page > 1 ? [...currentProducts, ...newProducts] : newProducts;
-
-      commit("setProduct", updatedProducts);
+      return response.data;
     } catch (error) {
       console.error("Error fetching product:", error);
+    }
+  },
+
+  async addProduct(
+    { commit }: { commit: Commit },
+    { product }: { product: Product }
+  ) {
+    const config = createAxiosConfig();
+    const url = "http://localhost:3000/store/addProduct";
+    const response = await axios.post(url, product, config);
+    if (response.status === 201) {
+      useToast().success("New Product added successfully");
+    }
+  },
+
+  async editProduct(
+    { commit }: { commit: Commit },
+    { product }: { product: Product }
+  ) {
+    const config = createAxiosConfig();
+    const url = `http://localhost:3000/store/updateProduct?id=${product._id}`;
+    const response = await axios.patch(url, product, config);
+    if (response.status === 200) {
+      useToast().success(" Exercise updated successfully");
+    }
+  },
+
+  async removeProduct({ commit }: { commit: Commit }, { id }: { id: string }) {
+    const config = createAxiosConfig();
+    const url = `http://localhost:3000/store/removeProduct?id=${id}`;
+    const response = await axios.delete(url, config);
+    if (response.status === 200) {
+      useToast().success(" Exercise removed successfully");
     }
   },
 };
 
 const getters: GetterTree<State, Product> = {
-  getProduct(state: State): Product[] {
-    return state.product;
-  },
+  // getProduct(state: State): Product[] {
+  //   return state.product;
+  // },
 };
 
 export default {

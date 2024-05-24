@@ -4,6 +4,7 @@
       <v-card-title> Add DietPlan </v-card-title>
       <v-card-text>
         <v-form ref="form">
+          <AdminImgUpload @img-selected="handleImageSelected" />
           <div class="d-flex flex-wrap">
             <v-text-field
               v-model="dietPlan.plan_name"
@@ -14,23 +15,24 @@
             ></v-text-field>
             <v-text-field
               v-model="dietPlan.diet_type"
-              label="Category"
+              label="Diet type"
               variant="outlined"
               required
               class="mr-4 mb-4"
             ></v-text-field>
             <v-text-field
               v-model="dietPlan.purpose"
-              label="Force"
+              label="Purpose"
               required
               variant="outlined"
               class="mr-4 mb-4"
             ></v-text-field>
             <v-text-field
               v-model="dietPlan.total_days"
-              label="Level"
+              label="Total Days "
               required
               variant="outlined"
+              type="number"
               class="mb-4"
             ></v-text-field>
           </div>
@@ -139,12 +141,18 @@
   </v-dialog>
 </template>
 <script>
+import axios from "axios";
+import AdminImgUpload from "@/components/common-components/AdminImgUpload.vue";
 export default {
   props: {
     dialogOpen: Boolean,
   },
+  components: {
+    AdminImgUpload,
+  },
   data() {
     return {
+      image: null,
       dialog: false,
       rows: 1,
       Days: [
@@ -192,6 +200,9 @@ export default {
     },
   },
   methods: {
+    handleImageSelected(image) {
+      this.image = image;
+    },
     addRow() {
       this.dietPlan.meals.push({
         day: "",
@@ -229,6 +240,20 @@ export default {
       this.$refs.form.reset();
     },
     async add(dietPlan) {
+      const upload_preset = "gymgenius";
+      const cloud_name = "dflto7hyt";
+      const uploadData = new FormData();
+      uploadData.append("file", this.image);
+      if (upload_preset && cloud_name) {
+        uploadData.append("upload_preset", upload_preset);
+        uploadData.append("api", "538769229598131");
+        uploadData.append("cloud_name", cloud_name);
+      }
+      const { data } = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        uploadData
+      );
+      dietPlan.cloudImg = data.url;
       await this.$store.dispatch("addDietPlan", { dietPlan });
       this.closeDialog();
     },

@@ -13,6 +13,7 @@ interface Yoga {
   pose_description: string;
   pose_benefits: string;
   instructions: string;
+  url_png: string;
 }
 
 interface State {

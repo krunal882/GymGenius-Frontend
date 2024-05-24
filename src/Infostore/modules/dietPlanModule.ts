@@ -6,6 +6,7 @@ import "vue-toast-notification/dist/theme-sugar.css";
 interface DietPlan {
   _id: string;
   name: string;
+  cloudImg: string;
   health_benefits: string;
   nutritions: string;
   culinary_uses: string;

@@ -8,6 +8,8 @@
       <v-card-title> Add Yoga </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
+          <AdminImgUpload @img-selected="handleImageSelected" />
+
           <div class="d-flex flex-wrap">
             <v-text-field
               :rules="Rules"
@@ -87,12 +89,18 @@
 </template>
 
 <script>
+import axios from "axios";
+import AdminImgUpload from "@/components/common-components/AdminImgUpload.vue";
 export default {
   props: {
     dialogOpen: Boolean,
   },
+  components: {
+    AdminImgUpload,
+  },
   data() {
     return {
+      image: null,
       dialog: false,
       valid: true,
       yoga: {
@@ -117,6 +125,9 @@ export default {
     },
   },
   methods: {
+    handleImageSelected(image) {
+      this.image = image;
+    },
     closeDialog() {
       this.dialog = false;
       this.$emit("close-dialog");
@@ -131,10 +142,23 @@ export default {
       this.$refs.form.reset();
     },
     async save(yoga) {
+      const upload_preset = "gymgenius";
+      const cloud_name = "dflto7hyt";
+      const uploadData = new FormData();
+      uploadData.append("file", this.image);
+      if (upload_preset && cloud_name) {
+        uploadData.append("upload_preset", upload_preset);
+        uploadData.append("api", "538769229598131");
+        uploadData.append("cloud_name", cloud_name);
+      }
+      const { data } = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        uploadData
+      );
+      yoga.url_png = data.url;
       await this.$store.dispatch("addYoga", { yoga });
       this.closeDialog();
     },
   },
 };
 </script>
-<style scoped></style>
