@@ -133,8 +133,8 @@ export default {
     },
     async save(product) {
       product.price = +product.price;
-      console.log(product);
       await this.$store.dispatch("editProduct", { product });
+      this.closeDialog();
     },
   },
 };

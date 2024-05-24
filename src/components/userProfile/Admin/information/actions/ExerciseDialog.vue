@@ -106,7 +106,7 @@ export default {
   data() {
     return {
       forceTypes: ["push", "pull", "static"],
-      levelTypes: ["beginner", "intermediate", "expert"], 
+      levelTypes: ["beginner", "intermediate", "expert"],
       dialog: false,
       valid: true,
       exercise: {
@@ -151,7 +151,8 @@ export default {
       this.$refs.form.reset();
     },
     async save(exercise) {
-      await this.$store.dispatch("editExercise", exercise);
+      await this.$store.dispatch("editExercise", { exercise });
+      this.closeDialog();
     },
   },
 };

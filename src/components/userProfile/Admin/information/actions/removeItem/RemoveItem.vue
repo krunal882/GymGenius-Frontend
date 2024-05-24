@@ -62,30 +62,32 @@ export default {
       this.$emit("close-dialog");
     },
     async remove() {
-      const timestamp = Math.floor(Date.now() / 1000);
+      if (this.item.cloudImg != undefined) {
+        const timestamp = Math.floor(Date.now() / 1000);
+        const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
+        const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
+        const uploadData = new FormData();
+        const imgUrl = this.item.cloudImg;
+        const api_secret = process.env.VUE_APP_CLOUDINARY_API_SECRET;
+        const apiKey = process.env.VUE_APP_CLOUDINARY_API_KEY;
+        const publicId = imgUrl.split("/").pop().split(".").shift();
+        const string_to_sign = `public_id=${publicId}&timestamp=${timestamp}${api_secret}`;
+        const signature = CryptoJS.SHA1(string_to_sign).toString();
 
-      const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
-      const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
-      const uploadData = new FormData();
-      const imgUrl = this.item.cloudImg;
-      const api_secret = process.env.VUE_APP_CLOUDINARY_API_SECRET;
-      const apiKey = process.env.VUE_APP_CLOUDINARY_API_KEY;
-      const publicId = imgUrl.split("/").pop().split(".").shift();
-      const string_to_sign = `public_id=${publicId}&timestamp=${timestamp}${api_secret}`;
-      const signature = CryptoJS.SHA1(string_to_sign).toString();
-
-      uploadData.append("file", this.item?.cloudImg);
-      if (upload_preset && cloud_name) {
-        uploadData.append("api_key", apiKey);
-        uploadData.append("timestamp", timestamp);
-        uploadData.append("public_id", publicId);
-        uploadData.append("signature", signature);
+        uploadData.append("file", this.item?.cloudImg);
+        if (upload_preset && cloud_name) {
+          uploadData.append("api_key", apiKey);
+          uploadData.append("timestamp", timestamp);
+          uploadData.append("public_id", publicId);
+          uploadData.append("signature", signature);
+        }
+        const { data } = await axios.post(
+          `https://api.cloudinary.com/v1_1/${cloud_name}/image/destroy`,
+          uploadData
+        );
+        console.log(data);
       }
-      const { data } = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/destroy`,
-        uploadData
-      );
-      console.log(data);
+      console.log(this.Item._id)
       await this.$store.dispatch(this.action, { id: this.Item._id });
       this.closeDialog();
     },

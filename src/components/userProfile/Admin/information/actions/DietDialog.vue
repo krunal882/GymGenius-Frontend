@@ -215,6 +215,7 @@ export default {
       const id = dietPlan._id;
       dietPlan.total_days = +dietPlan.total_days;
       await this.$store.dispatch("editDietPlan", { id, dietPlan });
+      this.closeDialog();
     },
   },
 };

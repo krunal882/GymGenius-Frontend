@@ -9,14 +9,13 @@
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <div class="d-flex flex-wrap">
-            <v-select
+            <v-text-field
               v-model="yoga.category_name"
-              :items="category"
               label="category"
               variant="outlined"
               required
               class="mr-4 mb-4"
-            ></v-select>
+            ></v-text-field>
             <v-text-field
               :rules="Rules"
               v-model="yoga.english_name"
@@ -92,19 +91,6 @@ export default {
   },
   data() {
     return {
-      category: [
-        "Core Yoga",
-        "Chest Opening Yoga",
-        "Seated Yoga",
-        "Strengthening Yoga",
-        "Standing Yoga",
-        "Restorative Yoga",
-        "Arm Balance Yoga",
-        "Inversion Yoga",
-        "Backbend Yoga",
-        "Forward Bend Yoga",
-        "Hip Opening Yoga",
-      ],
       dialog: false,
       valid: true,
       yoga: {
@@ -148,9 +134,8 @@ export default {
       this.$refs.form.reset();
     },
     async save(yoga) {
-      const id = yoga._id;
-      delete yoga._id;
-      await this.$store.dispatch("editYoga", { id, yoga });
+      await this.$store.dispatch("editYoga", { yoga });
+      this.closeDialog();
     },
   },
 };

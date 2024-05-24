@@ -81,6 +81,7 @@ export default {
       this.$emit("edit-yoga", yoga);
     },
     deleteClick(yoga) {
+      console.log(yoga);
       this.$emit("remove-yoga", yoga);
     },
     loadData() {

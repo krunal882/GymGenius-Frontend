@@ -248,8 +248,8 @@ export default {
       this.$refs.form.reset();
     },
     async save(foodItem) {
-
       await this.$store.dispatch("editFoodItem", { foodItem });
+      this.closeDialog();
     },
   },
 };

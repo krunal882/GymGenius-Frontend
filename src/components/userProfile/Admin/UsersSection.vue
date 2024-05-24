@@ -203,7 +203,6 @@ export default {
       this.dialog = false;
     },
     updateUserLocally(updatedUser) {
-      console.log(updatedUser);
       const index = this.users.findIndex(
         (user) => user._id === updatedUser._id
       );
