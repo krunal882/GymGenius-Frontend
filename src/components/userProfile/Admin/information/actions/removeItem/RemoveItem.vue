@@ -81,13 +81,11 @@ export default {
           uploadData.append("public_id", publicId);
           uploadData.append("signature", signature);
         }
-        const { data } = await axios.post(
+        await axios.post(
           `https://api.cloudinary.com/v1_1/${cloud_name}/image/destroy`,
           uploadData
         );
-        console.log(data);
       }
-      console.log(this.Item._id)
       await this.$store.dispatch(this.action, { id: this.Item._id });
       this.closeDialog();
     },

@@ -9,6 +9,31 @@
       <v-card-text>
         <v-form ref="form" v-model="valid">
           <div class="d-flex flex-wrap">
+            <v-col
+              cols="12"
+              md="6"
+              class="d-flex flex-wrap justify-center align-center"
+            >
+              <v-img
+                v-if="imagePath"
+                :src="imagePath(exercise.name, exercise.cloudImg)"
+                width="200"
+                height="200"
+                class="image-preview"
+              ></v-img>
+              <div v-else class="image-placeholder"></div>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-file-input
+                label="Upload New Image"
+                prepend-icon="mdi-camera"
+                variant="filled"
+                @change="onFileChange"
+                accept="image/*"
+              ></v-file-input>
+            </v-col>
+          </div>
+          <div class="d-flex flex-wrap">
             <v-text-field
               :rules="Rules"
               v-model="exercise.name"
@@ -98,6 +123,7 @@
 </template>
 
 <script>
+import axios from "axios";
 export default {
   props: {
     exerciseData: Object,
@@ -119,6 +145,7 @@ export default {
         secondaryMuscles: "",
         instructions: "",
         category: "",
+        cloudImg: "",
       },
       Rules: [
         (v) => !!v || "Field is Required",
@@ -135,6 +162,28 @@ export default {
     },
   },
   methods: {
+    onFileChange(event) {
+      const file = event.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.exercise.cloudImg = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    imagePath(exerciseName, cloudImg) {
+      if (cloudImg === undefined) {
+        const formattedName = exerciseName
+          .replace(/ /g, "_")
+          .replace(/\//g, "_");
+        const imgPath = `../../../../../assets/img/workout-exercise/${formattedName}/images/${exerciseName}0.jpg`;
+        return imgPath;
+      } else {
+        return cloudImg;
+      }
+    },
     closeDialog() {
       this.$emit("close-dialog");
     },
@@ -151,10 +200,33 @@ export default {
       this.$refs.form.reset();
     },
     async save(exercise) {
+      const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
+      const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
+      const uploadData = new FormData();
+      uploadData.append("file", this.exercise.cloudImg);
+      if (upload_preset && cloud_name) {
+        uploadData.append("upload_preset", upload_preset);
+        uploadData.append("cloud_name", cloud_name);
+      }
+      const { data } = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        uploadData
+      );
+      exercise.cloudImg = data.url;
       await this.$store.dispatch("editExercise", { exercise });
       this.closeDialog();
     },
   },
 };
 </script>
-<style scoped></style>
+<style scoped>
+.image-placeholder {
+  width: 200px;
+  height: 200px;
+  background-color: #f0f0f0;
+  border: 2px dashed #ccc;
+}
+.image-preview {
+  object-fit: contain;
+}
+</style>

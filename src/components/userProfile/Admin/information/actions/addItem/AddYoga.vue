@@ -31,7 +31,6 @@
           <div class="d-flex">
             <v-text-field
               v-model="yoga.english_name"
-              :items="forceTypes"
               label="english name of yoga"
               required
               variant="outlined"

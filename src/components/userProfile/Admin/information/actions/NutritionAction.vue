@@ -24,7 +24,6 @@
             height="200"
             :src="imgPath(foodItem.name, foodItem.cloudImg)"
             cover
-            @click="exploreClicked(foodItem)"
           >
             <v-card-title>{{ foodItem.name }}</v-card-title>
           </v-img>

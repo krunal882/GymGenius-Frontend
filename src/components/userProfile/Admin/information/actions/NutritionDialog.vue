@@ -9,6 +9,31 @@
       <v-card-text>
         <v-form ref="form">
           <div class="d-flex flex-wrap">
+            <v-col
+              cols="12"
+              md="6"
+              class="d-flex flex-wrap justify-center align-center"
+            >
+              <v-img
+                v-if="imgPath"
+                :src="imgPath(foodItem.name, foodItem.cloudImg)"
+                width="200"
+                height="200"
+                class="image-preview"
+              ></v-img>
+              <div v-else class="image-placeholder"></div>
+            </v-col>
+            <v-col cols="12" md="6">
+              <v-file-input
+                label="Upload New Image"
+                prepend-icon="mdi-camera"
+                variant="filled"
+                @change="onFileChange"
+                accept="image/*"
+              ></v-file-input>
+            </v-col>
+          </div>
+          <div class="d-flex flex-wrap">
             <v-text-field
               :rules="Rules"
               v-model="foodItem.name"
@@ -185,6 +210,7 @@
   </v-dialog>
 </template>
 <script>
+import axios from "axios";
 export default {
   props: {
     foodItemData: Object,
@@ -197,6 +223,7 @@ export default {
         name: "",
         category: "",
         health_benefits: "",
+        cloudImg: "",
         nutritions: {
           calories: "",
           protein: "",
@@ -232,6 +259,25 @@ export default {
   },
 
   methods: {
+    onFileChange(event) {
+      const file = event.target.files[0];
+
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = (e) => {
+          this.foodItem.cloudImg = e.target.result;
+        };
+        reader.readAsDataURL(file);
+      }
+    },
+    imgPath(foodItemName, cloudImg) {
+      if (cloudImg === undefined) {
+        const imgPath = `../../../../../assets/img/foodItem/${foodItemName}.jpg`;
+        return imgPath;
+      } else {
+        return cloudImg;
+      }
+    },
     closeDialog() {
       this.$emit("close-dialog");
     },
@@ -248,6 +294,19 @@ export default {
       this.$refs.form.reset();
     },
     async save(foodItem) {
+      const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
+      const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
+      const uploadData = new FormData();
+      uploadData.append("file", this.foodItem.cloudImg);
+      if (upload_preset && cloud_name) {
+        uploadData.append("upload_preset", upload_preset);
+        uploadData.append("cloud_name", cloud_name);
+      }
+      const { data } = await axios.post(
+        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+        uploadData
+      );
+      foodItem.cloudImg = data.url;
       await this.$store.dispatch("editFoodItem", { foodItem });
       this.closeDialog();
     },
