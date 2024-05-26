@@ -13,22 +13,22 @@
       <UserSearch @search="handleSearch" />
       <FoodFilter @filters-applied="applyFilters" />
     </div>
-    <div class="d-flex flex-wrap justify-content-center">
-      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
-        <NutritionPreview
-          v-if="!exploreClicked"
-          :foodItem="foodItem"
-          @explore="handleExploreClick"
-        />
-        <NutritionDetail
-          v-else
-          @explore="handleExploreClick"
-          :foodItem="selectedFoodItem"
-        />
+    <div class="justify-content-center">
+      <v-infinite-scroll
+        v-if="!exploreClicked"
+        @load="loadMoreProducts"
+        infinite-distance="10"
+      >
+        <NutritionPreview :foodItem="foodItem" @explore="handleExploreClick" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>
       </v-infinite-scroll>
+      <NutritionDetail
+        v-else
+        @explore="handleExploreClick"
+        :foodItem="selectedFoodItem"
+      />
     </div>
   </div>
 </template>

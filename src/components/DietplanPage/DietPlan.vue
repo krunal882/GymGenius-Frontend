@@ -15,22 +15,22 @@
     </div>
 
     <div class="d-flex flex-wrap justify-content-center">
-      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
-        <DietPreview
-          v-if="!exploreClicked"
-          :dietPlan="dietPlan"
-          @explore="handleExploreClick"
-        />
-        <DietDisplay
-          v-else
-          @explore="handleExploreClick"
-          :dietPlan="selectedDietPlan"
-          :meals="selectedDietPlan.meals"
-        />
+      <v-infinite-scroll
+        v-if="!exploreClicked"
+        @load="loadMoreProducts"
+        infinite-distance="10"
+      >
+        <DietPreview :dietPlan="dietPlan" @explore="handleExploreClick" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>
       </v-infinite-scroll>
+      <DietDisplay
+        v-else
+        @explore="handleExploreClick"
+        :dietPlan="selectedDietPlan"
+        :meals="selectedDietPlan.meals"
+      />
     </div>
   </div>
 </template>

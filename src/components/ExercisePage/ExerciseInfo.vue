@@ -15,21 +15,21 @@
       <ExerciseFilter @filters-applied="applyFilters" />
     </div>
     <div class="d-flex flex-wrap justify-content-center">
-      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
-        <ExercisePreview
-          v-if="!exploreClicked"
-          :exercises="exercises"
-          @explore="handleExploreClick"
-        />
-        <ExerciseDetail
-          v-else
-          @explore="handleExploreClick"
-          :exercise="selectedExercise"
-        />
+      <v-infinite-scroll
+        v-if="!exploreClicked"
+        @load="loadMoreProducts"
+        infinite-distance="10"
+      >
+        <ExercisePreview :exercises="exercises" @explore="handleExploreClick" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>
       </v-infinite-scroll>
+      <ExerciseDetail
+        v-else
+        @explore="handleExploreClick"
+        :exercise="selectedExercise"
+      />
     </div>
   </div>
 </template>
@@ -123,14 +123,12 @@ export default {
           limit: this.limit,
           page: this.page,
         });
-
         if (response.length === 0) {
           this.allLoaded = true;
         } else {
           this.localExercises = [...this.localExercises, ...response];
           this.page += 1;
         }
-
         done(this.allLoaded ? "empty" : null);
       } catch (error) {
         console.error("Error loading more exercises:", error);

@@ -16,21 +16,21 @@
       <YogaFilter @filters-applied="applyFilters" />
     </div>
     <div class="d-flex flex-wrap justify-content-center">
-      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
-        <YogaInfo
-          v-if="!exploreClicked"
-          :yoga="yoga"
-          @explore="handleExploreClick"
-        />
-        <YogaDetails
-          v-else
-          @explore="handleExploreClick"
-          :yoga="selectedCategory"
-        />
+      <v-infinite-scroll
+        v-if="!exploreClicked"
+        @load="loadMoreProducts"
+        infinite-distance="10"
+      >
+        <YogaInfo :yoga="yoga" @explore="handleExploreClick" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>
       </v-infinite-scroll>
+      <YogaDetails
+        v-else
+        @explore="handleExploreClick"
+        :yoga="selectedCategory"
+      />
     </div>
   </div>
 </template>

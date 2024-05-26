@@ -134,7 +134,7 @@ export default {
           console.error("Error loading images:", error);
         }
       } else {
-        this.images = cloudImg;
+        this.images = [cloudImg];
       }
     },
   },

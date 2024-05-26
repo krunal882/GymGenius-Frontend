@@ -21,7 +21,7 @@
               <h5 class="mb-0">{{ trainer.name }}</h5>
               <p class="small text-muted">{{ trainer.position }}</p>
               <li class="list-inline-item m-0">
-                <a :href="twitterLink" class="social-link">
+                <a :href="facebookLink" class="social-link">
                   <font-awesome-icon :icon="icons.faFacebookF" />
                 </a>
               </li>
@@ -65,15 +65,15 @@ export default {
   data() {
     return {
       icons: {
-        faFacebookF,
-        faTwitter,
-        faInstagram,
-        faLinkedin,
+        faFacebookF: ["fab", "facebook-f"],
+        faTwitter: ["fab", "twitter"],
+        faInstagram: ["fab", "instagram"],
+        faLinkedin: ["fab", "linkedin"],
       },
-      facebookLink: "#",
-      twitterLink: "#",
-      instagramLink: "#",
-      linkedinLink: "#",
+      facebookLink: "https://www.facebook.com",
+      twitterLink: "https://twitter.com",
+      instagramLink: "https://www.instagram.com",
+      linkedinLink: "https://www.linkedin.com",
       trainers: [
         {
           image: "../assets/trainer/team1.png",

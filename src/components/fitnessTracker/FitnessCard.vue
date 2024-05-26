@@ -3,7 +3,7 @@
     <v-card
       v-for="(item, index) in tracker"
       :key="index"
-      class="mx-auto image-hover-effect"
+      class="mx-auto d-flex flex-wrap image-hover-effect"
       max-width="400"
       style="margin: 10px; cursor: pointer"
       @click="handleCardClick(item)"

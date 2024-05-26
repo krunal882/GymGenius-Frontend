@@ -6,7 +6,7 @@
           v-model="dialogIsActive"
           transition="dialog-bottom-transition"
           width="auto"
-          persistent="false"
+          :persistent="false"
         >
           <template v-slot:default>
             <v-card class="dialog-card">
@@ -63,7 +63,7 @@ export default {
       this.dialogIsActive = false;
     },
   },
-  mounted() {},
+
 };
 </script>
 
