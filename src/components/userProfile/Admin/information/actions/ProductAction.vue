@@ -10,11 +10,7 @@
           md="3"
           lg="3"
         >
-          <v-card
-            class="mx-auto image-hover-effect"
-            max-width="260"
-            @click="viewProduct(product)"
-          >
+          <v-card class="mx-auto image-hover-effect" max-width="260">
             <v-img
               class="align-end text-white"
               height="346"
@@ -68,9 +64,6 @@ export default {
         return imgPath;
       }
     },
-    viewProduct(product) {
-      this.$emit("product-selected", product);
-    },
     editClick(product) {
       this.$emit("edit-product", product);
     },
@@ -81,4 +74,8 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.image-hover-effect:hover {
+  transform: scale(1.1);
+}
+</style>

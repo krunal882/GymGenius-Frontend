@@ -1,5 +1,6 @@
 import Cookies from "js-cookie";
 import InfoSection from "../components/userProfile/Admin/InfoSection.vue";
+import ProductsSection from "@/components/userProfile/Admin/ProductsSection.vue";
 import UsersSection from "../components/userProfile/Admin/UsersSection.vue";
 import BookMarkSection from "../components/userProfile/BookMarkSection.vue";
 import CartSection from "../components/userProfile/CartSection.vue";
@@ -61,6 +62,12 @@ const routes = [
         component: OrdersSection,
         beforeEnter: ifOwner,
         name: "orders",
+      },
+      {
+        path: "Products-admin",
+        component: ProductsSection,
+        beforeEnter: ifOwner,
+        name: "Products-admin",
       },
     ],
   },
