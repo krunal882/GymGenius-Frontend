@@ -108,11 +108,22 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
+
+    <PasswordDialog ref="passwordDialog" />
     <v-divider class="mb-10"></v-divider>
-    <div class="d-flex flex-wrap just">
-      <h6 class="mt-2">Want to delete your account ?</h6>
-      <v-btn class="ml-10" color="error" @click="deleteAccount">DELETE</v-btn>
+    <div class="d-flex flex-wrap justify-space-between">
+      <div class="d-flex flex-wrap">
+        <h6 class="mt-2">Want to delete your account ?</h6>
+        <v-btn class="ml-10" color="error" @click="deleteAccount">DELETE</v-btn>
+      </div>
+      <div class="d-flex flex-wrap">
+        <h6 class="mt-2">Want to change your password ?</h6>
+        <v-btn class="ml-10" color="success" @click="openPasswordDialog"
+          >CHANGE</v-btn
+        >
+      </div>
     </div>
+    <v-divider class="mb-10"></v-divider>
     <input
       type="file"
       ref="fileInput"
@@ -123,11 +134,13 @@
 </template>
 
 <script>
+import PasswordDialog from "./PasswordDialog.vue";
 import Cookies from "js-cookie";
 import axios from "axios";
-// import { storage } from "../../firebase.ts";
-// import { ref, uploadBytes, getDownloadURL } from "firebase/storage";
 export default {
+  components: {
+    PasswordDialog,
+  },
   data() {
     return {
       user: {
@@ -167,12 +180,23 @@ export default {
     "$store.state.userModule.userAvatarUrl"(newUrl) {
       this.userAvatarUrl = newUrl;
     },
+    "$store.state.userModule.email"(newEmail) {
+      this.user.email = newEmail;
+    },
+    "$store.state.userModule.name"(newName) {
+      this.user.name = newName;
+    },
+    "$store.state.userModule.age"(newAge) {
+      this.user.age = newAge;
+    },
+    "$store.state.userModule.number"(newNum) {
+      this.user.number = newNum;
+    },
   },
   methods: {
     saveChanges() {
       const { name, email, age, number } = this.editedUser;
       const userId = this.$store.state.userModule.userId;
-      this.user = { ...this.user, name, email, age, number };
       this.$store.dispatch("userUpdate", {
         updatedUser: {
           _id: userId,
@@ -185,14 +209,18 @@ export default {
 
       this.dialog = false;
     },
+    changePassword() {},
     deleteAccount() {
       const id = this.$store.state.userModule.userId;
       const role = this.$store.state.userModule.role;
-      this.$store.dispatch("userDelete", { id, role, master: "" }).then(() => {
-        if (this.$store.state.userModule.userDeleted) {
+      this.$store.dispatch("userDelete", { id, role }).then(() => {
+        if (this.$store.state.adminModule.userDeleted === true) {
           this.$router.replace("/");
         }
       });
+    },
+    openPasswordDialog() {
+      this.$refs.passwordDialog.dialog = true;
     },
     openImageUploadDialog() {
       this.$refs.fileInput.click();
@@ -233,7 +261,6 @@ export default {
         uploadData.append("upload_preset", upload_preset);
         uploadData.append("cloud_name", cloud_name);
       }
-      console.log(uploadData);
       const { data } = await axios.post(
         `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
         uploadData

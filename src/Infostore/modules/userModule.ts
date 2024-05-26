@@ -204,6 +204,7 @@ const actions = {
         useToast().success(
           "password reset link sent to your mail successfully"
         );
+        window.location.href = "/";
       }
     } catch (error) {
       useToast().error("Error in sending mail");
@@ -237,6 +238,7 @@ const actions = {
       );
       if (response.status === 201) {
         useToast().success("password reset successful");
+        window.location.href = "/authentication";
       }
     } catch (error) {
       useToast().error("Error in reset password");
@@ -329,6 +331,30 @@ const actions = {
       }
     } catch (error) {
       useToast().error("Error in sending connect request");
+    }
+  },
+
+  async changePassword(
+    { commit }: { commit: Commit },
+    {
+      oldPassword,
+      newPassword,
+      userId,
+    }: {
+      oldPassword: string;
+      newPassword: string;
+      userId: string;
+    }
+  ) {
+    const config = createAxiosConfig();
+    const url = "http://localhost:3000/auth/change-password";
+    const response = await axios.patch(
+      url,
+      { oldPassword, newPassword, userId },
+      config
+    );
+    if (response.status === 201) {
+      useToast().success("Password changed successfully.");
     }
   },
 };
