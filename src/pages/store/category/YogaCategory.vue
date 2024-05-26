@@ -46,6 +46,11 @@ export default {
       currentFilters: {},
     };
   },
+  computed: {
+    filteredProducts() {
+      return this.$store.state.productsModule.yoga;
+    },
+  },
 };
 </script>
 

@@ -47,14 +47,14 @@ interface State {
   userInfo: UserInfo[];
   productData: OrderData[];
   total: number;
-  userDeleted: string;
+  userDeleted: boolean;
 }
 
 const state: State = {
   userInfo: [],
   productData: [],
   total: 0,
-  userDeleted: "",
+  userDeleted: null,
 };
 
 const createAxiosConfig = () => {
@@ -83,7 +83,7 @@ const mutations = {
   deleteUser(state: State, id: string) {
     state.userInfo = state.userInfo.filter((user) => user._id !== id);
   },
-  setUserDeleted(state: State, isDeleted: string) {
+  setUserDeleted(state: State, isDeleted: boolean) {
     state.userDeleted = isDeleted;
   },
 };
@@ -135,7 +135,7 @@ const actions = {
         Cookies.remove("token");
         if (response.status === 200) {
           commit("deleteUser", id);
-          useToast().success(" User deleted successfully");
+          useToast().success(" your account deleted successfully");
         }
         commit("setUserDeleted", true);
       } else if (master) {

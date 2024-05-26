@@ -47,6 +47,11 @@ export default {
       currentFilters: {},
     };
   },
+  computed: {
+    filteredProducts() {
+      return this.$store.state.productsModule.cycles;
+    },
+  },
 };
 </script>
 

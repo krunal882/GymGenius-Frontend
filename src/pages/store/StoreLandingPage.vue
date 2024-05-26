@@ -8,8 +8,7 @@
       >
     </p>
     <ProductCarousel
-      :product="product"
-      category="equipments"
+      :product="equipmentCarousal"
       @product-selected="onProductSelected"
     />
     <p class="container slider">
@@ -19,8 +18,7 @@
       >
     </p>
     <ProductCarousel
-      :product="product"
-      category="supplements"
+      :product="supplementCarousal"
       @product-selected="onProductSelected"
     />
 
@@ -31,8 +29,7 @@
       >
     </p>
     <ProductCarousel
-      :product="product"
-      category="cycles"
+      :product="cycleCarousal"
       @product-selected="onProductSelected"
     />
     <p class="container slider">
@@ -42,8 +39,7 @@
       >
     </p>
     <ProductCarousel
-      :product="product"
-      category="cardio"
+      :product="cardioCarousal"
       @product-selected="onProductSelected"
     />
     <p class="container slider" style="font-size: 30px">SHOP BY WORKOUT</p>
@@ -71,19 +67,44 @@ export default {
     SpotLight,
   },
   computed: {
-    product() {
-      return this.$store.state.productsModule.product;
+    equipmentCarousal() {
+      return this.$store.state.productsModule.equipmentCarousal;
+    },
+    supplementCarousal() {
+      return this.$store.state.productsModule.supplementCarousal;
+    },
+    cycleCarousal() {
+      return this.$store.state.productsModule.cycleCarousal;
+    },
+    cardioCarousal() {
+      return this.$store.state.productsModule.cardioCarousal;
     },
   },
   mounted() {
-    const filteredFilters = {};
-    const limit = 15;
+    const categories = [
+      ["equipments", "equipmentCarousal"],
+      ["supplements", "supplementCarousal"],
+      ["cycles", "cycleCarousal"],
+      ["cardio", "cardioCarousal"],
+    ];
+    const limit = 10;
     const url = "http://localhost:3000/store";
-    this.$store
-      .dispatch("fetchProduct", { filteredFilters, limit ,url})
-      .catch((error) => {
-        console.error("Error fetching product:", error);
-      });
+
+    categories.forEach(async (category) => {
+      const [categoryName, store] = category; // Destructuring the category array
+      const filteredFilters = {};
+      await this.$store
+        .dispatch("fetchProduct", {
+          filteredFilters,
+          limit,
+          url,
+          category: categoryName,
+          store,
+        })
+        .catch((error) => {
+          console.error(`Error fetching ${categoryName} products:`, error);
+        });
+    });
   },
 };
 </script>

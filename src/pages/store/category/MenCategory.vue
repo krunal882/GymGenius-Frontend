@@ -1,7 +1,7 @@
 <template>
   <CategoryCarousel :images="carouselImages" />
   <div class="d-flex flex-wrap justify-content-center">
-    <UserSearch @search="handleSearch" />
+    <UserSearch @search="handleSearch" @clearSearch="clearField" />
     <ProductFilter @filters-applied="applyFilters" />
   </div>
   <div class="d-flex flex-wrap justify-content-center">
@@ -21,20 +21,19 @@
 import CategoryProduct from "../../../components/store/CategoryProduct.vue";
 import CategoryCarousel from "../../../components/store/CategoryCarousel.vue";
 import ProductFilter from "../../../components/store/ProductFilter.vue";
-import storeFilterMixin from "../../../components/store/storeFilterMixin";
 import UserSearch from "@/components/common-components/UserSearch.vue";
-
+import storeFilterMixin from "./../../../components/store/storeFilterMixin.js";
 export default {
-  mixins: [storeFilterMixin],
   components: {
     CategoryCarousel,
     ProductFilter,
     CategoryProduct,
     UserSearch,
   },
+  mixins: [storeFilterMixin],
+
   data() {
     return {
-      selectedItem: null,
       carouselImages: [
         require("../../../assets/img/man/man-carousal1.webp"),
         require("../../../assets/img/man/man-carousal2.webp"),
@@ -47,6 +46,11 @@ export default {
       searchTerm: "",
       currentFilters: {},
     };
+  },
+  computed: {
+    filteredProducts() {
+      return this.$store.state.productsModule.men;
+    },
   },
 };
 </script>

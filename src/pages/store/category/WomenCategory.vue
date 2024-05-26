@@ -40,7 +40,17 @@ export default {
         require("../../../assets/img/women/women-carousel3.webp"),
       ],
       category: "women",
+      page: 1,
+      loading: false,
+      allLoaded: false,
+      searchTerm: "",
+      currentFilters: {},
     };
+  },
+  computed: {
+    filteredProducts() {
+      return this.$store.state.productsModule.women;
+    },
   },
 };
 </script>

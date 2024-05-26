@@ -25,7 +25,6 @@ import storeFilterMixin from "../../../components/store/storeFilterMixin";
 import UserSearch from "@/components/common-components/UserSearch.vue";
 export default {
   mixins: [storeFilterMixin],
-
   components: {
     ManCarousal,
     ProductFilter,
@@ -46,6 +45,11 @@ export default {
       searchTerm: "",
       currentFilters: {},
     };
+  },
+  computed: {
+    filteredProducts() {
+      return this.$store.state.productsModule.equipments;
+    },
   },
 };
 </script>
