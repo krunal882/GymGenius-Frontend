@@ -19,6 +19,21 @@ interface State {
   product: Product[];
   productSearch: Product[];
   adminProduct: Product[];
+  men: Product[];
+  women: Product[];
+  accessories: Product[];
+  cardio: Product[];
+  cycles: Product[];
+  equipments: Product[];
+  running: Product[];
+  strength: Product[];
+  supplements: Product[];
+  yoga: Product[];
+  detail: Product[];
+  equipmentCarousal: Product[];
+  supplementCarousal: Product[];
+  cycleCarousal: Product[];
+  cardioCarousal: Product[];
 }
 
 interface FilteredFilters {
@@ -29,6 +44,21 @@ const state: State = {
   product: [],
   productSearch: [],
   adminProduct: [],
+  men: [],
+  women: [],
+  accessories: [],
+  cardio: [],
+  cycles: [],
+  equipments: [],
+  running: [],
+  strength: [],
+  supplements: [],
+  yoga: [],
+  detail: [],
+  equipmentCarousal: [],
+  supplementCarousal: [],
+  cycleCarousal: [],
+  cardioCarousal: [],
 };
 
 const createAxiosConfig = () => {
@@ -42,11 +72,17 @@ const createAxiosConfig = () => {
 };
 
 const mutations = {
-  setProduct(state: State, product: Product[]) {
-    state.product = product;
+  setProduct(
+    state: State,
+    payload: { data: Product[]; category: string; store: string }
+  ) {
+    state[payload.store] = payload.data;
   },
-  appendProducts(state, product) {
-    state.product = [...state.product, ...product];
+  appendProducts(
+    state: State,
+    payload: { data: Product[]; category: string; store: string }
+  ) {
+    state[payload.store] = [...state[payload.store], ...payload.data];
   },
   resetProducts(state) {
     state.product = [];
@@ -78,20 +114,31 @@ const actions = {
       page,
       url,
       role,
+      category,
+      store,
     }: {
       filteredFilters: FilteredFilters;
       limit?: number;
       page?: number;
       url: string;
       role?: string;
+      category: string;
+      store: string;
     }
   ) {
     try {
       const config = createAxiosConfig();
-      const params: Record<string, any> = { ...filteredFilters, limit, page };
+      const params: Record<string, any> = {
+        ...filteredFilters,
+        category,
+        limit,
+        page,
+      };
 
       const queryParams = Object.entries(params)
-        .filter(([, value]) => value !== undefined && value !== null)
+        .filter(
+          ([, value]) => value !== undefined && value !== null && value !== ""
+        )
         .map(([key, value]) => {
           if (Array.isArray(value)) {
             return value
@@ -103,18 +150,17 @@ const actions = {
         })
         .join("&");
       if (queryParams) {
-        url += `?${queryParams}`;
+        url += `/filtered?${queryParams}`;
       }
       const response: AxiosResponse = await axios.get(url, config);
 
-      if (role === "admin" && page === 1) {
-        commit("setAdminProduct", response.data);
-      } else if (role === "admin" && page > 1) {
-        commit("appendAdminProduct", response.data);
-      } else if (role === "" && page === 1) {
-        commit("setProduct", response.data);
+      const data = response.data;
+      if (page === 1) {
+        const data = response.data;
+        commit("setProduct", { data, category, store });
       } else {
-        commit("appendProducts", response.data);
+        const data = response.data;
+        commit("appendProducts", { data, category, store });
       }
 
       return response.data;
@@ -159,11 +205,7 @@ const actions = {
   },
 };
 
-const getters: GetterTree<State, Product> = {
-  // getProduct(state: State): Product[] {
-  //   return state.product;
-  // },
-};
+const getters: GetterTree<State, Product> = {};
 
 export default {
   state,

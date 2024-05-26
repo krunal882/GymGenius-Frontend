@@ -2,7 +2,11 @@
   <v-container v-if="product" class="my-5">
     <v-row>
       <v-col cols="12" md="4">
-        <v-img class="align-end text-white" :src="productImg" cover />
+        <v-img
+          class="align-end text-white"
+          :src="productImg(product.src, product.category)"
+          cover
+        />
       </v-col>
       <v-col cols="12" md="8">
         <div class="product-details">
@@ -111,6 +115,9 @@ export default {
     await this.fetchProduct(id);
   },
   methods: {
+    productImg(src, category) {
+      return `../../assets/img/products/${category}/${src}.jpg`;
+    },
     addToCartClicked(product) {
       this.$store.dispatch("addToCart", {
         productId: product._id,
@@ -132,13 +139,14 @@ export default {
     },
     async fetchProduct(productId) {
       try {
-        const url = "http://localhost:3000/store/filtered";
+        const url = "http://localhost:3000/store";
         const filteredFilters = { id: productId };
-        const response = await this.$store.dispatch("fetchProduct", {
+        await this.$store.dispatch("fetchProduct", {
           filteredFilters,
           url,
+          store: "detail",
+          page: 1,
         });
-        this.productDetail = response[0];
       } catch (error) {
         console.error("Error fetching product:", error);
       }
@@ -153,10 +161,7 @@ export default {
   },
   computed: {
     product() {
-      return this.productDetail;
-    },
-    productImg() {
-      return `../../assets/img/products/${this.productDetail.category}/${this.productDetail.src}.jpg`;
+      return this.$store.state.productsModule.detail[0];
     },
   },
 };

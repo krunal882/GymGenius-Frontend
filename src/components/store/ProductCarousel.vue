@@ -1,10 +1,7 @@
 <template>
   <v-sheet class="mx-auto" max-width="auto">
     <v-slide-group v-model="model" class="pa-4" show-arrows>
-      <v-slide-group-item
-        v-for="(product, index) in filteredProducts"
-        :key="index"
-      >
+      <v-slide-group-item v-for="(product, index) in product" :key="index">
         <v-card
           class="ma-5 image-hover-effect"
           width="260"
@@ -24,7 +21,7 @@
               <v-card-title class="pb-0 pt-0" style="font-size: large">{{
                 product.title
               }}</v-card-title>
-          
+
               <v-card-text class="pt-0">
                 <div class="d-flex flex-wrap">
                   <span
@@ -60,25 +57,11 @@ export default {
       type: Array,
       required: true,
     },
-    category: {
-      type: String,
-      required: true,
-    },
   },
   data() {
     return {
       model: null,
     };
-  },
-  computed: {
-    filteredProducts() {
-      if (!this.product) {
-        return []; 
-      }
-      return this.product.filter(
-        (product) => product.category === this.category
-      );
-    },
   },
   methods: {
     imgPath(product) {
