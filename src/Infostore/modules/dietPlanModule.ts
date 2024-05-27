@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
@@ -41,6 +41,27 @@ const createAxiosConfig = () => {
       Authorization: `Bearer ${token}`,
     },
   };
+};
+
+const handleServerError = (error: AxiosError) => {
+  if (!error.response) {
+    useToast().error(
+      "Network error. Please check your internet connection and try again."
+    );
+    return;
+  }
+
+  const { status, data } = error.response;
+  if (status === 500) {
+    useToast().error(
+      "An error occurred on the server. Please try again later."
+    );
+  } else {
+    const errorMessage =
+      (data as { message: string }).message ||
+      "Something went wrong. Please try again.";
+    useToast().error(errorMessage);
+  }
 };
 
 const mutations = {
@@ -101,25 +122,33 @@ const actions = {
       }
       return response.data;
     } catch (error) {
-      console.error("Error fetching dietPlan:", error);
+      handleServerError(error);
     }
   },
   async searchDiet({ commit }: { commit: Commit }, name: string) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/diet-plans/filter?name=${name}`;
-    const response = await axios.get(url, config);
-    commit("setDietSearch", response.data);
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/diet-plans/filter?name=${name}`;
+      const response = await axios.get(url, config);
+      commit("setDietSearch", response.data);
+    } catch (error) {
+      handleServerError(error);
+    }
   },
 
   async addDietPlan(
     { commit }: { commit: Commit },
     { dietPlan }: { dietPlan: DietPlan }
   ) {
-    const config = createAxiosConfig();
-    const url = "http://localhost:3000/diet-plans/add";
-    const response = await axios.post(url, dietPlan, config);
-    if (response.status === 201) {
-      useToast().success("New Diet-plan added successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = "http://localhost:3000/diet-plans/add";
+      const response = await axios.post(url, dietPlan, config);
+      if (response.status === 201) {
+        useToast().success("New Diet-plan added successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 
@@ -127,33 +156,36 @@ const actions = {
     { commit }: { commit: Commit },
     { id, dietPlan }: { id: string; dietPlan: DietPlan }
   ) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/diet-plans/update?id=${id}`;
-    const response = await axios.patch(url, dietPlan, config);
-    if (response.status === 200) {
-      commit("editDiet", { id, dietPlan });
-      useToast().success(" Diet-plan updated successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/diet-plans/update?id=${id}`;
+      const response = await axios.patch(url, dietPlan, config);
+      if (response.status === 200) {
+        commit("editDiet", { id, dietPlan });
+        useToast().success(" Diet-plan updated successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 
   async removeDiet({ commit }: { commit: Commit }, { id }: { id: string }) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/diet-plans/delete?id=${id}`;
-    const response = await axios.delete(url, config);
-    if (response.status === 200) {
-      commit("removeDiet", id);
-      useToast().success(" Diet-plan removed successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/diet-plans/delete?id=${id}`;
+      const response = await axios.delete(url, config);
+      if (response.status === 200) {
+        commit("removeDiet", id);
+        useToast().success(" Diet-plan removed successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
-};
-
-const getters = {
-  // Getters to access state.dirtPlan
 };
 
 export default {
   state,
   mutations,
   actions,
-  getters,
 };

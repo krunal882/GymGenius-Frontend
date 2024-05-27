@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit, Dispatch } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
@@ -67,6 +67,27 @@ const createAxiosConfig = () => {
   };
 };
 
+const handleServerError = (error: AxiosError) => {
+  if (!error.response) {
+    useToast().error(
+      "Network error. Please check your internet connection and try again."
+    );
+    return;
+  }
+
+  const { status, data } = error.response;
+  if (status === 500) {
+    useToast().error(
+      "An error occurred on the server. Please try again later."
+    );
+  } else {
+    const errorMessage =
+      (data as { message: string }).message ||
+      "Something went wrong. Please try again.";
+    useToast().error(errorMessage);
+  }
+};
+
 const mutations = {
   setUsers(state: State, data: UserInfo[]) {
     state.userInfo = data;
@@ -88,22 +109,6 @@ const mutations = {
   },
 };
 const actions = {
-  async handleServerError(error) {
-    const { response } = error;
-    if (!response) {
-      useToast().error(
-        "Network error. Please check your internet connection and try again."
-      );
-      return;
-    }
-    // if (response.status === 500) {
-    //   useToast().error(
-    //     "An error occurred on the server. Please try again later."
-    //   );
-    //   return;
-    // }
-    useToast().error(error.response.data.message);
-  },
   async getAllUser(
     {
       commit,
@@ -121,7 +126,7 @@ const actions = {
       commit("setUsers", users);
       commit("setTotalItems", totalItems);
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -135,7 +140,7 @@ const actions = {
         useToast().success("New user added successfully");
       }
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -159,7 +164,7 @@ const actions = {
         useToast().success(response.data);
       }
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -171,7 +176,7 @@ const actions = {
       const products = response.data;
       commit("setOrders", products);
     } catch (error) {
-      useToast().error("Error in fetching orders");
+      handleServerError(error);
     }
   },
 };

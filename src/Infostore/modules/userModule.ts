@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit, GetterTree, ActionTree } from "vuex";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
@@ -74,6 +74,27 @@ const createAxiosConfig = () => {
   };
 };
 
+const handleServerError = (error: AxiosError) => {
+  if (!error.response) {
+    useToast().error(
+      "Network error. Please check your internet connection and try again."
+    );
+    return;
+  }
+
+  const { status, data } = error.response;
+  if (status === 500) {
+    useToast().error(
+      "An error occurred on the server. Please try again later."
+    );
+  } else {
+    const errorMessage =
+      (data as { message: string }).message ||
+      "Something went wrong. Please try again.";
+    useToast().error(errorMessage);
+  }
+};
+
 const mutations = {
   setToken(state: State, data: signup) {
     state.token = data.token;
@@ -93,26 +114,18 @@ const mutations = {
 };
 
 const actions = {
-  async handleServerError(error) {
-    console.log(error);
-    const { response } = error;
-    if (!response) {
-      useToast().error(
-        "Network error. Please check your internet connection and try again."
-      );
-      return;
-    }
-    useToast().error(error.response.data.message);
-  },
-
   async fetchUser({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();
       const url = `http://localhost:3000/auth/filtered?id=${id}`;
       const response = await axios.get(url, config);
-      commit("setUser", response.data[0]);
+      if (response.data.length > 0) {
+        commit("setUser", response.data[0]);
+      } else {
+        useToast().error("User not found.");
+      }
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -137,15 +150,15 @@ const actions = {
       const token = response.data.token;
       if (response.status === 201) {
         useToast().success("Login successful! Welcome back.");
+        commit("setToken", response.data);
       }
-      commit("setToken", response.data);
       // await axios.post("http://localhost:3000/mailer/email", {
       //   recipients: email,
       //   subject,
       //   html,
       // });
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -182,8 +195,8 @@ const actions = {
         },
         config
       );
-      commit("setToken", response.data);
       if (response.status === 201) {
+        commit("setToken", response.data);
         useToast().success("Account created successfully! Welcome aboard.");
       }
       const subject = "Account Signup";
@@ -194,7 +207,7 @@ const actions = {
       //   html,
       // });
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -219,7 +232,7 @@ const actions = {
         window.location.href = "/";
       }
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -253,7 +266,7 @@ const actions = {
         window.location.href = "/authentication";
       }
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -274,7 +287,7 @@ const actions = {
         useToast().success("User updated successfully");
       }
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -289,7 +302,7 @@ const actions = {
       commit("setUserAvatarUrl", response.data);
       useToast().success("Profile picture uploaded");
     } catch (error) {
-      actions.handleServerError(error);
+      handleServerError(error);
     }
   },
 
@@ -343,7 +356,7 @@ const actions = {
         );
       }
     } catch (error) {
-      useToast().error("Error in sending connect request");
+      handleServerError(error);
     }
   },
 
@@ -371,7 +384,7 @@ const actions = {
         useToast().success("Password changed successfully.");
       }
     } catch (error) {
-      useToast().error("Error in sending connect request");
+      handleServerError(error);
     }
   },
 };

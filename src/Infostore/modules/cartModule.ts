@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Commit, Dispatch } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
@@ -13,6 +13,7 @@ interface Product {
   original_price: string;
   off: string;
   state: string;
+  paymentId: string;
 }
 
 interface State {
@@ -33,6 +34,27 @@ const createAxiosConfig = () => {
       Authorization: `Bearer ${token}`,
     },
   };
+};
+
+const handleServerError = (error: AxiosError) => {
+  if (!error.response) {
+    useToast().error(
+      "Network error. Please check your internet connection and try again."
+    );
+    return;
+  }
+
+  const { status, data } = error.response;
+  if (status === 500) {
+    useToast().error(
+      "An error occurred on the server. Please try again later."
+    );
+  } else {
+    const errorMessage =
+      (data as { message: string }).message ||
+      "Something went wrong. Please try again.";
+    useToast().error(errorMessage);
+  }
 };
 
 const mutations = {
@@ -64,6 +86,7 @@ const actions = {
       product,
     }: { productId: string; status: string; userId: string; product: Product }
   ) {
+    console.log(productId);
     try {
       const config = createAxiosConfig();
       const response = await axios.post(
@@ -76,10 +99,10 @@ const actions = {
       );
       commit("addToCartItems", product);
       if (response.status === 201) {
-        useToast().success("Product added to cart successfully");
+        useToast().success(response.data);
       }
     } catch (error) {
-      console.error("Error adding product to cart:", error);
+      handleServerError(error);
     }
   },
   async fetchCart(
@@ -92,29 +115,45 @@ const actions = {
         `http://localhost:3000/store/cart?userId=${userId}`,
         config
       );
+
       if (response?.data[0]?.product?.length > 0) {
         const allProducts = response.data[0].product;
         const filteredProducts = allProducts.filter(
           (item: { status: string }) => item.status === status
         );
-        const id = filteredProducts.map(
-          (item: { productId: string }) => item.productId
+
+        const idsAndPayments = filteredProducts.map(
+          (item: { productId: string; paymentId: string }) => ({
+            productId: item.productId,
+            paymentId: item.paymentId,
+          })
         );
-        if (id.length != 0) {
-          const idParams = id.map((id: string) => `id=${id}`).join("&");
-          const getProduct = await axios.get(
+        if (idsAndPayments.length > 0) {
+          const idParams = idsAndPayments
+            .map(({ productId }) => `id=${productId}`)
+            .join("&");
+          const getProductResponse = await axios.get(
             `http://localhost:3000/store/filtered?${idParams}`,
             config
           );
+          const productsWithPaymentId = getProductResponse.data.map(
+            (product: { productId: string }) => {
+              const paymentInfo = idsAndPayments[0].paymentId;
+              return {
+                ...product,
+                paymentId: paymentInfo,
+              };
+            }
+          );
           if (status == "pending") {
-            commit("setCartItems", getProduct.data);
+            commit("setCartItems", productsWithPaymentId);
           } else if (status == "done") {
-            commit("setHistory", getProduct.data);
+            commit("setHistory", productsWithPaymentId);
           }
         }
       }
     } catch (error) {
-      console.error("Error in fetching cart item:", error);
+      handleServerError(error);
     }
   },
 
@@ -137,30 +176,10 @@ const actions = {
       );
       if (response.status === 200) {
         commit("removeCartItem", productId);
-        useToast().success("Product removed from cart");
+        useToast().success(response.data);
       }
     } catch (error) {
-      console.error("Error removing product from cart:", error);
-    }
-  },
-
-  async addHistory(
-    { commit }: { commit: Commit },
-    { productId, userId }: { productId: string; userId: string }
-  ) {
-    try {
-      const config = createAxiosConfig();
-
-      await axios.patch(
-        "http://localhost:3000/store/updateCart",
-        {
-          userId,
-          productId,
-        },
-        config
-      );
-    } catch (error) {
-      console.error("Error adding product to history:", error);
+      handleServerError(error);
     }
   },
 
@@ -177,7 +196,7 @@ const actions = {
       price: number;
       quantity: string;
       title: string;
-      productId: string[];
+      productId: string;
       userId: string;
       email: string;
     }
@@ -202,7 +221,25 @@ const actions = {
       );
       commit("buyProduct", response.data);
     } catch (error) {
-      console.error("Error while buying product to cart:", error);
+      handleServerError(error);
+    }
+  },
+  async return(
+    { commit }: { commit: Commit },
+    { paymentId }: { paymentId: string }
+  ) {
+    try {
+      const config = createAxiosConfig();
+      const url = "http://localhost:3000/store/refund";
+
+      const response = await axios.patch(url, paymentId, config);
+      if (response.data.status === "success") {
+        useToast().success(
+          "Product successfully returned. Refund process initiated"
+        );
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 };

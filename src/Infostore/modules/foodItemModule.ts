@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
@@ -54,6 +54,27 @@ const createAxiosConfig = () => {
       Authorization: `Bearer ${token}`,
     },
   };
+};
+
+const handleServerError = (error: AxiosError) => {
+  if (!error.response) {
+    useToast().error(
+      "Network error. Please check your internet connection and try again."
+    );
+    return;
+  }
+
+  const { status, data } = error.response;
+  if (status === 500) {
+    useToast().error(
+      "An error occurred on the server. Please try again later."
+    );
+  } else {
+    const errorMessage =
+      (data as { message: string }).message ||
+      "Something went wrong. Please try again.";
+    useToast().error(errorMessage);
+  }
 };
 
 const mutations = {
@@ -119,7 +140,7 @@ const actions = {
       }
       return response.data;
     } catch (error) {
-      console.error("Error fetching foodItem:", error);
+      handleServerError(error);
     }
   },
 
@@ -127,53 +148,64 @@ const actions = {
     { commit }: { commit: Commit },
     { foodItem }: { foodItem: FoodItem }
   ) {
-    const config = createAxiosConfig();
-    const url = "http://localhost:3000/foodNutrition/addFoodItem";
-    const response = await axios.post(url, foodItem, config);
-    if (response.status === 201) {
-      useToast().success("New Food-item added successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = "http://localhost:3000/foodNutrition/addFoodItem";
+      const response = await axios.post(url, foodItem, config);
+      if (response.status === 201) {
+        useToast().success("New Food-item added successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 
   async searchFoodItem({ commit }: { commit: Commit }, name: string) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/foodNutrition/filtered?name=${name}`;
-    const response = await axios.get(url, config);
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/foodNutrition/filtered?name=${name}`;
+      const response = await axios.get(url, config);
 
-    commit("setFoodItemSearch", response.data);
+      commit("setFoodItemSearch", response.data);
+    } catch (error) {
+      handleServerError(error);
+    }
   },
 
   async editFoodItem(
     { commit }: { commit: Commit },
     { foodItem }: { foodItem: FoodItem }
   ) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/foodNutrition/updateFoodItem?id=${foodItem._id}`;
-    const response = await axios.patch(url, foodItem, config);
-    if (response.status === 200) {
-      commit("editFoodItem", foodItem);
-      useToast().success(" Food-item updated successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/foodNutrition/updateFoodItem?id=${foodItem._id}`;
+      const response = await axios.patch(url, foodItem, config);
+      if (response.status === 200) {
+        commit("editFoodItem", foodItem);
+        useToast().success(" Food-item updated successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 
   async removeFoodItem({ commit }: { commit: Commit }, { id }: { id: string }) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/foodNutrition/deleteFoodItem?id=${id}`;
-    const response = await axios.delete(url, config);
-    if (response.status === 200) {
-      commit("removeFoodItem", id);
-      useToast().success(" Food-item removed successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/foodNutrition/deleteFoodItem?id=${id}`;
+      const response = await axios.delete(url, config);
+      if (response.status === 200) {
+        commit("removeFoodItem", id);
+        useToast().success(" Food-item removed successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
-};
-
-const getters = {
-  // Getters to access state.foodItem
 };
 
 export default {
   state,
   mutations,
   actions,
-  getters,
 };

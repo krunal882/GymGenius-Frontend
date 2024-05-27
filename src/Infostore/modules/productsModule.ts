@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit, GetterTree } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
@@ -69,6 +69,27 @@ const createAxiosConfig = () => {
       Authorization: `Bearer ${token}`,
     },
   };
+};
+
+const handleServerError = (error: AxiosError) => {
+  if (!error.response) {
+    useToast().error(
+      "Network error. Please check your internet connection and try again."
+    );
+    return;
+  }
+
+  const { status, data } = error.response;
+  if (status === 500) {
+    useToast().error(
+      "An error occurred on the server. Please try again later."
+    );
+  } else {
+    const errorMessage =
+      (data as { message: string }).message ||
+      "Something went wrong. Please try again.";
+    useToast().error(errorMessage);
+  }
 };
 
 const mutations = {
@@ -165,7 +186,7 @@ const actions = {
 
       return response.data;
     } catch (error) {
-      console.error("Error fetching product:", error);
+      handleServerError(error);
     }
   },
 
@@ -173,11 +194,15 @@ const actions = {
     { commit }: { commit: Commit },
     { product }: { product: Product }
   ) {
-    const config = createAxiosConfig();
-    const url = "http://localhost:3000/store/addProduct";
-    const response = await axios.post(url, product, config);
-    if (response.status === 201) {
-      useToast().success("New Product added successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = "http://localhost:3000/store/addProduct";
+      const response = await axios.post(url, product, config);
+      if (response.status === 201) {
+        useToast().success("New Product added successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 
@@ -185,31 +210,36 @@ const actions = {
     { commit }: { commit: Commit },
     { product }: { product: Product }
   ) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/store/updateProduct?id=${product._id}`;
-    const response = await axios.patch(url, product, config);
-    if (response.status === 200) {
-      commit("editProduct", product);
-      useToast().success(" Product updated successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/store/updateProduct?id=${product._id}`;
+      const response = await axios.patch(url, product, config);
+      if (response.status === 200) {
+        commit("editProduct", product);
+        useToast().success(" Product updated successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 
   async removeProduct({ commit }: { commit: Commit }, { id }: { id: string }) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/store/removeProduct?id=${id}`;
-    const response = await axios.delete(url, config);
-    if (response.status === 200) {
-      commit("removeProduct", id);
-      useToast().success(" Product removed successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/store/removeProduct?id=${id}`;
+      const response = await axios.delete(url, config);
+      if (response.status === 200) {
+        commit("removeProduct", id);
+        useToast().success(" Product removed successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 };
-
-const getters: GetterTree<State, Product> = {};
 
 export default {
   state,
   mutations,
   actions,
-  getters,
 };

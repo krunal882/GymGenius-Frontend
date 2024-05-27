@@ -1,4 +1,4 @@
-import axios, { AxiosResponse } from "axios";
+import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
@@ -40,6 +40,27 @@ const createAxiosConfig = () => {
       Authorization: `Bearer ${token}`,
     },
   };
+};
+
+const handleServerError = (error: AxiosError) => {
+  if (!error.response) {
+    useToast().error(
+      "Network error. Please check your internet connection and try again."
+    );
+    return;
+  }
+
+  const { status, data } = error.response;
+  if (status === 500) {
+    useToast().error(
+      "An error occurred on the server. Please try again later."
+    );
+  } else {
+    const errorMessage =
+      (data as { message: string }).message ||
+      "Something went wrong. Please try again.";
+    useToast().error(errorMessage);
+  }
 };
 
 const mutations = {
@@ -104,26 +125,33 @@ const actions = {
       }
       return response.data;
     } catch (error) {
-      console.error("Error fetching exercises:", error);
+      handleServerError(error);
     }
   },
   async searchExercise({ commit }: { commit: Commit }, name: string) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/exercises/filtered?name=${name}`;
-    const response = await axios.get(url, config);
-    commit("setExerciseSearch", response.data);
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/exercises/filtered?name=${name}`;
+      const response = await axios.get(url, config);
+      commit("setExerciseSearch", response.data);
+    } catch (error) {
+      handleServerError(error);
+    }
   },
 
   async addExercise(
     { commit }: { commit: Commit },
     { exercise }: { exercise: Exercise }
   ) {
-    console.log(exercise);
-    const config = createAxiosConfig();
-    const url = "http://localhost:3000/exercises/addExercise";
-    const response = await axios.post(url, exercise, config);
-    if (response.status === 201) {
-      useToast().success("New Exercise added successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = "http://localhost:3000/exercises/addExercise";
+      const response = await axios.post(url, exercise, config);
+      if (response.status === 201) {
+        useToast().success("New Exercise added successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
 
@@ -131,33 +159,35 @@ const actions = {
     { commit }: { commit: Commit },
     { exercise }: { exercise: Exercise }
   ) {
-    console.log(exercise);
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/exercises/updateExercise?id=${exercise._id}`;
-    const response = await axios.patch(url, exercise, config);
-    if (response.status === 200) {
-      commit("editExercise", exercise);
-      useToast().success(" Exercise updated successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/exercises/updateExercise?id=${exercise._id}`;
+      const response = await axios.patch(url, exercise, config);
+      if (response.status === 200) {
+        commit("editExercise", exercise);
+        useToast().success(" Exercise updated successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
   async removeExercise({ commit }: { commit: Commit }, { id }: { id: string }) {
-    const config = createAxiosConfig();
-    const url = `http://localhost:3000/exercises/deleteExercise?id=${id}`;
-    const response = await axios.delete(url, config);
-    if (response.status === 200) {
-      commit("removeExercise", id);
-      useToast().success(" Exercise removed successfully");
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/exercises/deleteExercise?id=${id}`;
+      const response = await axios.delete(url, config);
+      if (response.status === 200) {
+        commit("removeExercise", id);
+        useToast().success(" Exercise removed successfully");
+      }
+    } catch (error) {
+      handleServerError(error);
     }
   },
-};
-
-const getters = {
-  // Getters to access state.exercises
 };
 
 export default {
   state,
   mutations,
   actions,
-  getters,
 };
