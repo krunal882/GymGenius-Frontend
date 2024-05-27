@@ -88,6 +88,22 @@ const mutations = {
   },
 };
 const actions = {
+  async handleServerError(error) {
+    const { response } = error;
+    if (!response) {
+      useToast().error(
+        "Network error. Please check your internet connection and try again."
+      );
+      return;
+    }
+    // if (response.status === 500) {
+    //   useToast().error(
+    //     "An error occurred on the server. Please try again later."
+    //   );
+    //   return;
+    // }
+    useToast().error(error.response.data.message);
+  },
   async getAllUser(
     {
       commit,
@@ -105,7 +121,7 @@ const actions = {
       commit("setUsers", users);
       commit("setTotalItems", totalItems);
     } catch (error) {
-      useToast().error("Error in fetching users");
+      actions.handleServerError(error);
     }
   },
 
@@ -119,7 +135,7 @@ const actions = {
         useToast().success("New user added successfully");
       }
     } catch (error) {
-      useToast().error("Error in user creation");
+      actions.handleServerError(error);
     }
   },
 
@@ -135,15 +151,15 @@ const actions = {
         Cookies.remove("token");
         if (response.status === 200) {
           commit("deleteUser", id);
-          useToast().success(" your account deleted successfully");
+          useToast().success(response.data);
         }
         commit("setUserDeleted", true);
       } else if (master) {
         commit("deleteUser", id);
-        useToast().success(" User deleted successfully");
+        useToast().success(response.data);
       }
     } catch (error) {
-      useToast().error("Error in user delete");
+      actions.handleServerError(error);
     }
   },
 

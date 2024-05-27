@@ -74,6 +74,11 @@ const admin = [
     text: "Info Section ",
     route: "Info-admin",
   },
+  {
+    icon: "mdi-shopping",
+    text: "Products Section ",
+    route: "Products-admin",
+  },
 ];
 const drawer = ref(true);
 const selectedItem = ref(

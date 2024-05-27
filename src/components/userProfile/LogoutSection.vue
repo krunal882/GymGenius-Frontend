@@ -37,6 +37,8 @@
 
 <script>
 import Cookies from "js-cookie";
+import { useToast } from "vue-toast-notification";
+import "vue-toast-notification/dist/theme-sugar.css";
 
 export default {
   data() {
@@ -51,6 +53,7 @@ export default {
     logout() {
       Cookies.set("token", "");
       this.$router.replace("/GymGenius");
+      useToast().success("You've been successfully logged out. See you soon!");
     },
   },
 };

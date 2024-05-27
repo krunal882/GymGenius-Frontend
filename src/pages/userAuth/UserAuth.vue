@@ -1,69 +1,78 @@
-<template enter-class="auth">
+<template>
   <v-container>
     <v-row align="center" justify="center">
       <v-col cols="12" sm="10">
         <v-card class="elevation-6 mt-10">
           <v-window v-model="step">
+            <!-- Login Step -->
             <v-window-item :value="1">
               <v-row>
                 <v-col cols="12" md="6">
-                  <v-card-text class="mt-12">
-                    <h4 class="text-center">Login in to Your Account</h4>
-                    <h6 class="text-center grey--text">
-                      Log in to your account so you can continue
-                      <br />with your fitness journey
-                    </h6>
-                    <v-row align="center" justify="center">
-                      <v-col cols="12" sm="8">
-                        <v-text-field
-                          v-model="loginEmail"
-                          prepend-inner-icon="mdi-email"
-                          label="Email"
-                          outlined
-                          dense
-                          color="blue"
-                          autocomplete="false"
-                          class="mt-16"
-                          :rules="emailRules"
-                        />
-                        <v-text-field
-                          v-model="loginPassword"
-                          prepend-inner-icon="mdi-key"
-                          label="Password"
-                          outlined
-                          dense
-                          color="blue"
-                          autocomplete="false"
-                          :type="loginPasswordVisible ? 'text' : 'password'"
-                          :append-inner-icon="
-                            loginPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
-                          "
-                          @click:append-inner="toggleLoginPasswordVisibility"
-                          :rules="passwordRules"
-                        />
-                        <v-row>
-                          <v-col cols="12" sm="7">
-                            <v-checkbox
-                              v-model="rememberMe"
-                              label="Remember Me"
-                              class="mt-n1"
-                              color="blue"
-                            />
-                          </v-col>
-                          <v-col cols="12" sm="5">
-                            <span class="caption text-blue"
-                              ><router-link to="/forgotPassword"
-                                >Forgot password ?</router-link
-                              ></span
-                            >
-                          </v-col>
-                        </v-row>
-                        <v-btn color="blue" dark block tile @click="login"
-                          >Log in</v-btn
-                        >
-                      </v-col>
-                    </v-row>
-                  </v-card-text>
+                  <v-form ref="loginForm" v-model="loginFormValid">
+                    <v-card-text class="mt-12">
+                      <h4 class="text-center">Login to Your Account</h4>
+                      <h6 class="text-center grey--text">
+                        Log in to your account so you can continue<br />with
+                        your fitness journey
+                      </h6>
+                      <v-row align="center" justify="center">
+                        <v-col cols="12" sm="8">
+                          <v-text-field
+                            v-model="loginEmail"
+                            prepend-inner-icon="mdi-email"
+                            label="Email"
+                            outlined
+                            dense
+                            color="blue"
+                            autocomplete="false"
+                            class="mt-16"
+                            :rules="emailRules"
+                          />
+                          <v-text-field
+                            v-model="loginPassword"
+                            prepend-inner-icon="mdi-key"
+                            label="Password"
+                            outlined
+                            dense
+                            color="blue"
+                            autocomplete="false"
+                            :type="loginPasswordVisible ? 'text' : 'password'"
+                            :append-inner-icon="
+                              loginPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
+                            "
+                            @click:append-inner="toggleLoginPasswordVisibility"
+                            :rules="passwordRules"
+                          />
+                          <v-row>
+                            <v-col cols="12" sm="7">
+                              <v-checkbox
+                                v-model="rememberMe"
+                                label="Remember Me"
+                                class="mt-n1"
+                                color="blue"
+                              />
+                            </v-col>
+                            <v-col cols="12" sm="5">
+                              <span class="caption text-blue">
+                                <router-link to="/forgotPassword"
+                                  >Forgot password ?</router-link
+                                >
+                              </span>
+                            </v-col>
+                          </v-row>
+                          <v-btn
+                            color="blue"
+                            dark
+                            block
+                            tile
+                            @click="login"
+                            :disabled="!loginFormValid"
+                            >Log in</v-btn
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-form>
                 </v-col>
                 <v-col class="main" cols="12" md="6">
                   <div style="text-align: center; padding: 220px 0">
@@ -81,6 +90,7 @@
                 </v-col>
               </v-row>
             </v-window-item>
+            <!-- Sign Up Step -->
             <v-window-item :value="2">
               <v-row>
                 <v-col cols="12" md="6" class="main">
@@ -99,86 +109,96 @@
                 </v-col>
 
                 <v-col cols="12" md="6">
-                  <v-card-text class="mt-12">
-                    <h4 class="text-center">Sign Up for an Account</h4>
-                    <h6 class="text-center grey--text">
-                      Let's get you all set up so you can start your
-                      <br />
-                      Fitness journey
-                    </h6>
-                    <v-row align="center" justify="center">
-                      <v-text-field
-                        v-model="fullName"
-                        label="Full Name"
-                        outlined
-                        dense
-                        color="blue"
-                        autocomplete="false"
-                        class="mt-4"
-                        :rules="nameRules"
-                      />
-                    </v-row>
-                    <v-text-field
-                      v-model="signUpEmail"
-                      label="Email"
-                      outlined
-                      dense
-                      color="blue"
-                      autocomplete="false"
-                      :rules="emailRules"
-                    />
-                    <v-text-field
-                      v-model="age"
-                      label="Age"
-                      outlined
-                      dense
-                      color="blue"
-                      autocomplete="false"
-                      :rules="ageRules"
-                      type="number"
-                    />
-                    <v-text-field
-                      v-model="number"
-                      label="Number"
-                      outlined
-                      dense
-                      color="blue"
-                      autocomplete="false"
-                      :rules="numberRules"
-                    />
-                    <v-text-field
-                      v-model="signUpPassword"
-                      label="Password"
-                      outlined
-                      dense
-                      color="blue"
-                      autocomplete="false"
-                      :type="signUpPasswordVisible ? 'text' : 'password'"
-                      :append-inner-icon="
-                        signUpPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
-                      "
-                      @click:append-inner="toggleSignUpPasswordVisibility"
-                      :rules="passwordRules"
-                    />
-                    <v-text-field
-                      v-model="confirmPassword"
-                      label="Confirm Password"
-                      outlined
-                      dense
-                      color="blue"
-                      autocomplete="false"
-                      :type="confirmPasswordVisible ? 'text' : 'password'"
-                      :append-inner-icon="
-                        confirmPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
-                      "
-                      @click:append-inner="toggleConfirmPasswordVisibility"
-                      :rules="confirmPasswordRules"
-                    />
-
-                    <v-btn color="blue" dark block tile @click="signUp"
-                      >Sign up</v-btn
-                    >
-                  </v-card-text>
+                  <v-form ref="signUpForm" v-model="signUpFormValid">
+                    <v-card-text class="mt-12">
+                      <h4 class="text-center">Sign Up for an Account</h4>
+                      <h6 class="text-center grey--text">
+                        Let's get you all set up so you can start your<br />Fitness
+                        journey
+                      </h6>
+                      <v-row align="center" justify="center">
+                        <v-col cols="12" sm="8">
+                          <v-text-field
+                            v-model="fullName"
+                            label="Full Name"
+                            outlined
+                            dense
+                            color="blue"
+                            autocomplete="false"
+                            class="mt-4"
+                            :rules="nameRules"
+                          />
+                          <v-text-field
+                            v-model="signUpEmail"
+                            label="Email"
+                            outlined
+                            dense
+                            color="blue"
+                            autocomplete="false"
+                            :rules="emailRules"
+                          />
+                          <v-text-field
+                            v-model="age"
+                            label="Age"
+                            outlined
+                            dense
+                            color="blue"
+                            autocomplete="false"
+                            :rules="ageRules"
+                            type="number"
+                          />
+                          <v-text-field
+                            v-model="number"
+                            label="Number"
+                            outlined
+                            dense
+                            color="blue"
+                            autocomplete="false"
+                            :rules="numberRules"
+                          />
+                          <v-text-field
+                            v-model="signUpPassword"
+                            label="Password"
+                            outlined
+                            dense
+                            color="blue"
+                            autocomplete="false"
+                            :type="signUpPasswordVisible ? 'text' : 'password'"
+                            :append-inner-icon="
+                              signUpPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
+                            "
+                            @click:append-inner="toggleSignUpPasswordVisibility"
+                            :rules="passwordRules"
+                          />
+                          <v-text-field
+                            v-model="confirmPassword"
+                            label="Confirm Password"
+                            outlined
+                            dense
+                            color="blue"
+                            autocomplete="false"
+                            :type="confirmPasswordVisible ? 'text' : 'password'"
+                            :append-inner-icon="
+                              confirmPasswordVisible ? 'mdi-eye-off' : 'mdi-eye'
+                            "
+                            @click:append-inner="
+                              toggleConfirmPasswordVisibility
+                            "
+                            :rules="confirmPasswordRules"
+                          />
+                          <v-btn
+                            color="blue"
+                            dark
+                            block
+                            tile
+                            @click="signUp"
+                            :disabled="!signUpFormValid"
+                            >Sign up</v-btn
+                          >
+                        </v-col>
+                      </v-row>
+                    </v-card-text>
+                  </v-form>
                 </v-col>
               </v-row>
             </v-window-item>
@@ -211,6 +231,7 @@ export default {
       emailRules: [
         (v) => !!v || "Email is required",
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
+        (v) => !/\s/.test(v) || "Spaces are not allowed",
       ],
       passwordRules: [
         (v) => !!v || "Password is required",
@@ -218,47 +239,57 @@ export default {
         (v) =>
           /[A-Z]/.test(v) ||
           "Password must contain at least one uppercase letter",
+        (v) => !/\s/.test(v) || "Spaces are not allowed",
       ],
       nameRules: [(v) => !!v || "Name is required"],
       ageRules: [
         (v) => v !== null || "Age is required",
         (v) => /^[1-9][0-9]*$/.test(v) || "Age must be a number",
         (v) => v >= 12 || "Age must be at least 12 years",
+        (v) => !/\s/.test(v) || "Spaces are not allowed",
       ],
       confirmPasswordRules: [
         (v) => !!v || "Confirm Password is required",
         (v) => v === this.signUpPassword || "Passwords do not match",
+        (v) => !/\s/.test(v) || "Spaces are not allowed",
       ],
       numberRules: [
         (v) => !!v || "Number is required",
         (v) => /^[0-9]+$/.test(v) || "Number must contain only digits",
         (v) => v.length === 10 || "Number must be 10 digits",
+        (v) => !/\s/.test(v) || "Spaces are not allowed",
       ],
+      loginFormValid: false,
+      signUpFormValid: false,
     };
   },
   methods: {
     async login() {
-      await this.$store.dispatch("userLogin", {
-        email: this.loginEmail,
-        password: this.loginPassword,
-      });
-      const token = Cookies.get("token");
-      if (token && token !== undefined) {
-        this.$router.replace("/GymGenius");
+      if (this.$refs.loginForm.validate()) {
+        await this.$store.dispatch("userLogin", {
+          email: this.loginEmail,
+          password: this.loginPassword,
+        });
+        const token = Cookies.get("token");
+        if (token && token !== undefined) {
+          this.$router.replace("/GymGenius");
+        }
       }
     },
     async signUp() {
-      await this.$store.dispatch("userSignup", {
-        email: this.signUpEmail,
-        password: this.signUpPassword,
-        name: this.fullName,
-        age: +this.age,
-        number: this.number,
-        confirmPassword: this.confirmPassword,
-      });
-      const token = Cookies.get("token");
-      if (token && token !== undefined) {
-        this.$router.replace("/GymGenius");
+      if (this.$refs.signUpForm.validate()) {
+        await this.$store.dispatch("userSignup", {
+          email: this.signUpEmail,
+          password: this.signUpPassword,
+          name: this.fullName,
+          age: +this.age,
+          number: this.number,
+          confirmPassword: this.confirmPassword,
+        });
+        const token = Cookies.get("token");
+        if (token && token !== undefined) {
+          this.$router.replace("/GymGenius");
+        }
       }
     },
     toggleLoginPasswordVisibility() {

@@ -29,6 +29,8 @@ export default {
         this.searchTimeout = setTimeout(() => {
           this.$emit("search", this.searchTerm);
         }, 500);
+      } else {
+        this.$emit("clearSearch");
       }
     },
   },

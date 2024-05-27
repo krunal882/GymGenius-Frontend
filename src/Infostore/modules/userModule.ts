@@ -93,6 +93,18 @@ const mutations = {
 };
 
 const actions = {
+  async handleServerError(error) {
+    console.log(error);
+    const { response } = error;
+    if (!response) {
+      useToast().error(
+        "Network error. Please check your internet connection and try again."
+      );
+      return;
+    }
+    useToast().error(error.response.data.message);
+  },
+
   async fetchUser({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();
@@ -100,7 +112,7 @@ const actions = {
       const response = await axios.get(url, config);
       commit("setUser", response.data[0]);
     } catch (error) {
-      useToast().error("Error in fetching users");
+      actions.handleServerError(error);
     }
   },
 
@@ -121,7 +133,7 @@ const actions = {
         config
       );
       const subject = "Account Login";
-      const html = "<p>successfully loggedIn to your account</p>";
+      const html = "<p>login activity detected in your account</p>";
       const token = response.data.token;
       if (response.status === 201) {
         useToast().success("Login successful! Welcome back.");
@@ -133,7 +145,7 @@ const actions = {
       //   html,
       // });
     } catch (error) {
-      useToast().error("Error in login");
+      actions.handleServerError(error);
     }
   },
 
@@ -182,7 +194,7 @@ const actions = {
       //   html,
       // });
     } catch (error) {
-      useToast().error("Error in signup");
+      actions.handleServerError(error);
     }
   },
 
@@ -207,7 +219,7 @@ const actions = {
         window.location.href = "/";
       }
     } catch (error) {
-      useToast().error("Error in sending mail");
+      actions.handleServerError(error);
     }
   },
 
@@ -237,11 +249,11 @@ const actions = {
         config
       );
       if (response.status === 201) {
-        useToast().success("password reset successful");
+        useToast().success(response.data);
         window.location.href = "/authentication";
       }
     } catch (error) {
-      useToast().error("Error in reset password");
+      actions.handleServerError(error);
     }
   },
 
@@ -259,10 +271,10 @@ const actions = {
       const response = await axios.patch(url, updatedUser, config);
       if (response.status === 200) {
         commit("setUser", updatedUser);
-        useToast().success(" User updated successfully");
+        useToast().success("User updated successfully");
       }
     } catch (error) {
-      useToast().error("Error in update user information");
+      actions.handleServerError(error);
     }
   },
 
@@ -275,8 +287,9 @@ const actions = {
       const url = "http://localhost:3000/auth/upload";
       const response = await axios.post(url, { userId, imgUrl }, config);
       commit("setUserAvatarUrl", response.data);
+      useToast().success("Profile picture uploaded");
     } catch (error) {
-      console.log(error);
+      actions.handleServerError(error);
     }
   },
 
@@ -346,15 +359,19 @@ const actions = {
       userId: string;
     }
   ) {
-    const config = createAxiosConfig();
-    const url = "http://localhost:3000/auth/change-password";
-    const response = await axios.patch(
-      url,
-      { oldPassword, newPassword, userId },
-      config
-    );
-    if (response.status === 201) {
-      useToast().success("Password changed successfully.");
+    try {
+      const config = createAxiosConfig();
+      const url = "http://localhost:3000/auth/change-password";
+      const response = await axios.patch(
+        url,
+        { oldPassword, newPassword, userId },
+        config
+      );
+      if (response.status === 201) {
+        useToast().success("Password changed successfully.");
+      }
+    } catch (error) {
+      useToast().error("Error in sending connect request");
     }
   },
 };
