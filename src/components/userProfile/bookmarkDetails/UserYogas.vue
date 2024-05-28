@@ -1,47 +1,41 @@
 <template>
   <v-container>
-    <div v-if="bookmarkedYogas.length != 0">
-      <v-col v-for="yoga in bookmarkedYogas" :key="yoga.id" cols="4">
-        <v-card class="" width="900" style="display: flex">
-          <div style="flex: 1; padding-right: 16px">
-            <v-img height="300" :src="yoga.url_png">
-              <v-card-title class="text-center"></v-card-title>
-            </v-img>
-          </div>
-          <hr
-            style="
-              height: 100%;
-              border: none;
-              border-right: 1px solid #ccc;
-              margin: 0;
-            "
-          />
-
-          <div style="flex: 1; padding: 16px">
-            <v-card-title class="pt-4"
-              >Category: {{ yoga.category_name }}</v-card-title
+    <v-row v-if="bookmarkedYogas.length != 0">
+      <v-col
+        v-for="yoga in bookmarkedYogas"
+        :key="yoga.id"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
+        <v-card class="image-hover-effect" width="100%">
+          <v-img
+            height="200"
+            :src="yoga.url_png"
+            class="pointer"
+            @click="exploreClicked(yoga)"
+          >
+          </v-img>
+          <v-divider></v-divider>
+          <v-card-text>
+            <v-card-title class="text-center">{{
+              yoga.sanskrit_name
+            }}</v-card-title>
+            <div class="mb-2">Category: {{ yoga.category_name }}</div>
+            <div class="mb-2">English Name: {{ yoga.english_name }}</div>
+            <div class="mb-2">Sanskrit Name: {{ yoga.sanskrit_name }}</div>
+            <div>Translation: {{ yoga.translation_name }}</div>
+          </v-card-text>
+          <v-card-actions class="justify-space-between">
+            <v-btn color="orange" @click="exploreClicked(yoga)">Explore</v-btn>
+            <v-btn color="orange" @click="undoBookmark(yoga)"
+              >Undo Bookmark</v-btn
             >
-            <div class="d-flex">
-              <v-card-text class="pt-4 flex-grow-1"
-                >English Name: {{ yoga.english_name }}</v-card-text
-              >
-              <v-card-text class="pt-4 flex-grow-1"
-                >Sanskrit Name: {{ yoga.sanskrit_name }}</v-card-text
-              >
-            </div>
-            <v-card-text
-              >Translation of Name: {{ yoga.translation_name }}</v-card-text
-            >
-
-            <v-card-actions style="justify-content: space-between">
-              <v-btn color="orange" @click="undoBookmark(yoga)"
-                >Undo Bookmark</v-btn
-              >
-            </v-card-actions>
-          </div>
+          </v-card-actions>
         </v-card>
       </v-col>
-    </div>
+    </v-row>
     <div v-else>
       <v-alert :value="true" color="info" icon="mdi-information">
         You do not have any bookmarked yogas. <br />
@@ -59,9 +53,11 @@ export default {
     },
   },
   methods: {
+    exploreClicked(yoga) {
+      this.$emit("explore", { item: yoga, route: "yogaDetail" });
+    },
     undoBookmark(yoga) {
       const userId = this.$store.state.userModule.userId;
-
       const yogaId = yoga._id;
       this.$store.dispatch("undoBookmark", {
         userId,
@@ -73,4 +69,12 @@ export default {
 };
 </script>
 
-<style></style>
+<style scoped>
+.image-hover-effect:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease-in-out;
+}
+.pointer {
+  cursor: pointer;
+}
+</style>

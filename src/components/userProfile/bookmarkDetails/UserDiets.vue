@@ -1,16 +1,20 @@
 <template>
   <v-container>
-    <v-row
-      v-if="bookmarkedDiets.length != 0"
-      style="justify-content: space-between"
-    >
-      <v-col v-for="dietPlan in bookmarkedDiets" :key="dietPlan.id" cols="4">
-        <v-card class="text-black my-4 mx-2" min-width="350" height="400">
+    <v-row v-if="bookmarkedDiets.length != 0" class="d-flex flex-wrap">
+      <v-col
+        v-for="dietPlan in bookmarkedDiets"
+        :key="dietPlan.id"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
+        <v-card class="text-black my-4 mx-2 image-hover-effect" width="90%">
           <v-img
-            class="align-end text-white"
-            style="height: 200px; width: 100%; object-fit: cover"
-            src="https://cdn.vuetifyjs.com/images/cards/docks.jpg"
+            style="height: 200px"
+            :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
             cover
+            @click="exploreClicked(dietPlan)"
           >
           </v-img>
 
@@ -28,6 +32,9 @@
           </v-card-text>
 
           <v-card-actions class="d-flex justify-center">
+            <v-btn color="orange" @click="exploreClicked(dietPlan)"
+              >Explore</v-btn
+            >
             <v-btn color="orange" @click="undoBookmark(dietPlan)"
               >Undo Bookmark</v-btn
             >
@@ -52,6 +59,12 @@ export default {
     },
   },
   methods: {
+    getImgPath(src, cloudImg) {
+      return cloudImg || `../../../assets/img/dietPlan/${src}`;
+    },
+    exploreClicked(dietPlan) {
+      this.$emit("explore", { item: dietPlan, route: "dietDetail" });
+    },
     undoBookmark(diet) {
       const userId = this.$store.state.userModule.userId;
 
