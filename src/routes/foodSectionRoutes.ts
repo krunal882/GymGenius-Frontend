@@ -4,6 +4,8 @@ import FoodNutrition from "../components/FoodNutritionPage/FoodNutrition.vue";
 import FoodSection from "../components/FoodNutritionPage/FoodSection.vue";
 import FoodItemPage from "../pages/foodSection/FoodItemPage.vue";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
+import DietDisplay from "@/components/DietplanPage/DietDisplay.vue";
+import NutritionDetail from "@/components/FoodNutritionPage/NutritionDetail.vue";
 
 const ifAuthenticated = (to, from, next) => {
   if (Cookies.get("token")) {
@@ -33,6 +35,16 @@ const routes: Array<RouteRecordRaw> = [
         path: "dietPlan",
         component: DietPlan,
         name: "dietPlan",
+      },
+      {
+        path: "diet-detail/:id",
+        component: DietDisplay,
+        name: "dietDetail",
+      },
+      {
+        path: "food-detail/:id",
+        component: NutritionDetail,
+        name: "foodDetail",
       },
     ],
   },

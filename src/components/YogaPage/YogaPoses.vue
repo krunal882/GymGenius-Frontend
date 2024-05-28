@@ -16,28 +16,18 @@
       <YogaFilter @filters-applied="applyFilters" />
     </div>
     <div class="d-flex flex-wrap justify-content-center">
-      <v-infinite-scroll
-        v-if="!exploreClicked"
-        @load="loadMoreProducts"
-        infinite-distance="10"
-      >
-        <YogaInfo :yoga="yoga" @explore="handleExploreClick" />
+      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
+        <YogaInfo :yoga="yoga" @explore="exploreClicked" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>
       </v-infinite-scroll>
-      <YogaDetails
-        v-else
-        @explore="handleExploreClick"
-        :yoga="selectedCategory"
-      />
     </div>
   </div>
 </template>
 
 <script>
 import YogaInfo from "./YogaInfo.vue";
-import YogaDetails from "./YogaDetails.vue";
 import YogaFilter from "./YogaFilter.vue";
 import YogaInfoTabs from "./YogaInfoTabs.vue";
 import UserSearch from "../common-components/UserSearch.vue";
@@ -46,7 +36,6 @@ export default {
   data() {
     return {
       selectedItem: null,
-      exploreClicked: false,
       selectedCategory: null,
       limit: 10,
       page: 1,
@@ -59,22 +48,24 @@ export default {
   },
   components: {
     YogaInfo,
-    YogaDetails,
     YogaFilter,
     YogaInfoTabs,
     UserSearch,
   },
   methods: {
+    async exploreClicked(yoga) {
+      this.$router.push({
+        name: "yogaDetail",
+        params: { id: yoga._id },
+      });
+    },
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
       this.page = 1;
       this.allLoaded = false;
       this.fetchYogaWithFilters({ name: searchTerm });
     },
-    handleExploreClick(yoga) {
-      this.exploreClicked = !this.exploreClicked;
-      this.selectedCategory = yoga;
-    },
+
     applyFilters(filteredFilters) {
       this.filterTerm = filteredFilters;
       this.page = 1;

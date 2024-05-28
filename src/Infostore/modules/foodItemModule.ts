@@ -35,6 +35,7 @@ interface FoodItem {
 interface State {
   foodItem: FoodItem[];
   searchFoodItem: FoodItem[];
+  foodDetail: FoodItem;
 }
 
 interface FilteredFilters {
@@ -44,6 +45,7 @@ interface FilteredFilters {
 const state: State = {
   foodItem: [],
   searchFoodItem: [],
+  foodDetail: null,
 };
 
 const createAxiosConfig = () => {
@@ -100,6 +102,9 @@ const mutations = {
       (item) => item._id !== id
     );
   },
+  setFoodDetail(state: State, foodItem: FoodItem) {
+    state.foodDetail = foodItem;
+  },
 };
 
 const actions = {
@@ -109,7 +114,13 @@ const actions = {
       filteredFilters,
       page,
       limit,
-    }: { filteredFilters: FilteredFilters; page: number; limit: number }
+      id,
+    }: {
+      filteredFilters: FilteredFilters;
+      page: number;
+      limit: number;
+      id: string;
+    }
   ) {
     try {
       const config = createAxiosConfig();
@@ -128,11 +139,15 @@ const actions = {
           .join("&");
 
         url += `/filtered?${queryParams}&page=${page}&limit=${limit}`;
+      } else if (id) {
+        url += `/filtered?nutritionId=${id}`;
       } else {
         url += `?page=${page}&limit=${limit}`;
       }
       const response: AxiosResponse = await axios.get(url, config);
-
+      if (id) {
+        commit("setFoodDetail", response.data);
+      }
       if (page === 1) {
         commit("setFoodItem", response.data);
       } else {

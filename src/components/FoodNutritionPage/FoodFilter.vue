@@ -9,7 +9,13 @@
             style="color: black; font-size: 24px"
             >mdi-menu</v-icon
           >
-          <span class="ml-1" style="color: black"> Filters</span>
+          <span
+            class="ml-1 menu-icon"
+            style="color: black"
+            @click="toggleFilter"
+          >
+            Filters</span
+          >
         </v-chip>
       </div>
       <transition name="filter" :duration="{ enter: 1000, leave: 500 }">
@@ -254,11 +260,11 @@ export default {
     applyFilters() {
       const filteredFilters = {};
 
-      if (this.selectedCategory.length > 0) {
+      if (this.selectedCategory?.length > 0) {
         filteredFilters.category = this.selectedCategory;
       }
 
-      if (this.selectedItem.length > 0) {
+      if (this.selectedItem?.length > 0) {
         filteredFilters.name = this.selectedItem;
       }
 

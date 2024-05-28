@@ -13,16 +13,22 @@
       <v-tabs-window v-model="tab">
         <v-tabs-window-item>
           <template v-if="tab === 1">
-            <UserExercises :exercise="bookmarkedExercises" />
+            <UserExercises
+              :exercise="bookmarkedExercises"
+              @explore="exploreClicked"
+            />
           </template>
           <template v-else-if="tab === 2">
-            <UserYogas :yoga="bookmarkedYogas" />
+            <UserYogas :yoga="bookmarkedYogas" @explore="exploreClicked" />
           </template>
           <template v-else-if="tab === 3">
-            <UserDiets :diet="bookmarkedDiets" />
+            <UserDiets :diet="bookmarkedDiets" @explore="exploreClicked" />
           </template>
           <template v-else-if="tab === 4">
-            <UserNutritions :nutrition="bookmarkedNutritions" />
+            <UserNutritions
+              :nutrition="bookmarkedNutritions"
+              @explore="exploreClicked"
+            />
           </template>
         </v-tabs-window-item>
       </v-tabs-window>
@@ -65,6 +71,12 @@ export default {
   },
   methods: {
     ...mapActions(["fetchBookmarked"]),
+    async exploreClicked(item) {
+      this.$router.push({
+        name: item.route,
+        params: { id: item.item._id },
+      });
+    },
   },
 
   created() {

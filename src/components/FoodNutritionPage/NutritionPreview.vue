@@ -9,10 +9,7 @@
         md="4"
         lg="4"
       >
-        <v-skeleton-loader
-          class="mx-auto border"
-          type="image"
-        ></v-skeleton-loader>
+        <v-skeleton-loader class="border" type="image"></v-skeleton-loader>
       </v-col>
     </v-row>
     <v-row v-else class="d-flex flex-wrap">
@@ -24,7 +21,7 @@
         md="4"
         lg="4"
       >
-        <v-card width="100%" class="text-black my-4 mx-2 image-hover-effect">
+        <v-card width="90%" class="text-black my-4 mx-2 image-hover-effect">
           <v-img
             class="align-end text-white"
             height="250"

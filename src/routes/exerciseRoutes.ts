@@ -1,6 +1,7 @@
 import Cookies from "js-cookie";
 import ExerciseInfo from "../components/ExercisePage/ExerciseInfo.vue";
 import ExercisePage from "../pages/exercise/ExercisePage.vue";
+import ExerciseDetail from "@/components/ExercisePage/ExerciseDetail.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
 const ifAuthenticated = (to, from, next) => {
@@ -21,6 +22,11 @@ const routes = [
         path: "",
         component: ExerciseInfo,
         name: "exerciseInfo",
+      },
+      {
+        path: "exercise-detail/:id",
+        component: ExerciseDetail,
+        name: "exerciseDetail",
       },
     ],
   },

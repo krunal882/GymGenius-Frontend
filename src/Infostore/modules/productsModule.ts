@@ -176,6 +176,14 @@ const actions = {
       const response: AxiosResponse = await axios.get(url, config);
 
       const data = response.data;
+      if (role === "admin") {
+        if (page === 1) {
+          commit("setAdminProduct", data);
+        } else {
+          commit("appendAdminProduct", data);
+        }
+      }
+
       if (page === 1) {
         const data = response.data;
         commit("setProduct", { data, category, store });

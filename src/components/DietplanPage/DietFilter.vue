@@ -9,7 +9,13 @@
             style="color: black; font-size: 24px"
             >mdi-menu</v-icon
           >
-          <span class="ml-1" style="color: black"> Filters</span>
+          <span
+            class="ml-1 menu-icon"
+            style="color: black"
+            @click="toggleFilter"
+          >
+            Filters</span
+          >
         </v-chip>
       </div>
       <transition name="filter" :duration="{ enter: 1000, leave: 500 }">

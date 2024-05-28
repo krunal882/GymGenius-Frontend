@@ -15,22 +15,12 @@
     </div>
 
     <div class="d-flex flex-wrap justify-content-center">
-      <v-infinite-scroll
-        v-if="!exploreClicked"
-        @load="loadMoreProducts"
-        infinite-distance="10"
-      >
-        <DietPreview :dietPlan="dietPlan" @explore="handleExploreClick" />
+      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
+        <DietPreview :dietPlan="dietPlan" @explore="exploreClicked" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>
       </v-infinite-scroll>
-      <DietDisplay
-        v-else
-        @explore="handleExploreClick"
-        :dietPlan="selectedDietPlan"
-        :meals="selectedDietPlan.meals"
-      />
     </div>
   </div>
 </template>
@@ -38,14 +28,12 @@
 <script>
 import dietPoster from "../../assets/img/diet-plan-poster2.png";
 import DietFilter from "./DietFilter.vue";
-import DietDisplay from "./DietDisplay.vue";
 import DietPreview from "./DietPreview.vue";
 import UserSearch from "../common-components/UserSearch.vue";
 export default {
   data() {
     return {
       poster: dietPoster,
-      exploreClicked: false,
       selectedDietPlan: null,
       filteredDietPlan: null,
       searchTimeout: null,
@@ -60,11 +48,16 @@ export default {
   },
   components: {
     DietFilter,
-    DietDisplay,
     DietPreview,
     UserSearch,
   },
   methods: {
+    async exploreClicked(diet) {
+      this.$router.push({
+        name: "dietDetail",
+        params: { id: diet._id },
+      });
+    },
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
       this.page = 1;
@@ -106,10 +99,6 @@ export default {
       } finally {
         this.loading = false;
       }
-    },
-    handleExploreClick(dietPlan) {
-      this.selectedDietPlan = dietPlan;
-      this.exploreClicked = !this.exploreClicked;
     },
     async loadMoreProducts({ done }) {
       if (this.allLoaded || this.loading) {

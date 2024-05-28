@@ -22,6 +22,7 @@ interface DietPlan {
 interface State {
   dietPlan: DietPlan[];
   dietSearch: DietPlan[];
+  dietDetail: DietPlan;
 }
 
 interface FilteredFilters {
@@ -31,6 +32,7 @@ interface FilteredFilters {
 const state: State = {
   dietPlan: [],
   dietSearch: [],
+  dietDetail: null,
 };
 
 const createAxiosConfig = () => {
@@ -83,6 +85,9 @@ const mutations = {
       state.dietSearch[index] = dietPlan;
     }
   },
+  setDietDetail(state: State, diet: DietPlan) {
+    state.dietDetail = diet;
+  },
 };
 
 const actions = {
@@ -92,7 +97,13 @@ const actions = {
       filteredFilters,
       page,
       limit,
-    }: { filteredFilters?: FilteredFilters; page: number; limit: number }
+      id,
+    }: {
+      filteredFilters?: FilteredFilters;
+      page: number;
+      limit: number;
+      id: string;
+    }
   ) {
     try {
       const config = createAxiosConfig();
@@ -111,10 +122,15 @@ const actions = {
           .join("&");
 
         url += `/filter?${queryParams}&page=${page}&limit=${limit}`;
+      } else if (id) {
+        url += `/filter?dietId=${id}`;
       } else {
         url += `?page=${page}&limit=${limit}`;
       }
       const response: AxiosResponse = await axios.get(url, config);
+      if (id) {
+        commit("setDietDetail", response.data);
+      }
       if (page === 1) {
         commit("setDietPlan", response.data);
       } else {

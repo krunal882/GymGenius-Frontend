@@ -21,6 +21,7 @@ interface Exercise {
 interface State {
   exercises: Exercise[];
   exerciseSearch: Exercise[];
+  exerciseDetail: Exercise;
 }
 
 interface FilteredFilters {
@@ -30,6 +31,7 @@ interface FilteredFilters {
 const state: State = {
   exercises: [],
   exerciseSearch: [],
+  exerciseDetail: null,
 };
 
 const createAxiosConfig = () => {
@@ -86,6 +88,9 @@ const mutations = {
       (item) => item._id !== id
     );
   },
+  setExerciseDetail(state: State, exercise: Exercise) {
+    state.exerciseDetail = exercise;
+  },
 };
 
 const actions = {
@@ -95,7 +100,13 @@ const actions = {
       filteredFilters,
       page,
       limit,
-    }: { filteredFilters: FilteredFilters; page: number; limit: number }
+      id,
+    }: {
+      filteredFilters: FilteredFilters;
+      page: number;
+      limit: number;
+      id: string;
+    }
   ) {
     try {
       const config = createAxiosConfig();
@@ -113,11 +124,17 @@ const actions = {
           })
           .join("&");
         url += `/filtered?${queryParams}&page=${page}&limit=${limit}`;
+      } else if (id) {
+        url += `/filtered?exerciseId=${id}`;
       } else {
         url += `?page=${page}&limit=${limit}`;
       }
 
       const response: AxiosResponse = await axios.get(url, config);
+
+      if (id) {
+        commit("setExerciseDetail", response.data);
+      }
       if (page === 1) {
         commit("setExercises", response.data);
       } else {

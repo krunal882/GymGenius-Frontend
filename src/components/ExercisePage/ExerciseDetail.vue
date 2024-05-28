@@ -1,5 +1,5 @@
 <template>
-  <v-card class="" width="auto" style="display: flex">
+  <v-card v-if="exercise" class="" width="auto" style="display: flex">
     <div style="flex: 1; padding-right: 16px; position: relative">
       <v-card class="mx-auto" elevation="24" width="auto">
         <v-carousel
@@ -83,7 +83,7 @@
       <v-card-text>Category : {{ exercise.category }}</v-card-text>
 
       <v-card-actions style="justify-content: space-between">
-        <v-btn color="orange" @click="exploreClicked">Go Back</v-btn>
+        <v-btn color="orange" @click="back">Go Back</v-btn>
         <v-btn color="orange" @click="bookmark(exercise)">Bookmark</v-btn>
       </v-card-actions>
     </div>
@@ -91,20 +91,23 @@
 </template>
 <script>
 export default {
-  props: {
-    exercise: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
       images: [""],
+      exercise: null,
     };
   },
   methods: {
-    exploreClicked() {
-      this.$emit("explore");
+    async fetchExercise(id) {
+      try {
+        await this.$store.dispatch("fetchExercises", { id });
+      } catch (error) {
+        console.log(error);
+      }
+      this.exercise = this.$store.state.exercisesModule.exerciseDetail[0];
+    },
+    back() {
+      this.$router.go(-1);
     },
     bookmark(exercise) {
       const userId = this.$store.state.userModule.userId;
@@ -138,7 +141,10 @@ export default {
       }
     },
   },
-  created() {
+  async created() {
+    const { id } = this.$route.params;
+    await this.fetchExercise(id);
+
     this.loadImages(this.exercise.name, this.exercise.cloudImg);
   },
 };

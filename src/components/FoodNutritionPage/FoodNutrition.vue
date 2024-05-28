@@ -14,28 +14,18 @@
       <FoodFilter @filters-applied="applyFilters" />
     </div>
     <div class="justify-content-center">
-      <v-infinite-scroll
-        v-if="!exploreClicked"
-        @load="loadMoreProducts"
-        infinite-distance="10"
-      >
-        <NutritionPreview :foodItem="foodItem" @explore="handleExploreClick" />
+      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
+        <NutritionPreview :foodItem="foodItem" @explore="exploreClicked" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>
       </v-infinite-scroll>
-      <NutritionDetail
-        v-else
-        @explore="handleExploreClick"
-        :foodItem="selectedFoodItem"
-      />
     </div>
   </div>
 </template>
 
 <script>
 import FoodFilter from "./FoodFilter.vue";
-import NutritionDetail from "./NutritionDetail.vue";
 import NutritionPreview from "./NutritionPreview.vue";
 import UserSearch from "../common-components/UserSearch.vue";
 
@@ -43,7 +33,6 @@ export default {
   data() {
     return {
       selectedItem: null,
-      exploreClicked: false,
       selectedFoodItem: null,
       limit: 10,
       page: 1,
@@ -55,6 +44,12 @@ export default {
     };
   },
   methods: {
+    async exploreClicked(foodItem) {
+      this.$router.push({
+        name: "foodDetail",
+        params: { id: foodItem._id },
+      });
+    },
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
       this.page = 1;
@@ -96,10 +91,6 @@ export default {
       } finally {
         this.loading = false;
       }
-    },
-    handleExploreClick(foodItem) {
-      this.selectedFoodItem = foodItem;
-      this.exploreClicked = !this.exploreClicked;
     },
     async loadMoreProducts({ done }) {
       if (this.allLoaded || this.loading) {
@@ -160,7 +151,6 @@ export default {
 
   components: {
     FoodFilter,
-    NutritionDetail,
     NutritionPreview,
     UserSearch,
   },

@@ -1,5 +1,5 @@
 <template>
-  <v-card class="" width="900" style="display: flex">
+  <v-card v-if="yoga" width="900" style="display: flex">
     <div style="flex: 1; padding-right: 16px; position: relative">
       <v-img height="300" :src="yoga.url_png">
         <v-card-title class="text-center">{{
@@ -54,7 +54,7 @@
       </v-card-text>
 
       <v-card-actions>
-        <v-btn color="orange" @click="exploreClicked">Go Back</v-btn>
+        <v-btn color="orange" @click="back">Go Back</v-btn>
         <v-btn color="orange" @click="bookmark(yoga)">Bookmark</v-btn>
       </v-card-actions>
     </div>
@@ -63,20 +63,23 @@
 
 <script>
 export default {
-  props: {
-    yoga: {
-      type: Object,
-      required: true,
-    },
-  },
   data() {
     return {
       images: [],
+      yoga: null,
     };
   },
   methods: {
-    exploreClicked() {
-      this.$emit("explore");
+    async fetchYoga(id) {
+      try {
+        await this.$store.dispatch("fetchYoga", { id });
+      } catch (error) {
+        console.log(error);
+      }
+      this.yoga = this.$store.state.yogaModule.yogaDetail[0];
+    },
+    back() {
+      this.$router.go(-1);
     },
     bookmark(yoga) {
       const userId = this.$store.state.userModule.userId;
@@ -87,6 +90,10 @@ export default {
         itemType: "yoga",
       });
     },
+  },
+  async created() {
+    const { id } = this.$route.params;
+    await this.fetchYoga(id);
   },
 };
 </script>

@@ -1,5 +1,6 @@
 <template>
-  <v-card class="mx-auto d-flex custom-card" width="100%">
+  <v-card v-if="foodItem" class="mx-auto d-flex custom-card" width="100%">
+    {{ console.log(foodItem) }}
     <v-img
       class="align-end text-white"
       height="300"
@@ -14,14 +15,14 @@
       >
 
       <v-card-actions style="justify-content: space-between">
-        <v-btn color="orange" @click="exploreClicked" text="Go Back"></v-btn>
+        <v-btn color="orange" @click="back" text="Go Back"></v-btn>
         <v-btn color="orange" @click="bookmark(foodItem)">Bookmark</v-btn>
       </v-card-actions>
     </div>
   </v-card>
   <v-timeline align="start">
     <v-timeline-item fill-dot icon="mdi-star" dot-color="red-lighten-2">
-      <v-card>
+      <v-card v-if="foodItem">
         <v-card-title :class="['text-h6', 'bg-red-lighten-2']">
           nutrition
         </v-card-title>
@@ -37,7 +38,7 @@
       </v-card>
     </v-timeline-item>
     <v-timeline-item fill-dot icon="mdi-star" dot-color="purple-lighten-2">
-      <v-card>
+      <v-card v-if="foodItem">
         <v-card-title :class="['text-h6', 'bg-purple-lighten-2']">
           Health Benefits
         </v-card-title>
@@ -51,7 +52,7 @@
       </v-card>
     </v-timeline-item>
     <v-timeline-item fill-dot icon="mdi-star" dot-color="green-lighten-2">
-      <v-card>
+      <v-card v-if="foodItem">
         <v-card-title :class="['text-h6', 'bg-green-lighten-2']">
           Fun Facts
         </v-card-title>
@@ -68,7 +69,7 @@
       </v-card>
     </v-timeline-item>
     <v-timeline-item fill-dot icon="mdi-star" dot-color="indigo-lighten-2">
-      <v-card>
+      <v-card v-if="foodItem">
         <v-card-title :class="['text-h6', 'bg-indigo-lighten-2']">
           Recipe ideas - 1
         </v-card-title>
@@ -101,8 +102,13 @@
         </v-card-text>
       </v-card>
     </v-timeline-item>
-    <v-timeline-item fill-dot icon="mdi-star" dot-color="purple-lighten-2">
-      <v-card>
+    <v-timeline-item
+      v-if="foodItem"
+      fill-dot
+      icon="mdi-star"
+      dot-color="purple-lighten-2"
+    >
+      <v-card v-if="foodItem">
         <v-card-title :class="['text-h6', 'bg-purple-lighten-2']">
           Recipe ideas - 2
         </v-card-title>
@@ -136,7 +142,7 @@
       </v-card>
     </v-timeline-item>
     <v-timeline-item fill-dot icon="mdi-star" dot-color="yellow-lighten-2">
-      <v-card>
+      <v-card v-if="foodItem">
         <v-card-title :class="['text-h6', 'bg-yellow-lighten-2']">
           varieties
         </v-card-title>
@@ -150,7 +156,7 @@
       </v-card>
     </v-timeline-item>
     <v-timeline-item fill-dot icon="mdi-star" dot-color="red-lighten-2">
-      <v-card>
+      <v-card v-if="foodItem">
         <v-card-title :class="['text-h6', 'bg-red-lighten-2']">
           culinary uses
         </v-card-title>
@@ -168,15 +174,22 @@
 
 <script>
 export default {
-  props: {
-    foodItem: {
-      type: Object,
-      require: true,
-    },
+  data() {
+    return {
+      foodItem: null,
+    };
   },
   methods: {
-    exploreClicked() {
-      this.$emit("explore");
+    async fetchFoodItem(id) {
+      try {
+        await this.$store.dispatch("fetchFoodItem", { id });
+      } catch (error) {
+        console.log(error);
+      }
+      this.foodItem = this.$store.state.foodItemModule.foodDetail[0];
+    },
+    back() {
+      this.$router.go(-1);
     },
     bookmark(foodItem) {
       const userId = this.$store.state.userModule.userId;
@@ -195,6 +208,10 @@ export default {
         return cloudImg;
       }
     },
+  },
+  async created() {
+    const { id } = this.$route.params;
+    await this.fetchFoodItem(id);
   },
 };
 </script>

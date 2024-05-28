@@ -15,28 +15,18 @@
       <ExerciseFilter @filters-applied="applyFilters" />
     </div>
     <div class="d-flex flex-wrap justify-content-center">
-      <v-infinite-scroll
-        v-if="!exploreClicked"
-        @load="loadMoreProducts"
-        infinite-distance="10"
-      >
-        <ExercisePreview :exercises="exercises" @explore="handleExploreClick" />
+      <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
+        <ExercisePreview :exercises="exercises" @explore="exploreClicked" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>
       </v-infinite-scroll>
-      <ExerciseDetail
-        v-else
-        @explore="handleExploreClick"
-        :exercise="selectedExercise"
-      />
     </div>
   </div>
 </template>
 
 <script>
 import ExerciseFilter from "./ExerciseFilter.vue";
-import ExerciseDetail from "./ExerciseDetail.vue";
 import ExercisePreview from "./ExercisePreview.vue";
 import UserSearch from "../common-components/UserSearch.vue";
 
@@ -44,7 +34,6 @@ export default {
   data() {
     return {
       selectedItem: null,
-      exploreClicked: false,
       selectedExercise: null,
       limit: 10,
       page: 1,
@@ -56,6 +45,12 @@ export default {
     };
   },
   methods: {
+    async exploreClicked(exercise) {
+      this.$router.push({
+        name: "exerciseDetail",
+        params: { id: exercise._id },
+      });
+    },
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
       this.page = 1;
@@ -97,10 +92,6 @@ export default {
       } finally {
         this.loading = false;
       }
-    },
-    handleExploreClick(exercise) {
-      this.selectedExercise = exercise;
-      this.exploreClicked = !this.exploreClicked;
     },
     async loadMoreProducts({ done }) {
       if (this.allLoaded || this.loading) {
@@ -159,7 +150,6 @@ export default {
   components: {
     ExerciseFilter,
     ExercisePreview,
-    ExerciseDetail,
     UserSearch,
   },
   mounted() {

@@ -1,7 +1,14 @@
 <template>
   <v-container fluid>
     <v-row v-if="loading">
-      <v-col v-for="n in skeletonCount" :key="n" cols="12" sm="6" md="4" lg="4">
+      <v-col
+        v-for="n in this.exercises.length"
+        :key="n"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
         <v-skeleton-loader
           class="mx-auto border"
           type="image, article, chip@2"
@@ -17,14 +24,13 @@
         md="4"
         lg="4"
       >
-        <v-card width="100%" class="text-black my-4 mx-2 image-hover-effect">
+        <v-card width="90%" class="text-black my-4 mx-2 image-hover-effect">
           <v-img
             :src="getExerciseImagePath(exercise.name, exercise.cloudImg)"
             style="height: 300px"
             @click="exploreClicked(exercise)"
           >
-            <div class="overlay"></div>
-            <div class="caption">{{ exercise.name }}</div>
+            <v-card-title class="caption">{{ exercise.name }}</v-card-title>
           </v-img>
           <v-card-text>
             <div class="subtitle-row">
@@ -65,11 +71,6 @@ export default {
     return {
       loading: true,
     };
-  },
-  computed: {
-    skeletonCount() {
-      return this.loading ? 6 : 0;
-    },
   },
   methods: {
     getExerciseImagePath(exerciseName, cloudImg) {
@@ -129,7 +130,6 @@ export default {
 }
 
 .caption {
-  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;

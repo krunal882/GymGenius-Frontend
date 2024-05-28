@@ -20,6 +20,7 @@ interface Yoga {
 interface State {
   yoga: Yoga[];
   yogaSearch: Yoga[];
+  yogaDetail: Yoga;
 }
 
 interface FilteredFilters {
@@ -29,6 +30,7 @@ interface FilteredFilters {
 const state: State = {
   yoga: [],
   yogaSearch: [],
+  yogaDetail: null,
 };
 
 const createAxiosConfig = () => {
@@ -83,6 +85,9 @@ const mutations = {
   removeYoga(state: State, id: string) {
     state.yogaSearch = state.yogaSearch.filter((item) => item._id !== id);
   },
+  setYogaDetail(state: State, yoga: Yoga) {
+    state.yogaDetail = yoga;
+  },
 };
 const actions = {
   async fetchYoga(
@@ -91,7 +96,13 @@ const actions = {
       filteredFilters,
       page,
       limit,
-    }: { filteredFilters: FilteredFilters; page: number; limit: number }
+      id,
+    }: {
+      filteredFilters: FilteredFilters;
+      page: number;
+      limit: number;
+      id: string;
+    }
   ) {
     try {
       const config = createAxiosConfig();
@@ -109,11 +120,17 @@ const actions = {
           })
           .join("&");
         url += `/filtered?${queryParams}&page=${page}&limit=${limit}`;
+      } else if (id) {
+        url += `/filtered?yogaId=${id}`;
       } else {
         url += `?page=${page}&limit=${limit}`;
       }
 
       const response: AxiosResponse = await axios.get(url, config);
+
+      if (id) {
+        commit("setYogaDetail", response.data);
+      }
 
       if (page === 1) {
         commit("setYoga", response.data);

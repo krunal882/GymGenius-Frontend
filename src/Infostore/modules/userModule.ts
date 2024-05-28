@@ -196,6 +196,7 @@ const actions = {
         config
       );
       if (response.status === 201) {
+        console.log(response);
         commit("setToken", response.data);
         useToast().success("Account created successfully! Welcome aboard.");
       }

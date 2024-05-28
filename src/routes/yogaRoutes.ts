@@ -2,6 +2,7 @@ import Cookies from "js-cookie";
 import YogaPoses from "../components/YogaPage/YogaPoses.vue";
 import YogaPage from "../pages/yoga/YogaPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import YogaDetails from "@/components/YogaPage/YogaDetails.vue";
 
 const ifAuthenticated = (to, from, next) => {
   if (Cookies.get("token")) {
@@ -21,6 +22,11 @@ const routes = [
         path: "",
         component: YogaPoses,
         name: "yogaPoses",
+      },
+      {
+        path: "yoga-detail/:id",
+        component: YogaDetails,
+        name: "yogaDetail",
       },
     ],
   },

@@ -1,5 +1,5 @@
 <template>
-  <div style="padding: 15px; margin-top: 25px; width: 1030px">
+  <div v-if="dietPlan" style="padding: 15px; margin-top: 25px; width: 1030px">
     <v-card width="auto" height="auto" style="display: flex">
       <div style="flex: 1">
         <img
@@ -27,7 +27,7 @@
             >
           </v-card-text>
           <v-card-actions>
-            <v-btn color="orange" @click="exploreClicked">Go Back</v-btn>
+            <v-btn color="orange" @click="back">Go Back</v-btn>
             <v-btn color="orange" @click="bookmark(dietPlan)">Bookmark</v-btn>
           </v-card-actions>
         </v-card>
@@ -98,27 +98,27 @@ export default {
     return {
       selectedDay: null,
       selectedMealType: null,
+      dietPlan: null,
+      meals: [],
     };
-  },
-  props: {
-    dietPlan: {
-      type: Object,
-      required: true,
-    },
-    meals: {
-      type: Array,
-      required: true,
-    },
   },
   computed: {
     days() {
-      return Array.from(new Set(this.meals.map((meal) => meal.day)));
+      if (this.meals && this.meals.length > 0) {
+        return Array.from(new Set(this.meals.map((meal) => meal.day)));
+      } else {
+        return [];
+      }
     },
     mealTypes() {
-      return Array.from(new Set(this.meals.map((meal) => meal.meal_type)));
+      if (this.meals && this.meals.length > 0) {
+        return Array.from(new Set(this.meals.map((meal) => meal.meal_type)));
+      } else {
+        return [];
+      }
     },
     filteredMeals() {
-      if (this.selectedDay && this.selectedMealType) {
+      if (this.selectedDay && this.selectedMealType && this.meals) {
         return this.meals.filter(
           (meal) =>
             meal.day === this.selectedDay &&
@@ -130,8 +130,17 @@ export default {
     },
   },
   methods: {
-    exploreClicked() {
-      this.$emit("explore");
+    async fetchDiet(id) {
+      try {
+        await this.$store.dispatch("fetchDietPlan", { id });
+        this.dietPlan = this.$store.state.dietPlanModule.dietDetail[0];
+        this.meals = this.dietPlan.meals;
+      } catch (error) {
+        console.log(error);
+      }
+    },
+    back() {
+      this.$router.go(-1);
     },
     bookmark(dietPlan) {
       const userId = this.$store.state.userModule.userId;
@@ -142,6 +151,10 @@ export default {
         itemType: "diet",
       });
     },
+  },
+  async created() {
+    const { id } = this.$route.params;
+    await this.fetchDiet(id);
   },
 };
 </script>

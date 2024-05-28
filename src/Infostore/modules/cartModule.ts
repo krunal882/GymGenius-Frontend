@@ -74,6 +74,9 @@ const mutations = {
   removeCartItem(state: State, id: string) {
     state.cartItems = state.cartItems.filter((item) => item._id !== id);
   },
+  removeReturnedProduct(state: State, id: string) {
+    state.history = state.history.filter((item) => item.paymentId !== id);
+  },
 };
 
 const actions = {
@@ -86,7 +89,6 @@ const actions = {
       product,
     }: { productId: string; status: string; userId: string; product: Product }
   ) {
-    console.log(productId);
     try {
       const config = createAxiosConfig();
       const response = await axios.post(
@@ -115,15 +117,13 @@ const actions = {
         `http://localhost:3000/store/cart?userId=${userId}`,
         config
       );
-
       if (response?.data[0]?.product?.length > 0) {
         const allProducts = response.data[0].product;
         const filteredProducts = allProducts.filter(
           (item: { status: string }) => item.status === status
         );
-
         const idsAndPayments = filteredProducts.map(
-          (item: { productId: string; paymentId: string }) => ({
+          (item: { productId: string; paymentId?: string }) => ({
             productId: item.productId,
             paymentId: item.paymentId,
           })
@@ -136,23 +136,30 @@ const actions = {
             `http://localhost:3000/store/filtered?${idParams}`,
             config
           );
-          const productsWithPaymentId = getProductResponse.data.map(
-            (product: { productId: string }) => {
-              const paymentInfo = idsAndPayments[0].paymentId;
-              return {
-                ...product,
-                paymentId: paymentInfo,
-              };
+          if (idsAndPayments[0].paymentId !== undefined) {
+            const productsWithPaymentId = getProductResponse.data.map(
+              (product: { _id: string }) => {
+                const paymentInfo = idsAndPayments.find(
+                  (item) => item.productId == product._id
+                );
+                return {
+                  ...product,
+                  paymentId: paymentInfo.paymentId,
+                };
+              }
+            );
+            if (status == "done") {
+              commit("setHistory", productsWithPaymentId);
             }
-          );
+          }
+
           if (status == "pending") {
-            commit("setCartItems", productsWithPaymentId);
-          } else if (status == "done") {
-            commit("setHistory", productsWithPaymentId);
+            commit("setCartItems", getProductResponse.data);
           }
         }
       }
     } catch (error) {
+      console.log(error);
       handleServerError(error);
     }
   },
@@ -233,7 +240,8 @@ const actions = {
       const url = "http://localhost:3000/store/refund";
 
       const response = await axios.patch(url, paymentId, config);
-      if (response.data.status === "success") {
+      if (response.data.status === "succeeded") {
+        commit("removeReturnedProduct", paymentId);
         useToast().success(
           "Product successfully returned. Refund process initiated"
         );
