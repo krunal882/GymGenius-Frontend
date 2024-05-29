@@ -127,6 +127,9 @@ export default {
 </script>
 
 <style scoped>
+.menu-icon {
+  cursor: pointer;
+}
 .filter-section {
   position: absolute;
   z-index: 100;

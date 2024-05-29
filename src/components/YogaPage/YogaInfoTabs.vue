@@ -7,15 +7,19 @@
         <v-tab value="three">Goal</v-tab>
       </v-tabs>
 
-      <v-card-text style="padding-right: 25px; padding-left: 25px">
+      <v-card-text class="scrollable-content">
         <v-window v-model="tab">
           <v-window-item value="one">
             <YogaHistory />
           </v-window-item>
 
-          <v-window-item value="two"> <YogaBenefits /></v-window-item>
+          <v-window-item value="two">
+            <YogaBenefits />
+          </v-window-item>
 
-          <v-window-item value="three"> <YogaGoal /> </v-window-item>
+          <v-window-item value="three">
+            <YogaGoal />
+          </v-window-item>
         </v-window>
       </v-card-text>
     </v-card>
@@ -51,6 +55,7 @@ export default {
   padding-top: 5px;
   padding-bottom: 5px;
 }
+
 .card-text {
   font-size: 16px;
   color: #333;
@@ -58,5 +63,12 @@ export default {
   line-height: 1.5;
   background-color: #f0f0f0;
   border-radius: 10px;
+}
+
+.scrollable-content {
+  max-height: 250px;
+  overflow-y: auto;
+  padding-right: 25px;
+  padding-left: 25px;
 }
 </style>

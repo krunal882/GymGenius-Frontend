@@ -24,7 +24,7 @@
           @submit.prevent="submit"
           class="row filter-section"
         >
-          <div class="row">
+          <div>
             <div
               class="col-md-3 col-sm-3 col-xs-12"
               style="
@@ -199,7 +199,6 @@ export default {
       if (this.selectedMuscle.length > 0) {
         filteredFilters.muscle = this.selectedMuscle;
       }
-      console.log(filteredFilters);
       if (Object.keys(filteredFilters).length > 0) {
         this.$emit("filters-applied", filteredFilters);
       } else {
@@ -217,25 +216,6 @@ export default {
   },
 };
 </script>
-
-<style scoped>
-.menu-icon {
-  cursor: pointer;
-}
-.filter-section {
-  position: absolute;
-  z-index: 100;
-}
-
-.filter-enter-active,
-.filter-leave-active {
-  transition: opacity 0.3s ease;
-}
-.filter-enter,
-.filter-leave-to {
-  opacity: 0;
-}
-</style>
 
 <style scoped>
 .menu-icon {

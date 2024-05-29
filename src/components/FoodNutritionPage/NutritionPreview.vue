@@ -12,7 +12,7 @@
         <v-skeleton-loader class="border" type="image"></v-skeleton-loader>
       </v-col>
     </v-row>
-    <v-row v-else class="d-flex flex-wrap">
+    <v-row class="d-flex flex-wrap">
       <v-col
         v-for="foodItem in foodItem"
         :key="foodItem.id"
@@ -72,16 +72,16 @@ export default {
         this.loading = false;
       }, 2000);
     },
-    watch: {
-      foodItem: {
-        handler(newValue, oldValue) {
-          if (newValue !== oldValue) {
-            this.loading = true;
-            this.loadData();
-          }
-        },
-        immediate: true,
+  },
+  watch: {
+    foodItem: {
+      handler(newValue, oldValue) {
+        if (newValue !== oldValue) {
+          this.loading = true;
+          this.loadData();
+        }
       },
+      immediate: true,
     },
   },
   created() {
@@ -98,7 +98,19 @@ export default {
 
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
+
+.image-hover-effect {
+  cursor: pointer;
+}
+
+.muscle-label {
+  font-weight: 500;
+  margin-right: 10px;
+}
+
 .caption {
   bottom: 0;
   left: 0;

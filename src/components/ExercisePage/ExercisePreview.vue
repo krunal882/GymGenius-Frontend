@@ -24,8 +24,9 @@
         md="4"
         lg="4"
       >
-        <v-card width="90%" class="text-black my-4 mx-2 image-hover-effect">
+        <v-card width="90%" class="mx-auto image-hover-effect">
           <v-img
+            class="align-end text-white"
             :src="getExerciseImagePath(exercise.name, exercise.cloudImg)"
             style="height: 300px"
             @click="exploreClicked(exercise)"
@@ -38,14 +39,14 @@
               <v-card-subtitle>Force: {{ exercise.force }}</v-card-subtitle>
             </div>
             <div class="mt-3 d-flex">
-              Primary Muscle:
-              <ul>
-                <li v-for="muscle in exercise.primaryMuscles" :key="muscle">
-                  {{ muscle }}
-                </li>
-              </ul>
+              <span class="muscle-label">Primary Muscle:</span>
+              <span> {{ exercise.primaryMuscles[0] }}</span>
             </div>
-            <div>Equipment needed : {{ exercise.equipment }}</div>
+            <div>
+              <span class="muscle-label">Equipment needed:</span>
+              <span v-if="exercise.equipment">{{ exercise.equipment }}</span>
+              <span v-else>body only</span>
+            </div>
           </v-card-text>
           <v-card-actions>
             <v-btn color="orange" @click="exploreClicked(exercise)"
@@ -127,9 +128,21 @@ export default {
 
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.image-hover-effect {
+  cursor: pointer;
+}
+
+.muscle-label {
+  font-weight: 500;
+  margin-right: 10px;
 }
 
 .caption {
+  position: absolute;
   bottom: 0;
   left: 0;
   right: 0;

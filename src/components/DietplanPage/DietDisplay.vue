@@ -1,95 +1,92 @@
 <template>
-  <div v-if="dietPlan" style="padding: 15px; margin-top: 25px; width: 1030px">
-    <v-card width="auto" height="auto" style="display: flex">
-      <div style="flex: 1">
-        <img
+  <v-container class="">
+    <div v-if="dietPlan" class="diet-plan-container">
+      <div :class="{ 'd-flex': isWideScreen }">
+        <v-img
           src="../../assets/img/diet-plan-image.jpg"
-          alt=""
-          style="height: 300px; object-fit: cover"
-        />
-
-        <v-card width="auto" style="margin-top: 15px">
-          <v-card-text style="height: auto">
-            <v-card-title style="font-size: 20px; font-weight: bold"
-              >Diet-plan name: {{ dietPlan.plan_name }}</v-card-title
-            >
-            <v-divider></v-divider>
-            <v-card-title style="font-size: 18px"
-              >Type : {{ dietPlan.diet_type }}</v-card-title
-            >
-            <v-divider></v-divider>
-            <v-card-title style="font-size: 18px"
-              >Purpose : {{ dietPlan.purpose }}</v-card-title
-            >
-            <v-divider></v-divider>
-            <v-card-title style="font-size: 18px"
-              >Total Days: {{ dietPlan.total_days }}</v-card-title
-            >
-          </v-card-text>
+          alt="Diet Plan Image"
+          class="diet-plan-image d-flex flex-wrap"
+        ></v-img>
+        <div class="diet-plan-details d-flex flex-wrap">
+          <v-card-title class="diet-plan-title">
+            Diet-plan name: {{ dietPlan.plan_name }}
+          </v-card-title>
+          <v-divider></v-divider>
+          <v-card-text
+            ><span class="label">Type:</span>
+            {{ dietPlan.diet_type }}</v-card-text
+          >
+          <v-card-text
+            ><span class="label">Purpose:</span>
+            {{ dietPlan.purpose }}</v-card-text
+          >
+          <v-card-text
+            ><span class="label">Total Days:</span>
+            {{ dietPlan.total_days }}</v-card-text
+          >
           <v-card-actions>
             <v-btn color="orange" @click="back">Go Back</v-btn>
             <v-btn color="orange" @click="bookmark(dietPlan)">Bookmark</v-btn>
           </v-card-actions>
-        </v-card>
+        </div>
       </div>
 
-      <div style="flex: 1">
-        <v-select
-          v-model="selectedDay"
-          :items="days"
-          label="Select Day"
-        ></v-select>
-        <v-select
-          v-model="selectedMealType"
-          :items="mealTypes"
-          label="Select Meal Type"
-        ></v-select>
-        <v-card
-          v-if="selectedDay && selectedMealType"
-          width="auto"
-          style="margin-top: 15px"
-        >
-          <v-card-text style="height: auto">
-            <v-card-title
-              >Meals for {{ selectedDay }} -
-              {{ selectedMealType }}:</v-card-title
+      <v-card-title class="meal-selection-title"> Select Day </v-card-title>
+      <v-select
+        style="width: 300px"
+        v-model="selectedDay"
+        :items="days"
+        label="Select a day"
+      ></v-select>
+
+      <v-card-text class="meal-details-card" v-if="filteredMeals.length > 0">
+        <v-card-title class="meal-details-title" style="align-content: center">
+          Meal Details for Day: {{ selectedDay }}
+        </v-card-title>
+        <div v-for="(meal, index) in filteredMeals" :key="index">
+          <v-divider></v-divider>
+
+          <v-card-title class="meal-type-title" style="align-content: center">
+            Meal Type: {{ meal.meal_type }}
+          </v-card-title>
+          <v-divider></v-divider>
+          <div
+            v-for="(food, foodIndex) in meal.foods"
+            :key="foodIndex"
+            class="d-flex justify-content-center"
+          >
+            <v-card-title class="food-item-title" style="align-content: center">
+              Food item name: {{ food.name }}
+            </v-card-title>
+            <v-card-subtitle style="align-content: center"
+              ><span style="font-weight: 500"> Quantity:</span>
+              {{ food.quantity }}</v-card-subtitle
             >
-            <template v-if="filteredMeals.length > 0">
-              <div v-for="(meal, index) in filteredMeals" :key="index">
-                <v-card-title>Day: {{ meal.day }}</v-card-title>
-                <v-divider></v-divider>
-                <v-card-title>Meal Type: {{ meal.meal_type }}</v-card-title>
-                <v-divider></v-divider>
-                <div v-for="(food, foodIndex) in meal.foods" :key="foodIndex">
-                  <v-card-title>Food item name: {{ food.name }}</v-card-title>
-                  <v-divider></v-divider>
-                  <v-card-title>Quantity: {{ food.quantity }}</v-card-title>
-                  <v-divider></v-divider>
-                  <v-card-title>Calories: {{ food.calories }}</v-card-title>
-                  <v-divider></v-divider>
-                  <v-card-title>Protein: {{ food.protein }}</v-card-title>
-                  <v-divider></v-divider>
-                  <v-card-title
-                    >Carbohydrates: {{ food.carbohydrates }}</v-card-title
-                  >
-                  <v-divider></v-divider>
-                  <v-card-title>Fat: {{ food.fat }}</v-card-title>
-                  <v-divider></v-divider>
-                  <v-card-title>Fiber: {{ food.fiber }}</v-card-title>
-                </div>
-              </div>
-            </template>
-            <template v-else>
-              <p>
-                No meals available for {{ selectedDay }} -
-                {{ selectedMealType }}
-              </p>
-            </template>
-          </v-card-text>
-        </v-card>
-      </div>
-    </v-card>
-  </div>
+            <v-card-subtitle style="align-content: center"
+              ><span style="font-weight: 500">Calories:</span>
+              {{ food.calories }}</v-card-subtitle
+            >
+            <v-card-subtitle style="align-content: center"
+              ><span style="font-weight: 500">Protein: </span
+              >{{ food.protein }}</v-card-subtitle
+            >
+            <v-card-subtitle style="align-content: center"
+              ><span style="font-weight: 500">Carbohydrates: </span
+              >{{ food.carbohydrates }}</v-card-subtitle
+            >
+            <v-card-subtitle style="align-content: center"
+              ><span style="font-weight: 500">Fat: </span
+              >{{ food.fat }}</v-card-subtitle
+            >
+            <v-card-subtitle style="align-content: center"
+              ><span style="font-weight: 500">Fiber: </span
+              >{{ food.fiber }}</v-card-subtitle
+            >
+          </div>
+        </div>
+      </v-card-text>
+    </div>
+  </v-container>
 </template>
 
 <script>
@@ -97,9 +94,9 @@ export default {
   data() {
     return {
       selectedDay: null,
-      selectedMealType: null,
       dietPlan: null,
       meals: [],
+      isWideScreen: true,
     };
   },
   computed: {
@@ -110,20 +107,9 @@ export default {
         return [];
       }
     },
-    mealTypes() {
-      if (this.meals && this.meals.length > 0) {
-        return Array.from(new Set(this.meals.map((meal) => meal.meal_type)));
-      } else {
-        return [];
-      }
-    },
     filteredMeals() {
-      if (this.selectedDay && this.selectedMealType && this.meals) {
-        return this.meals.filter(
-          (meal) =>
-            meal.day === this.selectedDay &&
-            meal.meal_type === this.selectedMealType
-        );
+      if (this.selectedDay) {
+        return this.meals.filter((meal) => meal.day === this.selectedDay);
       } else {
         return [];
       }
@@ -138,6 +124,9 @@ export default {
       } catch (error) {
         console.log(error);
       }
+    },
+    handleResize() {
+      this.isWideScreen = window.innerWidth > 790;
     },
     back() {
       this.$router.go(-1);
@@ -156,7 +145,67 @@ export default {
     const { id } = this.$route.params;
     await this.fetchDiet(id);
   },
+  mounted() {
+    window.addEventListener("resize", this.handleResize);
+    this.handleResize();
+  },
+  beforeUnmount() {
+    window.removeEventListener("resize", this.handleResize);
+  },
 };
 </script>
 
-<style scoped></style>
+<style scoped>
+.diet-plan-container {
+  padding: 15px;
+  margin-top: 25px;
+  width: 1030px;
+}
+.diet-plan-card {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+.diet-plan-image {
+  height: 300px;
+  object-fit: cover;
+  width: 60%;
+}
+.diet-plan-details {
+  margin-top: 15px;
+  width: 100%;
+}
+.diet-plan-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.meal-selection-card {
+  margin-top: 15px;
+}
+.meal-selection-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.meal-details-card {
+  margin-top: 15px;
+  width: 100%;
+}
+.meal-details-title {
+  font-size: 20px;
+  font-weight: bold;
+}
+.meal-type-title {
+  font-size: 18px;
+}
+.food-item-title {
+  font-size: 16px;
+}
+.no-meal-details-card {
+  margin-top: 15px;
+  width: 100%;
+}
+.label {
+  font-weight: 500;
+  font-size: 16px;
+}
+</style>

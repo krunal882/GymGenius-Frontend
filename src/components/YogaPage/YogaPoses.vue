@@ -12,7 +12,7 @@
 
     <YogaInfoTabs />
     <div class="d-flex flex-wrap justify-content-center">
-      <UserSearch @search="handleSearch" />
+      <UserSearch @search="handleSearch" @clearSearch="clearField" />
       <YogaFilter @filters-applied="applyFilters" />
     </div>
     <div class="d-flex flex-wrap justify-content-center">
@@ -65,7 +65,9 @@ export default {
       this.allLoaded = false;
       this.fetchYogaWithFilters({ name: searchTerm });
     },
-
+    clearField() {
+      this.searchTerm = "";
+    },
     applyFilters(filteredFilters) {
       this.filterTerm = filteredFilters;
       this.page = 1;

@@ -1,10 +1,9 @@
 <template>
   <v-container fluid>
-    <v-row v-if="loading" class="d-flex flex-wrap">
+    <v-row v-if="loading">
       <v-col v-for="n in skeletonCount" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
-          width="90%"
-          class="border my-4 mx-2"
+          class="border"
           type="image, article, chip@2"
         ></v-skeleton-loader>
       </v-col>
@@ -19,7 +18,7 @@
         md="4"
         lg="4"
       >
-        <v-card class="text-black my-4 mx-2 image-hover-effect" width="90%">
+        <v-card class="mx-auto image-hover-effect" width="90%">
           <v-img
             style="height: 200px"
             :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
@@ -27,21 +26,21 @@
             @click="exploreClicked(dietPlan)"
           ></v-img>
           <v-card-title class="text-center plan-name caption">
-            Plan Name:
+            Plan Name
           </v-card-title>
           <v-card-text class="text-center pb-0" style="font-weight: 500">
             {{ dietPlan.plan_name }}
           </v-card-text>
-          <v-card-text class="d-flex info pb-0">
+          <v-card-text class="d-flex info">
             <v-card-text style="font-weight: 450" class="p-0">
-              Diet Type: <br />{{ dietPlan.diet_type }}
+              <span class="label"> Diet Type: </span>{{ dietPlan.diet_type }}
             </v-card-text>
             <v-card-text style="font-weight: 450" class="p-0">
-              Purpose: <br />{{ dietPlan.purpose }}
+              <span class="label"> Purpose: </span>{{ dietPlan.purpose }}
             </v-card-text>
           </v-card-text>
 
-          <v-card-actions class="d-flex justify-center">
+          <v-card-actions>
             <v-btn color="orange" @click="exploreClicked(dietPlan)">
               Explore
             </v-btn>
@@ -118,14 +117,19 @@ export default {
 
 .info {
   font-size: 16px;
-  justify-content: space-between;
 }
 
-.v-btn {
-  width: 200px;
-}
 .image-hover-effect:hover {
-  transform: scale(1.05);
+  transform: scale(1.1);
   transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.image-hover-effect {
+  cursor: pointer;
+}
+
+.label {
+  font-weight: 500;
 }
 </style>

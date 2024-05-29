@@ -10,7 +10,7 @@
       </div>
     </div>
     <div class="d-flex flex-wrap justify-content-center">
-      <UserSearch @search="handleSearch" />
+      <UserSearch @search="handleSearch" @clearSearch="clearField" />
       <FoodFilter @filters-applied="applyFilters" />
     </div>
     <div class="justify-content-center">
@@ -56,6 +56,9 @@ export default {
       this.allLoaded = false;
       this.localFoodItem = [];
       this.fetchFoodItemWithFilters();
+    },
+    clearField() {
+      this.searchTerm = "";
     },
     applyFilters(filteredFilters) {
       this.filterTerm = filteredFilters;

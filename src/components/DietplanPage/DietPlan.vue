@@ -10,11 +10,11 @@
       </div>
     </div>
     <div class="d-flex flex-wrap justify-content-center">
-      <UserSearch @search="handleSearch" />
+      <UserSearch @search="handleSearch" @clearSearch="clearField" />
       <DietFilter @filters-applied="applyFilters" />
     </div>
 
-    <div class="d-flex flex-wrap justify-content-center">
+    <div class="justify-content-center">
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
         <DietPreview :dietPlan="dietPlan" @explore="exploreClicked" />
         <template v-slot:empty>
@@ -64,6 +64,9 @@ export default {
       this.allLoaded = false;
       this.localExercises = [];
       this.fetchDietPlanWithFilters();
+    },
+    clearField() {
+      this.searchTerm = "";
     },
     applyFilters(filteredFilters) {
       this.filterTerm = filteredFilters;
