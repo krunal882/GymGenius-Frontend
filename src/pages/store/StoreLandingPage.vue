@@ -57,7 +57,7 @@ import StoreCarousel from "../../components/store/storeComponents/StoreCarousel.
 import ProductCarousel from "../../components/store/ProductCarousel.vue";
 import ShopByCategory from "../../components/store/ShopByCategory.vue";
 import SpotLight from "../../components/store/SpotLight.vue";
-import storeFilterMixin from "@/components/store/storeFilterMixin";
+import storeFilterMixin from "@/mixins/storeFilterMixin";
 export default {
   mixins: [storeFilterMixin],
   components: {

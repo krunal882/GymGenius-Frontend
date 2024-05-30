@@ -22,7 +22,7 @@ import CategoryProduct from "../../../components/store/CategoryProduct.vue";
 import CategoryCarousel from "../../../components/store/CategoryCarousel.vue";
 import ProductFilter from "../../../components/store/ProductFilter.vue";
 import UserSearch from "@/components/common-components/UserSearch.vue";
-import storeFilterMixin from "./../../../components/store/storeFilterMixin.js";
+import storeFilterMixin from "../../../mixins/storeFilterMixin.js";
 export default {
   components: {
     CategoryCarousel,
