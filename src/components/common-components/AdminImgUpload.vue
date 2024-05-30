@@ -1,3 +1,4 @@
+<!-- component to upload image fot the admin -->
 <template>
   <div class="d-flex flex-wrap">
     <v-col cols="12" md="6" class="d-flex justify-center align-center">
@@ -46,6 +47,7 @@ export default {
 };
 </script>
 
+<!-- style for the image upload skeleton placeholder -->
 <style scoped>
 .image-placeholder {
   width: 200px;

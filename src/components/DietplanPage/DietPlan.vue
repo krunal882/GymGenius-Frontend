@@ -1,5 +1,7 @@
+<!-- this component is the parent component for the dietPlan page , it includes the search field , filter , preview card components -->
 <template>
   <div>
+    <!-- hero header image -->
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img
@@ -9,11 +11,13 @@
         />
       </div>
     </div>
+    <!-- search field and filter component -->
     <div class="d-flex flex-wrap justify-content-center">
       <UserSearch @search="handleSearch" @clearSearch="clearField" />
       <DietFilter @filters-applied="applyFilters" />
     </div>
 
+    <!-- preview card component with the infinity scroll applied (with pagination) -->
     <div class="justify-content-center">
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
         <DietPreview :dietPlan="dietPlan" @explore="exploreClicked" />
@@ -52,12 +56,14 @@ export default {
     UserSearch,
   },
   methods: {
+    //this method redirect to the dietPlan detail page
     async exploreClicked(diet) {
       this.$router.push({
         name: "dietDetail",
-        params: { id: diet._id },
+        params: { id: diet.item._id },
       });
     },
+    //this method is for the search functionality , handles search from the search-field component
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
       this.page = 1;
@@ -65,9 +71,11 @@ export default {
       this.localExercises = [];
       this.fetchDietPlanWithFilters();
     },
+    //this method is for clearing the stored search-field input
     clearField() {
       this.searchTerm = "";
     },
+    //this method handles the applied filters coming from the filter component
     applyFilters(filteredFilters) {
       this.filterTerm = filteredFilters;
       this.page = 1;
@@ -75,6 +83,7 @@ export default {
       this.localExercises = [];
       this.fetchDietPlanWithFilters();
     },
+    //fetchDietPlanWithFilters takes the filters and search text and call the action from the store
     async fetchDietPlanWithFilters() {
       this.loading = true;
       try {
@@ -90,19 +99,24 @@ export default {
           limit: this.limit,
           page: this.page,
         });
+        //checks page , if first page then  set data otherwise append data to existing
         if (this.page === 1) {
           this.localDiet = response;
         } else {
           this.localDiet = [...this.localDiet, ...response];
         }
+        //condition to check if all items are loaded or not
         this.allLoaded = response.length < this.limit;
         this.page += 1;
       } catch (error) {
         console.error("Error fetching DietPlans with filters:", error);
       } finally {
+        //after fetching item , made loading false
         this.loading = false;
       }
     },
+
+    //method is to send req and load more data
     async loadMoreProducts({ done }) {
       if (this.allLoaded || this.loading) {
         done("empty");
@@ -140,6 +154,7 @@ export default {
     },
   },
   computed: {
+    //to get already stored dietPlan
     dietPlan: {
       get() {
         return this.localDiet;
@@ -150,6 +165,7 @@ export default {
     },
   },
   watch: {
+    //to watch the change in the value of dietPlan and reflect changes
     "$store.state.dietPlanModule.dietPlan": {
       handler(newVal) {
         this.localDiet = newVal;
@@ -158,6 +174,7 @@ export default {
     },
   },
 
+  //to load dietPlan on page mount
   mounted() {
     this.fetchDietPlanWithFilters();
   },

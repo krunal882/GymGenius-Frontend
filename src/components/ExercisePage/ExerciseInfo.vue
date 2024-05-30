@@ -1,5 +1,7 @@
+<!-- this component is the parent component for the exercise page , it includes the search field , filter , preview card components -->
 <template>
   <div>
+    <!-- hero header image -->
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img
@@ -9,10 +11,12 @@
         />
       </div>
     </div>
+    <!-- search field and filter component -->
     <div class="d-flex flex-wrap justify-content-center">
       <UserSearch @search="handleSearch" @clearSearch="clearField" />
       <ExerciseFilter @filters-applied="applyFilters" />
     </div>
+    <!-- preview card component with the infinity scroll applied (with pagination) -->
     <div class="justify-content-center">
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
         <ExercisePreview :exercises="exercises" @explore="exploreClicked" />
@@ -44,12 +48,14 @@ export default {
     };
   },
   methods: {
+    //this method redirect to the exercise detail page
     async exploreClicked(exercise) {
       this.$router.push({
         name: "exerciseDetail",
-        params: { id: exercise._id },
+        params: { id: exercise.item._id },
       });
     },
+    //this method is for the search functionality , handles search from the search-field component
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
       this.page = 1;
@@ -57,9 +63,11 @@ export default {
       this.localExercises = [];
       this.fetchExercisesWithFilters();
     },
+    //this method is for clearing the stored search-field input
     clearField() {
       this.searchTerm = "";
     },
+    //this method handles the applied filters coming from the filter component
     applyFilters(filteredFilters) {
       this.filterTerm = filteredFilters;
       this.page = 1;
@@ -67,6 +75,7 @@ export default {
       this.localExercises = [];
       this.fetchExercisesWithFilters();
     },
+    //fetchExercisesWithFilters takes the filters and search text and call the action from the store
     async fetchExercisesWithFilters() {
       this.loading = true;
       try {
@@ -82,19 +91,23 @@ export default {
           limit: this.limit,
           page: this.page,
         });
+        //checks page , if first page then  set data otherwise append data to existing
         if (this.page === 1) {
           this.localExercises = response;
         } else {
           this.localExercises = [...this.localExercises, ...response];
         }
+        //condition to check if all items are loaded or not
         this.allLoaded = response.length < this.limit;
         this.page += 1;
       } catch (error) {
         console.error("Error fetching exercises with filters:", error);
       } finally {
+        //after fetching item , made loading false
         this.loading = false;
       }
     },
+    //method is to send req and load more data
     async loadMoreProducts({ done }) {
       if (this.allLoaded || this.loading) {
         done("empty");
@@ -132,6 +145,7 @@ export default {
     },
   },
   computed: {
+    //to get already stored exercises
     exercises: {
       get() {
         return this.localExercises;
@@ -141,6 +155,7 @@ export default {
       },
     },
   },
+  //to watch the change in the value of exercise and reflect changes
   watch: {
     "$store.state.exercisesModule.exercises": {
       handler(newVal) {
@@ -154,6 +169,7 @@ export default {
     ExercisePreview,
     UserSearch,
   },
+  //to load exercise on page mount
   mounted() {
     this.fetchExercisesWithFilters();
   },

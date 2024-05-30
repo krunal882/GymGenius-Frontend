@@ -1,8 +1,11 @@
+<!-- this component gives the preview of the exercise that contains some info about exercise in card form -->
+<!-- it also includes explore button to see full details and bookmark button for bookmarking -->
 <template>
   <v-container fluid>
+    <!-- skeleton loader for the card  -->
     <v-row v-if="loading">
       <v-col
-        v-for="n in this.exercises.length"
+        v-for="n in this.exercises?.length"
         :key="n"
         cols="12"
         sm="6"
@@ -15,6 +18,7 @@
         ></v-skeleton-loader>
       </v-col>
     </v-row>
+    <!-- exercise preview card -->
     <v-row v-else class="d-flex flex-wrap">
       <v-col
         v-for="exercise in exercises"
@@ -24,7 +28,8 @@
         md="4"
         lg="4"
       >
-        <v-card width="90%" class="mx-auto mt-5 image-hover-effect">
+        <v-card width="90%" class="mx-auto mt-2 mb-2 image-hover-effect">
+          <!-- exercise images -->
           <v-img
             class="align-end text-white"
             :src="getExerciseImagePath(exercise.name, exercise.cloudImg)"
@@ -33,6 +38,7 @@
           >
             <v-card-title class="caption">{{ exercise.name }}</v-card-title>
           </v-img>
+          <!-- exercise information -->
           <v-card-text>
             <div class="subtitle-row">
               <v-card-subtitle>Level: {{ exercise.level }}</v-card-subtitle>
@@ -48,7 +54,8 @@
               <span v-else>body only</span>
             </div>
           </v-card-text>
-          <v-card-actions>
+          <!-- buttons for explore and bookmark-undoBookmark -->
+          <v-card-actions class="justify-space-between">
             <v-btn color="orange" @click="exploreClicked(exercise)"
               >Explore</v-btn
             >
@@ -78,6 +85,7 @@ export default {
     };
   },
   methods: {
+    //to get image form the local or stored on cloud
     getExerciseImagePath(exerciseName, cloudImg) {
       if (cloudImg === undefined) {
         const formattedName = exerciseName
@@ -89,15 +97,18 @@ export default {
         return cloudImg;
       }
     },
+    //to emit an event to navigate to detail page
     exploreClicked(exercise) {
-      this.$emit("explore", exercise);
+      this.$emit("explore", { item: exercise, route: "exerciseDetail" });
     },
+    //it provides the timer for skeleton loader
     loadData() {
       setTimeout(() => {
         this.loading = false;
-      }, 1000);
+      }, 500);
     },
   },
+  //watcher for the exercise changes
   watch: {
     exercises: {
       handler(newValue, oldValue) {

@@ -1,6 +1,7 @@
+<!-- component is for search and adding new item functionality , provides search-field and  button-->
 <template>
   <v-row justify="center" dense>
-    <v-col class="mt-5 d-flex" cols="4">
+    <v-col class="mt-5 d-flex flex-wrap" cols="12" sm="4">
       <v-text-field
         v-model="selectedItem"
         class="mx-auto"
@@ -13,11 +14,14 @@
         @input="handleSearchInput"
       >
         <template v-slot:append>
-          <div class="button">
+          <div class="d-none d-sm-flex">
             <v-btn class="ml-5" @click="add" color="primary">Add New</v-btn>
           </div>
         </template>
       </v-text-field>
+      <div class="d-flex d-sm-none ml-5 mt-3">
+        <v-btn @click="add" color="primary">Add New</v-btn>
+      </div>
     </v-col>
   </v-row>
 </template>
@@ -31,14 +35,19 @@ export default {
     };
   },
   methods: {
+    // to handle the case when user search something or clear the search field
     handleSearchInput() {
       clearTimeout(this.searchTimeout);
       if (this.selectedItem) {
         this.searchTimeout = setTimeout(() => {
-          this.$emit("search", this.selectedItem);
+          const selectedItem = this.selectedItem;
+          this.$emit("search", selectedItem);
         }, 500);
+      } else {
+        this.$emit("clearSearch");
       }
     },
+    // to add new item
     add() {
       this.$emit("add");
     },

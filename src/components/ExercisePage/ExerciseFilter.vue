@@ -1,7 +1,10 @@
+<!-- this filter component provides the filter functionality for the exercise -->
+<!-- it provides filter for the equipment , force , muscle , level of exercise , category -->
 <template>
   <div class="d-flex justify-content-center align-items-center">
     <v-container class="ml-10" style="width: 152px; padding-bottom: 15px">
       <div class="d-flex align-items-center">
+        <!-- icon for the filter outline -->
         <v-chip color="blue">
           <v-icon
             class="menu-icon"
@@ -34,6 +37,7 @@
                 z-index: 100;
               "
             >
+              <!-- different options for the filter -->
               <v-card outlined>
                 <v-card-title>Equipment Needed</v-card-title>
                 <v-select
@@ -97,6 +101,7 @@
                 <div
                   class="container d-flex justify-center align-item-center pb-5"
                 >
+                  <!-- buttons to apply or clear filters -->
                   <v-btn
                     color="primary darken-2"
                     class="me-4 tonal"
@@ -174,9 +179,11 @@ export default {
     };
   },
   methods: {
+    //it manage the state to show and hide filter box
     toggleFilter() {
       this.showFilter = !this.showFilter;
     },
+    //this method is for emit event with applied filters data
     applyFilters() {
       const filteredFilters = {};
 
@@ -202,10 +209,12 @@ export default {
       if (Object.keys(filteredFilters).length > 0) {
         this.$emit("filters-applied", filteredFilters);
       } else {
+        //if filter not selected then tost notification will be showed
         useToast().error("No filters selected");
       }
       this.showFilter = !this.showFilter;
     },
+    //this method clears the selected filters
     handleReset() {
       this.selectedForce = [];
       this.selectedLevel = [];

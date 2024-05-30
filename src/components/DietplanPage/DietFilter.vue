@@ -1,7 +1,10 @@
+<!-- this filter component provides the filter functionality for the dietPlan -->
+<!-- it provides filter for the category , purpose of dietPlan -->
 <template>
   <div class="d-flex justify-content-center align-items-center">
     <v-container class="ml-10" style="width: 152px; padding-bottom: 15px">
       <div class="d-flex align-items-center">
+        <!-- icon for the filter outline -->
         <v-chip color="blue">
           <v-icon
             class="menu-icon"
@@ -37,7 +40,7 @@
               <v-card outlined>
                 <v-card-title>Filter DietPlan</v-card-title>
                 <v-divider></v-divider>
-
+                <!-- different options for the filter -->
                 <v-card-title>Diet Plan Type</v-card-title>
                 <v-select
                   v-model="selectedCategory"
@@ -55,10 +58,8 @@
                   multiple
                   persistent-hint
                 ></v-select>
-
                 <v-divider></v-divider>
-
-                <v-divider></v-divider>
+                <!-- buttons for the apply and clear filter fields -->
                 <div
                   class="container d-flex justify-center align-item-center pb-5"
                 >
@@ -97,9 +98,11 @@ export default {
     };
   },
   methods: {
+    //it manage the state to show and hide filter box
     toggleFilter() {
       this.showFilter = !this.showFilter;
     },
+    //this method is for emit event with applied filters data
     applyFilters() {
       const filteredFilters = {};
 
@@ -114,10 +117,13 @@ export default {
       if (Object.keys(filteredFilters).length > 0) {
         this.$emit("filters-applied", filteredFilters);
       } else {
+        //if filter not selected then tost notification will be showed
         useToast().error("No filters selected");
       }
       this.showFilter = !this.showFilter;
     },
+
+    //this method clears the selected filters
     handleReset() {
       this.selectedCategory = null;
       this.selectedItem = [];

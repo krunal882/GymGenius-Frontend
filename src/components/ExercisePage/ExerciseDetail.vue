@@ -1,8 +1,11 @@
+<!-- this component is for displaying the exercises to users -->
+<!--it also provides buttons for the bookmarking and for navigating to previous page -->
 <template>
   <v-container v-if="exercise">
     <v-card>
       <v-card :class="{ 'd-flex': isWideScreen }" width="auto">
         <div style="flex: 1; padding-right: 16px; position: relative">
+          <!-- carousal to display exercise images -->
           <v-card class="mx-auto" elevation="24" width="auto">
             <v-carousel
               :continuous="false"
@@ -30,7 +33,7 @@
             margin: 0;
           "
         />
-
+        <!-- exercises details -->
         <div style="flex: 1; padding: 16px; overflow: auto">
           <v-card-title class="pt-4 text-center"
             >Exercise Name: {{ exercise.name }}</v-card-title
@@ -95,7 +98,7 @@
               exercise.equipment.slice(1)
             }}</span></v-card-text
           >
-
+          <!-- action buttons for the bookmark/undoBookmark and navigation to previous page -->
           <v-card-actions style="justify-content: space-between">
             <v-btn color="orange" @click="back">Go Back</v-btn>
             <v-btn color="orange" @click="toggleBookmark(exercise, 'exercise')">
@@ -140,6 +143,7 @@ export default {
     };
   },
   methods: {
+    //this method fetches the dietPlan by id by calling action in the store
     async fetchExercise(id) {
       try {
         await this.$store.dispatch("fetchExercises", { id });
@@ -148,12 +152,15 @@ export default {
       }
       this.exercise = this.$store.state.exercisesModule.exerciseDetail[0];
     },
+    //it navigates to the previous page
     back() {
       this.$router.go(-1);
     },
+    //it handles the screen sizing
     handleResize() {
       this.isWideScreen = window.innerWidth > 790;
     },
+    //this method loades the image sof exercise form local or from the cloud
     async loadImages(exerciseName, cloudImg) {
       if (cloudImg === undefined) {
         const formatedName = exerciseName
@@ -178,10 +185,12 @@ export default {
     },
   },
   computed: {
+    //it returns the bookmarked exercises of the user
     bookmarked() {
       return this.$store.state.bookmarkModule.exercise;
     },
   },
+  //created lifecycle hook fetch the exercise using the id in route
   async created() {
     const { id } = this.$route.params;
     await this.fetchExercise(id);

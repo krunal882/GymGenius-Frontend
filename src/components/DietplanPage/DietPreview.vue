@@ -1,5 +1,8 @@
+<!-- this component gives the preview of the dietPlan that contains some info about dietPlan in card form -->
+<!-- it also includes explore button to see full details and bookmark button for bookmarking -->
 <template>
   <v-container fluid>
+    <!-- skeleton loader for the card  -->
     <v-row v-if="loading">
       <v-col v-for="n in skeletonCount" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
@@ -8,7 +11,7 @@
         ></v-skeleton-loader>
       </v-col>
     </v-row>
-
+    <!-- dietPlan preview card -->
     <v-row v-else class="d-flex flex-wrap">
       <v-col
         v-for="dietPlan in dietPlan"
@@ -19,6 +22,7 @@
         lg="4"
       >
         <v-card class="mx-auto image-hover-effect" width="90%">
+          <!-- dietPlan image -->
           <v-img
             style="height: 200px"
             :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
@@ -40,7 +44,8 @@
             </v-card-text>
           </v-card-text>
 
-          <v-card-actions>
+          <!-- buttons for explore and bookmark-undoBookmark -->
+          <v-card-actions class="justify-space-between">
             <v-btn color="orange" @click="exploreClicked(dietPlan)">
               Explore
             </v-btn>
@@ -70,21 +75,25 @@ export default {
     };
   },
   computed: {
+    //it returns the number of skeleton loader card
     skeletonCount() {
-      return this.loading ? this.dietPlan.length : 0;
+      return this.loading ? this.dietPlan?.length : 0;
     },
+    //it returns the bookmarked dietPlan of the user
     bookmarked() {
       return this.$store.state.bookmarkModule.diet;
     },
   },
   methods: {
+    //to get image form the local or stored on cloud
     getImgPath(src, cloudImg) {
       return cloudImg || `../../../assets/img/dietPlan/${src}`;
     },
+    //to emit an event to navigate to detail page
     exploreClicked(dietPlan) {
-      this.$emit("explore", dietPlan);
+      this.$emit("explore", { item: dietPlan, route: "dietDetail" });
     },
-
+    //it provides the timer for skeleton loader
     loadData() {
       setTimeout(() => {
         this.loading = false;
@@ -92,6 +101,7 @@ export default {
     },
   },
   watch: {
+    //watcher for the dietPlan changes
     dietPlan: {
       handler(newValue, oldValue) {
         if (newValue !== oldValue) {

@@ -1,3 +1,5 @@
+<!-- this component is for displaying the dietPlan to users -->
+<!--it also provides buttons for the bookmarking and for navigating to previous page -->
 <template>
   <v-container class="">
     <div v-if="dietPlan" class="diet-plan-container">
@@ -24,7 +26,7 @@
             ><span class="label">Total Days:</span>
             {{ dietPlan.total_days }}</v-card-text
           >
-          <v-card-actions>
+          <v-card-actions style="justify-content: space-between">
             <v-btn color="orange" @click="back">Go Back</v-btn>
             <v-btn color="orange" @click="toggleBookmark(dietPlan, 'diet')">
               {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
@@ -33,6 +35,7 @@
         </div>
       </div>
 
+      <!-- drop-down for selecting the day -->
       <v-card-title class="meal-selection-title"> Select Day </v-card-title>
       <v-select
         style="width: 300px"
@@ -41,6 +44,7 @@
         label="Select a day"
       ></v-select>
 
+      <!-- displays meals for the day  -->
       <v-card-text class="meal-details-card" v-if="filteredMeals.length > 0">
         <v-card-title class="meal-details-title" style="align-content: center">
           Meal Details for Day: {{ selectedDay }}
@@ -105,6 +109,7 @@ export default {
     };
   },
   computed: {
+    // it provides the total days of dietPlan
     days() {
       if (this.meals && this.meals.length > 0) {
         return Array.from(new Set(this.meals.map((meal) => meal.day)));
@@ -112,6 +117,7 @@ export default {
         return [];
       }
     },
+    //it filters the meal by the selected day
     filteredMeals() {
       if (this.selectedDay) {
         return this.meals.filter((meal) => meal.day === this.selectedDay);
@@ -119,11 +125,13 @@ export default {
         return [];
       }
     },
+    //it returns the bookmarked diet-plan of the user
     bookmarked() {
       return this.$store.state.bookmarkModule.diet;
     },
   },
   methods: {
+    //fetchDiet method fetch the dietPlan by id and stores in the local dietPlan
     async fetchDiet(id) {
       try {
         await this.$store.dispatch("fetchDietPlan", { id });
@@ -133,18 +141,22 @@ export default {
         console.log(error);
       }
     },
+    //it handles the screen sizing
     handleResize() {
       this.isWideScreen = window.innerWidth > 790;
     },
+    //it navigates to the previous page
     back() {
       this.$router.go(-1);
     },
   },
+
+  //created lifecycle hook fetch the dietPlan using the id in route
   async created() {
     const { id } = this.$route.params;
     await this.fetchDiet(id);
   },
-
+  //it handles the screen sizing
   mounted() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();

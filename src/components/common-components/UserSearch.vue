@@ -1,3 +1,4 @@
+<!-- this component is for searching functionality , provides the search field for users-->
 <template>
   <v-col class="mt-5 d-flex flex-wrap" cols="4">
     <v-text-field
@@ -22,6 +23,7 @@ export default {
       searchTimeout: null,
     };
   },
+  //this method handles the search input by user and clearing of input field
   methods: {
     handleSearchInput() {
       clearTimeout(this.searchTimeout);
