@@ -26,7 +26,9 @@
           >
           <v-card-actions>
             <v-btn color="orange" @click="back">Go Back</v-btn>
-            <v-btn color="orange" @click="bookmark(dietPlan)">Bookmark</v-btn>
+            <v-btn color="orange" @click="toggleBookmark(dietPlan, 'diet')">
+              {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
+            </v-btn>
           </v-card-actions>
         </div>
       </div>
@@ -50,13 +52,14 @@
             Meal Type: {{ meal.meal_type }}
           </v-card-title>
           <v-divider></v-divider>
+          <v-card-title>Food items: </v-card-title>
           <div
             v-for="(food, foodIndex) in meal.foods"
             :key="foodIndex"
             class="d-flex justify-content-center"
           >
             <v-card-title class="food-item-title" style="align-content: center">
-              Food item name: {{ food.name }}
+              {{ food.name }}
             </v-card-title>
             <v-card-subtitle style="align-content: center"
               ><span style="font-weight: 500"> Quantity:</span>
@@ -90,7 +93,9 @@
 </template>
 
 <script>
+import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
 export default {
+  mixins: [bookmarkMixin],
   data() {
     return {
       selectedDay: null,
@@ -114,6 +119,9 @@ export default {
         return [];
       }
     },
+    bookmarked() {
+      return this.$store.state.bookmarkModule.diet;
+    },
   },
   methods: {
     async fetchDiet(id) {
@@ -131,20 +139,12 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    bookmark(dietPlan) {
-      const userId = this.$store.state.userModule.userId;
-      const dietId = dietPlan._id;
-      this.$store.dispatch("bookmarkItem", {
-        userId,
-        itemId: dietId,
-        itemType: "diet",
-      });
-    },
   },
   async created() {
     const { id } = this.$route.params;
     await this.fetchDiet(id);
   },
+
   mounted() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();

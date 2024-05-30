@@ -44,7 +44,9 @@
             <v-btn color="orange" @click="exploreClicked(dietPlan)">
               Explore
             </v-btn>
-            <v-btn color="orange" @click="bookmark(dietPlan)"> Bookmark </v-btn>
+            <v-btn color="orange" @click="toggleBookmark(dietPlan, 'diet')">
+              {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -53,7 +55,9 @@
 </template>
 
 <script>
+import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
 export default {
+  mixins: [bookmarkMixin],
   props: {
     dietPlan: {
       type: Array,
@@ -69,6 +73,9 @@ export default {
     skeletonCount() {
       return this.loading ? this.dietPlan.length : 0;
     },
+    bookmarked() {
+      return this.$store.state.bookmarkModule.diet;
+    },
   },
   methods: {
     getImgPath(src, cloudImg) {
@@ -77,15 +84,7 @@ export default {
     exploreClicked(dietPlan) {
       this.$emit("explore", dietPlan);
     },
-    bookmark(dietPlan) {
-      const userId = this.$store.state.userModule.userId;
-      const dietId = dietPlan._id;
-      this.$store.dispatch("bookmarkItem", {
-        userId,
-        itemId: dietId,
-        itemType: "diet",
-      });
-    },
+
     loadData() {
       setTimeout(() => {
         this.loading = false;

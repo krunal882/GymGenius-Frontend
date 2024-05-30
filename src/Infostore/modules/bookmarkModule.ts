@@ -60,6 +60,24 @@ const mutations = {
         console.error("Invalid category:", payload.category);
     }
   },
+  bookmarkItem(state, payload) {
+    const category = payload.itemType;
+    const item = payload.item;
+    switch (category) {
+      case "exercise":
+        state.exercise.push(item);
+        break;
+      case "nutrition":
+        state.nutrition.push(item);
+        break;
+      case "yoga":
+        state.yoga.push(item);
+        break;
+      case "diet":
+        state.diet.push(item);
+        break;
+    }
+  },
   undoBookmark(state, payload) {
     const category = payload.itemType;
     const itemId = payload.itemId;
@@ -100,7 +118,7 @@ const actions = {
         if (exerciseIds && exerciseIds.length !== 0) {
           let exerciseUrl = "http://localhost:3000/exercises/filtered?";
           exerciseIds.forEach((id: string) => {
-            exerciseUrl += `exerciseId=${id}&`;
+            exerciseUrl += `_id=${id}&`;
           });
           if (exerciseUrl.endsWith("&")) {
             exerciseUrl = exerciseUrl.slice(0, -1);
@@ -131,7 +149,7 @@ const actions = {
         if (nutritionIds && nutritionIds.length !== 0) {
           let nutritionUrl = "http://localhost:3000/foodNutrition/filtered?";
           nutritionIds.forEach((id: string) => {
-            nutritionUrl += `nutritionId=${id}&`;
+            nutritionUrl += `_id=${id}&`;
           });
           if (nutritionUrl.endsWith("&")) {
             nutritionUrl = nutritionUrl.slice(0, -1);
@@ -162,11 +180,11 @@ const actions = {
       handleServerError(error);
     }
   },
-  async bookmarkItem({ commit }, { itemId, userId, itemType }) {
+  async bookmarkItem({ commit }, { item, userId, itemType }) {
     try {
       const url = "http://localhost:3000/bookmark/addBookmark";
       const config = createAxiosConfig();
-
+      const itemId = item._id;
       const response = await axios.post(
         url,
         { userId, itemId, itemType },
@@ -174,6 +192,7 @@ const actions = {
       );
 
       if (response.status === 201) {
+        commit("bookmarkItem", { itemType, item });
         useToast().success(
           `${
             itemType.charAt(0).toUpperCase() + itemType.slice(1)

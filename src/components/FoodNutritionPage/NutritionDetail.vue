@@ -14,7 +14,9 @@
 
         <v-card-actions style="justify-content: space-between">
           <v-btn color="orange" @click="back" text="Go Back"></v-btn>
-          <v-btn color="orange" @click="bookmark(foodItem)">Bookmark</v-btn>
+          <v-btn color="orange" @click="toggleBookmark(foodItem, 'nutrition')">
+            {{ isBookmarked(foodItem) ? "Undo Bookmark" : "Bookmark" }}
+          </v-btn>
         </v-card-actions>
       </div>
     </v-card>
@@ -229,7 +231,9 @@
 </template>
 
 <script>
+import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
 export default {
+  mixins: [bookmarkMixin],
   data() {
     return {
       foodItem: null,
@@ -247,15 +251,7 @@ export default {
     back() {
       this.$router.go(-1);
     },
-    bookmark(foodItem) {
-      const userId = this.$store.state.userModule.userId;
-      const foodId = foodItem._id;
-      this.$store.dispatch("bookmarkItem", {
-        userId,
-        itemId: foodId,
-        itemType: "nutrition",
-      });
-    },
+
     imgPath(foodItemName, cloudImg) {
       if (cloudImg === undefined) {
         const imgPath = `../../../assets/img/foodItem/${foodItemName}.jpg`;
@@ -263,6 +259,11 @@ export default {
       } else {
         return cloudImg;
       }
+    },
+  },
+  computed: {
+    bookmarked() {
+      return this.$store.state.bookmarkModule.nutrition;
     },
   },
   async created() {

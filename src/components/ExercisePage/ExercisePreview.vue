@@ -24,7 +24,7 @@
         md="4"
         lg="4"
       >
-        <v-card width="90%" class="mx-auto image-hover-effect">
+        <v-card width="90%" class="mx-auto mt-5 image-hover-effect">
           <v-img
             class="align-end text-white"
             :src="getExerciseImagePath(exercise.name, exercise.cloudImg)"
@@ -52,7 +52,9 @@
             <v-btn color="orange" @click="exploreClicked(exercise)"
               >Explore</v-btn
             >
-            <v-btn color="orange" @click="bookmark(exercise)">Bookmark</v-btn>
+            <v-btn color="orange" @click="toggleBookmark(exercise, 'exercise')">
+              {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}
+            </v-btn>
           </v-card-actions>
         </v-card>
       </v-col>
@@ -61,7 +63,9 @@
 </template>
 
 <script>
+import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
 export default {
+  mixins: [bookmarkMixin],
   props: {
     exercises: {
       type: Array,
@@ -88,15 +92,6 @@ export default {
     exploreClicked(exercise) {
       this.$emit("explore", exercise);
     },
-    bookmark(exercise) {
-      const userId = this.$store.state.userModule.userId;
-      const exerciseId = exercise._id;
-      this.$store.dispatch("bookmarkItem", {
-        userId,
-        itemId: exerciseId,
-        itemType: "exercise",
-      });
-    },
     loadData() {
       setTimeout(() => {
         this.loading = false;
@@ -116,6 +111,11 @@ export default {
   },
   created() {
     this.loadData();
+  },
+  computed: {
+    bookmarked() {
+      return this.$store.state.bookmarkModule.exercise;
+    },
   },
 };
 </script>

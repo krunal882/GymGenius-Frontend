@@ -38,7 +38,9 @@
 </template>
 
 <script>
+import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
 export default {
+  mixins: [bookmarkMixin],
   props: {
     foodItem: {
       type: Array,
@@ -53,6 +55,9 @@ export default {
   computed: {
     skeletonCount() {
       return this.loading ? this.foodItem.length : 0;
+    },
+    bookmarked() {
+      return this.$store.state.bookmarkModule.nutrition;
     },
   },
   methods: {

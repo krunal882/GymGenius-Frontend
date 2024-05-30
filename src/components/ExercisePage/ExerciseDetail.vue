@@ -68,7 +68,7 @@
               }}</v-card-text
             >
           </div>
-          <v-card-text v-if="exercise.primaryMuscles">
+          <v-card-text v-if="exercise.primaryMuscles?.length > 0">
             <div class="d-flex">
               <span class="details"> Primary Muscle: </span>
               <ul v-for="muscle in exercise.primaryMuscles" :key="muscle">
@@ -78,8 +78,8 @@
               </ul>
             </div></v-card-text
           >
-          <v-card-text v-if="exercise.secondaryMuscles">
-            <div class="d-flex">
+          <v-card-text v-if="exercise.secondaryMuscles?.length > 0">
+            <div class="d-flex flex-wrap">
               <span class="details"> Secondary Muscle target:</span>
               <ul v-for="muscle in exercise.secondaryMuscles" :key="muscle">
                 {{
@@ -98,7 +98,9 @@
 
           <v-card-actions style="justify-content: space-between">
             <v-btn color="orange" @click="back">Go Back</v-btn>
-            <v-btn color="orange" @click="bookmark(exercise)">Bookmark</v-btn>
+            <v-btn color="orange" @click="toggleBookmark(exercise, 'exercise')">
+              {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}
+            </v-btn>
           </v-card-actions>
         </div>
       </v-card>
@@ -127,7 +129,9 @@
   </v-container>
 </template>
 <script>
+import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
 export default {
+  mixins: [bookmarkMixin],
   data() {
     return {
       images: [""],
@@ -146,15 +150,6 @@ export default {
     },
     back() {
       this.$router.go(-1);
-    },
-    bookmark(exercise) {
-      const userId = this.$store.state.userModule.userId;
-      const exerciseId = exercise._id;
-      this.$store.dispatch("bookmarkItem", {
-        userId,
-        itemId: exerciseId,
-        itemType: "exercise",
-      });
     },
     handleResize() {
       this.isWideScreen = window.innerWidth > 790;
@@ -180,6 +175,11 @@ export default {
       } else {
         this.images = [cloudImg];
       }
+    },
+  },
+  computed: {
+    bookmarked() {
+      return this.$store.state.bookmarkModule.exercise;
     },
   },
   async created() {
