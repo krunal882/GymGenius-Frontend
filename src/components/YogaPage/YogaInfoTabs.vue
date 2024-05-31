@@ -1,3 +1,4 @@
+<!-- this parent component is for displaying the information tabs -->
 <template>
   <div style="padding: 15px; margin-top: 25px">
     <v-card style="height: fit-content">

@@ -1,3 +1,4 @@
+<!-- this component is for displaying the products purchased by user  -->
 <template>
   <v-container>
     <!-- Cart Items -->
@@ -5,12 +6,14 @@
       <v-col cols="12" v-for="(item, index) in this.product" :key="index">
         <v-card class="cart-item">
           <v-row>
+            <!-- product image -->
             <v-col cols="4">
               <v-img
                 :src="imgPath(item.src, item.category)"
                 aspect-ratio="1"
               ></v-img>
             </v-col>
+            <!-- product information -->
             <v-col cols="8">
               <div class="item-details">
                 <h3>{{ item.title }}</h3>
@@ -35,9 +38,9 @@
                     <v-chip color="blue">{{ item.off }}</v-chip></span
                   >
                 </v-card-text>
-
+                <!-- product return option -->
                 <v-btn
-                  @click="removeItem(item)"
+                  @click="returnItem(item)"
                   color="success"
                   small
                   style="margin-top: 10px"
@@ -66,10 +69,15 @@ export default {
     };
   },
   methods: {
+    // to get the image stored in the local
     imgPath(src, category) {
       const imgPath = `../../assets/img/products/${category}/${src}.jpg`;
 
       return imgPath;
+    },
+    // to make return request in the vuex store
+    returnItem(item) {
+      this.$store.dispatch("return", item);
     },
   },
 };

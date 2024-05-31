@@ -1,3 +1,4 @@
+<!-- this component is for admin to show yoga and provide options to edit , explore and delete -->
 <template>
   <v-container>
     <!-- <v-row v-if="loading">
@@ -9,9 +10,11 @@
         ></v-skeleton-loader>
       </v-col>
     </v-row> -->
+    <!-- yoga preview card -->
     <v-col v-for="yoga in yogas" :key="yoga.id" cols="4">
       <v-card class="image-hover-effect" width="900" style="display: flex">
         <div style="flex: 1; padding-right: 16px">
+          <!-- yoga image -->
           <v-img height="300" :src="yoga.url_png">
             <v-card-title class="text-center">{{
               yoga.sanskrit_name
@@ -26,7 +29,7 @@
             margin: 0;
           "
         />
-
+        <!-- yoga pose information -->
         <!-- Content container -->
         <div style="flex: 1; padding: 16px">
           <v-card-title class="pt-4"
@@ -43,8 +46,10 @@
           <v-card-text
             >Translation of Name: {{ yoga.translation_name }}</v-card-text
           >
+          <!-- buttons for explore , remove and edit -->
 
           <v-card-actions style="justify-content: space-between">
+            <v-btn color="orange" @click="exploreClicked(yoga)">Explore</v-btn>
             <v-btn color="primary" @click="editClick(yoga)">
               <v-icon left>mdi-pencil</v-icon> Edit</v-btn
             >
@@ -77,9 +82,18 @@ export default {
     },
   },
   methods: {
+    //to emit an event to navigate to detail page
+    async exploreClicked(yoga) {
+      this.$router.push({
+        name: "yogaDetail",
+        params: { id: yoga._id },
+      });
+    },
+    //to emit an event to navigate to edit page
     editClick(yoga) {
       this.$emit("edit-yoga", yoga);
     },
+    //to emit an event to delete the yoga
     deleteClick(yoga) {
       this.$emit("remove-yoga", yoga);
     },
@@ -89,6 +103,7 @@ export default {
       }, 2000);
     },
   },
+  //watcher for the yoga changes
   watch: {
     yoga: {
       handler(newValue, oldValue) {

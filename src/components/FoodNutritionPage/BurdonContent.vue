@@ -1,3 +1,4 @@
+<!-- this component displays the content for the burdon tab  -->
 <template>
   <div class="d-flex align-center flex-column">
     <v-card width="100%">

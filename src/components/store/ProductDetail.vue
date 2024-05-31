@@ -1,13 +1,16 @@
+<!-- this component is for displaying the specific single product information  -->
 <template>
   <v-container v-if="product" class="my-5">
     <v-row>
       <v-col cols="12" md="4">
+        <!-- image of product -->
         <v-img
           class="align-end text-white"
           :src="productImg(product.src, product.category)"
           cover
         />
       </v-col>
+      <!-- product information -->
       <v-col cols="12" md="8">
         <div class="product-details">
           <v-card-text>{{ product.brand }}</v-card-text>
@@ -29,6 +32,7 @@
             Off :
             <v-chip color="secondary"> $ {{ product.off }} </v-chip>
           </v-card-text>
+          <!-- product description -->
           <v-card-text>
             <div style="font-weight: bold">Product Description :</div>
             <br />
@@ -37,7 +41,7 @@
             along with 1 Doctor Consultation & Personal Video Training Session,
             Warranty: 6 Months Warranty on Manufacturing defects.
           </v-card-text>
-
+          <!-- action buttons for buy and cart options -->
           <v-row justify="center">
             <v-col cols="12" md="4" sm="6">
               <v-btn
@@ -58,12 +62,13 @@
                 color="red"
                 block
                 @click="addToCartClicked(product)"
+                :disabled="isAddedToCart"
               >
-                {{ addedToCart ? "Added to Cart" : "Add to Cart" }}
+                {{ isAddedToCart ? "Added to Cart" : "Add to Cart" }}
               </v-btn>
             </v-col>
           </v-row>
-
+          <!-- pincode field -->
           <div class="d-flex mt-5">
             <v-text-field
               ref="pincodeField"
@@ -89,9 +94,9 @@
           </p>
           <v-card-text style="font-weight: bold">
             - Free delivery within 5 -7 days <br />
-            - No returns available<br />
+            - Returns available only on damages<br />
             - 10 days exchange available <br />
-            - Free door-step installation by cultsport team after delivery
+            - Free door-step installation by GymGenius team after delivery
           </v-card-text>
         </div>
       </v-col>
@@ -110,14 +115,28 @@ export default {
       productDetail: [],
     };
   },
+  //to fetch product detail when page loads
   async created() {
     const { id } = this.$route.params;
     await this.fetchProduct(id);
+    if (this.cartItems.length) {
+      this.checkIfAddedToCart();
+    }
+  },
+  //watcher for the cartItems change
+  watch: {
+    cartItems(newCartItems, oldCartItems) {
+      if (newCartItems !== oldCartItems) {
+        this.checkIfAddedToCart();
+      }
+    },
   },
   methods: {
+    //to get image stored in local
     productImg(src, category) {
       return `../../assets/img/products/${category}/${src}.jpg`;
     },
+    //to handle add to cart event
     addToCartClicked(product) {
       this.$store.dispatch("addToCart", {
         productId: product._id,
@@ -127,6 +146,7 @@ export default {
       });
       this.addedToCart = true;
     },
+    //to handle buyNow event
     buyProduct() {
       this.$store.dispatch("purchase", {
         price: this.product.price,
@@ -137,6 +157,7 @@ export default {
         email: this.$store.state.userModule.email,
       });
     },
+    //to make an request in backend for product information , call action in store
     async fetchProduct(productId) {
       try {
         const url = "http://localhost:3000/store";
@@ -151,6 +172,7 @@ export default {
         console.error("Error fetching product:", error);
       }
     },
+    //check for valid pincode
     checkPincode() {
       this.isPincodeValid = this.indianPincode[0](this.pincode);
 
@@ -158,10 +180,24 @@ export default {
         this.isPincodeValid = null;
       }, 2000);
     },
+    //to check if product is already added to cart or not
+    checkIfAddedToCart() {
+      const productInCart = this.cartItems?.some(
+        (item) => item._id === this.product._id
+      );
+      this.addedToCart = productInCart;
+    },
   },
+  //to fetch information stored in vuex store modules
   computed: {
     product() {
       return this.$store.state.productsModule.detail[0];
+    },
+    cartItems() {
+      return this.$store.state.cartModule.cartItems;
+    },
+    isAddedToCart() {
+      return this.addedToCart;
     },
   },
 };

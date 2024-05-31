@@ -1,6 +1,9 @@
+<!-- this component is for displaying the foodItem nutrition to users -->
+<!--it also provides buttons for the bookmarking and for navigating to previous page -->
 <template>
   <v-container v-if="foodItem">
     <v-card v-if="foodItem" class="mx-auto d-flex custom-card" width="100%">
+      <!-- foodItem image -->
       <v-img
         class="align-end text-white"
         height="300"
@@ -8,10 +11,12 @@
         :src="imgPath(foodItem.name, foodItem.cloudImg)"
         cover
       ></v-img>
+      <!-- foodItem information -->
       <div class="custom-content">
         <v-card-title class="custom-title">{{ foodItem.name }}</v-card-title>
         <v-card-text>Category: {{ foodItem.category }}</v-card-text>
 
+        <!-- action buttons for the bookmark and previous page navigation -->
         <v-card-actions style="justify-content: space-between">
           <v-btn color="orange" @click="back" text="Go Back"></v-btn>
           <v-btn color="orange" @click="toggleBookmark(foodItem, 'nutrition')">
@@ -20,6 +25,7 @@
         </v-card-actions>
       </div>
     </v-card>
+    <!-- foodItem nutrition -->
     <v-timeline align="start">
       <v-timeline-item fill-dot icon="mdi-star" dot-color="red-lighten-2">
         <v-card v-if="foodItem.nutritions">
@@ -37,6 +43,7 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
+      <!-- foodItem health benefits -->
       <v-timeline-item fill-dot icon="mdi-star" dot-color="purple-lighten-2">
         <v-card v-if="foodItem.health_benefits">
           <v-card-title :class="['text-h6', 'bg-purple-lighten-2']">
@@ -56,6 +63,7 @@
       </v-timeline-item>
       <v-timeline-item fill-dot icon="mdi-star" dot-color="green-lighten-2">
         <v-card v-if="foodItem.fun_facts_and_trivia">
+          <!-- foodItem funFacts -->
           <v-card-title :class="['text-h6', 'bg-green-lighten-2']">
             Fun Facts
           </v-card-title>
@@ -71,6 +79,8 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
+
+      <!-- foodItem recipes and serving ideas -->
       <v-timeline-item fill-dot icon="mdi-star" dot-color="indigo-lighten-2">
         <v-card v-if="foodItem.recipes_and_serving_ideas[0]">
           <v-card-title :class="['text-h6', 'bg-indigo-lighten-2']">
@@ -153,6 +163,7 @@
               </li>
               <li style="font-weight: 500">ingredients :</li>
               <ul>
+                <!-- recipe ingredients -->
                 <li
                   v-for="(ingredient, index) in foodItem
                     .recipes_and_serving_ideas[1].ingredients"
@@ -161,6 +172,7 @@
                   {{ ingredient }}
                 </li>
               </ul>
+              <!-- recipe Instructions -->
               <li style="font-weight: 500">Instructions :</li>
               <ul>
                 <li
@@ -212,6 +224,7 @@
           </v-card-text>
         </v-card>
       </v-timeline-item>
+      <!-- uses of foodItem -->
       <v-timeline-item fill-dot icon="mdi-star" dot-color="red-lighten-2">
         <v-card v-if="foodItem.culinary_uses">
           <v-card-title :class="['text-h6', 'bg-red-lighten-2']">
@@ -240,6 +253,7 @@ export default {
     };
   },
   methods: {
+    //fetchFoodItem method fetch the foodItem by id and stores in the local foodItem
     async fetchFoodItem(id) {
       try {
         await this.$store.dispatch("fetchFoodItem", { id });
@@ -248,10 +262,11 @@ export default {
       }
       this.foodItem = this.$store.state.foodItemModule.foodDetail[0];
     },
+    //it navigates to the previous page
     back() {
       this.$router.go(-1);
     },
-
+    //it returns the image from local or the cloud storage
     imgPath(foodItemName, cloudImg) {
       if (cloudImg === undefined) {
         const imgPath = `../../../assets/img/foodItem/${foodItemName}.jpg`;
@@ -262,10 +277,12 @@ export default {
     },
   },
   computed: {
+    //it returns the bookmarked foodItem of the user
     bookmarked() {
       return this.$store.state.bookmarkModule.nutrition;
     },
   },
+  //created lifecycle hook fetch the foodItem using the id in route
   async created() {
     const { id } = this.$route.params;
     await this.fetchFoodItem(id);

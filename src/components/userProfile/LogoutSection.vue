@@ -1,3 +1,4 @@
+<!-- this component is for logout operation -->
 <template>
   <v-container>
     <v-row justify="space-around">
@@ -50,6 +51,7 @@ export default {
     this.dialogIsActive = true;
   },
   methods: {
+    //when logout clicked then stored token will be set empty and redirect to home page
     logout() {
       Cookies.set("token", "");
       this.$router.replace("/GymGenius");

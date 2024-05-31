@@ -1,6 +1,8 @@
+<!-- this component provides user to shop by category option with posters -->
 <template>
   <div class="card-container mt-10">
     <v-row cols="100%" md="20">
+      <!-- poster to display on page -->
       <v-card
         class="mx-auto image-hover-effect"
         v-for="(image, i) in images"
@@ -48,6 +50,8 @@ export default {
 
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 
 .v-card {

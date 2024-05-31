@@ -1,3 +1,4 @@
+<!-- this component is the wrapper of the footer -->
 <template>
   <div class="layout">
     <div class="content">

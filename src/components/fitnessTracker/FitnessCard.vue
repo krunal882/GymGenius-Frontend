@@ -1,3 +1,4 @@
+<!-- this component is for displaying the cards of different calculators for redirect to different calculators page -->
 <template>
   <div class="d-flex flex-wrap justify-center">
     <v-card
@@ -55,20 +56,25 @@ export default {
     };
   },
   methods: {
+    // method for handling the different calculator card click
     handleCardClick(item) {
-      if (item.title === "BMI CALCULATOR") {
-        // Redirect to the BMI calculator page
-        this.$router.push({ name: "bmiCalculator" });
-      } else if (item.title === "CALORIE CALCULATOR") {
-        this.$router.push({ name: "calorieCalculator" });
-      } else if (item.title === "BMR CALCULATOR") {
-        this.$router.push({ name: "bmrCalculator" });
-      } else if (item.title === "WATER INTAKE CALCULATOR") {
-        this.$router.push({ name: "waterCalculator" });
-      } else if (item.title === "BODY FAT CALCULATOR") {
-        this.$router.push({ name: "fatCalculator" });
-      } else if (item.title === "TDEE CALCULATOR") {
-        this.$router.push({ name: "tdeeCalculator" });
+      const routeMapping = {
+        "BMI CALCULATOR": "bmiCalculator",
+        "CALORIE CALCULATOR": "calorieCalculator",
+        "BMR CALCULATOR": "bmrCalculator",
+        "WATER INTAKE CALCULATOR": "waterCalculator",
+        "BODY FAT CALCULATOR": "fatCalculator",
+        "TDEE CALCULATOR": "tdeeCalculator",
+      };
+
+      // Get the route name based on the item title
+      const routeName = routeMapping[item.title];
+
+      // Check if the route name exists in the mapping
+      if (routeName) {
+        this.$router.push({ name: routeName });
+      } else {
+        console.error(`No route found for item title: ${item.title}`);
       }
     },
   },

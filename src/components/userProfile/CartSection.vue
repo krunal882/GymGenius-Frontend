@@ -1,8 +1,10 @@
+<!-- parent component for the cart section -->
 <template>
   <div>
     <h1 class="headline mb-5 text-center">Your Shopping Cart</h1>
 
     <div>
+      <!-- cart component -->
       <CartProduct :product="cartItems" />
     </div>
   </div>
@@ -10,19 +12,16 @@
 
 <script>
 import CartProduct from "./CartProduct.vue";
-import { mapActions } from "vuex";
 
 export default {
   components: {
     CartProduct,
   },
   computed: {
+    //to return cart items
     cartItems() {
       return this.$store.state.cartModule.cartItems;
     },
-  },
-  methods: {
-    ...mapActions(["fetchCart", "proceedToCheckout"]),
   },
 };
 </script>

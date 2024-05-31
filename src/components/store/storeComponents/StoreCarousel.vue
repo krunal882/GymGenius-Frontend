@@ -1,4 +1,4 @@
-/* eslint-disable */
+<!-- it is carousal component for the store landing page -->
 <template>
   <div>
     <div id="carouselExampleIndicators" class="carousel slide mb-5">
@@ -26,7 +26,7 @@
       </div>
       <div class="carousel-inner">
         <div class="carousel-item active" v-for="(image, i) in images" :key="i">
-          <img :src="image" class="d-block w-100" alt="..." />
+          <img :src="image" class="d-block w-100" alt="store carousal images" />
         </div>
       </div>
       <button
@@ -53,10 +53,11 @@
 export default {
   data() {
     return {
-      images: [""],
+      images: [],
     };
   },
   components: {},
+  // loading images on page mount
   async created() {
     const [image1, image2, image3] = await Promise.all([
       import("../../../assets/img/store-crousel-img2.png"),

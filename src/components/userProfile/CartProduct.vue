@@ -1,3 +1,4 @@
+<!-- this component is for displaying the users product in the cart section -->
 <template>
   <v-container>
     <!-- Cart Items -->
@@ -6,11 +7,13 @@
         <v-card class="cart-item">
           <v-row>
             <v-col cols="4">
+              <!-- product image -->
               <v-img
                 :src="imgPath(item.src, item.category)"
                 aspect-ratio="1"
               ></v-img>
             </v-col>
+            <!-- product information -->
             <v-col cols="8">
               <div class="item-details">
                 <h3>{{ item.title }}</h3>
@@ -35,6 +38,7 @@
                     <v-chip color="blue">{{ item.off }}</v-chip></span
                   >
                 </v-card-text>
+                <!-- button to increase or decrease the product quantity -->
                 <div class="input-group plus-minus">
                   <button
                     class="btn btn-outline-secondary"
@@ -61,6 +65,7 @@
                     +
                   </button>
                 </div>
+                <!-- button to remove product from the cart -->
                 <v-btn
                   @click="removeItem(item)"
                   color="error"
@@ -74,12 +79,13 @@
         </v-card>
       </v-col>
     </v-row>
-
+    <!-- display message if cart is empty -->
     <v-alert v-else type="info" class="mb-5">
       Your cart is empty. Feel free to explore our products and add them to your
       cart.
     </v-alert>
 
+    <!-- checkout section of the cart page -->
     <v-card v-if="product.length > 0" class="cart-summary">
       <v-card-text>
         <h3 class="mb-3">Cart Summary</h3>
@@ -94,8 +100,6 @@
 </template>
 
 <script>
-import { mapActions } from "vuex";
-
 export default {
   props: {
     product: { type: Array, required: true },
@@ -107,6 +111,7 @@ export default {
     };
   },
   computed: {
+    //to calculate total items
     totalItems() {
       return this.qty.reduce((total, qty) => total + qty, 0);
     },
@@ -118,8 +123,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["fetchCart", "removeCart", "proceedToCheckout"]),
-
+    //to increase and decrease quantity
     async addOrRemove(index, number) {
       if (number == 1 && this.qty[index] < 10) {
         this.qty[index]++;
@@ -127,17 +131,19 @@ export default {
         this.qty[index]--;
       }
     },
+    //to remove product from the cart
     async removeItem(item) {
       const id = item._id;
       const userId = this.$store.state.userModule.userId;
-      this.removeCart({ productId: id, userId });
+      this.$store.dispatch("removeCart", { productId: id, userId });
     },
-
+    //to get image from the local
     imgPath(src, category) {
       const imgPath = `../../assets/img/products/${category}/${src}.jpg`;
 
       return imgPath;
     },
+    // to make payment
     proceedToCheckout() {
       const id = this.product.map((item) => item._id);
 
@@ -151,6 +157,7 @@ export default {
       });
     },
   },
+  // watcher for the product changes
   watch: {
     product: {
       handler() {

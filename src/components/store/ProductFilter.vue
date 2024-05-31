@@ -1,7 +1,10 @@
+<!-- this filter component provides the filter functionality for the products -->
+<!-- it provides filter for the high-to-low , low-to-high and price of product -->
 <template>
   <div class="d-flex justify-content-center align-items-center">
     <v-container class="ml-1" style="width: 332px; padding-bottom: 15px">
       <div class="d-flex align-items-center">
+        <!-- icon for the filter outline -->
         <v-chip color="blue">
           <v-icon
             class="menu-icon"
@@ -9,7 +12,13 @@
             style="color: black; font-size: 24px"
             >mdi-menu</v-icon
           >
-          <span class="ml-1" style="color: black"> Filters</span>
+          <span
+            class="ml-1 menu-icon"
+            style="color: black"
+            @click="toggleFilter"
+          >
+            Filters</span
+          >
         </v-chip>
       </div>
 
@@ -24,6 +33,7 @@
               z-index: 100;
             "
           >
+            <!-- different options for the filter -->
             <v-card outlined>
               <v-card-title>Price Filters</v-card-title>
               <v-divider></v-divider>
@@ -80,6 +90,7 @@
               </v-row>
 
               <v-divider></v-divider>
+              <!-- buttons to apply or clear filters -->
               <div
                 class="container d-flex justify-center align-item-center pb-5"
               >
@@ -117,6 +128,7 @@ export default {
     };
   },
   computed: {
+    // to set values of the slider
     minValue() {
       return this.range[0].toFixed(0);
     },
@@ -125,9 +137,11 @@ export default {
     },
   },
   methods: {
+    // to set visibility of the filter option
     toggleFilter() {
       this.showFilter = !this.showFilter;
     },
+    // to apply selected filters and emit an event
     applyFilters() {
       let filteredFilters = {};
 
@@ -150,6 +164,7 @@ export default {
       }
       this.showFilter = !this.showFilter;
     },
+    //to handle the reset of filters
     handleReset() {
       this.range = [0, 20000];
 

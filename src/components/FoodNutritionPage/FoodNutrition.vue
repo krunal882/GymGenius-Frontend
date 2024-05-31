@@ -1,5 +1,7 @@
+<!-- this component is the parent component for the food-nutrition page , it includes the search field , filter , preview card components -->
 <template>
   <div>
+    <!-- hero header image -->
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img
@@ -9,10 +11,12 @@
         />
       </div>
     </div>
+    <!-- search field and filter component -->
     <div class="d-flex flex-wrap justify-content-center">
       <UserSearch @search="handleSearch" @clearSearch="clearField" />
       <FoodFilter @filters-applied="applyFilters" />
     </div>
+    <!-- preview card component with the infinity scroll applied (with pagination) -->
     <div class="justify-content-center">
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
         <NutritionPreview :foodItem="foodItem" @explore="exploreClicked" />
@@ -44,12 +48,14 @@ export default {
     };
   },
   methods: {
+    //this method redirect to the food-item detail page
     async exploreClicked(foodItem) {
       this.$router.push({
         name: "foodDetail",
-        params: { id: foodItem._id },
+        params: { id: foodItem.item._id },
       });
     },
+    //this method is for the search functionality , handles search from the search-field component
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
       this.page = 1;
@@ -57,9 +63,11 @@ export default {
       this.localFoodItem = [];
       this.fetchFoodItemWithFilters();
     },
+    //this method is for clearing the stored search-field input
     clearField() {
       this.searchTerm = "";
     },
+    //this method handles the applied filters coming from the filter component
     applyFilters(filteredFilters) {
       this.filterTerm = filteredFilters;
       this.page = 1;
@@ -67,6 +75,7 @@ export default {
       this.localFoodItem = [];
       this.fetchFoodItemWithFilters();
     },
+    //fetchFoodItemWithFilters takes the filters and search text and call the action from the store
     async fetchFoodItemWithFilters() {
       this.loading = true;
       try {
@@ -82,19 +91,25 @@ export default {
           limit: this.limit,
           page: this.page,
         });
+        //checks page , if first page then  set data otherwise append data to existing
         if (this.page === 1) {
           this.localFoodItem = response;
         } else {
           this.localFoodItem = [...this.localFoodItem, ...response];
         }
+        //condition to check if all items are loaded or not
+
         this.allLoaded = response.length < this.limit;
         this.page += 1;
       } catch (error) {
         console.error("Error fetching food-item with filters:", error);
       } finally {
+        //after fetching item , made loading false
+
         this.loading = false;
       }
     },
+    //method is to send req and load more data
     async loadMoreProducts({ done }) {
       if (this.allLoaded || this.loading) {
         done("empty");
@@ -134,6 +149,7 @@ export default {
     },
   },
   computed: {
+    //to get already stored food-item
     foodItem: {
       get() {
         return this.localFoodItem;
@@ -143,6 +159,7 @@ export default {
       },
     },
   },
+  //to watch the change in the value of food-item and reflect changes
   watch: {
     "$store.state.foodItemModule.foodItem": {
       handler(newVal) {
@@ -157,6 +174,7 @@ export default {
     NutritionPreview,
     UserSearch,
   },
+  //to load food-item on page mount
   mounted() {
     this.fetchFoodItemWithFilters();
   },

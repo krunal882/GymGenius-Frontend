@@ -1,3 +1,4 @@
+<!-- this component is parent component for displaying users purchases -->
 <template>
   <h1 class="headline mb-5 text-center">Your purchase history</h1>
   <div>
@@ -11,6 +12,7 @@ export default {
   components: {
     UserPurchase,
   },
+  // to fetch users product in cart
   created() {
     const id = this.$store.state.userModule.userId;
     this.$store.dispatch("fetchCart", { userId: id, status: "done" });

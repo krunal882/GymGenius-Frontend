@@ -1,9 +1,7 @@
+<!-- this component displays services that included in the websites and navigation option to that page using card -->
 <template>
   <v-hover class="cardHover">
-    <div
-      class="container marketing"
-      style="background-image: url(../../assets/img/hero-bg.png)"
-    >
+    <div class="container marketing">
       <div class="text-black absolute top-40 left-30 text-center">
         <h1
           class="text-5xl lg:text-5xl md:text-2xl sm:text-xl"
@@ -19,7 +17,8 @@
           v-for="(card, index) in cards"
           :key="index"
         >
-          <v-card style="height: 330px">
+          <!-- cards to display different services -->
+          <v-card style="height: 330px" class="mt-5">
             <v-img
               class="image mx-auto"
               :src="card.image"
@@ -57,6 +56,7 @@
 export default {
   data() {
     return {
+      // card content
       cards: [
         {
           image: "../assets/img/service-icon/weight.png",

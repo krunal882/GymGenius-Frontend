@@ -1,6 +1,8 @@
+<!-- this component is for calculating the body-mass-index of the human body , it contains input fields and formula -->
 <template>
   <div class="d-flex flex-wrap justify-center">
     <div>
+      <!-- input fields with round slider -->
       <Knob
         v-model="weight"
         :size="200"
@@ -28,6 +30,7 @@
       />
       <label class="bold-label">Height: {{ height }} cm</label>
     </div>
+    <!-- button to make calculation -->
     <div class="text-center mt-5" style="margin-left: 5%">
       <v-btn :loading="loading" @click="calculateBMI">
         Calculate Your BMI
@@ -35,6 +38,7 @@
           <v-progress-linear indeterminate></v-progress-linear>
         </template>
       </v-btn>
+      <!-- result of calculation -->
       <div v-if="bmiResult !== null" class="bmi-result">
         Your BMI is: {{ bmiResult.toFixed(2) }}
         <div style="width: 210px">
@@ -50,6 +54,7 @@
 </template>
 
 <script>
+// imported knob for the rounded slider of input fields
 import Knob from "primevue/knob";
 
 export default {
@@ -66,6 +71,7 @@ export default {
     };
   },
   methods: {
+    // formula to calculate BMI
     calculateBMI() {
       this.loading = true;
       setTimeout(() => {

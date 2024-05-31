@@ -124,6 +124,7 @@ export default {
     this.loadData();
   },
   computed: {
+    //to check if exercise is bookmarked or not
     bookmarked() {
       return this.$store.state.bookmarkModule.exercise;
     },

@@ -1,6 +1,8 @@
+<!-- this component is for calculating the water level need of the human body , it contains input fields and formula -->
 <template>
   <div class="d-flex flex-wrap justify-center">
     <div class="mb-5">
+      <!-- input fields with round slider -->
       <Knob
         v-model="weight"
         :size="200"
@@ -47,6 +49,7 @@
         </template>
       </v-btn>
     </div>
+    <!-- result of calculation -->
     <div v-if="waterIntakeResult !== null" class="water-intake-result">
       Your Estimated Daily Water Intake :
       {{ waterIntakeResult.toFixed(2) }} ml
@@ -55,6 +58,7 @@
 </template>
 
 <script>
+// imported knob for the rounded slider of input fields
 import Knob from "primevue/knob";
 
 export default {
@@ -73,6 +77,7 @@ export default {
     };
   },
   methods: {
+    // formula to calculate Water level
     calculateWaterIntake() {
       this.waterIntakeResult = null;
       this.loading = true;

@@ -1,3 +1,4 @@
+<!-- this component is to display goals of the yoga -->
 <template>
   <div class="d-flex align-center flex-column">
     <v-card width="100%">

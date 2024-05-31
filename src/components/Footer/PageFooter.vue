@@ -1,3 +1,4 @@
+<!-- this component is the footer , it contains different clickable links of the project pages and contact information -->
 <template>
   <div class="my-2">
     <footer
@@ -24,6 +25,7 @@
               :key="index"
               :class="section.class"
             >
+              <!-- clickable links  -->
               <h6 class="text-uppercase fw-bold pt-12">{{ section.title }}</h6>
               <hr
                 class="mb-4 mt-0 d-inline-block mx-auto"
@@ -60,6 +62,7 @@
 import { library } from "@fortawesome/fontawesome-svg-core";
 library.add(faHome, faEnvelope, faPhone, faPrint);
 
+// icons
 import {
   faHome,
   faEnvelope,
@@ -72,7 +75,7 @@ export default {
       sections: [
         {
           title: "Products",
-          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4",
+          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4 pr-0",
           icon: false,
           links: [
             { to: "equipments", text: "Gym Equipments" },
@@ -83,7 +86,7 @@ export default {
         },
         {
           title: "Services",
-          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4",
+          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4 pr-0",
           icon: false,
           links: [
             { to: "dietPlan", text: "Diet Plans" },
@@ -94,10 +97,10 @@ export default {
         },
         {
           title: "Contact",
-          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4",
+          class: "col-md-3 col-lg-3 col-xl-2 mx-auto mb-4 pr-0",
           icon: true,
           links: [
-            { text: "New York, NY 10012, US", icon: faHome },
+            { text: "New York, NY 10012", icon: faHome },
             { text: "gymgenius@gmail.com", icon: faEnvelope },
             { text: "+91 9265635978", icon: faPhone },
             { text: "+91 9265635978", icon: faPrint },

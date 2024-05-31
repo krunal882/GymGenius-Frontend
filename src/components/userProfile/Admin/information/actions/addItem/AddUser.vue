@@ -1,8 +1,10 @@
+<!-- this component is for admin to add/create new user information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog v-model="localDialog" max-width="500px">
     <v-card>
       <v-card-title>Add User</v-card-title>
       <v-card-text>
+        <!-- name field -->
         <v-text-field
           v-model="user.name"
           :rules="[(v) => !!v || 'Name is required']"
@@ -10,6 +12,7 @@
           variant="outlined"
           required
         ></v-text-field>
+        <!-- email field -->
         <v-text-field
           v-model="user.email"
           :rules="[
@@ -21,6 +24,7 @@
           required
         ></v-text-field>
         <div class="d-flex flex-wrap">
+          <!-- number field -->
           <v-text-field
             v-model="user.number"
             :rules="[
@@ -33,6 +37,7 @@
             maxlength="10"
             class="mr-4"
           ></v-text-field>
+          <!-- age field -->
           <v-text-field
             label="Age"
             variant="outlined"
@@ -46,6 +51,7 @@
         </div>
 
         <div class="d-flex flex-wrap">
+          <!-- role field -->
           <v-select
             label="Role"
             v-model="user.role"
@@ -53,6 +59,7 @@
             required
             class="mr-4"
           ></v-select>
+          <!-- state field -->
           <v-select
             label="State"
             v-model="user.state"
@@ -60,6 +67,7 @@
             required
           ></v-select>
         </div>
+        <!-- password field -->
         <v-text-field
           v-model="user.password"
           label="Password"
@@ -79,6 +87,7 @@
               'Password must contain at least one uppercase letter',
           ]"
         />
+        <!-- confirm password field -->
         <v-text-field
           v-model="user.confirmPassword"
           label="Confirm Password"
@@ -95,6 +104,7 @@
         />
       </v-card-text>
       <v-card-actions>
+        <!-- button for adding user -->
         <v-btn
           color="primary"
           :disabled="validationErrors || !passwordsMatch"
@@ -115,6 +125,7 @@ export default {
     },
   },
   data() {
+    //to handle state of dialog and password visibility
     return {
       localDialog: this.addDialog,
       user: {},
@@ -122,6 +133,7 @@ export default {
       confirmPasswordVisible: false,
     };
   },
+  // watcher for dialog
   watch: {
     addDialog(val) {
       this.localDialog = val;
@@ -131,6 +143,7 @@ export default {
     },
   },
   computed: {
+    //to check validation of input fields
     validationErrors() {
       return (
         !this.user.name ||
@@ -139,9 +152,11 @@ export default {
         !this.user.age
       );
     },
+    //to check the password and confirmPassword
     passwordsMatch() {
       return this.user.password === this.user.confirmPassword;
     },
+    //rules for the password
     passwordRules() {
       return [
         (v) => !!v || "Password is required",
@@ -159,11 +174,13 @@ export default {
     },
   },
   methods: {
+    //method that call action from vuex store
     addUser() {
       const user = this.user;
       this.$store.dispatch("userAdd", { user });
       this.localDialog = false;
     },
+    //password visibility
     toggleSignUpPasswordVisibility() {
       this.signUpPasswordVisible = !this.signUpPasswordVisible;
     },

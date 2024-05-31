@@ -1,3 +1,4 @@
+<!-- this component is for admin to edit diet plan information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -14,6 +15,8 @@
               md="6"
               class="d-flex flex-wrap justify-center align-center"
             >
+              <!-- component for uploading the image and showing existing image -->
+
               <v-img
                 v-if="imagePath"
                 :src="imagePath(dietPlan.src, dietPlan.cloudImg)"
@@ -34,6 +37,7 @@
             </v-col>
           </div>
           <div class="d-flex flex-wrap">
+            <!-- name field -->
             <v-text-field
               :rules="Rules"
               v-model="dietPlan.plan_name"
@@ -42,6 +46,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- diet type field -->
             <v-text-field
               :rules="Rules"
               v-model="dietPlan.diet_type"
@@ -52,6 +57,7 @@
             ></v-text-field>
           </div>
           <div class="d-flex flex-wrap">
+            <!-- purpose field -->
             <v-text-field
               :rules="Rules"
               v-model="dietPlan.purpose"
@@ -60,6 +66,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- total days field -->
             <v-text-field
               :rules="Rules"
               v-model="dietPlan.total_days"
@@ -72,12 +79,14 @@
             ></v-text-field>
           </div>
           <h4>Meals</h4>
+          <!-- field to enter meal information -->
           <div
             class="custom-border p-4 mb-4"
             v-for="(item, index) in dietPlan.meals"
             :key="index"
           >
             <div class="d-flex flex-wrap">
+              <!-- to select day -->
               <v-text-field
                 :rules="Rules"
                 v-model="item.day"
@@ -86,6 +95,7 @@
                 required
                 class="mr-4 mb-4"
               ></v-text-field>
+              <!-- to select meal-type -->
               <v-text-field
                 :rules="Rules"
                 v-model="item.meal_type"
@@ -97,6 +107,7 @@
             </div>
             <h4>Food Item</h4>
             <div v-for="(food, index) in item.foods" :key="index">
+              <!-- to add food item -->
               <div class="d-flex flex-wrap">
                 <v-text-field
                   :rules="Rules"
@@ -106,6 +117,7 @@
                   required
                   class="mr-4 mb-4"
                 ></v-text-field>
+                <!-- quantity -->
                 <v-text-field
                   :rules="Rules"
                   v-model="food.quantity"
@@ -114,6 +126,7 @@
                   required
                   class="mr-4 mb-4"
                 ></v-text-field>
+                <!-- calories -->
                 <v-text-field
                   v-model="food.calories"
                   label="Calories"
@@ -123,6 +136,7 @@
                   required
                   class="mb-4 mr-4"
                 ></v-text-field>
+                <!-- carbohydrates -->
                 <v-text-field
                   v-model="food.carbohydrates"
                   label="carbohydrates (g)"
@@ -134,6 +148,7 @@
                 ></v-text-field>
               </div>
               <div class="d-flex flex-wrap">
+                <!-- protein -->
                 <v-text-field
                   v-model="food.protein"
                   label="protein"
@@ -143,6 +158,7 @@
                   required
                   class="mb-4 mr-4"
                 ></v-text-field>
+                <!-- fat -->
                 <v-text-field
                   v-model="food.fat"
                   label="fat"
@@ -152,6 +168,7 @@
                   required
                   class="mb-4 mr-4"
                 ></v-text-field>
+                <!-- fiber -->
                 <v-text-field
                   v-model="food.fiber"
                   label="fiber"
@@ -166,6 +183,7 @@
           </div>
         </v-form>
       </v-card-text>
+      <!-- button to close the dialog and edit dietPlan -->
       <v-card-actions>
         <v-btn color="blue darken-1" @click="closeDialog">Cancel</v-btn>
         <v-btn color="blue darken-1" @click="save(dietPlan)">Save</v-btn>
@@ -180,6 +198,7 @@ export default {
     dietPlanData: Object,
     dialogOpen: Boolean,
   },
+  // data includes rules for input fields,image and days
   data() {
     return {
       dialog: false,
@@ -213,6 +232,7 @@ export default {
       ],
     };
   },
+  // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
@@ -223,6 +243,7 @@ export default {
   },
 
   methods: {
+    //to handle selected image
     onFileChange(event) {
       const file = event.target.files[0];
 
@@ -234,6 +255,7 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+    //to fetch existing image or stored in cloud
     imagePath(dietName, cloudImg) {
       if (cloudImg === undefined) {
         return `../../../../../assets/img/dietPlan/${dietName}`;
@@ -241,9 +263,11 @@ export default {
         return cloudImg;
       }
     },
+    //to close the dialog
     closeDialog() {
       this.$emit("close-dialog");
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
@@ -252,10 +276,7 @@ export default {
     initializeFormFields() {
       this.dietPlan = { ...this.dietPlanData };
     },
-    cancel() {
-      this.dialog = true;
-      this.$refs.form.reset();
-    },
+    //to upload image in cloud storage and call action from vuex store
     async save(dietPlan) {
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;

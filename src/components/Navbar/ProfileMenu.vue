@@ -1,10 +1,15 @@
+<!-- this component is for displaying profile menu button on the navigation bar -->
 <template>
   <v-row>
     <v-col cols="12" offset-sm="3" sm="6">
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-avatar>
-            <v-img alt="John" v-bind="props" :src="userAvatarUrl"></v-img>
+            <v-img
+              alt="https://cdn.vuetifyjs.com/images/john.jpg"
+              v-bind="props"
+              :src="userAvatarUrl"
+            ></v-img>
           </v-avatar>
         </template>
 
@@ -27,8 +32,11 @@
 <script>
 export default {
   data() {
+    // content to display inside of profile menu
     return {
-      userAvatarUrl: this.$store.state.userModule.userAvatarUrl,
+      userAvatarUrl:
+        this.$store.state.userModule.userAvatarUrl ||
+        "https://cdn.vuetifyjs.com/images/john.jpg",
       items: [
         { title: "Your Profile", route: "/profile" },
         { title: "Cart", route: "/profile/cart" },
@@ -37,15 +45,18 @@ export default {
     };
   },
   methods: {
+    // get the route of the item
     getRoute(title) {
       const item = this.items.find((item) => item.title === title);
       return item ? item.route : "/";
     },
   },
 
+  // watcher on the profile url
   watch: {
     "$store.state.userModule.userAvatarUrl"(newUrl) {
-      this.userAvatarUrl = newUrl
+      this.userAvatarUrl =
+        newUrl || "https://cdn.vuetifyjs.com/images/john.jpg";
     },
   },
 };

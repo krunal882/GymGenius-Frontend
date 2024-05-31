@@ -1,6 +1,8 @@
+<!-- this is child component for the password change functionality  -->
 <template>
   <v-dialog v-model="dialog" max-width="500px">
     <v-card>
+      <!-- change password dialog with two input fields -->
       <v-card-title>Change Password</v-card-title>
       <v-card-text>
         <v-text-field
@@ -20,6 +22,7 @@
           required
         ></v-text-field>
       </v-card-text>
+      <!-- save button to save new password -->
       <v-card-actions>
         <v-btn
           color="primary"
@@ -27,6 +30,7 @@
           @click="changePassword"
           >Save</v-btn
         >
+        <!-- cancel button to cancel changes  -->
         <v-btn @click="dialog = false">Cancel</v-btn>
       </v-card-actions>
     </v-card>
@@ -35,6 +39,7 @@
 
 <script>
 export default {
+  // it contains the rules for the password fields and holds data
   data() {
     return {
       dialog: false,
@@ -55,6 +60,7 @@ export default {
     };
   },
   computed: {
+    // to check input validation and disable button
     isSaveDisabled() {
       return (
         this.oldPassword === "" ||
@@ -67,6 +73,7 @@ export default {
     },
   },
   methods: {
+    //to save new password
     changePassword() {
       if (this.isSaveDisabled) return;
       const userId = this.$store.state.userModule.userId;

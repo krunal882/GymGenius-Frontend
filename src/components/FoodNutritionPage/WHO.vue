@@ -1,3 +1,4 @@
+<!-- this component is for displaying the WHO response about food nutrition -->
 <template>
   <div class="d-flex align-center flex-column">
     <v-card width="100%">
@@ -6,6 +7,7 @@
           >WHO response</v-card-title
         >
       </v-card-item>
+      <!-- content -->
       <div class="custom-wrapper">
         <v-card-text class="card-text">
           According to the 2016–2025 nutrition strategy, WHO uses its convening

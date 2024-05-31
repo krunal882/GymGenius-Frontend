@@ -1,8 +1,10 @@
+<!-- this component is for displaying the navigation bar for the store related pages -->
 <template>
   <nav
     class="navbar d-flex justify-content-center py-0 shadow"
     style="height: 50px; position: sticky"
   >
+    <!-- navbar options -->
     <div class="scrollable-wrapper">
       <ul class="navbar-nav">
         <li><router-link :to="{ name: 'men' }">Men</router-link></li>
@@ -19,6 +21,7 @@
           <router-link :to="{ name: 'supplements' }">Supplements</router-link>
         </li>
         <div class="cart-icon text-none mt-2 ml-2">
+          <!-- cart option button -->
           <v-badge color="error" :content="cartItemCount">
             <router-link :to="{ name: 'cart' }">
               <v-btn icon size="small">

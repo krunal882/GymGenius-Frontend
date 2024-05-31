@@ -1,3 +1,4 @@
+<!-- this component is for admin to see exercise , yoga , foodItem and dietPlan -->
 <template>
   <h3 class="text-center">Information Section</h3>
   <div>
@@ -11,6 +12,7 @@
     </v-card>
 
     <v-card>
+      <!-- different components for different tabs -->
       <v-tabs-window v-model="tab">
         <v-tabs-window-item>
           <template v-if="tab === 1">

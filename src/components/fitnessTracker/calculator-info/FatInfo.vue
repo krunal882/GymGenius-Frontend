@@ -1,3 +1,4 @@
+<!-- this component contains the information of thr fat calculator with formula used in calculator -->
 <template>
   <div class="mt-5">
     <h2>UNDERSTANDING BODY FAT:</h2>

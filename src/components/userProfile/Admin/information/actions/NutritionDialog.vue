@@ -1,3 +1,4 @@
+<!-- this component is for admin to edit food-item information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -14,6 +15,7 @@
               md="6"
               class="d-flex flex-wrap justify-center align-center"
             >
+              <!-- component for uploading the image and showing existing image -->
               <v-img
                 v-if="imgPath"
                 :src="imgPath(foodItem.name, foodItem.cloudImg)"
@@ -34,6 +36,7 @@
             </v-col>
           </div>
           <div class="d-flex flex-wrap">
+            <!-- name field -->
             <v-text-field
               :rules="Rules"
               v-model="foodItem.name"
@@ -42,6 +45,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- category field -->
             <v-text-field
               :rules="Rules"
               v-model="foodItem.category"
@@ -53,6 +57,7 @@
           </div>
           <h4>Nutritions</h4>
           <div class="d-flex flex-wrap">
+            <!-- calories field -->
             <v-text-field
               v-model="foodItem.nutritions.calories"
               label="Calories"
@@ -62,6 +67,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- protein field -->
             <v-text-field
               v-model="foodItem.nutritions.protein"
               label="Protein (g)"
@@ -71,6 +77,7 @@
               min="0"
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- carbohydrates field -->
             <v-text-field
               v-model="foodItem.nutritions.carbohydrates"
               label="Carbohydrates (g)"
@@ -80,6 +87,7 @@
               min="0"
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- fat field -->
             <v-text-field
               v-model="foodItem.nutritions.fat"
               label="Fat (g)"
@@ -89,6 +97,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- fiber field -->
             <v-text-field
               v-model="foodItem.nutritions.fiber"
               label="Fiber (g)"
@@ -98,6 +107,7 @@
               required
               class="mb-4 mr-4"
             ></v-text-field>
+            <!-- magnesium field -->
             <v-text-field
               v-model="foodItem.nutritions.magnesium"
               label="magnesium (mg)"
@@ -107,6 +117,7 @@
               required
               class="mb-4 mr-4"
             ></v-text-field>
+            <!-- phosphorus field -->
             <v-text-field
               v-model="foodItem.nutritions.phosphorus"
               label="phosphorus (mg)"
@@ -116,6 +127,7 @@
               required
               class="mb-4 mr-4"
             ></v-text-field>
+            <!-- vitamin_B6 field -->
             <v-text-field
               v-model="foodItem.nutritions.vitamin_B6"
               label="vitamin_B6 (mg)"
@@ -130,6 +142,7 @@
           <h4>Health benefits</h4>
 
           <div class="d-flex flex-wrap">
+            <!-- health benefits field -->
             <v-textarea
               :rules="Rules"
               v-model="foodItem.health_benefits"
@@ -141,6 +154,7 @@
           <h4>culinary uses</h4>
 
           <div class="d-flex flex-wrap">
+            <!-- culinary uses field -->
             <v-textarea
               :rules="Rules"
               v-model="foodItem.culinary_uses"
@@ -151,6 +165,7 @@
           </div>
           <h4>varieties</h4>
           <div class="d-flex flex-wrap">
+            <!-- varieties field -->
             <v-textarea
               v-model="foodItem.varieties"
               label=""
@@ -160,6 +175,7 @@
           </div>
           <h4>fun facts & trivia</h4>
           <div class="d-flex flex-wrap">
+            <!-- fun facts and trivia field -->
             <v-textarea
               :rules="Rules"
               v-model="foodItem.fun_facts_and_trivia"
@@ -169,10 +185,12 @@
             ></v-textarea>
           </div>
           <h4>recipes and serving ideas</h4>
+          <!-- recipes and serving ideas field -->
           <div
             v-for="(item, index) in foodItem.recipes_and_serving_ideas"
             :key="index"
           >
+            <!-- recipe name field -->
             <v-text-field
               :rules="Rules"
               v-model="item.name"
@@ -182,6 +200,7 @@
               class="mr-4 mb-4"
             ></v-text-field>
             <div class="d-flex flex-wrap">
+              <!-- ingredients field -->
               <v-textarea
                 :rules="Rules"
                 v-model="item.ingredients"
@@ -191,6 +210,7 @@
               ></v-textarea>
             </div>
             <div class="d-flex flex-wrap">
+              <!-- instructions field -->
               <v-textarea
                 :rules="Rules"
                 v-model="item.instructions"
@@ -202,6 +222,7 @@
           </div>
         </v-form>
       </v-card-text>
+      <!-- buttons for explore , remove and bookmark-undoBookmark -->
       <v-card-actions>
         <v-btn color="blue darken-1" @click="closeDialog">Cancel</v-btn>
         <v-btn color="blue darken-1" @click="save(foodItem)">Save</v-btn>
@@ -216,6 +237,7 @@ export default {
     foodItemData: Object,
     dialogOpen: Boolean,
   },
+  // data includes rules for input fields,image and foodItem
   data() {
     return {
       dialog: false,
@@ -248,7 +270,7 @@ export default {
         (v) => (v.trim && !!v.trim()) || "Field cannot contain only spaces",
       ],
     };
-  },
+  }, // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
@@ -259,6 +281,7 @@ export default {
   },
 
   methods: {
+    //to handle selected image
     onFileChange(event) {
       const file = event.target.files[0];
 
@@ -270,6 +293,7 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+    //to fetch existing image or stored in cloud
     imgPath(foodItemName, cloudImg) {
       if (cloudImg === undefined) {
         const imgPath = `../../../../../assets/img/foodItem/${foodItemName}.jpg`;
@@ -278,9 +302,11 @@ export default {
         return cloudImg;
       }
     },
+    //to close the dialog
     closeDialog() {
       this.$emit("close-dialog");
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
@@ -293,6 +319,7 @@ export default {
       this.dialog = true;
       this.$refs.form.reset();
     },
+    //to upload image in cloud storage and call action from vuex store
     async save(foodItem) {
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;

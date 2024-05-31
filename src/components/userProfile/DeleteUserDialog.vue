@@ -63,7 +63,6 @@ export default {
       this.dialogIsActive = false;
     },
   },
-
 };
 </script>
 

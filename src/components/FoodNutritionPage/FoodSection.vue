@@ -1,6 +1,8 @@
+<!-- this component displays the cards for the navigation to food-section pages -->
 <template>
   <div>
     <div id="carouselExampleIndicators" class="carousel slide">
+      <!-- image of the poster -->
       <div class="carousel-inner">
         <div class="carousel-item active">
           <img
@@ -17,8 +19,9 @@
         <router-link :to="{ name: 'foodNutrition' }">
           <img height="300px" width="100%" :src="nutrition" cover />
         </router-link>
+        <!-- card information section -->
         <v-card-title> Food Item Nutrition </v-card-title>
-
+        <!-- food item nutrition section -->
         <v-card-text>
           Click on the image to learn more about the nutritional value of the
           food item , Discover essential details such as calories,
@@ -31,6 +34,7 @@
           <v-img height="300px" width="100%" :src="diet" cover></v-img>
         </router-link>
 
+        <!-- dietPlan section -->
         <v-card-title> Diet Plan for your health </v-card-title>
 
         <v-card-text>

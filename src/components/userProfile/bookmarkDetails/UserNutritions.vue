@@ -1,3 +1,4 @@
+<!-- this component is for displaying the bookmarked food-item of the user -->
 <template>
   <v-container>
     <v-row class="d-flex flex-wrap" v-if="bookmarkedNutritions.length !== 0">
@@ -10,6 +11,7 @@
         lg="4"
       >
         <v-card class="text-black my-4 mx-2 image-hover-effect" width="90%">
+          <!-- foodItem image -->
           <v-img
             class="align-end text-white"
             height="250"
@@ -17,8 +19,10 @@
             cover
             @click="exploreClicked(foodItem)"
           >
+            <!-- exercise information -->
             <v-card-title class="caption">{{ foodItem.name }}</v-card-title>
           </v-img>
+          <!-- buttons for explore and bookmark/undoBookmark -->
           <v-card-actions class="d-flex flex-wrap">
             <v-btn color="orange" @click="exploreClicked(foodItem)"
               >Explore</v-btn
@@ -30,6 +34,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <!-- message to display if there is no items -->
     <div v-else>
       <v-alert :value="true" color="info" icon="mdi-information">
         You do not have any bookmarked nutrition item. <br />
@@ -42,18 +47,22 @@
 <script>
 export default {
   computed: {
+    // to fetch bookmarked item from store
     bookmarkedNutritions() {
       return this.$store.state.bookmarkModule.nutrition;
     },
   },
   methods: {
+    //for navigate to detail page
     exploreClicked(foodItem) {
       this.$emit("explore", { item: foodItem, route: "foodDetail" });
     },
+    //to fetch food-item image
     imgPath(foodItemName) {
       const imgPath = `../../assets/img/foodItem/${foodItemName}.jpg`;
       return imgPath;
     },
+    //to undo bookmark
     undoBookmark(foodItem) {
       const userId = this.$store.state.userModule.userId;
 

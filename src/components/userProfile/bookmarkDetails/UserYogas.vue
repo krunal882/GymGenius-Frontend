@@ -1,3 +1,4 @@
+<!-- this component is for displaying the bookmarked yoga poses of the user -->
 <template>
   <v-container>
     <v-row v-if="bookmarkedYogas.length != 0">
@@ -10,6 +11,7 @@
         lg="4"
       >
         <v-card class="image-hover-effect" width="100%">
+          <!-- yoga image -->
           <v-img
             height="200"
             :src="yoga.url_png"
@@ -18,6 +20,7 @@
           >
           </v-img>
           <v-divider></v-divider>
+          <!-- yoga pose information -->
           <v-card-text>
             <v-card-title class="text-center">{{
               yoga.sanskrit_name
@@ -27,6 +30,7 @@
             <div class="mb-2">Sanskrit Name: {{ yoga.sanskrit_name }}</div>
             <div>Translation: {{ yoga.translation_name }}</div>
           </v-card-text>
+          <!-- buttons for explore and bookmark/undoBookmark -->
           <v-card-actions class="justify-space-between">
             <v-btn color="orange" @click="exploreClicked(yoga)">Explore</v-btn>
             <v-btn color="orange" @click="undoBookmark(yoga)"
@@ -36,6 +40,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <!-- message to display if there is no items -->
     <div v-else>
       <v-alert :value="true" color="info" icon="mdi-information">
         You do not have any bookmarked yogas. <br />
@@ -48,14 +53,17 @@
 <script>
 export default {
   computed: {
+    // to fetch bookmarked item from store
     bookmarkedYogas() {
       return this.$store.state.bookmarkModule.yoga;
     },
   },
   methods: {
+    //for navigate to detail page
     exploreClicked(yoga) {
       this.$emit("explore", { item: yoga, route: "yogaDetail" });
     },
+    //to undo bookmark
     undoBookmark(yoga) {
       const userId = this.$store.state.userModule.userId;
       const yogaId = yoga._id;

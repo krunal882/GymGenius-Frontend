@@ -1,3 +1,4 @@
+<!-- this component is for displaying the trainer information and social media contacts -->
 <template>
   <div>
     <h2 class="font-weight-bold mb-2 text-center">Our Expert Trainers</h2>
@@ -12,11 +13,13 @@
         <!-- Card-->
         <div class="card shadow-sm border-1 rounded">
           <div class="card-body p-0">
+            <!-- trainer images -->
             <img
               :src="trainer.image"
               alt=""
               class="w-100 card-img-top image-hover-effect"
             />
+            <!-- trainer information -->
             <div class="p-4">
               <h5 class="mb-0">{{ trainer.name }}</h5>
               <p class="small text-muted">{{ trainer.position }}</p>
@@ -64,6 +67,7 @@ export default {
   components: {},
   data() {
     return {
+      // card content
       icons: {
         faFacebookF: ["fab", "facebook-f"],
         faTwitter: ["fab", "twitter"],

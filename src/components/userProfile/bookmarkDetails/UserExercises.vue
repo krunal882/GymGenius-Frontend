@@ -1,3 +1,4 @@
+<!-- this component is for displaying the bookmarked exercises of the user -->
 <template>
   <v-container fluid>
     <v-row v-if="bookmarkedExercises.length != 0">
@@ -9,24 +10,22 @@
         md="4"
         lg="4"
       >
-        <v-card
-          width="90%"
-          height="auto"
-          class="text-black my-4 mx-2 image-hover-effect"
-        >
-          <div>
-            <v-img
-              :src="getExerciseImagePath(item.name)"
-              style="height: 300px"
-              @click="exploreClicked(item)"
-              ><div class="caption">
-                {{ item.name }}
-              </div></v-img
-            >
-          </div>
-          <div class="content">
+        <v-card width="90%" class="mx-auto mt-5 image-hover-effect">
+          <!-- exercise image -->
+          <v-img
+            class="align-end text-white"
+            :src="getExerciseImagePath(item.name, item.cloudImg)"
+            style="height: 300px"
+            @click="exploreClicked(item)"
+            ><v-card-title class="caption">
+              {{ item.name }}
+            </v-card-title></v-img
+          >
+          <!-- exercise information -->
+          <v-card-text>
             <div class="subtitle-row">
               <v-card-subtitle>Level: {{ item.level }} </v-card-subtitle>
+              <v-card-subtitle>Force: {{ exercise.force }}</v-card-subtitle>
             </div>
             <v-card-text>
               <div class="d-flex">
@@ -40,6 +39,7 @@
 
               <div>Equipment needed: {{ item.equipment }}</div>
             </v-card-text>
+            <!-- buttons for explore and bookmark/undoBookmark -->
             <v-card-actions style="justify-content: space-between">
               <v-btn color="orange" @click="exploreClicked(item)"
                 >Explore</v-btn
@@ -48,10 +48,11 @@
                 >Undo Bookmark</v-btn
               >
             </v-card-actions>
-          </div>
+          </v-card-text>
         </v-card>
       </v-col>
     </v-row>
+    <!-- message to display if there is no items -->
     <div v-else>
       <v-alert :value="true" color="info" icon="mdi-information">
         You do not have any bookmarked exercises. <br />
@@ -65,15 +66,18 @@
 <script>
 export default {
   computed: {
+    // to fetch bookmarked item from store
     bookmarkedExercises() {
       return this.$store.state.bookmarkModule.exercise;
     },
   },
 
   methods: {
+    //for navigate to detail page
     exploreClicked(exercise) {
       this.$emit("explore", { item: exercise, route: "exerciseDetail" });
     },
+    //to fetch exercise image
     getExerciseImagePath(exerciseName) {
       const formatedName = exerciseName.replace(/ /g, "_").replace(/\//g, "_");
 
@@ -81,7 +85,8 @@ export default {
 
       return imgPath;
     },
-    undoBookmark(exercise) {
+        //to undo bookmark
+undoBookmark(exercise) {
       const userId = this.$store.state.userModule.userId;
 
       const exerciseId = exercise._id;
@@ -98,6 +103,8 @@ export default {
 <style scoped>
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 .caption {
   position: absolute;

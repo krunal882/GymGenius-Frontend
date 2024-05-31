@@ -1,3 +1,4 @@
+<!-- this component is for about section on the landing page , it contains information about the mission , vision and values -->
 <template>
   <div class="container">
     <div class="text-black absolute top-40 text-center">
@@ -8,6 +9,7 @@
     <hr class="featurette-divider" style="margin-top: 40px" />
 
     <div class="row featurette">
+      <!-- mission section -->
       <div class="col-md-7">
         <h2 class="featurette-heading mt-0">
           Our Mission
@@ -24,6 +26,7 @@
           athlete, we're here to help you succeed every step of the way.
         </p>
       </div>
+      <!-- image for mission section -->
       <div class="col-md-5" style="height: fit-content">
         <v-img
           class="featurette-image img-fluid mx-auto image-hover-effect"
@@ -35,6 +38,7 @@
 
     <hr class="featurette-divider" />
 
+    <!-- vision section -->
     <div class="row featurette">
       <div class="col-md-7 order-md-2">
         <h2 class="featurette-heading mt-0">
@@ -53,6 +57,7 @@
           and inspire positive change in the global fitness community.
         </p>
       </div>
+      <!-- image for vision section -->
       <div class="col-md-5 order-md-1">
         <v-img
           class="featurette-image img-fluid mx-auto image-hover-effect"
@@ -65,6 +70,7 @@
     <hr class="featurette-divider" />
 
     <div class="row featurette">
+      <!-- values section -->
       <div class="col-md-7">
         <h2 class="featurette-heading mt-0">
           Our Values
@@ -82,6 +88,7 @@
           making a meaningful impact on the world.
         </p>
       </div>
+      <!-- image for values section -->
       <div class="col-md-5">
         <v-img
           class="featurette-image img-fluid mx-auto image-hover-effect"

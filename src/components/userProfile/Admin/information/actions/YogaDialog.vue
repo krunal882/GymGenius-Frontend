@@ -1,3 +1,4 @@
+<!-- this component is for admin to edit yoga information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -14,6 +15,7 @@
               md="6"
               class="d-flex flex-wrap justify-center align-center"
             >
+              <!-- component for uploading the image and showing existing image -->
               <v-img
                 v-if="yoga.url_png"
                 :src="yoga.url_png"
@@ -34,6 +36,7 @@
             </v-col>
           </div>
           <div class="d-flex flex-wrap">
+            <!-- category name field -->
             <v-text-field
               v-model="yoga.category_name"
               label="category"
@@ -41,6 +44,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- yoga english name field -->
             <v-text-field
               :rules="Rules"
               v-model="yoga.english_name"
@@ -50,6 +54,7 @@
               class="mb-4"
             ></v-text-field>
           </div>
+          <!-- yoga category description field -->
           <v-textarea
             :rules="Rules"
             v-model="yoga.category_description"
@@ -59,6 +64,7 @@
             class="mb-4"
           ></v-textarea>
           <div class="d-flex">
+            <!-- yoga sanskrit name field -->
             <v-text-field
               v-model="yoga.sanskrit_name"
               label="sanskrit name"
@@ -66,6 +72,7 @@
               variant="outlined"
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- yoga sanskrit adapted  name field -->
             <v-text-field
               v-model="yoga.sanskrit_name_adapted"
               label="sanskrit name adapted"
@@ -74,6 +81,7 @@
               class="mb-4"
             ></v-text-field>
           </div>
+          <!-- yoga translation name field -->
           <v-text-field
             v-model="yoga.translation_name"
             label="translation_name"
@@ -81,6 +89,7 @@
             variant="outlined"
             class="mb-4"
           ></v-text-field>
+          <!-- yoga pose description field -->
           <v-textarea
             :rules="Rules"
             v-model="yoga.pose_description"
@@ -89,6 +98,7 @@
             required
             class="mr-4 mb-4"
           ></v-textarea>
+          <!-- yoga pose benefits field -->
           <v-textarea
             :rules="Rules"
             v-model="yoga.pose_benefits"
@@ -101,6 +111,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
+        <!-- button to close the dialog and edit yoga -->
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
         <v-btn color="blue darken-1" text @click="save(yoga)">Save</v-btn>
       </v-card-actions>
@@ -115,6 +126,7 @@ export default {
     yogaData: Object,
     dialogOpen: Boolean,
   },
+  // data includes rules for input fields,image and yoga
   data() {
     return {
       dialog: false,
@@ -136,6 +148,7 @@ export default {
       ],
     };
   },
+  // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
@@ -145,6 +158,7 @@ export default {
     },
   },
   methods: {
+    //to handle selected image
     onFileChange(event) {
       const file = event.target.files[0];
 
@@ -156,9 +170,11 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+    //to close the dialog
     closeDialog() {
       this.$emit("close-dialog");
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
@@ -167,10 +183,7 @@ export default {
     initializeFormFields() {
       this.yoga = { ...this.yogaData };
     },
-    cancel() {
-      this.dialog = true;
-      this.$refs.form.reset();
-    },
+    //to upload image in cloud storage and call action from vuex store
     async save(yoga) {
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;

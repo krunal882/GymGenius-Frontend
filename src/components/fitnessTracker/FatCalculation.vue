@@ -1,6 +1,8 @@
+<!-- this component is for calculating the fate percentage of the human body , it contains input fields and formula -->
 <template>
   <div class="d-flex flex-wrap justify-center">
     <div class="mb-4">
+      <!-- input fields with round slider -->
       <Knob
         v-model="weight"
         :size="200"
@@ -28,6 +30,7 @@
       />
       <label class="bold-label">Height: {{ height }} cm</label>
     </div>
+    <!-- button to make calculation -->
     <div class="mb-4" style="margin-left: 40px">
       <Knob
         v-model="age"
@@ -65,6 +68,7 @@
           <v-progress-linear indeterminate></v-progress-linear>
         </template>
       </v-btn>
+      <!-- result of calculation -->
       <div v-if="fatResult !== null" class="calories-result mt-5">
         Your Body Fat Percentage :
         {{ calculateBodyFatPercentage().toFixed(2) }}%
@@ -74,6 +78,7 @@
 </template>
 
 <script>
+// imported knob for the rounded slider of input fields
 import Knob from "primevue/knob";
 
 export default {
@@ -93,6 +98,7 @@ export default {
     };
   },
   methods: {
+    // formula to calculate BMI
     calculateFat() {
       this.fatResult = null;
       this.loading = true;

@@ -1,3 +1,4 @@
+<!-- this component contains the query form for the user -->
 <template>
   <container class="bg-light py-3 py-md-5">
     <div class="container">
@@ -16,6 +17,7 @@
 
     <div class="container">
       <div class="row gy-3 gy-md-4 gy-lg-0 align-items-xl-center">
+        <!-- form side image  -->
         <div class="col-12 col-lg-6">
           <img
             class="img-fluid rounded image-hover-effect"
@@ -24,6 +26,7 @@
             alt="Get in Touch"
           />
         </div>
+        <!-- form for user query -->
         <v-col cols="12" lg="6">
           <v-row justify="center">
             <v-col cols="12" xl="11">
@@ -33,6 +36,7 @@
                   v-model="formValid"
                   @submit.prevent="submitForm"
                 >
+                  <!-- name field -->
                   <v-card-text class="p-4 p-xl-5">
                     <v-row class="gy-4 gy-xl-5">
                       <v-col cols="12">
@@ -45,6 +49,7 @@
                         ></v-text-field>
                       </v-col>
 
+                      <!-- email field -->
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="email"
@@ -54,6 +59,8 @@
                           required
                         ></v-text-field>
                       </v-col>
+
+                      <!-- phone number field -->
                       <v-col cols="12" md="6">
                         <v-text-field
                           v-model="phoneNumber"
@@ -63,6 +70,7 @@
                           :rules="phoneNumberRules"
                         ></v-text-field>
                       </v-col>
+                      <!-- subject field -->
                       <v-col cols="12">
                         <v-text-field
                           v-model="subject"
@@ -72,6 +80,7 @@
                           required
                         ></v-text-field>
                       </v-col>
+                      <!-- message field -->
                       <v-col cols="12">
                         <v-textarea
                           v-model="message"
@@ -82,14 +91,21 @@
                           required
                         ></v-textarea>
                       </v-col>
+                      <!-- button to submit form -->
                       <v-col cols="12">
                         <v-btn
-                          :disabled="!isFormValid"
+                          :disabled="!isFormValid || loading"
                           color="primary"
                           class="btn-lg"
                           type="submit"
                         >
-                          Get in touch
+                          <v-progress-circular
+                            v-if="loading"
+                            indeterminate
+                            color="white"
+                            size="20"
+                          ></v-progress-circular>
+                          <span v-if="!loading">Get in touch</span>
                         </v-btn>
                       </v-col>
                     </v-row>
@@ -107,6 +123,7 @@
 <script>
 export default {
   data() {
+    // placeholder and rules for the input fields
     return {
       fullName: "",
       email: "",
@@ -114,6 +131,7 @@ export default {
       subject: "",
       message: "",
       formValid: false,
+      loading: false,
       fullNameRules: [
         (v) => !!v || "Full name is required",
         (v) =>
@@ -140,6 +158,7 @@ export default {
     };
   },
   computed: {
+    // to check if input data is valid or not
     isFormValid() {
       return (
         this.fullName &&
@@ -152,6 +171,7 @@ export default {
     },
   },
   methods: {
+    // to check validation rules
     validateForm() {
       return (
         this.fullNameRules.every((rule) => rule(this.fullName) === true) &&
@@ -163,8 +183,10 @@ export default {
         this.messageRules.every((rule) => rule(this.message) === true)
       );
     },
+    // handle submit form event
     submitForm() {
       if (this.isFormValid) {
+        this.loading = true;
         this.$store
           .dispatch("getContact", {
             fullName: this.fullName,
@@ -173,9 +195,19 @@ export default {
             subject: this.subject,
             message: this.message,
           })
-
+          .then(() => {
+            this.fullName = "";
+            this.email = "";
+            this.phoneNumber = "";
+            this.subject = "";
+            this.message = "";
+            this.$refs.contactForm.reset();
+          })
           .catch((error) => {
             console.error("Error sending contact form:", error);
+          })
+          .finally(() => {
+            this.loading = false;
           });
       }
     },

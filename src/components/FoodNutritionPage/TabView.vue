@@ -1,12 +1,14 @@
+<!-- this component displays the tabs for the overview , burdon and who response -->
 <template>
   <div style="padding: 15px; margin-top: 25px">
     <v-card style="height: auto">
+      <!-- tabs -->
       <v-tabs v-model="tab" bg-color="primary" align-tabs="center">
         <v-tab value="one">Overview</v-tab>
         <v-tab value="two">Burden</v-tab>
         <v-tab value="three">WHO response</v-tab>
       </v-tabs>
-
+      <!-- tab content -->
       <v-card-text style="padding-right: 25px; padding-left: 25px">
         <v-window v-model="tab">
           <v-window-item value="one">

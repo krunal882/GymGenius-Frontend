@@ -1,3 +1,4 @@
+<!-- this component is for admin to add new exercise information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -8,7 +9,9 @@
       <v-card-title> Add Exercise </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
+          <!-- component for uploading the image -->
           <AdminImgUpload @img-selected="handleImageSelected" />
+          <!-- name field -->
           <div class="d-flex flex-wrap">
             <v-text-field
               :rules="Rules"
@@ -18,6 +21,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- category field -->
             <v-text-field
               :rules="Rules"
               v-model="exercise.category"
@@ -27,6 +31,7 @@
               class="mb-4"
             ></v-text-field>
           </div>
+          <!-- force field -->
           <div class="d-flex">
             <v-select
               v-model="exercise.force"
@@ -36,6 +41,7 @@
               variant="outlined"
               class="mr-4 mb-4"
             ></v-select>
+            <!-- dropdown for exercise level -->
             <v-select
               v-model="exercise.level"
               :items="levelTypes"
@@ -45,6 +51,7 @@
               class="mb-4"
             ></v-select>
           </div>
+          <!-- exercise mechanic -->
           <div class="d-flex">
             <v-text-field
               :rules="Rules"
@@ -54,6 +61,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- exercise equipment needed -->
             <v-text-field
               :rules="Rules"
               v-model="exercise.equipment"
@@ -64,6 +72,7 @@
             ></v-text-field>
           </div>
           <div class="d-flex flex-wrap justify-space-between">
+            <!-- primary muscles field -->
             <v-text-field
               :rules="Rules"
               v-model="exercise.primaryMuscles"
@@ -72,6 +81,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- secondary Muscles input field -->
             <v-text-field
               v-model="exercise.secondaryMuscles"
               label="Secondary Muscles"
@@ -79,7 +89,7 @@
               class="mb-4"
             ></v-text-field>
           </div>
-
+          <!-- instruction field -->
           <v-textarea
             :rules="Rules"
             v-model="exercise.instructions"
@@ -91,6 +101,7 @@
       </v-card-text>
       <v-card-actions>
         <v-spacer></v-spacer>
+        <!-- button to close the dialog and add exercise -->
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
         <v-btn color="blue darken-1" text @click="add(exercise)">Add</v-btn>
       </v-card-actions>
@@ -132,19 +143,23 @@ export default {
       ],
     };
   },
+  // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
     },
   },
   methods: {
+    //to handle selected image
     handleImageSelected(image) {
       this.image = image;
     },
+    //to close the dialog
     closeDialog() {
       this.$emit("close-dialog");
       this.resetForm();
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
@@ -164,6 +179,7 @@ export default {
       };
       this.$refs.form.resetValidation();
     },
+    //to upload image in cloud storage and call action from vuex store
     async add(exercise) {
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
@@ -177,7 +193,6 @@ export default {
         `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
         uploadData
       );
-      console.log(data);
       exercise.cloudImg = data.url;
       await this.$store.dispatch("addExercise", { exercise });
       this.closeDialog();

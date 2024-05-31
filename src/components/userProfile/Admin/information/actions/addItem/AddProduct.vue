@@ -1,3 +1,4 @@
+<!-- this component is for admin to add new product information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -8,8 +9,10 @@
       <v-card-title> Add Product </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
+          <!-- component for uploading the image -->
           <AdminImgUpload @img-selected="handleImageSelected" />
 
+          <!-- name field -->
           <div class="d-flex flex-wrap">
             <v-text-field
               :rules="Rules"
@@ -19,6 +22,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- category field -->
             <v-text-field
               :rules="Rules"
               v-model="product.category"
@@ -28,6 +32,7 @@
               class="mb-4"
             ></v-text-field>
           </div>
+          <!-- brand field -->
           <div class="d-flex">
             <v-text-field
               :rules="Rules"
@@ -37,6 +42,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- off field -->
             <v-text-field
               :rules="Rules"
               v-model="product.off"
@@ -47,6 +53,7 @@
             ></v-text-field>
           </div>
           <div class="d-flex flex-wrap justify-space-between">
+            <!-- price field -->
             <v-text-field
               :rules="Rules"
               v-model="product.price"
@@ -56,6 +63,7 @@
               type="number"
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- original price field -->
             <v-text-field
               :rules="Rules"
               v-model="product.original_price"
@@ -64,6 +72,7 @@
               class="mb-4"
             ></v-text-field>
           </div>
+          <!-- product state field -->
           <v-select
             v-model="product.state"
             :items="stateType"
@@ -75,6 +84,7 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
+        <!-- button to close the dialog and add product -->
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
         <v-btn color="blue darken-1" text @click="add(product)">Add</v-btn>
@@ -94,6 +104,7 @@ export default {
     AdminImgUpload,
   },
   data() {
+    // data includes rules for input fields and product
     return {
       image: null,
       stateType: ["active", "inactive"],
@@ -114,19 +125,23 @@ export default {
       ],
     };
   },
+  // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
     },
   },
   methods: {
+    //to handle selected image
     handleImageSelected(image) {
       this.image = image;
     },
+    //to close the dialog
     closeDialog() {
       this.$emit("close-dialog");
       this.resetForm();
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
@@ -144,6 +159,7 @@ export default {
       };
       this.$refs.form.resetValidation();
     },
+    //to upload image in cloud storage and call action from vuex store
     async add(product) {
       product.price = +product.price;
 

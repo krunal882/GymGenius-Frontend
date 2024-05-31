@@ -1,3 +1,4 @@
+<!-- this component is for the overview of the nutrition and benefits of knowing it -->
 <template>
   <div class="d-flex align-center flex-column">
     <v-card width="100%">

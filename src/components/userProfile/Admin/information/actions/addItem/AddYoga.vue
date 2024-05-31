@@ -1,3 +1,4 @@
+<!-- this component is for admin to add new yoga information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -8,9 +9,11 @@
       <v-card-title> Add Yoga </v-card-title>
       <v-card-text>
         <v-form ref="form" v-model="valid">
+          <!-- component for uploading the image -->
           <AdminImgUpload @img-selected="handleImageSelected" />
 
           <div class="d-flex flex-wrap">
+            <!-- category field -->
             <v-text-field
               :rules="Rules"
               v-model="yoga.category_name"
@@ -19,6 +22,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- category description field -->
             <v-text-field
               :rules="Rules"
               v-model="yoga.category_description"
@@ -29,6 +33,7 @@
             ></v-text-field>
           </div>
           <div class="d-flex">
+            <!-- english name field -->
             <v-text-field
               v-model="yoga.english_name"
               label="english name of yoga"
@@ -36,6 +41,7 @@
               variant="outlined"
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- adapted sanskrit name field -->
             <v-text-field
               v-model="yoga.sanskrit_name_adapted"
               label="adapted name of yoga"
@@ -45,6 +51,7 @@
             ></v-text-field>
           </div>
           <div class="d-flex">
+            <!-- sanskrit name field -->
             <v-text-field
               :rules="Rules"
               v-model="yoga.sanskrit_name"
@@ -53,6 +60,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- translation of yoga -->
             <v-text-field
               :rules="Rules"
               v-model="yoga.translation_name"
@@ -62,6 +70,7 @@
               class="mb-4"
             ></v-text-field>
           </div>
+          <!-- pose description -->
           <v-textarea
             :rules="Rules"
             v-model="yoga.pose_description"
@@ -70,6 +79,7 @@
             required
             class="mr-4 mb-4"
           ></v-textarea>
+          <!-- pose description -->
           <v-textarea
             v-model="yoga.pose_benefits"
             label="yoga pose benefits"
@@ -78,6 +88,7 @@
           ></v-textarea>
         </v-form>
       </v-card-text>
+      <!-- button to close the dialog and add yoga -->
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
@@ -98,6 +109,7 @@ export default {
     AdminImgUpload,
   },
   data() {
+    // data includes rules for input fields and yogas
     return {
       image: null,
       dialog: false,
@@ -118,28 +130,29 @@ export default {
       ],
     };
   },
+  // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
     },
   },
   methods: {
+    //to handle selected image
     handleImageSelected(image) {
       this.image = image;
     },
+    //to close the dialog
     closeDialog() {
       this.dialog = false;
       this.$emit("close-dialog");
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
       }
     },
-    cancel() {
-      this.dialog = true;
-      this.$refs.form.reset();
-    },
+    //to upload image in cloud storage and call action from vuex store
     async save(yoga) {
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;

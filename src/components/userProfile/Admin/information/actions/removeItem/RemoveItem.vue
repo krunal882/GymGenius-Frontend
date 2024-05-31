@@ -1,7 +1,9 @@
+<!-- this component is for removing the item for admin -->
 <template>
   <v-container>
     <v-row justify="space-around">
       <v-col cols="12" md="6">
+        <!-- dialog for options  -->
         <v-dialog
           v-model="dialog"
           transition="dialog-bottom-transition"
@@ -19,7 +21,7 @@
               <v-card-text class="text-body-1 pa-12">
                 Are you sure you want to remove item?
               </v-card-text>
-
+              <!-- buttons for confirmation -->
               <v-card-actions class="justify-end">
                 <v-btn color="primary" text @click="closeDialog">Cancel</v-btn>
                 <v-btn color="error" text @click="remove()">Remove</v-btn>
@@ -34,7 +36,7 @@
 
 <script>
 import axios from "axios";
-const CryptoJS = require("crypto-js");
+const CryptoJS = require("crypto-js"); //for delete image from cloud storage
 export default {
   props: {
     item: Object,
@@ -47,7 +49,7 @@ export default {
       Item: "",
     };
   },
-
+  // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
@@ -61,6 +63,7 @@ export default {
       this.dialog = false;
       this.$emit("close-dialog");
     },
+    //to delete image in cloud storage and call action from vuex store
     async remove() {
       if (this.item.cloudImg != undefined) {
         const timestamp = Math.floor(Date.now() / 1000);
@@ -89,11 +92,13 @@ export default {
       await this.$store.dispatch(this.action, { id: this.Item._id });
       this.closeDialog();
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
       }
     },
+    //to initialize fields
     initializeFormFields() {
       this.Item = { ...this.item };
     },

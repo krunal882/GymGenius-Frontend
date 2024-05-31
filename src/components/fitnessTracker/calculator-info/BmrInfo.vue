@@ -1,3 +1,4 @@
+<!-- this component contains the information of thr  basal metabolic rate  calculator with formula used in calculator -->
 <template>
   <div class="mt-5">
     <h2>CALCULATING YOUR BASAL METABOLIC RATE</h2>

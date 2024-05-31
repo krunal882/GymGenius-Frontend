@@ -1,7 +1,10 @@
+<!-- this filter component provides the filter functionality for the yoga -->
+<!-- it provides filter for the category yoga -->
 <template>
   <div class="d-flex justify-content-center align-items-center">
     <v-container class="ml-10" style="width: 152px; padding-bottom: 15px">
       <div class="d-flex align-items-center">
+        <!-- icon for the filter outline -->
         <v-chip color="blue">
           <v-icon
             class="menu-icon"
@@ -34,6 +37,7 @@
                 z-index: 100;
               "
             >
+              <!-- filter by category option -->
               <v-card outlined>
                 <v-card-title>Filter Yoga</v-card-title>
                 <v-divider></v-divider>
@@ -59,6 +63,8 @@
                   >
                     Apply
                   </v-btn>
+                  <!-- buttons to apply or clear filters -->
+
                   <v-btn color="error darken-2" @click="handleReset">
                     Clear
                   </v-btn>
@@ -99,9 +105,11 @@ export default {
   },
   computed: {},
   methods: {
+    //it manage the state to show and hide filter box
     toggleFilter() {
       this.showFilter = !this.showFilter;
     },
+    //this method is for emit event with applied filters data
     applyFilters() {
       const filteredFilters = {};
 
@@ -112,10 +120,12 @@ export default {
       if (Object.keys(filteredFilters).length > 0) {
         this.$emit("filters-applied", filteredFilters);
       } else {
+        //if filter not selected then tost notification will be showed
         useToast().error("No filters selected");
       }
       this.showFilter = !this.showFilter;
     },
+    //this method clears the selected filters
     handleReset() {
       this.selectedCategory = [];
     },

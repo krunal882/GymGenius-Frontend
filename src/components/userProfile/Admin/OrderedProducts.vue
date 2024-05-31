@@ -1,3 +1,4 @@
+<!-- this component is for admin to see all received orders of the product -->
 <template>
   <div class="container pr-0 pl-0 ml-0 mr-0 mt-5">
     <v-row class="d-flex">
@@ -11,6 +12,7 @@
             <v-card class="mx-auto image-hover-effect" max-width="600">
               <v-row>
                 <v-col>
+                  <!-- product image  -->
                   <v-img
                     class="align-end text-white"
                     height="346"
@@ -25,6 +27,7 @@
                     cover
                   ></v-img>
                 </v-col>
+                <!-- product and user details  -->
                 <v-col cols="6">
                   <div class="details-container ml-4">
                     <v-card-title class="pt-4">Product Title</v-card-title>
@@ -92,6 +95,7 @@ export default {
     product: { type: Object, required: true },
   },
   methods: {
+    //to  display image stored in local
     imgPath(src, category) {
       const imgPath = `../../assets/img/products/${category}/${src}.jpg`;
       return imgPath;

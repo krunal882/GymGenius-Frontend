@@ -1,5 +1,7 @@
+<!-- this component is for calculating the Total Daily Energy Expenditure of the human body , it contains input fields and formula -->
 <template>
   <div>
+    <!-- input fields with round slider -->
     <div class="d-flex flex-wrap justify-center">
       <div class="mb-4">
         <Knob
@@ -70,6 +72,7 @@
         ></v-select>
       </div>
     </div>
+    <!-- button to make calculation -->
     <div class="text-center">
       <v-btn :loading="loading" @click="calculateTDEE">
         Calculate Your TDEE
@@ -77,6 +80,7 @@
           <v-progress-linear indeterminate></v-progress-linear>
         </template>
       </v-btn>
+      <!-- result of calculation -->
       <div v-if="tdeeResult !== null" class="calories-result mt-5">
         Your TDEE is: {{ tdeeResult.toFixed(2) }}
       </div>
@@ -85,6 +89,7 @@
 </template>
 
 <script>
+// imported knob for the rounded slider of input fields
 import Knob from "primevue/knob";
 
 export default {
@@ -105,6 +110,7 @@ export default {
     };
   },
   methods: {
+    // formula to calculate TDEE
     calculateTDEE() {
       this.tdeeResult = null;
       this.loading = true;
@@ -131,6 +137,7 @@ export default {
         this.loading = false;
       }, 1000);
     },
+    //this method is for setting the goal
     getGoalAdjustment(goal) {
       switch (goal) {
         case "Lose Weight":

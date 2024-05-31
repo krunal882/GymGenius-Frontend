@@ -1,3 +1,4 @@
+<!-- this component provides the highlight on the store pages -->
 <template>
   <div class="container">
     <div class="image-container">
@@ -15,6 +16,7 @@ export default {
       images: [],
     };
   },
+  // to set images on page load
   async created() {
     const [image1, image2] = await Promise.all([
       import("../../assets/img/store/spotlight2.webp"),

@@ -1,3 +1,4 @@
+<!-- this component contains the information of thr calorie calculator with formula used in calculator -->
 <template>
   <div class="mt-5">
     <h2>HOW TO CALCULATE MY CALORIES</h2>

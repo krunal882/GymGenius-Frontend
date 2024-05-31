@@ -1,3 +1,4 @@
+<!-- this component is an wrapper of the store navbar -->
 <template>
   <div class="layout">
     <StoreNavbar />

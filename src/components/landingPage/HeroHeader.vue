@@ -1,3 +1,4 @@
+<!-- this component is for displaying video as hero header  -->
 <template>
   <div class="position-relative overflow-hidden">
     <div class="d-flex min-vh-100" lc-helper="video-bg">
@@ -16,6 +17,7 @@
           type="video/mp4"
         />
       </video>
+      <!-- title above the video -->
       <div
         style="z-index: 2"
         class="align-self-center text-center text-light col-md-8 offset-md-2"

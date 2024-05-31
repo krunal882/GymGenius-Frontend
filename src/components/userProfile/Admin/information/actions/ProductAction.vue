@@ -1,3 +1,4 @@
+<!-- this component is for admin to show product and provide options to edit , explore and delete -->
 <template>
   <v-container>
     <div fluid class="container pr-0 pl-0 ml-0 mr-0 mt-10">
@@ -7,16 +8,19 @@
           :key="product.id"
           cols="12"
           sm="6"
-          md="3"
-          lg="3"
+          md="4"
+          lg="4"
         >
-          <v-card class="mx-auto image-hover-effect" max-width="260">
+          <v-card class="mx-auto image-hover-effect" max-width="270">
+            <!-- product image -->
             <v-img
               class="align-end text-white"
               height="346"
               :src="imgPath(product.src, product.category, product.cloudImg)"
+              @click="exploreClicked(product)"
               cover
             ></v-img>
+            <!-- product information -->
             <v-card-title class="pb-0">{{ product.title }}</v-card-title>
             <v-card-subtitle class="py-2">{{ product.brand }}</v-card-subtitle>
             <v-card-text class="pt-0">
@@ -34,7 +38,11 @@
                 </span>
               </div>
             </v-card-text>
+            <!-- buttons for explore , remove and edit -->
             <v-card-actions style="justify-content: space-between">
+              <v-btn color="orange" @click="exploreClicked(product)"
+                >Explore</v-btn
+              >
               <v-btn color="primary" @click="editClick(product)">
                 <v-icon left>mdi-pencil</v-icon> Edit</v-btn
               >
@@ -55,6 +63,12 @@ export default {
     products: { type: Array, required: true },
   },
   methods: {
+    exploreClicked(product) {
+      this.$router.push({
+        name: "productDetail",
+        params: { category: product.category, id: product._id },
+      });
+    },
     imgPath(src, category, cloudImg) {
       if (cloudImg === undefined) {
         const imgPath = `../../../../../assets/img/products/${category}/${src}.jpg`;

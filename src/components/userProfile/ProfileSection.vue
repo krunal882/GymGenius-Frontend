@@ -1,3 +1,4 @@
+<!-- this component is for displaying user information -->
 <template>
   <div class="text-center container">
     <v-avatar
@@ -6,6 +7,7 @@
       size="200"
       style="border: 6px solid #64dd17"
     >
+      <!-- user profile image -->
       <img
         :src="userAvatarUrl"
         alt="User Avatar"
@@ -15,6 +17,7 @@
       <v-icon v-else size="200px">mdi-account-circle</v-icon>
     </v-avatar>
 
+    <!-- to change the user profile -->
     <v-badge color="primary darken-2" overlap @click="openImageUploadDialog">
       <template v-slot:badge>
         <v-icon color="white" size="50" style="font-size: large"
@@ -23,6 +26,7 @@
       </template>
     </v-badge>
     <v-divider class="mb-10"></v-divider>
+    <!-- user information fields -->
     <div>
       <v-row class="text-center">
         <v-col cols="12" sm="3">
@@ -67,7 +71,18 @@
       </template>
 
       <v-card>
+        <!-- dialog for the change in user information -->
         <v-card-title>Edit Details</v-card-title>
+        <v-alert
+          v-if="!isEmailValid"
+          type="error"
+          dismissible
+          outlined
+          dense
+          class="mb-4"
+        >
+          This email already exists. Please choose another one.
+        </v-alert>
         <v-card-text>
           <v-text-field
             v-model="editedUser.name"
@@ -100,6 +115,7 @@
             required
           ></v-text-field>
         </v-card-text>
+        <!-- buttons to perform action -->
         <v-card-actions>
           <v-btn color="primary" :disabled="isSaveDisabled" @click="saveChanges"
             >Save</v-btn
@@ -108,14 +124,16 @@
         </v-card-actions>
       </v-card>
     </v-dialog>
-
+    <!-- password field component -->
     <PasswordDialog ref="passwordDialog" />
     <v-divider class="mb-10"></v-divider>
     <div class="d-flex flex-wrap justify-space-between">
+      <!-- account delete option -->
       <div class="d-flex flex-wrap">
         <h6 class="mt-2">Want to delete your account ?</h6>
         <v-btn class="ml-10" color="error" @click="deleteAccount">DELETE</v-btn>
       </div>
+      <!-- password change option -->
       <div class="d-flex flex-wrap">
         <h6 class="mt-2">Want to change your password ?</h6>
         <v-btn class="ml-10" color="success" @click="openPasswordDialog"
@@ -141,6 +159,7 @@ export default {
   components: {
     PasswordDialog,
   },
+  //data contains user input fields and the rules
   data() {
     return {
       user: {
@@ -174,9 +193,20 @@ export default {
       ],
       userAvatarUrl: this.$store.state.userModule.userAvatarUrl,
       profileImg: ``,
+      debounceTimer: null,
+      isEmailValid: true,
     };
   },
+  //watcher for the user info and profile image
   watch: {
+    "editedUser.email"(newEmail) {
+      if (newEmail) {
+        clearTimeout(this.debounceTimer);
+        this.debounceTimer = setTimeout(() => {
+          this.checkEmailExistence(newEmail);
+        }, 1000);
+      }
+    },
     "$store.state.userModule.userAvatarUrl"(newUrl) {
       this.userAvatarUrl = newUrl;
     },
@@ -194,6 +224,25 @@ export default {
     },
   },
   methods: {
+    // to check if there exist same email
+    async checkEmailExistence(email) {
+      const config = () => {
+        const token = Cookies.get("token");
+        return {
+          withCredentials: true,
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        };
+      };
+
+      const response = await axios.get(
+        `http://localhost:3000/auth/filtered?email=${email}`,
+        config()
+      );
+      this.isEmailValid = response.data.length === 0;
+    },
+    //to save the user information
     saveChanges() {
       const { name, email, age, number } = this.editedUser;
       const userId = this.$store.state.userModule.userId;
@@ -209,7 +258,7 @@ export default {
 
       this.dialog = false;
     },
-    changePassword() {},
+    // to delete account make an request to vuex store
     deleteAccount() {
       const id = this.$store.state.userModule.userId;
       const role = this.$store.state.userModule.role;
@@ -219,9 +268,11 @@ export default {
         }
       });
     },
+    // to open the password dialog
     openPasswordDialog() {
       this.$refs.passwordDialog.dialog = true;
     },
+    // to open  image upload diagram
     openImageUploadDialog() {
       this.$refs.fileInput.click();
     },
@@ -234,7 +285,7 @@ export default {
         },
       };
     },
-
+    // to upload the image
     async uploadImage(event) {
       const file = event.target.files[0];
       if (!file) return;
@@ -274,10 +325,15 @@ export default {
     },
   },
   computed: {
+    // to make button disabled
     isSaveDisabled() {
-      return Object.values(this.editedUser).some((value) => !value);
+      return (
+        Object.values(this.editedUser).some((value) => !value) ||
+        !this.isEmailValid
+      );
     },
   },
+  // to fetch user information from the store
   mounted() {
     this.user.name = this.$store.state.userModule.name;
     this.user.email = this.$store.state.userModule.email;

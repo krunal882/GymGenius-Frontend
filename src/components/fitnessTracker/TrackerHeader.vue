@@ -1,3 +1,4 @@
+<!-- this component is for displaying the title of the calculator  -->
 <template>
   <div class="header">{{ title }}</div>
 </template>
@@ -22,7 +23,6 @@ export default {
   font-weight: bold;
   margin: 0 auto;
   width: 100%;
-  max-width: 1200px;
 }
 
 @media (min-width: 600px) {

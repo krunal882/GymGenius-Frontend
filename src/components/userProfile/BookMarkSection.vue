@@ -1,3 +1,4 @@
+<!-- this component is parent component for displaying the users bookmarked items -->
 <template>
   <div>
     <v-card>
@@ -9,24 +10,31 @@
       </v-tabs>
     </v-card>
 
-    <v-card>
+    <v-card style="min-height: 600px">
       <v-tabs-window v-model="tab">
         <v-tabs-window-item>
+          <!-- exercise section -->
           <template v-if="tab === 1">
-            <UserExercises
-              :exercise="bookmarkedExercises"
+            <ExercisePreview
+              :exercises="bookmarkedExercises"
               @explore="exploreClicked"
             />
           </template>
+          <!-- yoga section -->
           <template v-else-if="tab === 2">
-            <UserYogas :yoga="bookmarkedYogas" @explore="exploreClicked" />
+            <YogaInfo :yoga="bookmarkedYogas" @explore="exploreClicked" />
           </template>
+          <!-- dietPlan section -->
           <template v-else-if="tab === 3">
-            <UserDiets :diet="bookmarkedDiets" @explore="exploreClicked" />
+            <DietPreview
+              :dietPlan="bookmarkedDiets"
+              @explore="exploreClicked"
+            />
           </template>
+          <!-- foodItem section -->
           <template v-else-if="tab === 4">
-            <UserNutritions
-              :nutrition="bookmarkedNutritions"
+            <NutritionPreview
+              :foodItem="bookmarkedNutritions"
               @explore="exploreClicked"
             />
           </template>
@@ -37,24 +45,24 @@
 </template>
 
 <script>
-import UserExercises from "./bookmarkDetails/UserExercises.vue";
-import UserYogas from "./bookmarkDetails/UserYogas.vue";
-import UserNutritions from "./bookmarkDetails/UserNutritions.vue";
-import UserDiets from "./bookmarkDetails/UserDiets.vue";
-import { mapActions } from "vuex";
+import ExercisePreview from "../ExercisePage/ExercisePreview.vue";
+import YogaInfo from "../YogaPage/YogaInfo.vue";
+import DietPreview from "../DietplanPage/DietPreview.vue";
+import NutritionPreview from "../FoodNutritionPage/NutritionPreview.vue";
 
 export default {
   components: {
-    UserExercises,
-    UserYogas,
-    UserNutritions,
-    UserDiets,
+    ExercisePreview,
+    YogaInfo,
+    NutritionPreview,
+    DietPreview,
   },
   data() {
     return {
       tab: null,
     };
   },
+  // to fetch items from the store
   computed: {
     bookmarkedExercises() {
       return this.$store.state.bookmarkModule.exercise;
@@ -70,7 +78,7 @@ export default {
     },
   },
   methods: {
-    ...mapActions(["fetchBookmarked"]),
+    //to navigate to detail page
     async exploreClicked(item) {
       this.$router.push({
         name: item.route,
@@ -78,12 +86,7 @@ export default {
       });
     },
   },
-
-  created() {
-    const userId = this.$store.state.userModule.userId;
-    this.fetchBookmarked({ userId });
-  },
 };
 </script>
 
-<style></style>
+<style scoped></style>

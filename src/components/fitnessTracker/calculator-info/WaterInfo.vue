@@ -1,3 +1,4 @@
+<!-- this component contains the information of thr water calculator with formula used in calculator -->
 <template>
   <div class="mt-3">
     <h2>STAYING HYDRATED</h2>

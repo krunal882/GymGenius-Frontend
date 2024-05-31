@@ -1,6 +1,8 @@
+<!-- this component is for calculating the  basal metabolic rate of the human body , it contains input fields and formula -->
 <template>
   <div class="d-flex flex-wrap justify-center">
     <div>
+      <!-- input fields with round slider -->
       <Knob
         v-model="weight"
         :size="200"
@@ -50,6 +52,7 @@
         variant="outlined"
       ></v-select>
     </div>
+    <!-- button to make calculation -->
     <div class="text-center mt-5" style="margin-left: 5%">
       <v-btn :loading="loading" @click="calculateCalories">
         Calculate Your BMR
@@ -65,6 +68,7 @@
 </template>
 
 <script>
+// imported knob for the rounded slider of input fields
 import Knob from "primevue/knob";
 
 export default {
@@ -84,6 +88,7 @@ export default {
     };
   },
   methods: {
+    // formula to calculate BMR
     calculateCalories() {
       this.caloriesResult = null;
       this.loading = true;

@@ -1,7 +1,10 @@
+<!-- this filter component provides the filter functionality for the food-item -->
+<!-- it provides filter for the category , name , calories , protein of food-item -->
 <template>
   <div class="d-flex justify-content-center align-items-center">
     <v-container class="ml-10" style="width: 152px; padding-bottom: 15px">
       <div class="d-flex align-items-center">
+        <!-- icon for the filter outline -->
         <v-chip color="blue">
           <v-icon
             class="menu-icon"
@@ -34,6 +37,8 @@
                 z-index: 100;
               "
             >
+              <!-- different options for the filter -->
+              <!-- category -->
               <v-card outlined>
                 <v-card-title>Filter Food Items</v-card-title>
                 <v-divider></v-divider>
@@ -45,6 +50,7 @@
                   persistent-hint
                 ></v-select>
                 <v-divider></v-divider>
+                <!-- name -->
                 <v-select
                   v-model="selectedItem"
                   :items="itemsInSelectedCategory"
@@ -62,6 +68,7 @@
               <v-card outlined>
                 <v-card-title>Filter By Nutritional</v-card-title>
                 <v-divider></v-divider>
+                <!-- by calories -->
                 <v-range-slider
                   style="width: 250px"
                   label="calories"
@@ -97,6 +104,7 @@
                   </v-col>
                 </v-row>
                 <v-divider></v-divider>
+                <!-- by protein -->
                 <v-range-slider
                   style="width: 250px"
                   label="protein"
@@ -131,6 +139,7 @@
                     ></v-text-field>
                   </v-col>
                 </v-row>
+                <!-- buttons to apply or clear filters -->
                 <div class="col text-center pb-3">
                   <v-btn
                     color="primary darken-2"

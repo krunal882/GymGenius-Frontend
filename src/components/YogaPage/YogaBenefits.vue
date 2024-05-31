@@ -1,3 +1,4 @@
+<!-- this component is for displaying the yoga benefits -->
 <template>
   <div class="d-flex align-center flex-column">
     <v-card width="100%">

@@ -1,18 +1,25 @@
+<!-- this component gives the preview of the foodItem nutrition that contains some info about foodItem in card form -->
+<!-- it also includes explore button to see full details and bookmark button for bookmarking -->
 <template>
   <v-container fluid>
+    <!-- skeleton loader for the card  -->
     <v-row v-if="loading">
       <v-col
-        v-for="n in this.foodItem.length"
+        v-for="n in this.foodItem?.length"
         :key="n"
         cols="12"
         sm="6"
         md="4"
         lg="4"
       >
-        <v-skeleton-loader class="border" type="image"></v-skeleton-loader>
+        <v-skeleton-loader
+          class="border mx-auto"
+          type="image"
+        ></v-skeleton-loader>
       </v-col>
     </v-row>
-    <v-row class="d-flex flex-wrap">
+    <!-- foodItem preview card -->
+    <v-row v-else class="d-flex flex-wrap">
       <v-col
         v-for="foodItem in foodItem"
         :key="foodItem.id"
@@ -22,6 +29,7 @@
         lg="4"
       >
         <v-card width="90%" class="text-black my-4 mx-2 image-hover-effect">
+          <!-- foodItem image -->
           <v-img
             class="align-end text-white"
             height="250"
@@ -53,17 +61,21 @@ export default {
     };
   },
   computed: {
+    //to return number of foodItem
     skeletonCount() {
-      return this.loading ? this.foodItem.length : 0;
+      return this.loading ? this.foodItem?.length : 0;
     },
+    //to check if foodItem is bookmarked or not
     bookmarked() {
       return this.$store.state.bookmarkModule.nutrition;
     },
   },
   methods: {
+    //to emit an event to navigate to detail page
     exploreClicked(foodItem) {
-      this.$emit("explore", foodItem);
+      this.$emit("explore", { item: foodItem, route: "foodDetail" });
     },
+    //to get image form the local or stored on cloud
     imgPath(foodItemName, cloudImg) {
       if (cloudImg === undefined) {
         const imgPath = `../../assets/img/foodItem/${foodItemName}.jpg`;
@@ -72,12 +84,14 @@ export default {
         return cloudImg;
       }
     },
+    //it provides the timer for skeleton loader
     loadData() {
       setTimeout(() => {
         this.loading = false;
       }, 2000);
     },
   },
+  //watcher for the foodItem changes
   watch: {
     foodItem: {
       handler(newValue, oldValue) {

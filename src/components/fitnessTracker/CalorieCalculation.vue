@@ -1,6 +1,8 @@
+<!-- this component is for calculating the calories needed to human body , it contains input fields and formula -->
 <template>
   <div class="d-flex flex-wrap justify-center">
     <div>
+      <!-- input fields with round slider -->
       <Knob
         v-model="weight"
         :size="200"
@@ -50,6 +52,7 @@
         variant="outlined"
       ></v-select>
     </div>
+    <!-- button to make calculation -->
     <div class="text-center ml-5 mt-5">
       <v-btn :loading="loading" @click="calculateCalories">
         Calculate Your Calories
@@ -57,6 +60,7 @@
           <v-progress-linear indeterminate></v-progress-linear>
         </template>
       </v-btn>
+      <!-- result of calculation -->
       <div v-if="caloriesResult !== null" class="calories-result mt-10">
         Your Daily Calories: {{ caloriesResult.toFixed(2) }}
       </div>
@@ -65,6 +69,7 @@
 </template>
 
 <script>
+// imported knob for the rounded slider of input fields
 import Knob from "primevue/knob";
 
 export default {
@@ -84,6 +89,7 @@ export default {
     };
   },
   methods: {
+    // formula to calculate calories
     calculateCalories() {
       this.caloriesResult = null;
       this.loading = true;

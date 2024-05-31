@@ -1,8 +1,10 @@
+<!-- this component displays the information of the Healthy Eating Habits and Diet Benefits -->
 <template>
   <div style="padding: 15px; margin-top: 25px">
     <v-card width="auto">
       <v-row justify="center">
         <v-card width="auto" style="display: flex">
+          <!-- poster image -->
           <v-card-text style="padding-right: 25px; width: auto">
             <img
               src="../../assets/img/nutrition-poster.png"

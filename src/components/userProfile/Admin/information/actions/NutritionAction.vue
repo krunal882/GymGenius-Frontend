@@ -1,5 +1,6 @@
+<!-- this component is for admin to show food-item and provide options to edit , explore and delete -->
 <template>
-  <v-container>
+  <v-container fluid>
     <!-- <v-row v-if="loading">
         <v-col v-for="n in this.foodItem.length" :key="n" cols="4">
           <v-skeleton-loader
@@ -9,6 +10,7 @@
           ></v-skeleton-loader>
         </v-col>
       </v-row> -->
+    <!-- foodItem preview card -->
     <v-row class="d-flex flex-wrap">
       <v-col
         v-for="foodItem in foodItem"
@@ -18,16 +20,22 @@
         md="4"
         lg="4"
       >
-        <v-card width="100%" class="text-black my-4 mx-2 image-hover-effect">
+        <v-card width="90%" class="text-black my-4 mx-2 image-hover-effect">
+          <!-- foodItem image -->
           <v-img
             class="align-end text-white"
-            height="200"
+            height="300"
             :src="imgPath(foodItem.name, foodItem.cloudImg)"
+            @click="exploreClicked(foodItem)"
             cover
           >
             <v-card-title>{{ foodItem.name }}</v-card-title>
           </v-img>
+          <!-- buttons for explore , remove and edit -->
           <v-card-actions style="justify-content: space-between">
+            <v-btn color="orange" @click="exploreClicked(foodItem)"
+              >Explore</v-btn
+            >
             <v-btn color="primary" @click="editClick(foodItem)">
               <v-icon left>mdi-pencil</v-icon> Edit</v-btn
             >
@@ -60,6 +68,14 @@ export default {
     },
   },
   methods: {
+    //to emit an event to navigate to detail page
+    async exploreClicked(foodItem) {
+      this.$router.push({
+        name: "foodDetail",
+        params: { id: foodItem._id },
+      });
+    },
+    //to get image form the local or stored on cloud
     imgPath(foodItemName, cloudImg) {
       if (cloudImg === undefined) {
         const imgPath = `../../assets/img/foodItem/${foodItemName}.jpg`;
@@ -68,9 +84,11 @@ export default {
         return cloudImg;
       }
     },
+    //to emit an event to navigate to edit page
     editClick(foodItem) {
       this.$emit("edit-foodItem", foodItem);
     },
+    //to emit an event to delete the food-item
     deleteClick(foodItem) {
       this.$emit("remove-foodItem", foodItem);
     },
@@ -80,6 +98,7 @@ export default {
       }, 2000);
     },
   },
+  //watcher for the food-item changes
   watch: {
     foodItem: {
       handler(newValue, oldValue) {

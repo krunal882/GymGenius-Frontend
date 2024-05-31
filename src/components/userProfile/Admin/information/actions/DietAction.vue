@@ -1,5 +1,6 @@
+<!-- this component is for admin to show diet plan and provide options to edit , explore and delete -->
 <template>
-  <v-container>
+  <v-container fluid>
     <!-- <v-row v-if="loading">
       <v-col v-for="n in this.dietPlan.length" :key="n" cols="12" md="6" lg="4">
         <v-skeleton-loader
@@ -9,7 +10,7 @@
         ></v-skeleton-loader>
       </v-col>
     </v-row> -->
-
+    <!-- dietPlan preview card -->
     <v-row class="d-flex flex-wrap">
       <v-col
         v-for="dietPlan in dietPlan"
@@ -19,16 +20,18 @@
         md="4"
         lg="4"
       >
-        <v-card width="100%" class="text-black my-4 mx-2">
+        <v-card width="90%" class="text-black my-4 mx-2">
+          <!-- dietPlan image -->
           <v-img
             class="align-end text-white"
             height="200"
             :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
+            @click="exploreClicked(dietPlan)"
             cover
             alt="pic"
           >
           </v-img>
-
+          <!-- diet plan information -->
           <v-card-title class="text-center plan-name">Plan Name: </v-card-title>
           <v-card-text class="text-center pb-0" style="font-weight: 500">{{
             dietPlan.plan_name
@@ -41,8 +44,11 @@
               >Purpose: <br />{{ dietPlan.purpose }}</v-card-text
             >
           </v-card-text>
-
+          <!-- buttons for explore , remove and edit -->
           <v-card-actions style="justify-content: space-between">
+            <v-btn color="orange" @click="exploreClicked(dietPlan)"
+              >Explore</v-btn
+            >
             <v-btn color="primary" @click="editClick(dietPlan)">
               <v-icon left>mdi-pencil</v-icon> Edit
             </v-btn>
@@ -70,6 +76,14 @@ export default {
     };
   },
   methods: {
+    //to emit an event to navigate to detail page
+    async exploreClicked(dietPlan) {
+      this.$router.push({
+        name: "dietDetail",
+        params: { id: dietPlan._id },
+      });
+    },
+    //to get image form the local or stored on cloud
     getImgPath(src, cloudImg) {
       if (cloudImg === undefined) {
         return require(`@/assets/img/dietPlan/${src}`);
@@ -77,9 +91,11 @@ export default {
         return cloudImg;
       }
     },
+    //to emit an event to navigate to edit page
     editClick(dietPlan) {
       this.$emit("edit-dietPlan", dietPlan);
     },
+    //to emit an event to delete the dietPlan
     deleteClick(dietPlan) {
       this.$emit("remove-dietPlan", dietPlan);
     },
@@ -90,10 +106,13 @@ export default {
     },
   },
   computed: {
+    //to get the number of dietPlan to show the skeleton loader
     skeletonCount() {
       return this.loading ? this.dietPlan.length : 0;
     },
   },
+  //watcher for the dietPlan changes
+
   watch: {
     dietPlan: {
       handler(newValue, oldValue) {

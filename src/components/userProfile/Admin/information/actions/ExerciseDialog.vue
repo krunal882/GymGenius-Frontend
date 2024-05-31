@@ -1,3 +1,4 @@
+<!-- this component is for admin to edit exercise information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -14,6 +15,7 @@
               md="6"
               class="d-flex flex-wrap justify-center align-center"
             >
+              <!-- component for uploading the image and showing existing image -->
               <v-img
                 v-if="imagePath"
                 :src="imagePath(exercise.name, exercise.cloudImg)"
@@ -34,6 +36,7 @@
             </v-col>
           </div>
           <div class="d-flex flex-wrap">
+            <!-- name field -->
             <v-text-field
               :rules="Rules"
               v-model="exercise.name"
@@ -42,6 +45,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- category field -->
             <v-text-field
               :rules="Rules"
               v-model="exercise.category"
@@ -52,6 +56,7 @@
             ></v-text-field>
           </div>
           <div class="d-flex">
+            <!--dropdown for force field -->
             <v-select
               v-model="exercise.force"
               :items="forceTypes"
@@ -60,6 +65,7 @@
               variant="outlined"
               class="mr-4 mb-4"
             ></v-select>
+            <!-- dropdown for exercise level -->
             <v-select
               v-model="exercise.level"
               :items="levelTypes"
@@ -70,6 +76,7 @@
             ></v-select>
           </div>
           <div class="d-flex">
+            <!-- exercise mechanic -->
             <v-text-field
               :rules="Rules"
               v-model="exercise.mechanic"
@@ -78,6 +85,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- exercise equipment needed -->
             <v-text-field
               :rules="Rules"
               v-model="exercise.equipment"
@@ -88,6 +96,7 @@
             ></v-text-field>
           </div>
           <div class="d-flex flex-wrap justify-space-between">
+            <!-- primary muscles field -->
             <v-text-field
               :rules="Rules"
               v-model="exercise.primaryMuscles"
@@ -96,6 +105,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- secondary Muscles input field -->
             <v-text-field
               v-model="exercise.secondaryMuscles"
               label="Secondary Muscles"
@@ -104,6 +114,7 @@
             ></v-text-field>
           </div>
 
+          <!-- instruction field -->
           <v-textarea
             :rules="Rules"
             v-model="exercise.instructions"
@@ -113,6 +124,7 @@
           ></v-textarea>
         </v-form>
       </v-card-text>
+      <!-- button to close the dialog and add exercise -->
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
@@ -129,6 +141,7 @@ export default {
     exerciseData: Object,
     dialogOpen: Boolean,
   },
+  // data includes rules for input fields,image and exercise
   data() {
     return {
       forceTypes: ["push", "pull", "static"],
@@ -145,7 +158,7 @@ export default {
         secondaryMuscles: "",
         instructions: "",
         category: "",
-        cloudImg: "",
+        cloudImg: null,
       },
       Rules: [
         (v) => !!v || "Field is Required",
@@ -153,6 +166,7 @@ export default {
       ],
     };
   },
+  // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
@@ -162,6 +176,7 @@ export default {
     },
   },
   methods: {
+    //to handle selected image
     onFileChange(event) {
       const file = event.target.files[0];
 
@@ -173,6 +188,7 @@ export default {
         reader.readAsDataURL(file);
       }
     },
+    //to fetch existing image or stored in cloud
     imagePath(exerciseName, cloudImg) {
       if (cloudImg === undefined) {
         const formattedName = exerciseName
@@ -184,9 +200,11 @@ export default {
         return cloudImg;
       }
     },
+    //to close the dialog
     closeDialog() {
       this.$emit("close-dialog");
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
@@ -195,24 +213,23 @@ export default {
     initializeFormFields() {
       this.exercise = { ...this.exerciseData };
     },
-    cancel() {
-      this.dialog = true;
-      this.$refs.form.reset();
-    },
+    //to upload image in cloud storage and call action from vuex store
     async save(exercise) {
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
       const uploadData = new FormData();
-      uploadData.append("file", this.exercise.cloudImg);
-      if (upload_preset && cloud_name) {
-        uploadData.append("upload_preset", upload_preset);
-        uploadData.append("cloud_name", cloud_name);
+      if (this.exercise.cloudImg != null) {
+        uploadData.append("file", this.exercise.cloudImg);
+        if (upload_preset && cloud_name) {
+          uploadData.append("upload_preset", upload_preset);
+          uploadData.append("cloud_name", cloud_name);
+        }
+        const { data } = await axios.post(
+          `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+          uploadData
+        );
+        exercise.cloudImg = data.url;
       }
-      const { data } = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-        uploadData
-      );
-      exercise.cloudImg = data.url;
       await this.$store.dispatch("editExercise", { exercise });
       this.closeDialog();
     },

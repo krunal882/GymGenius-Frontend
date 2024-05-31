@@ -1,5 +1,7 @@
+<!-- this component is the parent component for the yoga page , it includes the search field , filter , preview card components -->
 <template>
   <div>
+    <!-- hero header image -->
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img
@@ -9,12 +11,14 @@
         />
       </div>
     </div>
-
+    <!-- tabs view -->
     <YogaInfoTabs />
+    <!-- search field and filter component -->
     <div class="d-flex flex-wrap justify-content-center">
       <UserSearch @search="handleSearch" @clearSearch="clearField" />
       <YogaFilter @filters-applied="applyFilters" />
     </div>
+    <!-- preview card component with the infinity scroll applied (with pagination) -->
     <div class="d-flex flex-wrap justify-content-center">
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
         <YogaInfo :yoga="yoga" @explore="exploreClicked" />
@@ -53,27 +57,32 @@ export default {
     UserSearch,
   },
   methods: {
+    //this method redirect to the yoga detail page
     async exploreClicked(yoga) {
       this.$router.push({
         name: "yogaDetail",
-        params: { id: yoga._id },
+        params: { id: yoga.item._id },
       });
     },
+    //this method is for the search functionality , handles search from the search-field component
     handleSearch(searchTerm) {
       this.searchTerm = searchTerm;
       this.page = 1;
       this.allLoaded = false;
       this.fetchYogaWithFilters({ name: searchTerm });
     },
+    //this method is for clearing the stored search-field input
     clearField() {
       this.searchTerm = "";
     },
+    //this method handles the applied filters coming from the filter component
     applyFilters(filteredFilters) {
       this.filterTerm = filteredFilters;
       this.page = 1;
       this.allLoaded = false;
       this.fetchYogaWithFilters(filteredFilters);
     },
+    //fetchYogaWithFilters takes the filters and search text and call the action from the store
     async fetchYogaWithFilters(filteredFilters) {
       this.loading = true;
       try {
@@ -82,19 +91,23 @@ export default {
           limit: this.limit,
           page: this.page,
         });
+        //checks page , if first page then  set data otherwise append data to existing
         if (this.page === 1) {
           this.localYoga = response;
         } else {
           this.localYoga = [...this.localYoga, ...response];
         }
+        //condition to check if all items are loaded or not
         this.allLoaded = response.length < this.limit;
         this.page += 1;
       } catch (error) {
         console.error("Error fetching yoga with filters:", error);
       } finally {
+        //after fetching item , made loading false
         this.loading = false;
       }
     },
+    //method is to send req and load more data
     async loadMoreProducts({ done }) {
       if (this.allLoaded || this.loading) {
         done("empty");
@@ -133,6 +146,7 @@ export default {
       }
     },
   },
+  //to get already stored yogas
   computed: {
     yoga: {
       get() {
@@ -143,6 +157,7 @@ export default {
       },
     },
   },
+  //to watch the change in the value of yoga and reflect changes
   watch: {
     "$store.state.yogaModule.yoga": {
       handler(newVal) {
@@ -151,6 +166,7 @@ export default {
       immediate: true,
     },
   },
+  //to load yoga on page mount
   mounted() {
     this.fetchYogaWithFilters();
   },

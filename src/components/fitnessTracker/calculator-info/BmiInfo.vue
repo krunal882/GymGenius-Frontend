@@ -1,3 +1,4 @@
+<!-- this component contains the information of thr Body-mass-index calculator with formula used in calculator -->
 <template>
   <div>
     <h2 class="mt-5">ACCURACY OF BMI MEASUREMENTS</h2>

@@ -1,3 +1,4 @@
+<!-- this component is the wrapper of the navbar -->
 <template>
   <div class="layout">
     <MainNav />

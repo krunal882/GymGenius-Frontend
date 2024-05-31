@@ -1,10 +1,13 @@
+<!-- this component includes the navigation bar of the website , it has logo , navigation options , profile-menu , login/signup button -->
 <template>
   <nav class="navbar my-navbar navbar-expand-md navbar-light">
     <div class="container">
+      <!-- website logo -->
       <router-link class="navbar-brand" to="/GymGenius">
         <img src="@/assets/logo.png" alt="Logo" style="width: 220px" />
       </router-link>
-      <div :class="{ collapse: isMenuVisible, 'navbar-collapse': true }">
+      <!-- navigation options -->
+      <div :class="{ 'navbar-collapse': true }">
         <ul class="navbar-nav ml-auto">
           <li
             v-for="(navItem, index) in navItems"
@@ -25,13 +28,15 @@
           </li>
         </ul>
       </div>
-      <div v-if="!userId" class="d-flex flex-wrap">
+      <!-- login/signup button -->
+      <div v-if="!token" class="d-flex flex-wrap">
         <router-link to="/authentication">
           <v-btn variant="outlined" color="white">Login/Register</v-btn>
         </router-link>
       </div>
     </div>
-    <ProfileMenu v-if="userId" />
+    <!-- profile menu option -->
+    <ProfileMenu v-if="token" />
   </nav>
 </template>
 
@@ -47,6 +52,7 @@ export default {
   },
   data() {
     return {
+      // navigation options
       activeNavItem: 0,
       navItems: [
         { label: "Home", route: "/" },
@@ -57,12 +63,57 @@ export default {
         { label: "Analyzer", route: "/fitnessTrackers" },
       ],
       user: null,
+      token: null,
     };
   },
   methods: {
+    // to highlight the active option on navbar
     setActiveNavItem(index) {
       this.activeNavItem = index;
     },
+    // to check if the token is available , if available then make requests
+    checkToken() {
+      const currentToken = Cookies.get("token");
+      if (currentToken !== undefined && currentToken !== this.token) {
+        this.token = currentToken;
+        if (this.token) {
+          const decodedToken = jwtDecode(this.token);
+          this.$store.dispatch("fetchUser", { id: decodedToken.userId });
+          this.$store.state.userModule.userId = decodedToken.userId;
+          this.$store.state.userModule.role = decodedToken.role;
+          this.$store.dispatch("fetchCart", {
+            userId: decodedToken.userId,
+            status: "pending",
+          });
+          this.$store.dispatch("fetchBookmarked", {
+            userId: decodedToken.userId,
+          });
+        }
+      }
+    },
+    //chatBoat for the fitness purpose
+    //   chatBoat() {
+    //     const scriptConfig = document.createElement("script");
+    //     scriptConfig.innerHTML = `
+    //       window.embeddedChatbotConfig = {
+    //         chatbotId: "_goC7mZy5K-mr7xGihzhw",
+    //         domain: "www.chatbase.co"
+    //       }
+    //     `;
+    //     document.head.appendChild(scriptConfig);
+
+    //     const scriptEmbed = document.createElement("script");
+    //     scriptEmbed.src = "https://www.chatbase.co/embed.min.js";
+    //     scriptEmbed.setAttribute("chatbotId", "_goC7mZy5K-mr7xGihzhw");
+    //     scriptEmbed.setAttribute("domain", "www.chatbase.co");
+    //     scriptEmbed.defer = true;
+    //     document.head.appendChild(scriptEmbed);
+    //   },
+    // },
+    // mounted() {
+    //   if (this.$store.state.userModule.userId.length > 0) {
+    //     this.chatBoat();
+    //   }
   },
   computed: {
     userId() {
@@ -76,6 +127,7 @@ export default {
         (item) => item.route === this.$route.path
       );
       this.activeNavItem = routeIndex !== -1 ? routeIndex : 0;
+      this.checkToken();
     },
   },
   created() {
@@ -107,20 +159,9 @@ export default {
         break;
 
       default:
+        this.activeNavItem = 0;
     }
-  },
-  mounted() {
-    const token = Cookies.get("token");
-    if (token) {
-      const decodedToken = jwtDecode(token);
-      this.$store.dispatch("fetchUser", { id: decodedToken.userId });
-      this.$store.state.userModule.userId = decodedToken.userId;
-      this.$store.state.userModule.role = decodedToken.role;
-      this.$store.dispatch("fetchCart", {
-        userId: decodedToken.userId,
-        status: "pending",
-      });
-    }
+    this.checkToken();
   },
 };
 </script>

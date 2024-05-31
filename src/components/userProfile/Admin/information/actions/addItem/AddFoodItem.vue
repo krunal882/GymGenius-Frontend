@@ -1,3 +1,4 @@
+<!-- this component is for admin to add new foodItem information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -8,8 +9,9 @@
       <v-card-title> Add FoodItem </v-card-title>
       <v-card-text>
         <v-form ref="form">
+          <!-- component for uploading the image -->
           <AdminImgUpload @img-selected="handleImageSelected" />
-
+          <!-- name field -->
           <div class="d-flex flex-wrap">
             <v-text-field
               :rules="Rules"
@@ -19,6 +21,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- category field -->
             <v-text-field
               :rules="Rules"
               v-model="foodItem.category"
@@ -29,6 +32,7 @@
             ></v-text-field>
           </div>
           <h4>Nutritions</h4>
+          <!-- calories field -->
           <div class="d-flex flex-wrap">
             <v-text-field
               v-model="foodItem.nutritions.calories"
@@ -39,6 +43,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- protein field -->
             <v-text-field
               v-model="foodItem.nutritions.protein"
               label="Protein (g)"
@@ -48,6 +53,7 @@
               min="0"
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- carbohydrates field -->
             <v-text-field
               v-model="foodItem.nutritions.carbohydrates"
               label="Carbohydrates (g)"
@@ -57,6 +63,7 @@
               min="0"
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- fat field -->
             <v-text-field
               v-model="foodItem.nutritions.fat"
               label="Fat (g)"
@@ -66,6 +73,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- fiber field -->
             <v-text-field
               v-model="foodItem.nutritions.fiber"
               label="Fiber (g)"
@@ -75,6 +83,7 @@
               required
               class="mb-4 mr-4"
             ></v-text-field>
+            <!-- magnesium field -->
             <v-text-field
               v-model="foodItem.nutritions.magnesium"
               label="magnesium (mg)"
@@ -84,6 +93,7 @@
               required
               class="mb-4 mr-4"
             ></v-text-field>
+            <!-- phosphorus field -->
             <v-text-field
               v-model="foodItem.nutritions.phosphorus"
               label="phosphorus (mg)"
@@ -93,6 +103,7 @@
               required
               class="mb-4 mr-4"
             ></v-text-field>
+            <!-- vitamin_B6 field -->
             <v-text-field
               v-model="foodItem.nutritions.vitamin_B6"
               label="vitamin_B6 (mg)"
@@ -105,7 +116,7 @@
           </div>
 
           <h4>Health benefits</h4>
-
+          <!-- health benefits field -->
           <div class="d-flex flex-wrap">
             <v-textarea
               :rules="Rules"
@@ -116,7 +127,7 @@
             ></v-textarea>
           </div>
           <h4>culinary uses</h4>
-
+          <!-- culinary uses field -->
           <div class="d-flex flex-wrap">
             <v-textarea
               :rules="Rules"
@@ -127,6 +138,7 @@
             ></v-textarea>
           </div>
           <h4>varieties</h4>
+          <!-- varieties field -->
           <div class="d-flex flex-wrap">
             <v-textarea
               v-model="foodItem.varieties"
@@ -136,6 +148,7 @@
             ></v-textarea>
           </div>
           <h4>fun facts & trivia</h4>
+          <!-- fun facts and trivia field -->
           <div class="d-flex flex-wrap">
             <v-textarea
               :rules="Rules"
@@ -146,10 +159,12 @@
             ></v-textarea>
           </div>
           <h4>recipes and serving ideas</h4>
+          <!-- recipes and serving ideas field -->
           <div
             v-for="(item, index) in foodItem.recipes_and_serving_ideas"
             :key="index"
           >
+            <!-- recipe name field -->
             <v-text-field
               :rules="Rules"
               v-model="item.name"
@@ -158,6 +173,7 @@
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- ingredients field -->
             <div class="d-flex flex-wrap">
               <v-textarea
                 :rules="Rules"
@@ -168,6 +184,7 @@
               ></v-textarea>
             </div>
             <div class="d-flex flex-wrap">
+              <!-- instructions field -->
               <v-textarea
                 :rules="Rules"
                 v-model="item.instructions"
@@ -180,6 +197,7 @@
         </v-form>
       </v-card-text>
       <v-card-actions>
+        <!-- button to close the dialog and add foodItem -->
         <v-btn color="blue darken-1" @click="closeDialog">Cancel</v-btn>
         <v-btn color="blue darken-1" @click="add(foodItem)">Add</v-btn>
       </v-card-actions>
@@ -197,6 +215,7 @@ export default {
     AdminImgUpload,
   },
   data() {
+    // data includes rules for input fields and foodItem
     return {
       image: null,
       dialog: false,
@@ -231,6 +250,7 @@ export default {
       ],
     };
   },
+  // watcher for dialog
   watch: {
     dialogOpen(value) {
       this.dialog = value;
@@ -238,22 +258,21 @@ export default {
   },
 
   methods: {
+    //to handle selected image
     handleImageSelected(image) {
       this.image = image;
     },
+    //to close the dialog
     closeDialog() {
       this.$emit("close-dialog");
     },
+    //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
       }
     },
-
-    cancel() {
-      this.dialog = true;
-      this.$refs.form.reset();
-    },
+    //to upload image in cloud storage and call action from vuex store
     async add(foodItem) {
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;

@@ -1,18 +1,24 @@
+<!-- this component is parent component of yoga for the admin actions -->
 <template>
   <div>
+    <!-- component to handle search action by admin -->
     <ItemSearch @search="handleSearch" @add="openAddDialog" />
+    <!-- component to add new yoga pose by admin -->
     <AddYoga :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
-    <div v-if="yogas.length > 0">
+    <div v-if="yogas?.length > 0">
+      <!-- component for options of edit and delete  -->
       <YogaAction
         :yogas="yogas"
         @edit-yoga="openEditDialog"
         @remove-yoga="openRemoveDialog"
       />
+      <!-- component for edit operation -->
       <YogaDialog
         :yogaData="selectedYoga"
         :dialogOpen="dialogOpen"
         @close-dialog="closeEditDialog"
       />
+      <!-- component for delete operation -->
       <RemoveItem
         action="removeYoga"
         :item="selectedYoga"
@@ -51,43 +57,50 @@ export default {
     };
   },
   computed: {
+    // data request sent to show some result when page first loads
     yogas() {
       return this.$store.state.yogaModule.yogaSearch;
     },
   },
   methods: {
+    //to open the edit dialog
     openEditDialog(yoga) {
       this.selectedYoga = yoga;
       this.dialogOpen = true;
     },
+    // to close edit dialog
     closeEditDialog() {
       this.dialogOpen = false;
     },
+    // to open delete dialog
     openRemoveDialog(yoga) {
       this.selectedYoga = yoga;
       this.removeDialogOpen = true;
     },
+    //to close delete dialog
     closeRemoveDialog() {
       this.removeDialogOpen = false;
     },
+    //to open add new dialog
     openAddDialog() {
       this.addDialogOpen = true;
     },
+    //to close add new dialog
     closeAddDialog() {
       this.addDialogOpen = false;
     },
+    //to handle search operation by admin
     handleSearch(searchItem) {
       this.selectedItem = searchItem;
 
       this.fetchYogaWithFilters(this.selectedItem);
     },
-    async fetchYogaWithFilters(name) {
-      try {
-        await this.$store.dispatch("searchYoga", name);
-      } catch (error) {
-        console.error("Error fetching exercises with filters:", error);
-      }
-    },
+  },
+  async mounted() {
+    //fetch data only once page loads
+    if (this.yoga.length === 0) {
+      await this.$store.dispatch("searchYoga", name);
+    }
   },
 };
 </script>

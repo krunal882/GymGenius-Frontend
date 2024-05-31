@@ -1,3 +1,4 @@
+<!-- this component is for setting carousal image for the product category page -->
 <template>
   <v-carousel
     height="fit-content"
@@ -28,6 +29,7 @@ export default {
       carouselHeight: "640px",
     };
   },
+  // to set the image size on page load
   async created() {
     const imageHeights = await Promise.all(
       this.images.map((image) => this.getImageNaturalHeight(image))

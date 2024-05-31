@@ -1,3 +1,4 @@
+<!-- this component is for displaying the bookmarked dietPlans of the user -->
 <template>
   <v-container>
     <v-row v-if="bookmarkedDiets.length != 0" class="d-flex flex-wrap">
@@ -10,6 +11,7 @@
         lg="4"
       >
         <v-card class="text-black my-4 mx-2 image-hover-effect" width="90%">
+          <!-- diet plan image -->
           <v-img
             style="height: 200px"
             :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
@@ -18,6 +20,7 @@
           >
           </v-img>
 
+          <!-- dietPlan information -->
           <v-card-title class="text-center plan-name">Plan Name: </v-card-title>
           <v-card-text class="text-center pb-0" style="font-weight: 500">{{
             dietPlan.plan_name
@@ -30,7 +33,7 @@
               >Purpose: <br />{{ dietPlan.purpose }}</v-card-text
             >
           </v-card-text>
-
+          <!-- buttons for explore and bookmark/undoBookmark -->
           <v-card-actions class="d-flex justify-center">
             <v-btn color="orange" @click="exploreClicked(dietPlan)"
               >Explore</v-btn
@@ -42,6 +45,7 @@
         </v-card>
       </v-col>
     </v-row>
+    <!-- message to display if there is no items -->
     <div v-else>
       <v-alert :value="true" color="info" icon="mdi-information">
         You do not have any bookmarked diet plans. <br />
@@ -54,17 +58,21 @@
 <script>
 export default {
   computed: {
+    // to fetch bookmarked item from store
     bookmarkedDiets() {
       return this.$store.state.bookmarkModule.diet;
     },
   },
   methods: {
+    //to fetch dietPlan image
     getImgPath(src, cloudImg) {
       return cloudImg || `../../../assets/img/dietPlan/${src}`;
     },
+    //for navigate to detail page
     exploreClicked(dietPlan) {
       this.$emit("explore", { item: dietPlan, route: "dietDetail" });
     },
+    //to undo bookmark
     undoBookmark(diet) {
       const userId = this.$store.state.userModule.userId;
 
