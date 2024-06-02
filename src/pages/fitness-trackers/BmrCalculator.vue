@@ -1,4 +1,6 @@
+<!-- BMR calculator page (parent) -->
 <template>
+  <!-- header of the page -->
   <TrackerHeader title="BMR CALCULATOR" />
   <div class="container mt-5">
     <h2 class="u-h2">WHAT IS BMR?</h2>
@@ -19,6 +21,7 @@
     </p>
     <h2 class="u-h2">CALCULATE YOUR BMR</h2>
     <h6>set your weight, height & age</h6>
+    <!-- calculator component -->
     <BmrCalculation />
     <BmrInfo />
   </div>

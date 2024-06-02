@@ -1,9 +1,11 @@
+// this vuex store is for foodItem actions
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+//interface for the foodItem
 interface FoodItem {
   _id: string;
   name: string;
@@ -32,6 +34,7 @@ interface FoodItem {
   ];
 }
 
+// state interface
 interface State {
   foodItem: FoodItem[];
   searchFoodItem: FoodItem[];
@@ -42,12 +45,14 @@ interface FilteredFilters {
   [key: string]: string | string[];
 }
 
+//store state
 const state: State = {
   foodItem: [],
   searchFoodItem: [],
   foodDetail: null,
 };
 
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -58,6 +63,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -79,6 +85,7 @@ const handleServerError = (error: AxiosError) => {
   }
 };
 
+// mutations for the state changes
 const mutations = {
   setFoodItem(state: State, foodItem: FoodItem[]) {
     state.foodItem = foodItem;
@@ -107,7 +114,9 @@ const mutations = {
   },
 };
 
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  // action to fetch foodItem
   async fetchFoodItem(
     { commit }: { commit: Commit },
     {
@@ -159,6 +168,7 @@ const actions = {
     }
   },
 
+  // action to add new foodItem
   async addFoodItem(
     { commit }: { commit: Commit },
     { foodItem }: { foodItem: FoodItem }
@@ -175,6 +185,7 @@ const actions = {
     }
   },
 
+  // action to search specific foodItem
   async searchFoodItem({ commit }: { commit: Commit }, name: string) {
     try {
       const config = createAxiosConfig();
@@ -187,6 +198,7 @@ const actions = {
     }
   },
 
+  // action to edit existing foodItem
   async editFoodItem(
     { commit }: { commit: Commit },
     { foodItem }: { foodItem: FoodItem }
@@ -204,6 +216,7 @@ const actions = {
     }
   },
 
+  // action to delete foodItem
   async removeFoodItem({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();

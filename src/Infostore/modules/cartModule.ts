@@ -1,9 +1,11 @@
+// this vuex store is for users cart actions
 import axios, { AxiosError } from "axios";
 import { Commit, Dispatch } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+// interface for the product
 interface Product {
   _id: string;
   category: string;
@@ -16,16 +18,19 @@ interface Product {
   paymentId: string;
 }
 
+// state interface
 interface State {
   cartItems: Product[];
   history: Product[];
 }
 
+//store state
 const state: State = {
   cartItems: [],
   history: [],
 };
 
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -36,6 +41,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -57,6 +63,7 @@ const handleServerError = (error: AxiosError) => {
   }
 };
 
+// mutations for the state changes
 const mutations = {
   setCartItems(state: State, cartItems: Product[]) {
     state.cartItems = cartItems;
@@ -79,7 +86,9 @@ const mutations = {
   },
 };
 
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  // action to add product in the cart
   async addToCart(
     { commit }: { commit: Commit },
     {
@@ -107,6 +116,7 @@ const actions = {
       handleServerError(error);
     }
   },
+  // action to fetch users cart product
   async fetchCart(
     { commit }: { commit: Commit },
     { userId, status }: { userId: string; status: string }
@@ -148,11 +158,12 @@ const actions = {
                 };
               }
             );
+            // if payment is done then add product to history
             if (status == "done") {
               commit("setHistory", productsWithPaymentId);
             }
           }
-
+          // if payment is due then add product to cart
           if (status == "pending") {
             commit("setCartItems", getProductResponse.data);
           }
@@ -163,7 +174,7 @@ const actions = {
       handleServerError(error);
     }
   },
-
+  // action to remove product from the cart section
   async removeCart(
     { commit }: { commit: Commit },
     { productId, userId }: { productId: string; userId: string }
@@ -190,6 +201,7 @@ const actions = {
     }
   },
 
+  // action to purchase product
   async purchase(
     { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
     {
@@ -231,6 +243,8 @@ const actions = {
       handleServerError(error);
     }
   },
+
+  // action to return the purchased product
   async return(
     { commit }: { commit: Commit },
     { paymentId }: { paymentId: string }

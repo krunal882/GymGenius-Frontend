@@ -1,9 +1,11 @@
+// this vuex store is for exercise actions
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+// interface for the exercise
 interface Exercise {
   _id: string;
   name: string;
@@ -18,6 +20,7 @@ interface Exercise {
   cloudImg: string;
 }
 
+// state interface
 interface State {
   exercises: Exercise[];
   exerciseSearch: Exercise[];
@@ -28,12 +31,14 @@ interface FilteredFilters {
   [key: string]: string | string[];
 }
 
+//store state
 const state: State = {
   exercises: [],
   exerciseSearch: [],
   exerciseDetail: null,
 };
 
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -44,6 +49,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -65,6 +71,7 @@ const handleServerError = (error: AxiosError) => {
   }
 };
 
+// mutations for the state changes
 const mutations = {
   setExercises(state: State, exercises: Exercise[]) {
     state.exercises = exercises;
@@ -93,7 +100,9 @@ const mutations = {
   },
 };
 
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  // action to fetch exercises
   async fetchExercises(
     { commit }: { commit: Commit },
     {
@@ -145,6 +154,8 @@ const actions = {
       handleServerError(error);
     }
   },
+
+  // action to search specific exercise
   async searchExercise({ commit }: { commit: Commit }, name: string) {
     try {
       const config = createAxiosConfig();
@@ -156,6 +167,7 @@ const actions = {
     }
   },
 
+  // action to add new exercise
   async addExercise(
     { commit }: { commit: Commit },
     { exercise }: { exercise: Exercise }
@@ -172,6 +184,7 @@ const actions = {
     }
   },
 
+  // action to edit existing exercise
   async editExercise(
     { commit }: { commit: Commit },
     { exercise }: { exercise: Exercise }
@@ -188,6 +201,8 @@ const actions = {
       handleServerError(error);
     }
   },
+
+  // action to remove exercise
   async removeExercise({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();

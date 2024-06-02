@@ -1,9 +1,11 @@
+//yoga routes
 import Cookies from "js-cookie";
 import YogaPoses from "../components/YogaPage/YogaPoses.vue";
 import YogaPage from "../pages/yoga/YogaPage.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import YogaDetails from "@/components/YogaPage/YogaDetails.vue";
 
+// check if user is logged-in / registered or not
 const ifAuthenticated = (to, from, next) => {
   if (Cookies.get("token")) {
     next();
@@ -12,6 +14,7 @@ const ifAuthenticated = (to, from, next) => {
   }
 };
 
+//routes
 const routes = [
   {
     path: "/YogaPoses",

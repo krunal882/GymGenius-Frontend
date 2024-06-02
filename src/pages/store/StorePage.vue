@@ -1,3 +1,4 @@
+<!-- store page -->
 <template>
   <div>
     <store-nav-wrapper>

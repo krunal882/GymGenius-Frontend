@@ -1,3 +1,4 @@
+<!-- yoga page  -->
 <template>
   <div>
     <router-view></router-view>

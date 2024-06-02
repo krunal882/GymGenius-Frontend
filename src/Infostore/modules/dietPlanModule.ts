@@ -1,8 +1,11 @@
+// this vuex store is for dietPlan
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
+
+// interface for the DietPlan
 interface DietPlan {
   _id: string;
   name: string;
@@ -19,6 +22,7 @@ interface DietPlan {
   }[];
 }
 
+// state interface
 interface State {
   dietPlan: DietPlan[];
   dietSearch: DietPlan[];
@@ -29,12 +33,14 @@ interface FilteredFilters {
   [key: string]: string | string[];
 }
 
+//store state
 const state: State = {
   dietPlan: [],
   dietSearch: [],
   dietDetail: null,
 };
 
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -45,6 +51,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -66,6 +73,7 @@ const handleServerError = (error: AxiosError) => {
   }
 };
 
+// mutations for the state changes
 const mutations = {
   setDietPlan(state: State, dietPlan: DietPlan[]) {
     state.dietPlan = dietPlan;
@@ -90,7 +98,9 @@ const mutations = {
   },
 };
 
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  //action to fetch diet plan
   async fetchDietPlan(
     { commit }: { commit: Commit },
     {
@@ -141,6 +151,8 @@ const actions = {
       handleServerError(error);
     }
   },
+
+  // action to search specific diet plan
   async searchDiet({ commit }: { commit: Commit }, name: string) {
     try {
       const config = createAxiosConfig();
@@ -152,6 +164,7 @@ const actions = {
     }
   },
 
+  // action to add new diet plan
   async addDietPlan(
     { commit }: { commit: Commit },
     { dietPlan }: { dietPlan: DietPlan }
@@ -168,6 +181,7 @@ const actions = {
     }
   },
 
+  // action to edit existing diet plan
   async editDietPlan(
     { commit }: { commit: Commit },
     { id, dietPlan }: { id: string; dietPlan: DietPlan }
@@ -185,6 +199,7 @@ const actions = {
     }
   },
 
+  // action to remove diet plan
   async removeDiet({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();

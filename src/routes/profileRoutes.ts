@@ -1,3 +1,4 @@
+// user profile routes
 import Cookies from "js-cookie";
 import InfoSection from "../components/userProfile/Admin/InfoSection.vue";
 import ProductsSection from "@/components/userProfile/Admin/ProductsSection.vue";
@@ -12,6 +13,7 @@ import OrdersSection from "@/components/userProfile/Admin/OrdersSection.vue";
 import { createRouter, createWebHistory } from "vue-router";
 import userModule from "@/Infostore/modules/userModule";
 
+// check if user is logged-in / registered or not
 const ifAuthenticated = (to, from, next) => {
   if (Cookies.get("token")) {
     next();
@@ -20,6 +22,7 @@ const ifAuthenticated = (to, from, next) => {
   }
 };
 
+// check if logged-in credentials is of owner or user
 const ifOwner = (to, from, next) => {
   const userRole = userModule.state.role;
   if (Cookies.get("token") && userRole === "owner") {
@@ -29,6 +32,7 @@ const ifOwner = (to, from, next) => {
   }
 };
 
+//routes
 const routes = [
   {
     path: "/profile",

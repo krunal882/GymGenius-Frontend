@@ -1,4 +1,6 @@
+<!-- TDEE calculator page (parent) -->
 <template>
+  <!-- header of the page -->
   <TrackerHeader title="TDEE CALCULATOR" />
   <div class="container mt-5">
     <h2 class="u-h2">WHAT IS TDEE?</h2>
@@ -12,6 +14,7 @@
       gaining muscle, or simply staying healthy.
     </p>
     <h6>set your relative data</h6>
+    <!-- calculator component -->
     <TdeeCalculation />
     <TdeeInfo />
   </div>

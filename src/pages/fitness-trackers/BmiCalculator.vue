@@ -1,4 +1,6 @@
+<!-- BMI calculator page (parent) -->
 <template>
+  <!-- header of the page -->
   <TrackerHeader title="BMI CALCULATOR" />
   <div class="container mt-5">
     <h2 class="u-h2">WHAT IS BMI?</h2>
@@ -13,6 +15,7 @@
     </p>
     <h2 class="u-h2">CALCULATE YOUR BMI</h2>
     <h6>set your weight and height</h6>
+    <!-- calculator component -->
     <BmiCalculation />
     <h2 class="mt-3">BMI RANGES</h2>
     <h6 class="range-description" style="font-size: medium">

@@ -1,19 +1,11 @@
+// this vuex store is for admin actions
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit, Dispatch } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
-interface UserInfo {
-  _id: string;
-  name: string;
-  email: string;
-  age: number;
-  number: number;
-  role: string;
-  state: string;
-}
-
+// interface for the user
 interface User {
   _id: string;
   name: string;
@@ -21,12 +13,13 @@ interface User {
   age: number;
   number: string;
   role: string;
-  password: string;
-  confirmPassword: string;
+  password?: string;
+  confirmPassword?: string;
   state: string;
-  src: string;
+  src?: string;
 }
 
+//interface for the product
 interface ProductInfo {
   _id: string;
   category: string;
@@ -38,18 +31,21 @@ interface ProductInfo {
   state: string;
 }
 
+// interface for the orders
 interface OrderData {
   userId: string;
   productInfo: ProductInfo[];
 }
 
+// state interface
 interface State {
-  userInfo: UserInfo[];
+  userInfo: User[];
   productData: OrderData[];
   total: number;
   userDeleted: boolean;
 }
 
+//store state
 const state: State = {
   userInfo: [],
   productData: [],
@@ -57,6 +53,7 @@ const state: State = {
   userDeleted: null,
 };
 
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -67,6 +64,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -88,8 +86,9 @@ const handleServerError = (error: AxiosError) => {
   }
 };
 
+// mutations for the state changes
 const mutations = {
-  setUsers(state: State, data: UserInfo[]) {
+  setUsers(state: State, data: User[]) {
     state.userInfo = data;
   },
   setOrders(state: State, products: OrderData[]) {
@@ -98,7 +97,7 @@ const mutations = {
   setTotalItems(state: State, total: number) {
     state.total = total;
   },
-  addUser(state: State, user: UserInfo) {
+  addUser(state: State, user: User) {
     state.userInfo.push(user);
   },
   deleteUser(state: State, id: string) {
@@ -108,7 +107,10 @@ const mutations = {
     state.userDeleted = isDeleted;
   },
 };
+
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  // action to get all users information for admin
   async getAllUser(
     {
       commit,
@@ -130,6 +132,7 @@ const actions = {
     }
   },
 
+  // action to add new user by admin
   async userAdd({ commit }: { commit: Commit }, { user }: { user: User }) {
     try {
       const config = createAxiosConfig();
@@ -144,6 +147,7 @@ const actions = {
     }
   },
 
+  // action to delete an user by admin
   async userDelete(
     { commit }: { commit: Commit },
     { id, role, master }: { id: string; role: string; master: string }
@@ -168,6 +172,7 @@ const actions = {
     }
   },
 
+  // action to get all received orders from the users
   async getAllOrders({ commit }: { commit: Commit }) {
     try {
       const url = "http://localhost:3000/store/orders";

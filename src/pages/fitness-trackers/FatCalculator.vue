@@ -1,4 +1,6 @@
+<!-- fat calculator page (parent) -->
 <template>
+  <!-- header of the page -->
   <TrackerHeader title="BODY FAT CALCULATOR" />
   <div class="container mt-5">
     <h2>BODY FAT CALCULATOR: CALCULATE YOUR BODY FAT PERCENTAGE</h2>
@@ -9,6 +11,7 @@
       it also guides you towards your ideal weight for optimal body fat levels.
     </p>
     <h6>set your weight, height & age</h6>
+    <!-- calculator component -->
     <FatCalculation />
     <FatInfo />
   </div>

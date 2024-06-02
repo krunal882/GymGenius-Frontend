@@ -1,5 +1,7 @@
+<!-- store landing page -->
 <template>
   <div>
+    <!-- carousal images -->
     <StoreCarousel />
     <p class="container slider">
       EQUIPMENTS
@@ -67,6 +69,7 @@ export default {
     SpotLight,
   },
   computed: {
+    // different carousals for different category
     equipmentCarousal() {
       return this.$store.state.productsModule.equipmentCarousal;
     },
@@ -80,6 +83,8 @@ export default {
       return this.$store.state.productsModule.cardioCarousal;
     },
   },
+
+  //fetching 10 product of each category for category wise carousal
   mounted() {
     const categories = [
       ["equipments", "equipmentCarousal"],

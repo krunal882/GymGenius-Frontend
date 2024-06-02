@@ -1,3 +1,4 @@
+<!-- exercise page (parent) -->
 <template>
   <div>
     <router-view></router-view>

@@ -1,3 +1,4 @@
+<!-- food nutrition page -->
 <template>
   <div>
     <router-view></router-view>

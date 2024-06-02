@@ -1,3 +1,4 @@
+<!-- login and signUp page -->
 <template>
   <v-container>
     <v-row align="center" justify="center">
@@ -15,6 +16,9 @@
                         Log in to your account so you can continue<br />with
                         your fitness journey
                       </h6>
+
+                      <!-- input fields for the login -->
+
                       <v-row align="center" justify="center">
                         <v-col cols="12" sm="8">
                           <v-text-field
@@ -116,6 +120,9 @@
                         Let's get you all set up so you can start your<br />Fitness
                         journey
                       </h6>
+
+                      <!-- input fields for the signup process -->
+
                       <v-row align="center" justify="center">
                         <v-col cols="12" sm="8">
                           <v-text-field
@@ -213,6 +220,7 @@
 import Cookies from "js-cookie";
 export default {
   data() {
+    // input fields value holder and rules for the input data
     return {
       step: 1,
       loginEmail: "",
@@ -264,6 +272,7 @@ export default {
     };
   },
   methods: {
+    // to login request
     async login() {
       if (this.$refs.loginForm.validate()) {
         await this.$store.dispatch("userLogin", {
@@ -276,6 +285,8 @@ export default {
         }
       }
     },
+
+    // to signup request
     async signUp() {
       if (this.$refs.signUpForm.validate()) {
         await this.$store.dispatch("userSignup", {
@@ -292,6 +303,8 @@ export default {
         }
       }
     },
+
+    // to toggle password visibility
     toggleLoginPasswordVisibility() {
       this.loginPasswordVisible = !this.loginPasswordVisible;
     },
@@ -302,7 +315,6 @@ export default {
       this.confirmPasswordVisible = !this.confirmPasswordVisible;
     },
   },
-  computed: {},
 };
 </script>
 

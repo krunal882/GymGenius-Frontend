@@ -1,9 +1,11 @@
+// this vuex store is for products actions
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit, GetterTree } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+// interface for the product
 interface Product {
   _id: string;
   category: string;
@@ -15,6 +17,7 @@ interface Product {
   state: string;
 }
 
+//state interface
 interface State {
   product: Product[];
   productSearch: Product[];
@@ -40,6 +43,7 @@ interface FilteredFilters {
   [key: string]: boolean | number | string;
 }
 
+//store state
 const state: State = {
   product: [],
   productSearch: [],
@@ -61,6 +65,7 @@ const state: State = {
   cardioCarousal: [],
 };
 
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -71,6 +76,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -92,6 +98,7 @@ const handleServerError = (error: AxiosError) => {
   }
 };
 
+// mutations for the state changes
 const mutations = {
   setProduct(
     state: State,
@@ -126,7 +133,10 @@ const mutations = {
     state.adminProduct = state.adminProduct.filter((item) => item._id !== id);
   },
 };
+
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  // action to fetch product
   async fetchProduct(
     { commit, state }: { commit: Commit; state: any },
     {
@@ -198,6 +208,7 @@ const actions = {
     }
   },
 
+  // action to add new product
   async addProduct(
     { commit }: { commit: Commit },
     { product }: { product: Product }
@@ -214,6 +225,7 @@ const actions = {
     }
   },
 
+  // action to edit existing product
   async editProduct(
     { commit }: { commit: Commit },
     { product }: { product: Product }
@@ -231,6 +243,7 @@ const actions = {
     }
   },
 
+  // action to delete product
   async removeProduct({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();

@@ -1,3 +1,4 @@
+<!-- user profile page with all user/owner options -->
 <template>
   <v-app id="inspire">
     <v-app-bar-nav-icon

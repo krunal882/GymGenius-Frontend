@@ -1,9 +1,11 @@
+// this vuex store is for yoga actions
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
+// interface for the yoga
 interface Yoga {
   _id: string;
   category_name: string;
@@ -17,6 +19,7 @@ interface Yoga {
   url_png: string;
 }
 
+// state interface
 interface State {
   yoga: Yoga[];
   yogaSearch: Yoga[];
@@ -27,12 +30,14 @@ interface FilteredFilters {
   [key: string]: string | string[];
 }
 
+//store state
 const state: State = {
   yoga: [],
   yogaSearch: [],
   yogaDetail: null,
 };
 
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -43,6 +48,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -64,6 +70,7 @@ const handleServerError = (error: AxiosError) => {
   }
 };
 
+// mutations for the state changes
 const mutations = {
   setYoga(state: State, yoga: Yoga[]) {
     state.yoga = yoga;
@@ -89,7 +96,10 @@ const mutations = {
     state.yogaDetail = yoga;
   },
 };
+
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  // action to fetch yoga poses
   async fetchYoga(
     { commit }: { commit: Commit },
     {
@@ -142,6 +152,8 @@ const actions = {
       handleServerError(error);
     }
   },
+
+  // action to search yoga
   async searchYoga({ commit }: { commit: Commit }, name: string) {
     try {
       const config = createAxiosConfig();
@@ -153,6 +165,7 @@ const actions = {
     }
   },
 
+  // action to add new yoga pose
   async addYoga({ commit }: { commit: Commit }, { yoga }: { yoga: Yoga }) {
     try {
       const config = createAxiosConfig();
@@ -166,6 +179,7 @@ const actions = {
     }
   },
 
+  // action to edit existing yoga pose
   async editYoga({ commit }: { commit: Commit }, { yoga }: { yoga: Yoga }) {
     try {
       const config = createAxiosConfig();
@@ -180,6 +194,7 @@ const actions = {
     }
   },
 
+  // action to delete yoga pose
   async removeYoga({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();

@@ -1,3 +1,4 @@
+// Import styles , Vue and necessary plugins , Vuetify components and directives
 import "bootstrap/dist/css/bootstrap.css";
 import "@mdi/font/css/materialdesignicons.css";
 import "vue3-toastify/dist/index.css";
@@ -29,6 +30,7 @@ import { RouteRecordRaw, Router } from "vue-router";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
 
+// Function to add routes from multiple collections
 function addRoutes(router: Router, ...routeCollections: Router[]): void {
   routeCollections.forEach((routes) => {
     routes.getRoutes().forEach((route: RouteRecordRaw) => {
@@ -37,12 +39,14 @@ function addRoutes(router: Router, ...routeCollections: Router[]): void {
   });
 }
 
+// Create Vuetify instance
 const vuetify = createVuetify({
   components,
   directives,
   ssr: true,
 });
 
+// Create router instance
 const router = createRouter({
   history: createWebHistory(process.env.BASE_URL),
   routes: [
@@ -64,13 +68,16 @@ const router = createRouter({
   ],
 });
 
+// Scroll to top on route change
 router.beforeEach((to, from, next) => {
   window.scrollTo(0, 0);
   next();
 });
 
+// Create Vue app instance
 const app = createApp(App);
 
+// Add additional routes
 addRoutes(
   router,
   authRoutes,
@@ -82,13 +89,14 @@ addRoutes(
   yogaRoutes
 );
 
+// Use plugins and components
 app.use(vuetify);
 app.use(router);
 app.use(store);
 app.use(ToastPlugin, { position: "top-right" });
-
 app.component("font-awesome-icon", FontAwesomeIcon);
 
+// Mount the app
 app.mount("#app");
 
 import "bootstrap/dist/js/bootstrap.js";

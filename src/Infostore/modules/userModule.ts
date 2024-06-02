@@ -1,9 +1,11 @@
+// this vuex store is for user actions
 import axios, { AxiosResponse, AxiosError } from "axios";
 import { Commit, GetterTree, ActionTree } from "vuex";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import Cookies from "js-cookie";
 
+//interface for the user
 interface State {
   userId: string;
   role: string;
@@ -15,6 +17,7 @@ interface State {
   userAvatarUrl: string;
 }
 
+// interface for creating new user and editing user
 interface User {
   _id: string;
   name: string;
@@ -28,6 +31,7 @@ interface User {
   src: string;
 }
 
+// interface for the signup
 interface signup {
   token: string;
   user: User;
@@ -53,6 +57,7 @@ interface Age {
   [key: string]: string;
 }
 
+// store state
 const state: State = {
   userId: "",
   role: "",
@@ -64,6 +69,7 @@ const state: State = {
   userAvatarUrl: "",
 };
 
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -74,6 +80,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -95,6 +102,7 @@ const handleServerError = (error: AxiosError) => {
   }
 };
 
+// mutations for the state changes
 const mutations = {
   setToken(state: State, data: signup) {
     state.token = data.token;
@@ -113,7 +121,9 @@ const mutations = {
   },
 };
 
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  // action to fetch the user
   async fetchUser({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();
@@ -129,6 +139,7 @@ const actions = {
     }
   },
 
+  // action for user login
   async userLogin(
     { commit }: { commit: Commit },
     { email, password }: { email: Email; password: Password }
@@ -152,16 +163,17 @@ const actions = {
         useToast().success("Login successful! Welcome back.");
         commit("setToken", response.data);
       }
-      // await axios.post("http://localhost:3000/mailer/email", {
-      //   recipients: email,
-      //   subject,
-      //   html,
-      // });
+      await axios.post("http://localhost:3000/mailer/email", {
+        recipients: email,
+        subject,
+        html,
+      });
     } catch (error) {
       handleServerError(error);
     }
   },
 
+  // action for the user signup
   async userSignup(
     { commit }: { commit: Commit },
     {
@@ -202,16 +214,17 @@ const actions = {
       }
       const subject = "Account Signup";
       const html = "<p>successfully created account</p>";
-      // await axios.post("http://localhost:3000/mailer/email", {
-      //   recipients: email,
-      //   subject,
-      //   html,
-      // });
+      await axios.post("http://localhost:3000/mailer/email", {
+        recipients: email,
+        subject,
+        html,
+      });
     } catch (error) {
       handleServerError(error);
     }
   },
 
+  // action for forgot password operation
   async forgotPassword(
     { commit }: { commit: Commit },
     { email }: { email: string }
@@ -237,6 +250,7 @@ const actions = {
     }
   },
 
+  // action for the reset password operation
   async resetPassword(
     { commit }: { commit: Commit },
     {
@@ -271,6 +285,7 @@ const actions = {
     }
   },
 
+  // action for the user update
   async userUpdate(
     { commit }: { commit: Commit },
     {
@@ -292,6 +307,7 @@ const actions = {
     }
   },
 
+  // action for the profile image upload
   async addImage(
     { commit }: { commit: Commit },
     { userId, imgUrl }: { userId: string; imgUrl: string }
@@ -307,6 +323,7 @@ const actions = {
     }
   },
 
+  // action for the user query form
   async getContact(
     { commit }: { commit: Commit },
     { fullName, email, phoneNumber, subject, message }
@@ -361,6 +378,7 @@ const actions = {
     }
   },
 
+  // action for the change password operation
   async changePassword(
     { commit }: { commit: Commit },
     {

@@ -1,13 +1,16 @@
+<!-- reset password page -->
 <template>
   <v-card elevation="1" class="forgot-password-card">
     <div class="text-center">
       <h1 class="mb-2">Reset Password</h1>
     </div>
+    <!-- poster image -->
     <img
       src="../../assets/img/authentication/forgotPassword.png"
       alt="Forgot password image"
       class="forgot-password-image"
     />
+    <!-- input fields for the password -->
     <v-form>
       <v-text-field
         v-model="password"
@@ -50,6 +53,7 @@
 
 <script>
 export default {
+  // rules for the input fields
   data() {
     return {
       password: "",
@@ -70,6 +74,7 @@ export default {
     };
   },
   methods: {
+    // to send req for reset-password
     resetPassword() {
       const resetToken = this.$route.params.token;
       this.$store.dispatch("resetPassword", {
@@ -78,6 +83,7 @@ export default {
         resetPasswordToken: resetToken,
       });
     },
+    // to toggle password visibility to user
     togglePasswordVisibility() {
       this.passwordVisible = !this.passwordVisible;
     },

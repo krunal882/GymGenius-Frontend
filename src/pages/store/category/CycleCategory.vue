@@ -1,9 +1,13 @@
+<!-- this component is the parent component for the store cycles page , it includes the search field , filter , preview card components -->
 <template>
+  <!-- hero header images -->
   <CategoryCarousel :images="carouselImages" />
+  <!-- search field and filter component -->
   <div class="d-flex flex-wrap justify-content-center">
     <UserSearch @search="handleSearch" @clearSearch="clearField" />
     <ProductFilter @filters-applied="applyFilters" />
   </div>
+  <!-- preview card component with the infinity scroll applied (with pagination) -->
   <div class="d-flex flex-wrap justify-content-center">
     <v-infinite-scroll @load="loadMoreProducts">
       <CategoryProduct
@@ -48,6 +52,7 @@ export default {
     };
   },
   computed: {
+    // to fetch accessories product
     filteredProducts() {
       return this.$store.state.productsModule.cycles;
     },

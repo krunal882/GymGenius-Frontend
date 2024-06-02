@@ -1,10 +1,13 @@
 <template>
   <div>
+    <!-- Main navigation and footer are displayed only if the current route is not a special page -->
     <main-nav-wrapper v-if="!isSpecialPage">
       <footer-wrapper>
+        <!-- The main content of the page is displayed here -->
         <router-view></router-view>
       </footer-wrapper>
     </main-nav-wrapper>
+    <!-- For special pages, only the main content is displayed without the main navigation and footer -->
     <router-view v-if="isSpecialPage" />
   </div>
 </template>
@@ -25,45 +28,11 @@ export default {
       return (
         path === "/authentication" ||
         path === "/forgotPassword" ||
-        path.startsWith("/resetPassword/") ||
+        path.startsWith("/resetPassword") ||
         path === "/404"
       );
     },
   },
-  // methods: {
-  //   appendChatbotScripts() {
-  //     if (
-  //       document.querySelector(
-  //         'script[src="https://www.chatbase.co/embed.min.js"]'
-  //       )
-  //     ) {
-  //       return; // Scripts are already present, no need to append again
-  //     }
-  //     const configScript = document.createElement("script");
-  //     configScript.innerHTML = `
-  //       window.embeddedChatbotConfig = {
-  //         chatbotId: "_goC7mZy5K-mr7xGihzhw",
-  //         domain: "www.chatbase.co"
-  //       }
-  //     `;
-  //     document.head.appendChild(configScript);
-
-  //     const embedScript = document.createElement("script");
-  //     embedScript.src = "https://www.chatbase.co/embed.min.js";
-  //     embedScript.setAttribute("chatbotId", "_goC7mZy5K-mr7xGihzhw");
-  //     embedScript.setAttribute("domain", "www.chatbase.co");
-  //     embedScript.defer = true;
-  //     document.head.appendChild(embedScript);
-  //   },
-  // },
-  // watch: {
-  //   $route() {
-  //     this.appendChatbotScripts();
-  //   },
-  //   mounted() {
-  //     this.appendChatbotScripts();
-  //   },
-  // },
 };
 </script>
 

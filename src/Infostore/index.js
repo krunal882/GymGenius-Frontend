@@ -1,3 +1,4 @@
+// vuex store creation and configuration with all separate store modules
 import { createStore } from 'vuex';
 import productsModule from './modules/productsModule';
 import cartModule from './modules/cartModule';

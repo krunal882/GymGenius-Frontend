@@ -1,14 +1,16 @@
-
+// mixin component for the products that contains methods related to products
 export default {
 
     methods: {
-
+        // to navigate to product detail page
         async onProductSelected(product) {
             this.$router.push({
                 name: "productDetail",
                 params: { category: product.category, id: product._id },
             });
         },
+
+        // to apply selected filters on the product
         applyFilters(filters) {
             this.currentFilters = filters;
             this.page = 1;
@@ -16,6 +18,7 @@ export default {
             this.loadMoreProducts();
         },
 
+        // to search any product
         handleSearch(searchTerm) {
             this.searchTerm = searchTerm;
             this.page = 1;
@@ -23,6 +26,7 @@ export default {
             this.loadMoreProducts();
         },
 
+        // to load more products when scrolling
         async loadMoreProducts({ done } = {}) {
             if (this.allLoaded || this.loading) {
                 if (done) done("empty");
@@ -54,6 +58,8 @@ export default {
                 if (done) done(this.allLoaded ? "empty" : null);
             }
         },
+
+        // to empty search field
         clearField() {
             this.searchTerm = "";
         },

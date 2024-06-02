@@ -1,4 +1,6 @@
+<!-- water calculator page (parent) -->
 <template>
+  <!-- header of the page -->
   <TrackerHeader title="WATER INTAKE CALCULATOR" />
   <div class="container mt-5">
     <h2 class="u-h2">WATER INTAKE CALCULATOR</h2>
@@ -7,7 +9,7 @@
       should be drinking it, and how to judge when you need more or less</P
     >
     <h6>set your relative data</h6>
-
+    <!-- calculator component -->
     <WaterCalculation />
     <WaterInfo />
   </div>

@@ -1,8 +1,12 @@
+// this vuex store is for item bookmark actions
+
 import axios, { AxiosError } from "axios";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import { Commit, Dispatch } from "vuex";
+
+// getting token from the cookie
 const createAxiosConfig = () => {
   const token = Cookies.get("token");
   return {
@@ -13,6 +17,7 @@ const createAxiosConfig = () => {
   };
 };
 
+// server side error handling
 const handleServerError = (error: AxiosError) => {
   if (!error.response) {
     useToast().error(
@@ -41,6 +46,7 @@ const state = {
   diet: [],
 };
 
+// mutations for the state changes
 const mutations = {
   setBookmarked(state, payload) {
     switch (payload.category) {
@@ -98,7 +104,9 @@ const mutations = {
   },
 };
 
+// Vuex actions for asynchronously handling and committing state changes.
 const actions = {
+  // action to get all users bookmarked item
   async fetchBookmarked({ commit }, { userId }) {
     try {
       const config = createAxiosConfig();
@@ -115,6 +123,7 @@ const actions = {
         const nutritionIds = itemId.nutrition;
         const dietPlanIds = itemId.diet;
 
+        //Fetch and accumulate exercises
         if (exerciseIds && exerciseIds.length !== 0) {
           let exerciseUrl = "http://localhost:3000/exercises/filtered?";
           exerciseIds.forEach((id: string) => {
@@ -180,6 +189,8 @@ const actions = {
       handleServerError(error);
     }
   },
+
+  //action to bookmark an item
   async bookmarkItem({ commit }, { item, userId, itemType }) {
     try {
       const url = "http://localhost:3000/bookmark/addBookmark";
@@ -203,6 +214,8 @@ const actions = {
       handleServerError(error);
     }
   },
+
+  //action to undo bookmark of item
   async undoBookmark(
     { commit, dispatch }: { commit: Commit; dispatch: Dispatch },
     {

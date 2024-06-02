@@ -1,4 +1,6 @@
+<!-- calorie calculator page (parent) -->
 <template>
+  <!-- header of the page -->
   <TrackerHeader title="CALORIE CALCULATOR" />
   <div class="container mt-5">
     <h2 class="u-h2">WHAT IS CALORIE?</h2>
@@ -14,6 +16,7 @@
     </p>
     <h2 class="u-h2">CALCULATE YOUR CALORIE</h2>
     <h6>set your weight, height & age</h6>
+    <!-- calculator component -->
     <CalorieCalculation />
     <CalorieInfo />
   </div>

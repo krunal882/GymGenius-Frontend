@@ -1,10 +1,13 @@
+<!-- trackers landing page -->
 <template>
   <div>
+    <!-- hero header poster -->
     <img
       width="100%"
       src="../../assets/img/fitnessTrackers/Fitness-Calculators.png"
       alt=""
     />
+    <!-- card of all fitness calculators -->
     <FitnessCard />
     <router-view></router-view>
   </div>

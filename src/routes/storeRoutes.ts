@@ -1,3 +1,4 @@
+//e-commerce store routes
 import Cookies from "js-cookie";
 import ProductDetail from "../components/store/ProductDetail.vue";
 import AccessoryCategory from "../pages/store/category/AccessoryCategory.vue";
@@ -14,6 +15,7 @@ import StoreLandingPage from "../pages/store/StoreLandingPage.vue";
 import StorePage from "../pages/store/StorePage.vue";
 import { createRouter, createWebHistory, RouteRecordRaw } from "vue-router";
 
+// check if user is logged-in / registered or not
 const ifAuthenticated = (to, from, next) => {
   if (Cookies.get("token")) {
     next();
@@ -21,6 +23,8 @@ const ifAuthenticated = (to, from, next) => {
     next("/authentication");
   }
 };
+
+//routes
 const routes: Array<RouteRecordRaw> = [
   {
     path: "/store",

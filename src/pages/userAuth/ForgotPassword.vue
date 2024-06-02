@@ -1,3 +1,4 @@
+<!-- forgot password page -->
 <template>
   <v-card elevation="1" class="forgot-password-card" style="">
     <div class="text-center">
@@ -45,10 +46,10 @@ export default {
   methods: {
     reset() {
       const email = this.resetEmail;
-      // this.$store.dispatch("forgotPassword", { email: this.resetEmail });
+      this.$store.dispatch("forgotPassword", { email: this.resetEmail });
       this.$store.dispatch("forgotPassword", {
         email: email,
-        // password: this.loginPassword,
+        password: this.loginPassword,
       });
     },
   },

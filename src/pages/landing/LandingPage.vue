@@ -1,5 +1,7 @@
+<!-- website landing page  -->
 <template>
   <div>
+    <!-- all landing page components -->
     <HeroHeader />
     <OurService />
     <AboutUs />
