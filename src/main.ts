@@ -29,6 +29,7 @@ import * as directives from "vuetify/directives";
 import { RouteRecordRaw, Router } from "vue-router";
 
 import { FontAwesomeIcon } from "@fortawesome/vue-fontawesome";
+import VImageMagnifier from "v-image-magnifier";
 
 // Function to add routes from multiple collections
 function addRoutes(router: Router, ...routeCollections: Router[]): void {
@@ -95,6 +96,7 @@ app.use(router);
 app.use(store);
 app.use(ToastPlugin, { position: "top-right" });
 app.component("font-awesome-icon", FontAwesomeIcon);
+app.use(VImageMagnifier);
 
 // Mount the app
 app.mount("#app");

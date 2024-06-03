@@ -3,10 +3,14 @@
   <v-container v-if="product" class="my-5">
     <v-row>
       <v-col cols="12" md="4">
-        <!-- image of product -->
-        <v-img
+        <!-- image of product with magnifier -->
+
+        <VImageMagnifier
           class="align-end text-white"
           :src="productImg(product.src, product.category)"
+          :zoomSize="120"
+          :zoomFactore="1.5"
+          :magnifiedBorderRadius="100"
           cover
         />
       </v-col>
