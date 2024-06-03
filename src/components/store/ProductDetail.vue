@@ -105,6 +105,7 @@
 </template>
 
 <script>
+import Cookies from "js-cookie"; // Import the Cookies library
 export default {
   data() {
     return {
@@ -138,6 +139,13 @@ export default {
     },
     //to handle add to cart event
     addToCartClicked(product) {
+      const token = Cookies.get("token");
+
+      if (!token) {
+        // Redirect to authentication page if not logged in
+        this.$router.push("/authentication");
+        return;
+      }
       this.$store.dispatch("addToCart", {
         productId: product._id,
         status: "pending",
@@ -148,6 +156,13 @@ export default {
     },
     //to handle buyNow event
     buyProduct() {
+      const token = Cookies.get("token");
+
+      if (!token) {
+        // Redirect to authentication page if not logged in
+        this.$router.push("/authentication");
+        return;
+      }
       this.$store.dispatch("purchase", {
         price: this.product.price,
         title: this.product.title,

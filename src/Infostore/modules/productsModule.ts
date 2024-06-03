@@ -138,7 +138,7 @@ const mutations = {
 const actions = {
   // action to fetch product
   async fetchProduct(
-    { commit, state }: { commit: Commit; state: any },
+    { commit }: { commit: Commit },
     {
       filteredFilters,
       limit,

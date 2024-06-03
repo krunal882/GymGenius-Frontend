@@ -22,7 +22,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/foodSection",
     component: FoodItemPage,
-    beforeEnter: ifAuthenticated,
     children: [
       {
         path: "",
@@ -41,11 +40,13 @@ const routes: Array<RouteRecordRaw> = [
       },
       {
         path: "diet-detail/:id",
+        beforeEnter: ifAuthenticated,
         component: DietDisplay,
         name: "dietDetail",
       },
       {
         path: "food-detail/:id",
+        beforeEnter: ifAuthenticated,
         component: NutritionDetail,
         name: "foodDetail",
       },

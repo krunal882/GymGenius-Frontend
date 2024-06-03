@@ -19,7 +19,6 @@ const routes = [
   {
     path: "/exercise",
     component: ExercisePage,
-    beforeEnter: ifAuthenticated,
     children: [
       {
         path: "",
@@ -28,6 +27,7 @@ const routes = [
       },
       {
         path: "exercise-detail/:id",
+        beforeEnter: ifAuthenticated,
         component: ExerciseDetail,
         name: "exerciseDetail",
       },

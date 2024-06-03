@@ -19,7 +19,6 @@ const routes = [
   {
     path: "/YogaPoses",
     component: YogaPage,
-    beforeEnter: ifAuthenticated,
     children: [
       {
         path: "",
@@ -28,6 +27,7 @@ const routes = [
       },
       {
         path: "yoga-detail/:id",
+        beforeEnter: ifAuthenticated,
         component: YogaDetails,
         name: "yogaDetail",
       },

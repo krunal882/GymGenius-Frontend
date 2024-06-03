@@ -29,7 +29,6 @@ const routes: Array<RouteRecordRaw> = [
   {
     path: "/store",
     component: StorePage,
-    beforeEnter: ifAuthenticated,
     children: [
       { path: "", component: StoreLandingPage, name: "store" },
       { path: "men", component: MenCategory, name: "men" },

@@ -10,21 +10,11 @@ import TrackerLandingPage from "../pages/fitness-trackers/TrackerLandingPage.vue
 import WaterCalculator from "../pages/fitness-trackers/WaterCalculator.vue";
 import { createRouter, createWebHistory } from "vue-router";
 
-// check if user is logged-in / registered or not
-const ifAuthenticated = (to, from, next) => {
-  if (Cookies.get("token")) {
-    next();
-  } else {
-    next("/authentication");
-  }
-};
-
 //routes
 const routes = [
   {
     path: "/fitnessTrackers",
     component: FitnessTrackers,
-    beforeEnter: ifAuthenticated,
     children: [
       { path: "", component: TrackerLandingPage, name: "fitnessTrackers" },
       {
