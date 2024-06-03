@@ -12,15 +12,18 @@ export default {
   components: {
     UserPurchase,
   },
-  // to fetch users product in cart
-  created() {
-    const id = this.$store.state.userModule.userId;
-    this.$store.dispatch("fetchCart", { userId: id, status: "done" });
-  },
+
   computed: {
     historyItems() {
       return this.$store.state.cartModule.history;
     },
+  },
+  // to fetch users product in cart
+  created() {
+    const id = this.$store.state.userModule.userId;
+    if (!this.historyItems.length) {
+      this.$store.dispatch("fetchCart", { userId: id, status: "done" });
+    }
   },
 };
 </script>

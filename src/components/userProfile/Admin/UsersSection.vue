@@ -221,9 +221,6 @@ export default {
       this.loadItems({ page: 1, itemsPerPage: this.itemsPerPage });
     },
   },
-  created() {
-    this.loadItems({ page: this.page, itemsPerPage: this.itemsPerPage });
-  },
 };
 </script>
 

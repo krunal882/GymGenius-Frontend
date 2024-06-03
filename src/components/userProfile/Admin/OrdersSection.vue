@@ -15,7 +15,9 @@ export default {
   },
   components: { OrderedProducts },
   mounted() {
-    this.$store.dispatch("getAllOrders");
+    if (!this.orders.length) {
+      this.$store.dispatch("getAllOrders");
+    }
   },
 };
 </script>

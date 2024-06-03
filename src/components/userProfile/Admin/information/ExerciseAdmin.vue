@@ -91,7 +91,7 @@ export default {
   },
   async mounted() {
     //fetch data only once page loads
-    if (this.exercises.length === 0) {
+    if (this.exercises.length == 0) {
       await this.$store.dispatch("searchExercise", name);
     }
   },

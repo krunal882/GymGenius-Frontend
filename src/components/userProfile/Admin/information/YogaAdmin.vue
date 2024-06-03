@@ -48,7 +48,6 @@ export default {
   },
   data() {
     return {
-      yoga: [],
       selectedYoga: null,
       dialogOpen: false,
       removeDialogOpen: false,
@@ -95,7 +94,7 @@ export default {
   },
   async mounted() {
     //fetch data only once page loads
-    if (this.yoga.length === 0) {
+    if (this.yogas.length == 0) {
       await this.$store.dispatch("searchYoga", name);
     }
   },

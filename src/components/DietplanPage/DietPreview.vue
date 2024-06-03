@@ -12,7 +12,7 @@
       </v-col>
     </v-row>
     <!-- dietPlan preview card -->
-    <v-row v-else class="d-flex flex-wrap">
+    <v-row class="d-flex flex-wrap">
       <v-col
         v-for="dietPlan in dietPlan"
         :key="dietPlan.id"

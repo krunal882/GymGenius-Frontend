@@ -157,19 +157,6 @@ export default {
       },
     },
   },
-  //to watch the change in the value of yoga and reflect changes
-  watch: {
-    "$store.state.yogaModule.yoga": {
-      handler(newVal) {
-        this.localYoga = newVal;
-      },
-      immediate: true,
-    },
-  },
-  //to load yoga on page mount
-  mounted() {
-    this.fetchYogaWithFilters();
-  },
 };
 </script>
 

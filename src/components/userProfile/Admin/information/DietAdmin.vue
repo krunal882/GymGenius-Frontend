@@ -46,7 +46,6 @@ export default {
   data() {
     return {
       selectedItem: null,
-      dietPlan: [],
       selectedDietPlan: null,
       dialogOpen: false,
       removeDialogOpen: false,
@@ -93,7 +92,7 @@ export default {
   },
   async mounted() {
     //fetch data only once page loads
-    if (this.dietPlan.length === 0) {
+    if (this.dietPlans.length === 0) {
       await this.$store.dispatch("searchDiet", name);
     }
   },

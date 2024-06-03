@@ -65,7 +65,6 @@ export default {
       diet: diet,
     };
   },
-  methods: {},
 };
 </script>
 

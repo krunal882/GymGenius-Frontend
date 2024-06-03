@@ -159,24 +159,11 @@ export default {
       },
     },
   },
-  //to watch the change in the value of food-item and reflect changes
-  watch: {
-    "$store.state.foodItemModule.foodItem": {
-      handler(newVal) {
-        this.localFoodItem = newVal;
-      },
-      immediate: true,
-    },
-  },
 
   components: {
     FoodFilter,
     NutritionPreview,
     UserSearch,
-  },
-  //to load food-item on page mount
-  mounted() {
-    this.fetchFoodItemWithFilters();
   },
 };
 </script>

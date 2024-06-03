@@ -155,23 +155,11 @@ export default {
       },
     },
   },
-  //to watch the change in the value of exercise and reflect changes
-  watch: {
-    "$store.state.exercisesModule.exercises": {
-      handler(newVal) {
-        this.localExercises = newVal;
-      },
-      immediate: true,
-    },
-  },
+
   components: {
     ExerciseFilter,
     ExercisePreview,
     UserSearch,
-  },
-  //to load exercise on page mount
-  mounted() {
-    this.fetchExercisesWithFilters();
   },
 };
 </script>

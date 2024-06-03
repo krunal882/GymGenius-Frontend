@@ -25,18 +25,20 @@
           ></v-img>
           <!-- information of the product -->
           <v-card-title class="pb-0">{{ product.title }}</v-card-title>
-          <v-card-subtitle class="py-2">{{ product.brand }}</v-card-subtitle>
+          <v-card-subtitle v-if="product.brand" class="py-2">{{
+            product.brand
+          }}</v-card-subtitle>
           <v-card-text class="pt-0">
             <div class="d-flex flex-wrap">
               <span>
-                Price: <v-chip color="green">{{ product.price }}</v-chip>
+                Price: <v-chip color="green">${{ product.price }}</v-chip>
               </span>
-              <span class="mx-4">
-                <v-chip color="red" style="text-decoration: line-through">{{
-                  product.original_price
-                }}</v-chip>
+              <span class="mx-4" v-if="product.original_price">
+                <v-chip color="red" style="text-decoration: line-through"
+                  >${{ product.original_price }}</v-chip
+                >
               </span>
-              <span>
+              <span v-if="product.off">
                 Discount: <v-chip color="blue">{{ product.off }}</v-chip>
               </span>
             </div>

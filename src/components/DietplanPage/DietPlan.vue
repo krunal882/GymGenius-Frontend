@@ -164,20 +164,6 @@ export default {
       },
     },
   },
-  watch: {
-    //to watch the change in the value of dietPlan and reflect changes
-    "$store.state.dietPlanModule.dietPlan": {
-      handler(newVal) {
-        this.localDiet = newVal;
-      },
-      immediate: true,
-    },
-  },
-
-  //to load dietPlan on page mount
-  mounted() {
-    this.fetchDietPlanWithFilters();
-  },
 };
 </script>
 

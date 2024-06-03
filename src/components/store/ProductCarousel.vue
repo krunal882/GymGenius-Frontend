@@ -28,16 +28,16 @@
 
               <v-card-text class="pt-0">
                 <div class="d-flex flex-wrap">
-                  <span
+                  <span v-if="product.price"
                     >Price:
-                    <v-chip color="green">{{ product.price }}</v-chip></span
+                    <v-chip color="green">${{ product.price }}</v-chip></span
                   >
-                  <span class="mx-4">
-                    <v-chip color="red" style="text-decoration: line-through">{{
-                      product.original_price
-                    }}</v-chip>
+                  <span class="mx-4" v-if="product.original_price">
+                    <v-chip color="red" style="text-decoration: line-through"
+                      >${{ product.original_price }}</v-chip
+                    >
                   </span>
-                  <span
+                  <span v-if="product.off"
                     >Discount:
                     <v-chip color="blue">{{ product.off }}</v-chip></span
                   >
