@@ -13,11 +13,13 @@
         :step="1"
         aria-label="Weight"
         id="weight"
+        class="knob"
       />
       <label class="bold-label ml-5">Weight: {{ weight }} kg</label>
     </div>
     <div class="mb-4" style="margin-left: 40px; width: 100px">
       <v-select
+        class="knob"
         label="Activity Factor"
         v-model="activityFactor"
         :items="[1.2, 1.375, 1.55, 1.725, 1.9]"
@@ -26,6 +28,7 @@
     </div>
     <div class="mb-4" style="margin-left: 40px; width: 100px">
       <v-select
+        class="knob"
         label="Climate Factor"
         v-model="climateFactor"
         :items="[1.0, 1.1, 1.2, 1.3, 1.4, 1.5]"
@@ -34,6 +37,7 @@
     </div>
     <div class="mb-4" style="margin-left: 40px">
       <v-text-field
+        class="knob"
         v-model="temperature"
         label="Temperature "
         type="number"
@@ -41,7 +45,7 @@
         outlined
       ></v-text-field>
     </div>
-    <div class="text-center ml-5 mt-2">
+    <div class="text-center ml-5 mt-2 knob">
       <v-btn :loading="loading" @click="calculateWaterIntake">
         Calculate Water Intake
         <template v-slot:loader>
@@ -105,5 +109,12 @@ export default {
 <style scoped>
 .bold-label {
   font-weight: bold;
+}
+.knob {
+  transition: stroke-dashoffset 0.3s ease, transform 0.3s ease;
+}
+
+.knob:hover {
+  transform: scale(1.06);
 }
 </style>

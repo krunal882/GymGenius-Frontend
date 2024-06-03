@@ -1,6 +1,6 @@
 <!-- this component is for displaying the cards of different calculators for redirect to different calculators page -->
 <template>
-  <div class="d-flex flex-wrap justify-center">
+  <div class="d-flex flex-wrap justify-center mt-5">
     <v-card
       v-for="(item, index) in tracker"
       :key="index"
@@ -95,5 +95,11 @@ export default {
 }
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.image-hover-effect {
+  cursor: pointer;
 }
 </style>

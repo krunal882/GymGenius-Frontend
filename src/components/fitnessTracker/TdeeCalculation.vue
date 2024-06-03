@@ -14,6 +14,7 @@
           :step="1"
           aria-label="Weight"
           id="weight"
+          class="knob"
         />
         <label class="bold-label">Weight: {{ weight }} kg</label>
       </div>
@@ -28,6 +29,7 @@
           :step="1"
           aria-label="height"
           id="height"
+          class="knob"
         />
         <label class="bold-label">Height: {{ height }} cm</label>
       </div>
@@ -42,6 +44,7 @@
           :step="1"
           aria-label="age"
           id="age"
+          class="knob"
         />
         <label class="bold-label">Age: {{ age }} year</label>
       </div>
@@ -49,6 +52,7 @@
     <div class="d-flex flex-wrap justify-center mt-5">
       <div class="mb-4" style="margin-right: 20px">
         <v-select
+          class="knob"
           label="Gender"
           v-model="gender"
           :items="['Male', 'Female']"
@@ -57,6 +61,7 @@
       </div>
       <div class="mb-4" style="margin-right: 20px">
         <v-select
+          class="knob"
           label="Activity Level"
           v-model="activityFactor"
           :items="[1.2, 1.375, 1.55, 1.725, 1.9]"
@@ -65,6 +70,7 @@
       </div>
       <div class="mb-4">
         <v-select
+          class="knob"
           label="Goal Adjustment"
           v-model="goalAdjustment"
           :items="['Lose Weight', 'Maintain Weight', 'Gain Muscle']"
@@ -73,7 +79,7 @@
       </div>
     </div>
     <!-- button to make calculation -->
-    <div class="text-center">
+    <div class="text-center knob">
       <v-btn :loading="loading" @click="calculateTDEE">
         Calculate Your TDEE
         <template v-slot:loader>
@@ -161,5 +167,12 @@ export default {
 .calories-result {
   font-weight: bold;
   margin-top: 20px;
+}
+.knob {
+  transition: stroke-dashoffset 0.3s ease, transform 0.3s ease;
+}
+
+.knob:hover {
+  transform: scale(1.06);
 }
 </style>

@@ -13,6 +13,7 @@
         :step="1"
         aria-label="Weight"
         id="weight"
+        class="knob"
       />
       <label class="bold-label">Weight: {{ weight }} kg</label>
     </div>
@@ -27,6 +28,7 @@
         :step="1"
         aria-label="height"
         id="height"
+        class="knob"
       />
       <label class="bold-label">Height: {{ height }} cm</label>
     </div>
@@ -41,11 +43,13 @@
         :step="1"
         aria-label="age"
         id="age"
+        class="knob"
       />
       <label class="bold-label">Age: {{ age }} year</label>
     </div>
     <div class="mt-5" style="margin-left: 50px; width: 148px">
       <v-select
+        class="knob"
         label="Gender"
         v-model="gender"
         :items="['Male', 'Female']"
@@ -53,7 +57,7 @@
       ></v-select>
     </div>
     <!-- button to make calculation -->
-    <div class="text-center mt-5" style="margin-left: 5%">
+    <div class="text-center mt-5 knob" style="margin-left: 5%">
       <v-btn :loading="loading" @click="calculateCalories">
         Calculate Your BMR
         <template v-slot:loader>
@@ -125,5 +129,12 @@ export default {
 .calorie-result {
   font-weight: bold;
   margin-top: 20px;
+}
+.knob {
+  transition: stroke-dashoffset 0.3s ease, transform 0.3s ease;
+}
+
+.knob:hover {
+  transform: scale(1.06);
 }
 </style>
