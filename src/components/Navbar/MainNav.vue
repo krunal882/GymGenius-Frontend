@@ -26,13 +26,13 @@
               {{ navItem.label }}
             </router-link>
           </li>
+          <!-- login/signup button -->
+          <div v-if="!token" class="d-flex flex-wrap">
+            <router-link to="/authentication">
+              <v-btn variant="outlined" color="white">Login/Register</v-btn>
+            </router-link>
+          </div>
         </ul>
-      </div>
-      <!-- login/signup button -->
-      <div v-if="!token" class="d-flex flex-wrap">
-        <router-link to="/authentication">
-          <v-btn variant="outlined" color="white">Login/Register</v-btn>
-        </router-link>
       </div>
     </div>
     <!-- profile menu option -->
@@ -78,7 +78,8 @@ export default {
         this.token = currentToken;
         if (this.token) {
           const decodedToken = jwtDecode(this.token);
-          this.$store.dispatch("fetchUser", { id: decodedToken.userId });
+          const id = decodedToken.userId;
+          this.$store.dispatch("fetchUser", { id });
           this.$store.state.userModule.userId = decodedToken.userId;
           this.$store.state.userModule.role = decodedToken.role;
           this.$store.dispatch("fetchCart", {

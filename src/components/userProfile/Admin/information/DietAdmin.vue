@@ -1,11 +1,11 @@
 <!-- this component is parent component of dietPlan for the admin actions -->
 <template>
-  <div>
+  <div class="d-flex flex-wrap justify-content-center">
     <!-- component to handle search action by admin -->
     <ItemSearch @search="handleSearch" @add="openAddDialog" />
     <!-- component to add new dietPlan by admin -->
     <AddDiet :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
-    <div v-if="dietPlans.length > 0">
+    <div v-if="dietPlans.length > 0" class="justify-content-center">
       <!-- component for options of edit and delete  -->
       <DietAction
         :dietPlan="dietPlans"
@@ -87,18 +87,15 @@ export default {
       this.addDialogOpen = false;
     },
     //to handle search operation by admin
-    handleSearch(searchItem) {
-      this.selectedItem = searchItem;
-      this.fetchDietPlanWithFilters(this.selectedItem);
+    async handleSearch(name) {
+      await this.$store.dispatch("searchDiet", name);
     },
-    //action call from vuex store to fetch data
-    async fetchDietPlanWithFilters(name) {
-      try {
-        await this.$store.dispatch("searchDiet", name);
-      } catch (error) {
-        console.error("Error fetching fetchDietPlan with filters:", error);
-      }
-    },
+  },
+  async mounted() {
+    //fetch data only once page loads
+    if (this.dietPlan.length === 0) {
+      await this.$store.dispatch("searchDiet", name);
+    }
   },
 };
 </script>

@@ -48,7 +48,6 @@ export default {
   },
   data() {
     return {
-      selectedItem: null,
       yoga: [],
       selectedYoga: null,
       dialogOpen: false,
@@ -90,10 +89,8 @@ export default {
       this.addDialogOpen = false;
     },
     //to handle search operation by admin
-    handleSearch(searchItem) {
-      this.selectedItem = searchItem;
-
-      this.fetchYogaWithFilters(this.selectedItem);
+    async handleSearch(name) {
+      await this.$store.dispatch("searchYoga", name);
     },
   },
   async mounted() {

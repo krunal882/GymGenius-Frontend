@@ -45,7 +45,6 @@ export default {
   },
   data() {
     return {
-      selectedItem: null,
       selectedExercise: null,
       dialogOpen: false,
       removeDialogOpen: false,
@@ -86,10 +85,8 @@ export default {
       this.addDialogOpen = false;
     },
     //to handle search operation by admin
-    handleSearch(searchItem) {
-      this.selectedItem = searchItem;
-
-      this.fetchExercisesWithFilters(this.selectedItem);
+    async handleSearch(name) {
+      await this.$store.dispatch("searchExercise", name);
     },
   },
   async mounted() {

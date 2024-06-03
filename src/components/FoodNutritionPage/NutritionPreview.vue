@@ -125,11 +125,6 @@ export default {
   cursor: pointer;
 }
 
-.muscle-label {
-  font-weight: 500;
-  margin-right: 10px;
-}
-
 .caption {
   bottom: 0;
   left: 0;

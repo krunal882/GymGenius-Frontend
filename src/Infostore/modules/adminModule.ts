@@ -132,6 +132,24 @@ const actions = {
     }
   },
 
+  // action to fetch user by name
+  async fetchFilteredUser(
+    { commit }: { commit: Commit },
+    { name }: { name: string }
+  ) {
+    try {
+      const config = createAxiosConfig();
+      const url = `http://localhost:3000/auth/filtered?name=${name}`;
+      const response = await axios.get(url, config);
+      const users = response.data;
+      const totalItems = response.data.length;
+      commit("setUsers", users);
+      commit("setTotalItems", totalItems);
+    } catch (error) {
+      handleServerError(error);
+    }
+  },
+
   // action to add new user by admin
   async userAdd({ commit }: { commit: Commit }, { user }: { user: User }) {
     try {

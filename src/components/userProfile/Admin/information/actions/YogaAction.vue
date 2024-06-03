@@ -1,6 +1,6 @@
 <!-- this component is for admin to show yoga and provide options to edit , explore and delete -->
 <template>
-  <v-container>
+  <v-container fluid>
     <!-- <v-row v-if="loading">
       <v-col v-for="n in this.yoga.length" :key="n" cols="4">
         <v-skeleton-loader
@@ -11,41 +11,47 @@
       </v-col>
     </v-row> -->
     <!-- yoga preview card -->
-    <v-col v-for="yoga in yogas" :key="yoga.id" cols="4">
-      <v-card class="image-hover-effect" width="900" style="display: flex">
-        <div style="flex: 1; padding-right: 16px">
+    <v-row>
+      <v-col
+        v-for="yoga in yogas"
+        :key="yoga.id"
+        cols="12"
+        sm="6"
+        md="4"
+        lg="4"
+      >
+        <v-card class="image-hover-effect mx-auto" width="90%">
           <!-- yoga image -->
-          <v-img height="300" :src="yoga.url_png">
+          <v-img
+            height="200"
+            :src="yoga.url_png"
+            class="pointer"
+            @click="exploreClicked(yoga)"
+          >
+          </v-img>
+          <!-- yoga pose information -->
+          <!-- Content container -->
+          <v-card-text class="pt-0">
             <v-card-title class="text-center">{{
               yoga.sanskrit_name
             }}</v-card-title>
-          </v-img>
-        </div>
-        <hr
-          style="
-            height: 100%;
-            border: none;
-            border-right: 1px solid #ccc;
-            margin: 0;
-          "
-        />
-        <!-- yoga pose information -->
-        <!-- Content container -->
-        <div style="flex: 1; padding: 16px">
-          <v-card-title class="pt-4"
-            >Category: {{ yoga.category_name }}</v-card-title
-          >
-          <div class="d-flex">
-            <v-card-text class="pt-4 flex-grow-1"
-              >English Name: {{ yoga.english_name }}</v-card-text
-            >
-            <v-card-text class="pt-4 flex-grow-1"
-              >Sanskrit Name: {{ yoga.sanskrit_name }}</v-card-text
-            >
-          </div>
-          <v-card-text
-            >Translation of Name: {{ yoga.translation_name }}</v-card-text
-          >
+            <div class="d-flex justify-space-between">
+              <div class="mb-2">
+                <span class="label"> Category:</span>
+                {{ yoga.category_name }}
+              </div>
+              <div class="mb-2">
+                <span class="label">English Name: </span>{{ yoga.english_name }}
+              </div>
+            </div>
+            <div class="mb-2">
+              <span class="label">Sanskrit Name: </span>{{ yoga.sanskrit_name }}
+            </div>
+            <div>
+              <span class="label">Translation: </span
+              >{{ yoga.translation_name }}
+            </div>
+          </v-card-text>
           <!-- buttons for explore , remove and edit -->
 
           <v-card-actions style="justify-content: space-between">
@@ -57,9 +63,9 @@
               <v-icon left>mdi-delete</v-icon> Delete</v-btn
             >
           </v-card-actions>
-        </div>
-      </v-card>
-    </v-col>
+        </v-card>
+      </v-col>
+    </v-row>
   </v-container>
 </template>
 
@@ -124,5 +130,13 @@ export default {
 <style scoped>
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+.pointer {
+  cursor: pointer;
+}
+.label {
+  font-weight: 500;
 }
 </style>

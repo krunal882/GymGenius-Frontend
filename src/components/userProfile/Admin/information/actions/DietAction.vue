@@ -20,7 +20,7 @@
         md="4"
         lg="4"
       >
-        <v-card width="90%" class="text-black my-4 mx-2">
+        <v-card width="90%" class="mx-auto image-hover-effect">
           <!-- dietPlan image -->
           <v-img
             class="align-end text-white"
@@ -144,5 +144,11 @@ export default {
 
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+
+.image-hover-effect {
+  cursor: pointer;
 }
 </style>

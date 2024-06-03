@@ -1,13 +1,24 @@
 <!-- this component is parent component of users for the admin actions -->
 <template>
   <v-container>
-    <v-row>
-      <v-col cols="6">
+    <v-row align="center" justify="space-between">
+      <v-col cols="auto">
         <h3>Your Users</h3>
       </v-col>
-      <!-- button for adding user -->
-      <v-col cols="6" class="text-right">
-        <v-btn color="success" @click="addUser()">Add User</v-btn>
+      <v-col cols="auto">
+        <v-text-field
+          v-model="userSearch"
+          dense
+          placeholder="Search user by name"
+          append-outer-icon="mdi-magnify"
+          style="max-width: 300px; min-width: 250px"
+          variant="outlined"
+          rounded
+          @input="debouncedSearch"
+        />
+      </v-col>
+      <v-col cols="auto">
+        <v-btn class="mb-5" color="success" @click="addUser">Add User</v-btn>
       </v-col>
     </v-row>
     <!-- data table for displaying user info -->
@@ -17,6 +28,7 @@
       :items="users"
       :loading="loading"
       :headers="headers"
+      :items-per-page-options="[5, 10, 20, 50]"
       @update:options="loadItems"
     >
       <template v-slot:headers="{ headers }">
@@ -62,44 +74,6 @@
         <!-- fields for edit user -->
         <v-card-title>Edit Details</v-card-title>
         <v-card-text>
-          <v-text-field
-            v-model="editedUser.name"
-            :rules="[(v) => !!v || 'Name is required']"
-            label="Name"
-            variant="outlined"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="editedUser.email"
-            :rules="[
-              (v) => !!v || 'Email is required',
-              (v) => /.+@.+\..+/.test(v) || 'Email must be valid',
-            ]"
-            label="Email"
-            variant="outlined"
-            required
-          ></v-text-field>
-          <v-text-field
-            v-model="editedUser.number"
-            :rules="[
-              (v) => !!v || 'Phone number is required',
-              (v) => /^\d{10}$/.test(v) || 'Phone number must be 10 digits',
-            ]"
-            label="Phone"
-            variant="outlined"
-            required
-            maxlength="10"
-          ></v-text-field>
-          <v-text-field
-            label="Age"
-            variant="outlined"
-            v-model.number="editedUser.age"
-            :rules="[
-              (v) => !!v || 'Age is required',
-              (v) => /^\d+$/.test(v) || 'Age must be a number',
-            ]"
-            required
-          ></v-text-field>
           <v-select
             label="Role"
             v-model="editedUser.role"
@@ -139,6 +113,7 @@ export default {
   },
   data() {
     return {
+      userSearch: "",
       addDialog: false,
       deleteDialog: false,
       userToDelete: null,
@@ -158,6 +133,7 @@ export default {
         { text: "State", align: "start", sortable: false },
         { text: "Actions", align: "start", sortable: false },
       ],
+      searchTimeout: null, // Timeout ID for debounce
     };
   },
   computed: {
@@ -173,7 +149,16 @@ export default {
     async loadItems({ page, itemsPerPage }) {
       this.loading = true;
       try {
-        await this.$store.dispatch("getAllUser", { page, limit: itemsPerPage });
+        if (this.userSearch) {
+          await this.$store.dispatch("fetchFilteredUser", {
+            name: this.userSearch,
+          });
+        } else {
+          await this.$store.dispatch("getAllUser", {
+            page,
+            limit: itemsPerPage,
+          });
+        }
         this.loading = false;
         this.page = page;
       } catch (error) {
@@ -181,7 +166,7 @@ export default {
         this.loading = false;
       }
     },
-    //to open the edit dialog
+    // to open the edit dialog
     editItem(item) {
       this.openDialog(item);
     },
@@ -190,39 +175,50 @@ export default {
       this.userToDelete = user._id;
       this.deleteDialog = true;
     },
-    //to close delete dialog
+    // to close delete dialog
     closeDeleteDialog() {
       this.deleteDialog = false;
       this.userToDelete = null;
     },
-    //to open add dialog
+    // to open add dialog
     addUser() {
       this.addDialog = true;
     },
-    //to open edit dialog
+    // to open edit dialog
     openDialog(item) {
       this.editedUser = { ...item };
       this.dialog = true;
     },
-    //to close dialog
+    // to close dialog
     closeDialog() {
       this.dialog = false;
     },
-    //to update user information
-    saveChanges({ _id, email, name, age, number, role, state }) {
-      const updatedUser = { _id, email, name, age, number, role, state };
+    // to update user information
+    saveChanges({ _id, role, state }) {
+      console.log(role, state);
+      const updatedUser = { _id, role, state };
       this.$store.dispatch("userUpdate", { updatedUser });
       this.updateUserLocally(updatedUser);
       this.dialog = false;
     },
-    //update user locally
+    // update user locally
     updateUserLocally(updatedUser) {
       const index = this.users.findIndex(
         (user) => user._id === updatedUser._id
       );
       if (index !== -1) {
-        this.users[index] = updatedUser;
+        this.users[index].role = updatedUser.role;
+        this.users[index].state = updatedUser.state;
       }
+    },
+    debouncedSearch() {
+      clearTimeout(this.searchTimeout);
+      this.searchTimeout = setTimeout(() => {
+        this.handleSearchInput();
+      }, 1000);
+    },
+    handleSearchInput() {
+      this.loadItems({ page: 1, itemsPerPage: this.itemsPerPage });
     },
   },
   created() {

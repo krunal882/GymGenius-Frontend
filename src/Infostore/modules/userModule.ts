@@ -162,14 +162,11 @@ const actions = {
       if (response.status === 201) {
         useToast().success("Login successful! Welcome back.");
         commit("setToken", response.data);
-        axios.post(
-          "http://localhost:3000/mailer/email",
-          {
-            recipients: email,
-            subject,
-            html,
-          }
-        );
+        axios.post("http://localhost:3000/mailer/email", {
+          recipients: email,
+          subject,
+          html,
+        });
       }
     } catch (error) {
       handleServerError(error);
@@ -216,14 +213,11 @@ const actions = {
       }
       const subject = "Account Signup";
       const html = "<p>successfully created account</p>";
-      axios.post(
-        "http://localhost:3000/mailer/email",
-        {
-          recipients: email,
-          subject,
-          html,
-        },
-      );
+      axios.post("http://localhost:3000/mailer/email", {
+        recipients: email,
+        subject,
+        html,
+      });
     } catch (error) {
       handleServerError(error);
     }
@@ -364,13 +358,11 @@ const actions = {
     </body>
   </html>`;
 
-      const response = await axios.post(
-        "http://localhost:3000/mailer/email",
-        {
-          recipients: "krunalvekariya254@gmail.com",
-          subject,
-          html,
-        }      );
+      const response = await axios.post("http://localhost:3000/mailer/email", {
+        recipients: "krunalvekariya254@gmail.com",
+        subject,
+        html,
+      });
       if (response.status === 201) {
         useToast().success(
           "Thank you for your message! We'll get back to you shortly."

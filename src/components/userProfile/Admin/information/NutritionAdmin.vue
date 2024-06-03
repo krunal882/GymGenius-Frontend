@@ -86,10 +86,8 @@ export default {
       this.addDialogOpen = false;
     },
     //to handle search operation by admin
-    handleSearch(searchItem) {
-      this.selectedItem = searchItem;
-
-      this.fetchFoodItemWithFilters(this.selectedItem);
+    async handleSearch(name) {
+      await this.$store.dispatch("searchFoodItem", name);
     },
   },
   async mounted() {

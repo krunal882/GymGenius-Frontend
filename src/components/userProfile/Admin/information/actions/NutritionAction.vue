@@ -24,12 +24,12 @@
           <!-- foodItem image -->
           <v-img
             class="align-end text-white"
-            height="300"
+            height="250"
             :src="imgPath(foodItem.name, foodItem.cloudImg)"
             @click="exploreClicked(foodItem)"
             cover
           >
-            <v-card-title>{{ foodItem.name }}</v-card-title>
+            <v-card-title class="caption">{{ foodItem.name }}</v-card-title>
           </v-img>
           <!-- buttons for explore , remove and edit -->
           <v-card-actions style="justify-content: space-between">
@@ -124,5 +124,19 @@ export default {
 }
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+.image-hover-effect {
+  cursor: pointer;
+}
+
+.caption {
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background-color: rgba(0, 0, 0, 0.6);
+  color: white;
+  padding: 8px;
 }
 </style>
