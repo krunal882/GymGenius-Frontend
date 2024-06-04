@@ -98,6 +98,14 @@
               <li style="font-weight: 500">Ingredients :</li>
               <ul>
                 <li
+                  v-if="
+                    isString(foodItem.recipes_and_serving_ideas[0].ingredients)
+                  "
+                >
+                  {{ foodItem.recipes_and_serving_ideas[0].ingredients }}
+                </li>
+                <li
+                  v-else
                   v-for="(ingredient, index) in foodItem
                     .recipes_and_serving_ideas[0].ingredients"
                   :key="index"
@@ -108,6 +116,14 @@
               <li style="font-weight: 500">Instructions :</li>
               <ul>
                 <li
+                  v-if="
+                    isString(foodItem.recipes_and_serving_ideas[0].instructions)
+                  "
+                >
+                  {{ foodItem.recipes_and_serving_ideas[0].instructions }}
+                </li>
+                <li
+                  v-else
                   v-for="(instruction, index) in foodItem
                     .recipes_and_serving_ideas[0].instructions"
                   :key="index"
@@ -165,6 +181,14 @@
               <ul>
                 <!-- recipe ingredients -->
                 <li
+                  v-if="
+                    isString(foodItem.recipes_and_serving_ideas[1].ingredients)
+                  "
+                >
+                  {{ foodItem.recipes_and_serving_ideas[1].ingredients }}
+                </li>
+                <li
+                  v-else
                   v-for="(ingredient, index) in foodItem
                     .recipes_and_serving_ideas[1].ingredients"
                   :key="index"
@@ -176,6 +200,14 @@
               <li style="font-weight: 500">Instructions :</li>
               <ul>
                 <li
+                  v-if="
+                    isString(foodItem.recipes_and_serving_ideas[1].instructions)
+                  "
+                >
+                  {{ foodItem.recipes_and_serving_ideas[1].instructions }}
+                </li>
+                <li
+                  v-else
                   v-for="(instruction, index) in foodItem
                     .recipes_and_serving_ideas[1].instructions"
                   :key="index"
@@ -253,6 +285,9 @@ export default {
     };
   },
   methods: {
+    isString(value) {
+      return typeof value === "string";
+    },
     //fetchFoodItem method fetch the foodItem by id and stores in the local foodItem
     async fetchFoodItem(id) {
       try {

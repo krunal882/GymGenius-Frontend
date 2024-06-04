@@ -21,7 +21,7 @@
     <!-- preview card component with the infinity scroll applied (with pagination) -->
     <div class="d-flex flex-wrap justify-content-center">
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
-        <YogaInfo :yoga="yoga" @explore="exploreClicked" />
+        <YogaInfo :yoga="yoga" :loading="loading" @explore="exploreClicked" />
         <template v-slot:empty>
           <v-alert type="warning">No more products!</v-alert>
         </template>

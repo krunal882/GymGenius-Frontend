@@ -4,14 +4,7 @@
   <v-container fluid>
     <!-- skeleton loader for the card  -->
     <v-row v-if="loading">
-      <v-col
-        v-for="n in this.exercises?.length"
-        :key="n"
-        cols="12"
-        sm="6"
-        md="4"
-        lg="4"
-      >
+      <v-col v-for="n in 12" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
           class="mx-auto border"
           type="image, article, chip@2"
@@ -78,11 +71,10 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {
-      loading: true,
-    };
+    loading: {
+      type: Boolean,
+      required: true,
+    },
   },
   methods: {
     //to get image form the local or stored on cloud
@@ -101,27 +93,6 @@ export default {
     exploreClicked(exercise) {
       this.$emit("explore", { item: exercise, route: "exerciseDetail" });
     },
-    //it provides the timer for skeleton loader
-    loadData() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 500);
-    },
-  },
-  //watcher for the exercise changes
-  watch: {
-    exercises: {
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.loading = true;
-          this.loadData();
-        }
-      },
-      immediate: true,
-    },
-  },
-  created() {
-    this.loadData();
   },
   computed: {
     //to check if exercise is bookmarked or not

@@ -4,7 +4,7 @@
   <v-container fluid>
     <!-- skeleton loader for the card  -->
     <v-row v-if="loading">
-      <v-col v-for="n in skeletonCount" :key="n" cols="12" sm="6" md="4" lg="4">
+      <v-col v-for="n in 12" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
           class="border"
           type="image, article, chip@2"
@@ -12,7 +12,7 @@
       </v-col>
     </v-row>
     <!-- dietPlan preview card -->
-    <v-row class="d-flex flex-wrap">
+    <v-row v-else class="d-flex flex-wrap">
       <v-col
         v-for="dietPlan in dietPlan"
         :key="dietPlan.id"
@@ -68,17 +68,13 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {
-      loading: true,
-    };
-  },
-  computed: {
-    //it returns the number of skeleton loader card
-    skeletonCount() {
-      return this.loading ? this.dietPlan?.length : 0;
+    loading: {
+      type: Boolean,
+      required: true,
     },
+  },
+
+  computed: {
     //it returns the bookmarked dietPlan of the user
     bookmarked() {
       return this.$store.state.bookmarkModule.diet;
@@ -93,27 +89,6 @@ export default {
     exploreClicked(dietPlan) {
       this.$emit("explore", { item: dietPlan, route: "dietDetail" });
     },
-    //it provides the timer for skeleton loader
-    loadData() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
-    },
-  },
-  watch: {
-    //watcher for the dietPlan changes
-    dietPlan: {
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.loading = true;
-          this.loadData();
-        }
-      },
-      immediate: true,
-    },
-  },
-  created() {
-    this.loadData();
   },
 };
 </script>

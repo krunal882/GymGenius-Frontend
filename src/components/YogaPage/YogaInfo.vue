@@ -4,7 +4,7 @@
   <v-container fluid>
     <!-- skeleton loader for the card  -->
     <v-row v-if="loading">
-      <v-col v-for="n in skeletonCount" :key="n" cols="12" sm="6" md="4" lg="4">
+      <v-col v-for="n in 12" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
           class="mx-auto"
           max-width="300"
@@ -69,16 +69,12 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {
-      loading: true,
-    };
+    loading: {
+      type: Boolean,
+      required: true,
+    },
   },
   computed: {
-    skeletonCount() {
-      return this.loading ? this.yoga.length : 0;
-    },
     //to check if yoga is bookmarked or not
     bookmarked() {
       return this.$store.state.bookmarkModule.yoga;
@@ -89,27 +85,6 @@ export default {
     exploreClicked(yoga) {
       this.$emit("explore", { item: yoga, route: "yogaDetail" });
     },
-    //it provides the timer for skeleton loader
-    loadData() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 1000);
-    },
-  },
-  //watcher for the yoga changes
-  watch: {
-    yoga: {
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.loading = true;
-          this.loadData();
-        }
-      },
-      immediate: true,
-    },
-  },
-  created() {
-    this.loadData();
   },
 };
 </script>

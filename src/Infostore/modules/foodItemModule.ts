@@ -149,7 +149,7 @@ const actions = {
 
         url += `/filtered?${queryParams}&page=${page}&limit=${limit}`;
       } else if (id) {
-        url += `/filtered?nutritionId=${id}`;
+        url += `/filtered?_id=${id}`;
       } else {
         url += `?page=${page}&limit=${limit}`;
       }

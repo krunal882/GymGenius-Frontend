@@ -4,14 +4,7 @@
   <v-container fluid>
     <!-- skeleton loader for the card  -->
     <v-row v-if="loading">
-      <v-col
-        v-for="n in this.foodItem?.length"
-        :key="n"
-        cols="12"
-        sm="6"
-        md="4"
-        lg="4"
-      >
+      <v-col v-for="n in 12" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
           class="border mx-auto"
           type="image"
@@ -54,17 +47,13 @@ export default {
       type: Array,
       required: true,
     },
-  },
-  data() {
-    return {
-      loading: true,
-    };
-  },
-  computed: {
-    //to return number of foodItem
-    skeletonCount() {
-      return this.loading ? this.foodItem?.length : 0;
+    loading: {
+      type: Boolean,
+      required: true,
     },
+  },
+
+  computed: {
     //to check if foodItem is bookmarked or not
     bookmarked() {
       return this.$store.state.bookmarkModule.nutrition;
@@ -84,27 +73,6 @@ export default {
         return cloudImg;
       }
     },
-    //it provides the timer for skeleton loader
-    loadData() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
-    },
-  },
-  //watcher for the foodItem changes
-  watch: {
-    foodItem: {
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.loading = true;
-          this.loadData();
-        }
-      },
-      immediate: true,
-    },
-  },
-  created() {
-    this.loadData();
   },
 };
 </script>
