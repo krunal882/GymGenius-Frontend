@@ -92,7 +92,15 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="save(yoga)">Add</v-btn>
+        <v-btn color="blue darken-1" text @click="save(yoga)"
+          ><v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+          <span v-if="!loading">Add</span></v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -114,6 +122,7 @@ export default {
       image: null,
       dialog: false,
       valid: true,
+      loading: false,
       yoga: {
         category_name: "",
         category_description: "",
@@ -154,6 +163,7 @@ export default {
     },
     //to upload image in cloud storage and call action from vuex store
     async save(yoga) {
+      this.loading = true;
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
       const uploadData = new FormData();
@@ -168,6 +178,7 @@ export default {
       );
       yoga.url_png = data.url;
       await this.$store.dispatch("addYoga", { yoga });
+      this.loading = false;
       this.closeDialog();
     },
   },

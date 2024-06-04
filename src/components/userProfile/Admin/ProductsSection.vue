@@ -167,6 +167,18 @@ export default {
       }
     },
   },
+  async mounted() {
+    if (this.products.length === 0) {
+      const url = "http://localhost:3000/store";
+      await this.$store.dispatch("fetchProduct", {
+        filteredFilters: { name: "" },
+        url,
+        store: "adminProduct",
+        category: "men",
+        limit: 10,
+      });
+    }
+  },
 };
 </script>
 

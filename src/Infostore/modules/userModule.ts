@@ -127,7 +127,7 @@ const actions = {
   async fetchUser({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();
-      const url = `http://localhost:3000/auth/filtered?id=${id}`;
+      const url = `http://localhost:3000/auth/filtered?_id=${id}`;
       const response = await axios.get(url, config);
       if (response.data.length > 0) {
         commit("setUser", response.data[0]);

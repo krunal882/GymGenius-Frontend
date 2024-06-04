@@ -1,24 +1,24 @@
 <!-- this component displays services that included in the websites and navigation option to that page using card -->
 <template>
-  <v-hover class="cardHover">
-    <div class="container marketing">
-      <div class="text-black absolute top-40 left-30 text-center">
-        <h1
-          class="text-5xl lg:text-5xl md:text-2xl sm:text-xl"
-          style="margin-top: 30px; margin-bottom: 50px"
-        >
-          push your limits forward,<br />
-          we offer to you
-        </h1>
-      </div>
-      <div class="row justify-content-center">
-        <div
-          class="col-lg-4 image-hover-effect"
-          v-for="(card, index) in cards"
-          :key="index"
-        >
-          <!-- cards to display different services -->
-          <v-card style="height: 330px" class="mt-5">
+  <div class="container marketing">
+    <div class="text-black absolute top-40 left-30 text-center">
+      <h1
+        class="text-5xl lg:text-5xl md:text-2xl sm:text-xl"
+        style="margin-top: 30px; margin-bottom: 50px"
+      >
+        push your limits forward,<br />
+        we offer to you
+      </h1>
+    </div>
+    <div class="row justify-content-center">
+      <div
+        class="col-lg-4 image-hover-effect"
+        v-for="(card, index) in cards"
+        :key="index"
+      >
+        <!-- cards to display different services -->
+        <v-card style="height: 330px" class="mt-5">
+          <router-link :to="{ name: card.routeName }">
             <v-img
               class="image mx-auto"
               :src="card.image"
@@ -26,30 +26,27 @@
               width="100"
               height="100"
             />
-            <h2
-              style="
-                font-size: 24px;
-                font-weight: bold;
-                margin-top: 20px;
-                color: red;
-              "
-            >
-              {{ card.title }}
-            </h2>
-            <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px">
-              {{ card.description }}
-            </p>
-            <router-link
-              :to="{ name: card.routeName }"
-              class="btn btn-secondary"
-            >
-              View details &raquo;
-            </router-link>
-          </v-card>
-        </div>
+          </router-link>
+          <h2
+            style="
+              font-size: 24px;
+              font-weight: bold;
+              margin-top: 20px;
+              color: red;
+            "
+          >
+            {{ card.title }}
+          </h2>
+          <p style="font-size: 16px; line-height: 1.6; margin-bottom: 20px">
+            {{ card.description }}
+          </p>
+          <router-link :to="{ name: card.routeName }" class="btn btn-secondary">
+            View details &raquo;
+          </router-link>
+        </v-card>
       </div>
     </div>
-  </v-hover>
+  </div>
 </template>
 
 <script>
@@ -167,6 +164,7 @@ body {
 
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
 }
 
 @media (min-width: 40em) {

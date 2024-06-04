@@ -36,7 +36,7 @@
       </div>
     </div>
     <!-- profile menu option -->
-    <ProfileMenu v-if="token" />
+    <ProfileMenu class="hover" v-if="token" />
   </nav>
 </template>
 
@@ -92,29 +92,29 @@ export default {
         }
       }
     },
-    //chatBoat for the fitness purpose
-    //   chatBoat() {
-    //     const scriptConfig = document.createElement("script");
-    //     scriptConfig.innerHTML = `
-    //       window.embeddedChatbotConfig = {
-    //         chatbotId: "_goC7mZy5K-mr7xGihzhw",
-    //         domain: "www.chatbase.co"
-    //       }
-    //     `;
-    //     document.head.appendChild(scriptConfig);
+    // chatBoat for the fitness purpose
+    chatBoat() {
+      const scriptConfig = document.createElement("script");
+      scriptConfig.innerHTML = `
+          window.embeddedChatbotConfig = {
+            chatbotId: "_goC7mZy5K-mr7xGihzhw",
+            domain: "www.chatbase.co"
+          }
+        `;
+      document.head.appendChild(scriptConfig);
 
-    //     const scriptEmbed = document.createElement("script");
-    //     scriptEmbed.src = "https://www.chatbase.co/embed.min.js";
-    //     scriptEmbed.setAttribute("chatbotId", "_goC7mZy5K-mr7xGihzhw");
-    //     scriptEmbed.setAttribute("domain", "www.chatbase.co");
-    //     scriptEmbed.defer = true;
-    //     document.head.appendChild(scriptEmbed);
-    //   },
-    // },
-    // mounted() {
-    //   if (this.$store.state.userModule.userId.length > 0) {
-    //     this.chatBoat();
-    //   }
+      const scriptEmbed = document.createElement("script");
+      scriptEmbed.src = "https://www.chatbase.co/embed.min.js";
+      scriptEmbed.setAttribute("chatbotId", "_goC7mZy5K-mr7xGihzhw");
+      scriptEmbed.setAttribute("domain", "www.chatbase.co");
+      scriptEmbed.defer = true;
+      document.head.appendChild(scriptEmbed);
+    },
+  },
+  mounted() {
+    // if (this.$store.state.userModule.userId.length > 0) {
+    //   this.chatBoat();
+    // }
   },
   computed: {
     userId() {
@@ -207,5 +207,9 @@ body {
 
 .img {
   width: 250px;
+}
+
+.hover {
+  cursor: pointer;
 }
 </style>

@@ -20,7 +20,7 @@
         <!-- form side image  -->
         <div class="col-12 col-lg-6">
           <img
-            class="img-fluid rounded image-hover-effect"
+            class="img-fluid rounded"
             loading="lazy"
             src="../../assets/contact_form.png"
             alt="Get in Touch"
@@ -215,8 +215,4 @@ export default {
 };
 </script>
 
-<style scoped>
-.image-hover-effect:hover {
-  transform: scale(0.9);
-}
-</style>
+<style scoped></style>

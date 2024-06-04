@@ -103,7 +103,15 @@
         <v-spacer></v-spacer>
         <!-- button to close the dialog and add exercise -->
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="add(exercise)">Add</v-btn>
+        <v-btn color="blue darken-1" text @click="add(exercise)"
+          ><v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+          <span v-if="!loading">Add</span></v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -122,6 +130,7 @@ export default {
   data() {
     return {
       image: null,
+      loading: false,
       forceTypes: ["push", "pull", "static"],
       levelTypes: ["beginner", "intermediate", "expert"],
       dialog: false,
@@ -181,6 +190,7 @@ export default {
     },
     //to upload image in cloud storage and call action from vuex store
     async add(exercise) {
+      this.loading = true;
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
       const uploadData = new FormData();
@@ -193,8 +203,18 @@ export default {
         `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
         uploadData
       );
+      exercise.primaryMuscles = exercise.primaryMuscles
+        .split(",")
+        .map((item) => item.trim());
+      exercise.secondaryMuscles = exercise.secondaryMuscles
+        .split(",")
+        .map((item) => item.trim());
+      exercise.instructions = exercise.instructions
+        .split(".")
+        .map((item) => item.trim());
       exercise.cloudImg = data.url;
       await this.$store.dispatch("addExercise", { exercise });
+      this.loading = false;
       this.closeDialog();
     },
   },

@@ -109,7 +109,13 @@
           color="primary"
           :disabled="validationErrors || !passwordsMatch"
           @click="addUser(user._id)"
-          >Add</v-btn
+          ><v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+          <span v-if="!loading">Add</span></v-btn
         >
         <v-btn @click="localDialog = false">Cancel</v-btn>
       </v-card-actions>
@@ -131,6 +137,7 @@ export default {
       user: {},
       signUpPasswordVisible: false,
       confirmPasswordVisible: false,
+      loading: false,
     };
   },
   // watcher for dialog
@@ -176,8 +183,10 @@ export default {
   methods: {
     //method that call action from vuex store
     addUser() {
+      this.loading = true;
       const user = this.user;
       this.$store.dispatch("userAdd", { user });
+      this.loading = false;
       this.localDialog = false;
     },
     //password visibility

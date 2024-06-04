@@ -87,7 +87,15 @@
         <!-- button to close the dialog and add product -->
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="add(product)">Add</v-btn>
+        <v-btn color="blue darken-1" text @click="add(product)"
+          ><v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+          <span v-if="!loading">Add</span></v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -110,6 +118,7 @@ export default {
       stateType: ["active", "inactive"],
       dialog: false,
       valid: true,
+      loading: false,
       product: {
         title: "",
         brand: "",
@@ -161,6 +170,7 @@ export default {
     },
     //to upload image in cloud storage and call action from vuex store
     async add(product) {
+      this.loading = true;
       product.price = +product.price;
 
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
@@ -177,6 +187,7 @@ export default {
       );
       product.cloudImg = data.url;
       await this.$store.dispatch("addProduct", { product });
+      this.loading = false;
       this.closeDialog();
     },
   },

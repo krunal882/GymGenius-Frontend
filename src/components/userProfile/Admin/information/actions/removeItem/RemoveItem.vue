@@ -24,7 +24,15 @@
               <!-- buttons for confirmation -->
               <v-card-actions class="justify-end">
                 <v-btn color="primary" text @click="closeDialog">Cancel</v-btn>
-                <v-btn color="error" text @click="remove()">Remove</v-btn>
+                <v-btn color="error" text @click="remove()"
+                  ><v-progress-circular
+                    v-if="loading"
+                    indeterminate
+                    color="white"
+                    size="20"
+                  ></v-progress-circular>
+                  <span v-if="!loading">Remove</span></v-btn
+                >
               </v-card-actions>
             </v-card>
           </template>
@@ -46,6 +54,7 @@ export default {
   data() {
     return {
       dialog: false,
+      loading: false,
       Item: "",
     };
   },
@@ -65,6 +74,7 @@ export default {
     },
     //to delete image in cloud storage and call action from vuex store
     async remove() {
+      this.loading = true;
       if (this.item.cloudImg != undefined) {
         const timestamp = Math.floor(Date.now() / 1000);
         const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
@@ -90,6 +100,7 @@ export default {
         );
       }
       await this.$store.dispatch(this.action, { id: this.Item._id });
+      this.loading = false;
       this.closeDialog();
     },
     //to handle and close dialog on outside click

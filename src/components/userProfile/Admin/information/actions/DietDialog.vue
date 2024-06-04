@@ -186,7 +186,15 @@
       <!-- button to close the dialog and edit dietPlan -->
       <v-card-actions>
         <v-btn color="blue darken-1" @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" @click="save(dietPlan)">Save</v-btn>
+        <v-btn color="blue darken-1" @click="save(dietPlan)"
+          ><v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+          <span v-if="!loading">Save</span></v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -202,6 +210,7 @@ export default {
   data() {
     return {
       dialog: false,
+      loading: false,
       dietPlan: {
         plan_name: "",
         diet_type: "",
@@ -278,23 +287,36 @@ export default {
     },
     //to upload image in cloud storage and call action from vuex store
     async save(dietPlan) {
+      this.loading = true;
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
       const uploadData = new FormData();
-      uploadData.append("file", this.dietPlan.cloudImg);
-      if (upload_preset && cloud_name) {
-        uploadData.append("upload_preset", upload_preset);
-        uploadData.append("cloud_name", cloud_name);
+      if (this.dietPlan.cloudImg != null) {
+        if (upload_preset && cloud_name) {
+          uploadData.append("upload_preset", upload_preset);
+          uploadData.append("cloud_name", cloud_name);
+        }
+        const { data } = await axios.post(
+          `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
+          uploadData
+        );
+        dietPlan.cloudImg = data.url;
       }
-      const { data } = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-        uploadData
-      );
-      dietPlan.cloudImg = data.url;
+
+      dietPlan.meals.forEach((meal) => {
+        meal.foods.forEach((food) => {
+          food.calories = +food.calories;
+          food.protein = +food.protein;
+          food.carbohydrates = +food.carbohydrates;
+          food.fat = +food.fat;
+          food.fiber = +food.fiber;
+        });
+      });
 
       const id = dietPlan._id;
       dietPlan.total_days = +dietPlan.total_days;
       await this.$store.dispatch("editDietPlan", { id, dietPlan });
+      this.loading = false;
       this.closeDialog();
     },
   },

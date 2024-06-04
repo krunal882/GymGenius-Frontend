@@ -11,14 +11,10 @@
         :key="index"
       >
         <!-- Card-->
-        <div class="card shadow-sm border-1 rounded">
+        <div class="card shadow-sm border-1 rounded image-hover-effect">
           <div class="card-body p-0">
             <!-- trainer images -->
-            <img
-              :src="trainer.image"
-              alt=""
-              class="w-100 card-img-top image-hover-effect"
-            />
+            <img :src="trainer.image" alt="" class="w-100 card-img-top" />
             <!-- trainer information -->
             <div class="p-4">
               <h5 class="mb-0">{{ trainer.name }}</h5>
@@ -116,6 +112,8 @@ export default {
 
 .image-hover-effect:hover {
   transform: scale(1.1);
+  transition: transform 0.3s ease-in-out;
+  box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
 }
 
 .social-link:hover,

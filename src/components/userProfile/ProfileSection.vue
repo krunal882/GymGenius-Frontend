@@ -20,7 +20,13 @@
     <!-- to change the user profile -->
     <v-badge color="primary darken-2" overlap @click="openImageUploadDialog">
       <template v-slot:badge>
-        <v-icon color="white" size="50" style="font-size: large"
+        <v-progress-circular
+          v-if="isLoading"
+          indeterminate
+          color="white"
+          size="20"
+        ></v-progress-circular>
+        <v-icon v-else color="white" size="50" style="font-size: large"
           >mdi-pencil</v-icon
         >
       </template>
@@ -162,6 +168,7 @@ export default {
   //data contains user input fields and the rules
   data() {
     return {
+      isLoading: false,
       user: {
         name: "",
         email: "",
@@ -287,6 +294,8 @@ export default {
     },
     // to upload the image
     async uploadImage(event) {
+      this.isLoading = true;
+
       const file = event.target.files[0];
       if (!file) return;
 
@@ -316,8 +325,8 @@ export default {
         `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
         uploadData
       );
-
       this.saveAvatarUrl(data.url);
+      this.isLoading = false;
     },
     saveAvatarUrl(imgUrl) {
       const userId = this.$store.state.userModule.userId;

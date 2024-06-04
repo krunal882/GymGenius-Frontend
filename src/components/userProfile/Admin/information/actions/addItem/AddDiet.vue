@@ -153,7 +153,15 @@
       <!-- button to close the dialog and add dietPlan -->
       <v-card-actions>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="add(dietPlan)">Add</v-btn>
+        <v-btn color="blue darken-1" text @click="add(dietPlan)"
+          ><v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+          <span v-if="!loading">Add</span></v-btn
+        >
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -173,6 +181,7 @@ export default {
     return {
       image: null,
       dialog: false,
+      loading: false,
       rows: 1,
       Days: [
         "Monday",
@@ -261,6 +270,7 @@ export default {
     },
     //to upload image in cloud storage and call action from vuex store
     async add(dietPlan) {
+      this.loading = true;
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
       const uploadData = new FormData();
@@ -275,6 +285,7 @@ export default {
       );
       dietPlan.cloudImg = data.url;
       await this.$store.dispatch("addDietPlan", { dietPlan });
+      this.loading = false;
       this.closeDialog();
     },
   },

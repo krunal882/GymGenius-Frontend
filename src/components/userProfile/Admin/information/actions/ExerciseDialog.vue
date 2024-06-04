@@ -78,11 +78,9 @@
           <div class="d-flex">
             <!-- exercise mechanic -->
             <v-text-field
-              :rules="Rules"
               v-model="exercise.mechanic"
               label="Mechanic"
               variant="outlined"
-              required
               class="mr-4 mb-4"
             ></v-text-field>
             <!-- exercise equipment needed -->
@@ -128,7 +126,15 @@
       <v-card-actions>
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="save(exercise)">Save</v-btn>
+        <v-btn color="blue darken-1" text @click="save(exercise)"
+          ><v-progress-circular
+            v-if="loading"
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+          <span v-if="!loading">Save</span>
+        </v-btn>
       </v-card-actions>
     </v-card>
   </v-dialog>
@@ -148,6 +154,7 @@ export default {
       levelTypes: ["beginner", "intermediate", "expert"],
       dialog: false,
       valid: true,
+      loading: false,
       exercise: {
         name: "",
         force: "Force",
@@ -215,11 +222,11 @@ export default {
     },
     //to upload image in cloud storage and call action from vuex store
     async save(exercise) {
+      this.loading = true;
       const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
       const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
       const uploadData = new FormData();
       if (this.exercise.cloudImg != null) {
-        uploadData.append("file", this.exercise.cloudImg);
         if (upload_preset && cloud_name) {
           uploadData.append("upload_preset", upload_preset);
           uploadData.append("cloud_name", cloud_name);
@@ -230,7 +237,17 @@ export default {
         );
         exercise.cloudImg = data.url;
       }
+      exercise.primaryMuscles = exercise.primaryMuscles
+        .split(",")
+        .map((item) => item.trim());
+      exercise.secondaryMuscles = exercise.secondaryMuscles
+        .split(",")
+        .map((item) => item.trim());
+      exercise.instructions = exercise.instructions
+        .split(".")
+        .map((item) => item.trim());
       await this.$store.dispatch("editExercise", { exercise });
+      this.loading = false;
       this.closeDialog();
     },
   },

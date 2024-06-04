@@ -55,10 +55,10 @@
           <td>{{ item.state }}</td>
           <td>
             <!-- edit and delete button  -->
-            <v-icon color="blue" class="mr-5" @click="openDialog(item)"
+            <v-icon color="blue" class="mr-5 action" @click="openDialog(item)"
               >mdi-pencil</v-icon
             >
-            <v-icon color="red" @click="openDeleteDialog(item)"
+            <v-icon color="red" class="action" @click="openDeleteDialog(item)"
               >mdi-delete</v-icon
             >
           </td>
