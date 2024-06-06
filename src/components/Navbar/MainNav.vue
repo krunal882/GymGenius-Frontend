@@ -1,4 +1,3 @@
-<!-- this component includes the navigation bar of the website , it has logo , navigation options , profile-menu , login/signup button -->
 <template>
   <nav class="navbar my-navbar navbar-expand-md navbar-light">
     <div class="container">
@@ -42,7 +41,6 @@
 
 <script>
 import Cookies from "js-cookie";
-
 import ProfileMenu from "./ProfileMenu.vue";
 import { jwtDecode } from "jwt-decode";
 
@@ -52,26 +50,42 @@ export default {
   },
   data() {
     return {
-      // navigation options
-      activeNavItem: 0,
+      activeNavItem: null,
       navItems: [
-        { label: "Home", route: "/" },
-        { label: "Exercises", route: "/exercise" },
-        { label: "Yoga", route: "/YogaPoses" },
-        { label: "Nutrition", route: "/foodSection" },
-        { label: "Shop", route: "/store" },
-        { label: "Analyzer", route: "/fitnessTrackers" },
+        { label: "Home", route: "/", highlight: "/" },
+        {
+          label: "Exercises",
+          route: "/exercise",
+          highlight: ["/exercise", "/exercise/:detail"],
+        },
+        {
+          label: "Yoga",
+          route: "/YogaPoses",
+          highlight: ["/YogaPoses", "YogaPoses/:detail"],
+        },
+        {
+          label: "Nutrition",
+          route: "/foodSection",
+          highlight: ["/foodSection", "/foodSection/:category"],
+        },
+        {
+          label: "Shop",
+          route: "/store",
+          highlight: ["/store", "/store/:name"],
+        },
+        {
+          label: "Analyzer",
+          route: "/fitnessTrackers",
+          highlight: ["/fitnessTrackers", "/fitnessTrackers/:tracker"],
+        },
       ],
-      user: null,
       token: null,
     };
   },
   methods: {
-    // to highlight the active option on navbar
     setActiveNavItem(index) {
       this.activeNavItem = index;
     },
-    // to check if the token is available , if available then make requests
     checkToken() {
       const currentToken = Cookies.get("token");
       if (currentToken !== undefined && currentToken !== this.token) {
@@ -92,77 +106,34 @@ export default {
         }
       }
     },
-    // chatBoat for the fitness purpose
-    chatBoat() {
-      const scriptConfig = document.createElement("script");
-      scriptConfig.innerHTML = `
-          window.embeddedChatbotConfig = {
-            chatbotId: "_goC7mZy5K-mr7xGihzhw",
-            domain: "www.chatbase.co"
-          }
-        `;
-      document.head.appendChild(scriptConfig);
-
-      const scriptEmbed = document.createElement("script");
-      scriptEmbed.src = "https://www.chatbase.co/embed.min.js";
-      scriptEmbed.setAttribute("chatbotId", "_goC7mZy5K-mr7xGihzhw");
-      scriptEmbed.setAttribute("domain", "www.chatbase.co");
-      scriptEmbed.defer = true;
-      document.head.appendChild(scriptEmbed);
-    },
   },
   mounted() {
-    // if (this.$store.state.userModule.userId.length > 0) {
-    //   this.chatBoat();
-    // }
+    this.checkToken();
+    const routeIndex = this.navItems.findIndex((item) => {
+      if (Array.isArray(item.highlight)) {
+        return item.highlight.some((highlight) =>
+          this.$route.path.startsWith(highlight)
+        );
+      } else {
+        return item.highlight === this.$route.path;
+      }
+    });
+    this.activeNavItem = routeIndex !== -1 ? routeIndex : 0;
   },
-  computed: {
-    userId() {
-      return this.$store.state.userModule.userId?.length > 0;
-    },
-  },
-
   watch: {
     $route() {
-      const routeIndex = this.navItems.findIndex(
-        (item) => item.route === this.$route.path
-      );
+      const routeIndex = this.navItems.findIndex((item) => {
+        if (Array.isArray(item.highlight)) {
+          return item.highlight.some((highlight) =>
+            this.$route.path.startsWith(highlight)
+          );
+        } else {
+          return item.highlight === this.$route.path;
+        }
+      });
       this.activeNavItem = routeIndex !== -1 ? routeIndex : 0;
       this.checkToken();
     },
-  },
-  created() {
-    switch (this.$route.path) {
-      case "/":
-        this.activeNavItem = 0;
-        break;
-      case "/exercises":
-        this.activeNavItem = 1;
-        break;
-      case "/yoga":
-        this.activeNavItem = 2;
-        break;
-      case "/foodSection":
-        this.activeNavItem = 3;
-        break;
-      case "/store":
-        this.activeNavItem = 4;
-        break;
-      case "/blogs":
-        this.activeNavItem = 5;
-        break;
-      case "/fitnessTrackers/":
-        this.activeNavItem = 6;
-        break;
-
-      case "/authentication":
-        this.activeNavItem = -1;
-        break;
-
-      default:
-        this.activeNavItem = 0;
-    }
-    this.checkToken();
   },
 };
 </script>

@@ -1,4 +1,3 @@
-<!-- this component is for displaying the navigation bar for the store related pages -->
 <template>
   <nav
     class="navbar d-flex justify-content-center py-0 shadow"
@@ -7,18 +6,20 @@
     <!-- navbar options -->
     <div class="scrollable-wrapper">
       <ul class="navbar-nav">
-        <li><router-link :to="{ name: 'men' }">Men</router-link></li>
-        <li><router-link :to="{ name: 'women' }">Women</router-link></li>
-        <li><router-link :to="{ name: 'cardio' }">Cardio</router-link></li>
-        <li><router-link :to="{ name: 'cycles' }">Cycles</router-link></li>
-        <li>
-          <router-link :to="{ name: 'accessories' }">Accessories</router-link>
-        </li>
-        <li>
-          <router-link :to="{ name: 'equipments' }">Equipments</router-link>
-        </li>
-        <li>
-          <router-link :to="{ name: 'supplements' }">Supplements</router-link>
+        <li
+          v-for="(navItem, index) in navItems"
+          :key="index"
+          :class="{
+            'nav-item': true,
+            active: activeNavItem === index && activeNavItem !== -1,
+          }"
+        >
+          <router-link
+            v-if="navItem.route"
+            :to="{ name: navItem.route }"
+            @click="setActiveNavItem(index)"
+            >{{ navItem.label }}</router-link
+          >
         </li>
         <div class="cart-icon text-none mt-2 ml-2">
           <!-- cart option button -->
@@ -38,11 +39,84 @@
 <script>
 export default {
   data() {
-    return {};
+    return {
+      activeNavItem: null,
+      navItems: [
+        {
+          label: "Men",
+          route: "men",
+          highlight: ["/store/men", "/store/men/:products"],
+        },
+        {
+          label: "Women",
+          route: "women",
+          highlight: ["/store/women", "/store/women/:products"],
+        },
+        {
+          label: "Cardio",
+          route: "cardio",
+          highlight: ["/store/cardio", "/store/cardio/:products"],
+        },
+        {
+          label: "Cycles",
+          route: "cycles",
+          highlight: ["/store/cycles", "/store/cycles/:products"],
+        },
+
+        {
+          label: "Accessories",
+          route: "accessories",
+          highlight: ["/store/accessories", "/store/accessories/:products"],
+        },
+        {
+          label: "Equipments",
+          route: "equipments",
+          highlight: ["/store/equipments", "/store/equipments/:products"],
+        },
+        {
+          label: "Supplements",
+          route: "supplements",
+          highlight: ["/store/supplements", "/store/supplements/:products"],
+        },
+      ],
+      activeNavItemIndex: null,
+    };
   },
   computed: {
     cartItemCount() {
       return this.$store.state.cartModule.cartItems.length;
+    },
+  },
+  methods: {
+    setActiveNavItem(index) {
+      this.activeNavItem = index;
+    },
+  },
+  mounted() {
+    const routeIndex = this.navItems.findIndex((item) => {
+      if (Array.isArray(item.highlight)) {
+        return item.highlight.some((highlight) =>
+          this.$route.path.startsWith(highlight)
+        );
+      } else {
+        return item.highlight === this.$route.path;
+      }
+    });
+    this.activeNavItem = routeIndex !== -1 ? routeIndex : -1;
+  },
+  watch: {
+    $route() {
+      // Update activeNavItemIndex whenever route changes
+      const routeIndex = this.navItems.findIndex((item) => {
+        if (Array.isArray(item.highlight)) {
+          return item.highlight.some((highlight) =>
+            this.$route.path.startsWith(highlight)
+          );
+        } else {
+          return item.highlight === this.$route.path;
+        }
+      });
+      this.activeNavItem = routeIndex !== -1 ? routeIndex : 0;
     },
   },
 };
@@ -84,6 +158,11 @@ nav ul li a {
 }
 
 nav ul li a:hover {
+  background-color: #111;
+  color: white;
+}
+
+.navbar-nav .active a {
   background-color: #111;
   color: white;
 }
