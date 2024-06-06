@@ -1,5 +1,3 @@
-<!-- this component is for displaying the foodItem nutrition to users -->
-<!--it also provides buttons for the bookmarking and for navigating to previous page -->
 <template>
   <v-container v-if="foodItem">
     <v-card v-if="foodItem" class="mx-auto d-flex custom-card" width="100%">
@@ -16,12 +14,13 @@
         <v-card-title class="custom-title">{{ foodItem.name }}</v-card-title>
         <v-card-text>Category: {{ foodItem.category }}</v-card-text>
 
-        <!-- action buttons for the bookmark and previous page navigation -->
+        <!-- action buttons for the bookmark, previous page navigation, and PDF download -->
         <v-card-actions style="justify-content: space-between">
           <v-btn color="orange" @click="back" text="Go Back"></v-btn>
           <v-btn color="orange" @click="toggleBookmark(foodItem, 'nutrition')">
             {{ isBookmarked(foodItem) ? "Undo Bookmark" : "Bookmark" }}
           </v-btn>
+          <v-btn color="orange" @click="downloadPDF">Download PDF</v-btn>
         </v-card-actions>
       </div>
     </v-card>
@@ -276,7 +275,9 @@
 </template>
 
 <script>
+import jsPDF from "jspdf";
 import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
+
 export default {
   mixins: [bookmarkMixin],
   data() {
@@ -309,6 +310,166 @@ export default {
       } else {
         return cloudImg;
       }
+    },
+    async downloadPDF() {
+      const pdf = new jsPDF("p", "mm", "a4");
+      const margin = 10;
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      let yOffset = margin;
+
+      // Add Food Item Name
+      pdf.setFontSize(22);
+      pdf.text(this.foodItem.name, margin, yOffset);
+      yOffset += 10;
+
+      // Add Image
+      const img = await this.loadImage(
+        this.imgPath(this.foodItem.name, this.foodItem.cloudImg)
+      );
+      const imgProps = pdf.getImageProperties(img);
+      const imgWidth = pageWidth - 2 * margin;
+      const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+      if (yOffset + imgHeight > pageHeight - margin) {
+        pdf.addPage();
+        yOffset = margin;
+      }
+
+      pdf.addImage(img, "JPEG", margin, yOffset, imgWidth, imgHeight);
+      yOffset += imgHeight + margin;
+
+      // Add Food Item Details
+      const details = [`Category: ${this.foodItem.category}`];
+
+      pdf.setFontSize(12);
+      details.forEach((detail) => {
+        pdf.text(detail, margin, yOffset);
+        yOffset += 7;
+      });
+
+      // Add Nutrition
+      if (this.foodItem.nutritions) {
+        pdf.setFontSize(16);
+        pdf.text("Nutrition:", margin, yOffset);
+        yOffset += 10;
+
+        pdf.setFontSize(12);
+        for (const [key, value] of Object.entries(this.foodItem.nutritions)) {
+          pdf.text(`${key}: ${value}`, margin, yOffset);
+          yOffset += 7;
+        }
+      }
+
+      // Add Health Benefits
+      if (this.foodItem.health_benefits) {
+        pdf.setFontSize(16);
+        pdf.text("Health Benefits:", margin, yOffset);
+        yOffset += 10;
+
+        pdf.setFontSize(12);
+        this.foodItem.health_benefits.forEach((benefit) => {
+          const textLines = pdf.splitTextToSize(
+            benefit,
+            pageWidth - 2 * margin
+          );
+          pdf.text(textLines, margin, yOffset);
+          yOffset += textLines.length * 7;
+        });
+      }
+
+      // Add Fun Facts
+      if (this.foodItem.fun_facts_and_trivia) {
+        pdf.setFontSize(16);
+        pdf.text("Fun Facts:", margin, yOffset);
+        yOffset += 10;
+
+        pdf.setFontSize(12);
+        this.foodItem.fun_facts_and_trivia.forEach((fact) => {
+          const textLines = pdf.splitTextToSize(fact, pageWidth - 2 * margin);
+          pdf.text(textLines, margin, yOffset);
+          yOffset += textLines.length * 7;
+        });
+      }
+
+      // Add Recipes and Serving Ideas
+      this.foodItem.recipes_and_serving_ideas.forEach((recipe, index) => {
+        pdf.setFontSize(16);
+        pdf.text(`Recipe Ideas - ${index + 1}:`, margin, yOffset);
+        yOffset += 10;
+
+        pdf.setFontSize(12);
+        if (recipe.name) {
+          pdf.text(`Item Name: ${recipe.name}`, margin, yOffset);
+          yOffset += 7;
+        }
+
+        if (recipe.ingredients) {
+          pdf.text("Ingredients:", margin, yOffset);
+          yOffset += 7;
+
+          if (this.isString(recipe.ingredients)) {
+            pdf.text(recipe.ingredients, margin + 10, yOffset);
+            yOffset += 7;
+          } else {
+            recipe.ingredients.forEach((ingredient) => {
+              pdf.text(`- ${ingredient}`, margin + 10, yOffset);
+              yOffset += 7;
+            });
+          }
+        }
+
+        if (recipe.instructions) {
+          pdf.text("Instructions:", margin, yOffset);
+          yOffset += 7;
+
+          if (this.isString(recipe.instructions)) {
+            pdf.text(recipe.instructions, margin + 10, yOffset);
+            yOffset += 7;
+          } else {
+            recipe.instructions.forEach((instruction) => {
+              pdf.text(`- ${instruction}`, margin + 10, yOffset);
+              yOffset += 7;
+            });
+          }
+        }
+      });
+
+      // Add Varieties
+      if (this.foodItem.varieties) {
+        pdf.setFontSize(16);
+        pdf.text("Varieties:", margin, yOffset);
+        yOffset += 10;
+
+        pdf.setFontSize(12);
+        this.foodItem.varieties.forEach((variety) => {
+          pdf.text(variety, margin, yOffset);
+          yOffset += 7;
+        });
+      }
+
+      // Add Culinary Uses
+      if (this.foodItem.culinary_uses) {
+        pdf.setFontSize(16);
+        pdf.text("Culinary Uses:", margin, yOffset);
+        yOffset += 10;
+
+        pdf.setFontSize(12);
+        this.foodItem.culinary_uses.forEach((use) => {
+          pdf.text(use, margin, yOffset);
+          yOffset += 7;
+        });
+      }
+
+      pdf.save(`${this.foodItem.name}.pdf`);
+    },
+    loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => resolve(img);
+        img.onerror = (err) => reject(err);
+      });
     },
   },
   computed: {

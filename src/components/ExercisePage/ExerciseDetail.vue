@@ -34,7 +34,10 @@
           "
         />
         <!-- exercises details -->
-        <div style="flex: 1; padding: 16px; overflow: auto">
+        <div
+          ref="exerciseDetails"
+          style="flex: 1; padding: 16px; overflow: auto"
+        >
           <v-card-title class="pt-4 text-center"
             >Exercise Name: {{ exercise.name }}</v-card-title
           >
@@ -104,6 +107,7 @@
             <v-btn color="orange" @click="toggleBookmark(exercise, 'exercise')">
               {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}
             </v-btn>
+            <v-btn color="orange" @click="downloadPDF">Download PDF</v-btn>
           </v-card-actions>
         </div>
       </v-card>
@@ -132,7 +136,9 @@
   </v-container>
 </template>
 <script>
+import jsPDF from "jspdf";
 import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
+
 export default {
   mixins: [bookmarkMixin],
   data() {
@@ -143,7 +149,6 @@ export default {
     };
   },
   methods: {
-    //this method fetches the dietPlan by id by calling action in the store
     async fetchExercise(id) {
       try {
         await this.$store.dispatch("fetchExercises", { id });
@@ -152,15 +157,12 @@ export default {
       }
       this.exercise = this.$store.state.exercisesModule.exerciseDetail[0];
     },
-    //it navigates to the previous page
     back() {
       this.$router.go(-1);
     },
-    //it handles the screen sizing
     handleResize() {
       this.isWideScreen = window.innerWidth > 790;
     },
-    //this method loades the image sof exercise form local or from the cloud
     async loadImages(exerciseName, cloudImg) {
       if (cloudImg === undefined) {
         const formatedName = exerciseName
@@ -183,14 +185,85 @@ export default {
         this.images = [cloudImg];
       }
     },
+    async downloadPDF() {
+      const pdf = new jsPDF("p", "mm", "a4");
+      const margin = 10;
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      let yOffset = margin;
+
+      // Add Exercise Name
+      pdf.setFontSize(22);
+      pdf.text(this.exercise.name, margin, yOffset);
+      yOffset += 10;
+
+      // Add Exercise Details
+      const details = [
+        `Level: ${this.exercise.level}`,
+        `Category: ${this.exercise.category}`,
+        `Force: ${this.exercise.force}`,
+        `Mechanic: ${this.exercise.mechanic}`,
+        `Primary Muscles: ${this.exercise.primaryMuscles.join(", ")}`,
+        `Secondary Muscles: ${this.exercise.secondaryMuscles.join(", ")}`,
+        `Equipment: ${this.exercise.equipment}`,
+      ];
+
+      pdf.setFontSize(12);
+      details.forEach((detail) => {
+        pdf.text(detail, margin, yOffset);
+        yOffset += 7;
+      });
+
+      // Add Instructions
+      pdf.setFontSize(16);
+      pdf.text("Instructions:", margin, yOffset);
+      yOffset += 10;
+
+      pdf.setFontSize(12);
+      this.exercise.instructions.forEach((instruction, index) => {
+        const text = `${index + 1}. ${instruction}`;
+        const textLines = pdf.splitTextToSize(text, pageWidth - 2 * margin);
+        pdf.text(textLines, margin, yOffset);
+        yOffset += textLines.length * 7;
+
+        if (yOffset + 7 > pageHeight - margin) {
+          pdf.addPage();
+          yOffset = margin;
+        }
+      });
+
+      // Add Images
+      for (let image of this.images) {
+        const img = await this.loadImage(image);
+        const imgProps = pdf.getImageProperties(img);
+        const imgWidth = pageWidth - 2 * margin;
+        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+        if (yOffset + imgHeight > pageHeight - margin) {
+          pdf.addPage();
+          yOffset = margin;
+        }
+
+        pdf.addImage(img, "JPEG", margin, yOffset, imgWidth, imgHeight);
+        yOffset += imgHeight + margin;
+      }
+
+      pdf.save(`${this.exercise.name}.pdf`);
+    },
+    loadImage(src) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.src = src;
+        img.onload = () => resolve(img);
+        img.onerror = (err) => reject(err);
+      });
+    },
   },
   computed: {
-    //it returns the bookmarked exercises of the user
     bookmarked() {
       return this.$store.state.bookmarkModule.exercise;
     },
   },
-  //created lifecycle hook fetch the exercise using the id in route
   async created() {
     const { id } = this.$route.params;
     await this.fetchExercise(id);

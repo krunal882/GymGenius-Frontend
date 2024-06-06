@@ -31,6 +31,7 @@
             <v-btn color="orange" @click="toggleBookmark(dietPlan, 'diet')">
               {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
             </v-btn>
+            <v-btn color="orange" @click="downloadPDF">Download PDF</v-btn>
           </v-card-actions>
         </div>
       </div>
@@ -97,6 +98,7 @@
 </template>
 
 <script>
+import jsPDF from "jspdf";
 import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
 export default {
   mixins: [bookmarkMixin],
@@ -148,6 +150,72 @@ export default {
     //it navigates to the previous page
     back() {
       this.$router.go(-1);
+    },
+
+    async downloadPDF() {
+      const pdf = new jsPDF("p", "mm", "a4");
+      const margin = 10;
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      let yOffset = margin;
+
+      pdf.setFontSize(22);
+      pdf.text(this.dietPlan.plan_name, margin, yOffset);
+      yOffset += 10;
+
+      const details = [
+        `Type: ${this.dietPlan.diet_type}`,
+        `Purpose: ${this.dietPlan.purpose}`,
+        `Total Days: ${this.dietPlan.total_days}`,
+      ];
+
+      pdf.setFontSize(12);
+      details.forEach((detail) => {
+        pdf.text(detail, margin, yOffset);
+        yOffset += 7;
+      });
+
+      this.days.forEach((day) => {
+        pdf.setFontSize(16);
+        pdf.text(`Day ${day}`, margin, yOffset);
+        yOffset += 10;
+
+        const dayMeals = this.meals.filter((meal) => meal.day === day);
+
+        dayMeals.forEach((meal) => {
+          pdf.setFontSize(14);
+          pdf.text(`Meal Type: ${meal.meal_type}`, margin, yOffset);
+          yOffset += 7;
+
+          pdf.setFontSize(12);
+          meal.foods.forEach((food) => {
+            const foodDetails = [
+              `Food Item: ${food.name}`,
+              `Quantity: ${food.quantity}`,
+              `Calories: ${food.calories}`,
+              `Protein: ${food.protein}`,
+              `Carbohydrates: ${food.carbohydrates}`,
+              `Fat: ${food.fat}`,
+              `Fiber: ${food.fiber}`,
+            ];
+
+            foodDetails.forEach((detail) => {
+              pdf.text(detail, margin + 10, yOffset);
+              yOffset += 7;
+            });
+
+            yOffset += 5;
+          });
+
+          yOffset += 10;
+        });
+
+        if (yOffset > pageHeight - margin) {
+          pdf.addPage();
+          yOffset = margin;
+        }
+      });
+
+      pdf.save(`${this.dietPlan.plan_name}.pdf`);
     },
   },
 

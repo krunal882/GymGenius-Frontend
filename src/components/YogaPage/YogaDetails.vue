@@ -62,6 +62,7 @@
           <v-btn color="orange" @click="toggleBookmark(yoga, 'yoga')">
             {{ isBookmarked(yoga) ? "Undo Bookmark" : "Bookmark" }}
           </v-btn>
+          <v-btn color="orange" @click="downloadPDF">Download PDF</v-btn>
         </v-card-actions>
       </div>
     </v-card>
@@ -69,6 +70,7 @@
 </template>
 
 <script>
+import jsPDF from "jspdf";
 import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
 export default {
   mixins: [bookmarkMixin],
@@ -96,6 +98,77 @@ export default {
     //it handles the screen sizing
     handleResize() {
       this.isWideScreen = window.innerWidth > 790;
+    },
+
+    loadImage(url) {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.crossOrigin = "Anonymous";
+        img.onload = () => resolve(img);
+        img.onerror = (err) => reject(err);
+        img.src = url;
+      });
+    },
+    // This method generates a PDF with the yoga details and an image
+    async downloadPDF() {
+      const pdf = new jsPDF("p", "mm", "a4");
+      const margin = 10;
+      const pageWidth = pdf.internal.pageSize.getWidth();
+      const pageHeight = pdf.internal.pageSize.getHeight();
+      let yOffset = margin;
+
+      if (this.yoga) {
+        // Add Yoga Name
+        pdf.setFontSize(22);
+        pdf.text(this.yoga.english_name, margin, yOffset);
+        yOffset += 10;
+
+        // Add Yoga Image
+        if (this.yoga.url_png) {
+          const img = await this.loadImage(this.yoga.url_png);
+          const imgProps = pdf.getImageProperties(img);
+          const imgWidth = pageWidth - 2 * margin;
+          const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+          if (yOffset + imgHeight > pageHeight - margin) {
+            pdf.addPage();
+            yOffset = margin;
+          }
+
+          pdf.addImage(img, "PNG", margin, yOffset, imgWidth, imgHeight);
+          yOffset += imgHeight + 10;
+        }
+
+        // Add Yoga Details
+        const details = [
+          `Category: ${this.yoga.category_name}`,
+          `Sanskrit Name: ${this.yoga.sanskrit_name}`,
+          `Translation of Name: ${this.yoga.translation_name}`,
+          `Pose Benefits: ${this.yoga.pose_benefits}`,
+          `Category Description: ${this.yoga.category_description}`,
+        ];
+
+        pdf.setFontSize(12);
+        details.forEach((detail) => {
+          pdf.text(detail, margin, yOffset);
+          yOffset += 7;
+        });
+
+        // Add Pose Description
+        pdf.setFontSize(16);
+        pdf.text("Pose Description:", margin, yOffset);
+        yOffset += 10;
+
+        pdf.setFontSize(12);
+        const descriptionLines = pdf.splitTextToSize(
+          this.yoga.pose_description,
+          pageWidth - 2 * margin
+        );
+        pdf.text(descriptionLines, margin, yOffset);
+        yOffset += descriptionLines.length * 7;
+      }
+
+      pdf.save(`${this.yoga.english_name}.pdf`);
     },
   },
   computed: {
