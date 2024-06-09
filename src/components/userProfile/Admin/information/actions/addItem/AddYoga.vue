@@ -107,7 +107,7 @@
 </template>
 
 <script>
-import axios from "axios";
+import cloudImgMixin from "@/mixins/cloudImgMixin";
 import AdminImgUpload from "@/components/common-components/AdminImgUpload.vue";
 export default {
   props: {
@@ -116,6 +116,7 @@ export default {
   components: {
     AdminImgUpload,
   },
+  mixins: [cloudImgMixin],
   data() {
     // data includes rules for input fields and yogas
     return {
@@ -164,18 +165,7 @@ export default {
     //to upload image in cloud storage and call action from vuex store
     async save(yoga) {
       this.loading = true;
-      const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
-      const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
-      const uploadData = new FormData();
-      uploadData.append("file", this.image);
-      if (upload_preset && cloud_name) {
-        uploadData.append("upload_preset", upload_preset);
-        uploadData.append("cloud_name", cloud_name);
-      }
-      const { data } = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-        uploadData
-      );
+      const data = await this.cloudImgUpload();
       yoga.url_png = data.url;
       await this.$store.dispatch("addYoga", { yoga });
       this.loading = false;

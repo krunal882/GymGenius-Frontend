@@ -118,8 +118,8 @@
 </template>
 
 <script>
-import axios from "axios";
 import AdminImgUpload from "@/components/common-components/AdminImgUpload.vue";
+import cloudImgMixin from "@/mixins/cloudImgMixin";
 export default {
   props: {
     dialogOpen: Boolean,
@@ -127,6 +127,7 @@ export default {
   components: {
     AdminImgUpload,
   },
+  mixins: [cloudImgMixin],
   data() {
     return {
       image: null,
@@ -191,18 +192,7 @@ export default {
     //to upload image in cloud storage and call action from vuex store
     async add(exercise) {
       this.loading = true;
-      const upload_preset = process.env.VUE_APP_CLOUDINARY_UPLOAD_PRESET;
-      const cloud_name = process.env.VUE_APP_CLOUDINARY_CLOUD_NAME;
-      const uploadData = new FormData();
-      uploadData.append("file", this.image);
-      if (upload_preset && cloud_name) {
-        uploadData.append("upload_preset", upload_preset);
-        uploadData.append("cloud_name", cloud_name);
-      }
-      const { data } = await axios.post(
-        `https://api.cloudinary.com/v1_1/${cloud_name}/image/upload`,
-        uploadData
-      );
+      const data = await this.cloudImgUpload();
       exercise.primaryMuscles = exercise.primaryMuscles
         .split(",")
         .map((item) => item.trim());
