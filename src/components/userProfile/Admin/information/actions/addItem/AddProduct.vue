@@ -49,6 +49,8 @@
               variant="outlined"
               label="Off"
               required
+              type="number"
+              min="0"
               class="mb-4"
             ></v-text-field>
           </div>

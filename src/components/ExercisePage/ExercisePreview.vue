@@ -1,5 +1,3 @@
-<!-- this component gives the preview of the exercise that contains some info about exercise in card form -->
-<!-- it also includes explore button to see full details and bookmark button for bookmarking -->
 <template>
   <v-container fluid>
     <!-- skeleton loader for the card  -->
@@ -15,7 +13,7 @@
     <v-row v-else class="d-flex flex-wrap">
       <v-col
         v-for="exercise in exercises"
-        :key="exercise.id"
+        :key="exercise._id"
         cols="12"
         sm="6"
         md="4"
@@ -53,7 +51,15 @@
               >Explore</v-btn
             >
             <v-btn color="orange" @click="toggleBookmark(exercise, 'exercise')">
-              {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}
+              <v-progress-circular
+                v-if="loadingExercises[exercise._id]"
+                indeterminate
+                color="white"
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!loadingExercises[exercise._id]">
+                {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}
+              </span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -76,8 +82,13 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      loadingExercises: {}, // To track loading state for each exercise
+    };
+  },
   methods: {
-    //to get image form the local or stored on cloud
+    // to get image from the local or stored on cloud
     getExerciseImagePath(exerciseName, cloudImg) {
       if (cloudImg === undefined) {
         const formattedName = exerciseName
@@ -89,13 +100,24 @@ export default {
         return cloudImg;
       }
     },
-    //to emit an event to navigate to detail page
+    // to emit an event to navigate to detail page
     exploreClicked(exercise) {
       this.$emit("explore", { item: exercise, route: "exerciseDetail" });
     },
+    // Override toggleBookmark to handle loading state
+    async toggleBookmark(exercise, itemType) {
+      const exerciseId = exercise._id;
+      this.loadingExercises[exerciseId] = true;
+
+      try {
+        await this.bookmarkOrUndo(exercise, itemType);
+      } finally {
+        this.loadingExercises[exerciseId] = false;
+      }
+    },
   },
   computed: {
-    //to check if exercise is bookmarked or not
+    // to check if exercise is bookmarked or not
     bookmarked() {
       return this.$store.state.bookmarkModule.exercise;
     },

@@ -15,28 +15,19 @@
         <v-tabs-window-item>
           <!-- exercise section -->
           <template v-if="tab === 1">
-            <ExercisePreview
-              :exercises="bookmarkedExercises"
-              @explore="exploreClicked"
-            />
+            <UserExercises @explore="exploreClicked" />
           </template>
           <!-- yoga section -->
           <template v-else-if="tab === 2">
-            <YogaInfo :yoga="bookmarkedYogas" @explore="exploreClicked" />
+            <UserYogas @explore="exploreClicked" />
           </template>
           <!-- dietPlan section -->
           <template v-else-if="tab === 3">
-            <DietPreview
-              :dietPlan="bookmarkedDiets"
-              @explore="exploreClicked"
-            />
+            <UserDiets @explore="exploreClicked" />
           </template>
           <!-- foodItem section -->
           <template v-else-if="tab === 4">
-            <NutritionPreview
-              :foodItem="bookmarkedNutritions"
-              @explore="exploreClicked"
-            />
+            <UserNutritions @explore="exploreClicked" />
           </template>
         </v-tabs-window-item>
       </v-tabs-window>
@@ -45,17 +36,17 @@
 </template>
 
 <script>
-import ExercisePreview from "../ExercisePage/ExercisePreview.vue";
-import YogaInfo from "../YogaPage/YogaInfo.vue";
-import DietPreview from "../DietplanPage/DietPreview.vue";
-import NutritionPreview from "../FoodNutritionPage/NutritionPreview.vue";
+import UserExercises from "./bookmarkDetails/UserExercises.vue";
+import UserYogas from "./bookmarkDetails/UserYogas.vue";
+import UserDiets from "./bookmarkDetails/UserDiets.vue";
+import UserNutritions from "./bookmarkDetails/UserNutritions.vue";
 
 export default {
   components: {
-    ExercisePreview,
-    YogaInfo,
-    NutritionPreview,
-    DietPreview,
+    UserYogas,
+    UserDiets,
+    UserNutritions,
+    UserExercises,
   },
   data() {
     return {

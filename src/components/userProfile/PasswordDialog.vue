@@ -26,10 +26,17 @@
       <v-card-actions>
         <v-btn
           color="primary"
-          :disabled="isSaveDisabled"
+          :disabled="isSaveDisabled || isLoading"
           @click="changePassword"
-          >Save</v-btn
         >
+          <span v-if="!isLoading">Save</span>
+          <v-progress-circular
+            v-else
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+        </v-btn>
         <!-- cancel button to cancel changes  -->
         <v-btn @click="dialog = false">Cancel</v-btn>
       </v-card-actions>
@@ -45,6 +52,7 @@ export default {
       dialog: false,
       oldPassword: "",
       newPassword: "",
+      isLoading: false, // Add isLoading property
       oldPasswordRules: [(v) => !!v || "Old password is required"],
       newPasswordRules: [
         (v) => !!v || "New password is required",
@@ -74,15 +82,22 @@ export default {
   },
   methods: {
     //to save new password
-    changePassword() {
-      if (this.isSaveDisabled) return;
+    async changePassword() {
+      if (this.isSaveDisabled || this.isLoading) return;
+      this.isLoading = true;
       const userId = this.$store.state.userModule.userId;
-      this.$store.dispatch("changePassword", {
-        oldPassword: this.oldPassword,
-        newPassword: this.newPassword,
-        userId,
-      });
-      this.dialog = false;
+      try {
+        await this.$store.dispatch("changePassword", {
+          oldPassword: this.oldPassword,
+          newPassword: this.newPassword,
+          userId,
+        });
+      } catch (error) {
+        console.error("Password change failed:", error);
+      } finally {
+        this.isLoading = false; // Set isLoading to false after the action completes
+        this.dialog = false; // Close the dialog regardless of success or failure
+      }
     },
   },
 };

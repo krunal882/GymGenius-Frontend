@@ -93,7 +93,14 @@
             color="primary"
             :disabled="validationErrors"
             @click="saveChanges(editedUser)"
-            >Save</v-btn
+          >
+            <v-progress-circular
+              v-if="actionLoading"
+              indeterminate
+              color="white"
+              size="20"
+            ></v-progress-circular
+            ><span v-if="!actionLoading"> Save </span></v-btn
           >
           <v-btn @click="closeDialog">Cancel</v-btn>
         </v-card-actions>
@@ -123,6 +130,7 @@ export default {
       validationErrors: false,
       itemsPerPage: 10,
       page: 1,
+      actionLoading: false,
       headers: [
         { text: "No", align: "start", sortable: false },
         { text: "Name", align: "start", sortable: false },
@@ -194,11 +202,12 @@ export default {
       this.dialog = false;
     },
     // to update user information
-    saveChanges({ _id, role, state }) {
-      console.log(role, state);
+    async saveChanges({ _id, role, state }) {
+      this.actionLoading = true;
       const updatedUser = { _id, role, state };
-      this.$store.dispatch("userUpdate", { updatedUser });
+      await this.$store.dispatch("userUpdate", { updatedUser });
       this.updateUserLocally(updatedUser);
+      this.actionLoading = false;
       this.dialog = false;
     },
     // update user locally

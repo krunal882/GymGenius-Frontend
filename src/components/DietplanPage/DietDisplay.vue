@@ -14,24 +14,43 @@
             Diet-plan name: {{ dietPlan.plan_name }}
           </v-card-title>
           <v-divider></v-divider>
-          <v-card-text
-            ><span class="label">Type:</span>
-            {{ dietPlan.diet_type }}</v-card-text
-          >
-          <v-card-text
-            ><span class="label">Purpose:</span>
-            {{ dietPlan.purpose }}</v-card-text
-          >
-          <v-card-text
-            ><span class="label">Total Days:</span>
-            {{ dietPlan.total_days }}</v-card-text
-          >
+          <v-card-text>
+            <span class="label">Type:</span>
+            {{ dietPlan.diet_type }}
+          </v-card-text>
+          <v-card-text>
+            <span class="label">Purpose:</span>
+            {{ dietPlan.purpose }}
+          </v-card-text>
+          <v-card-text>
+            <span class="label">Total Days:</span>
+            {{ dietPlan.total_days }}
+          </v-card-text>
+          <!-- Action buttons with loading indicators -->
           <v-card-actions style="justify-content: space-between">
             <v-btn color="orange" @click="back">Go Back</v-btn>
             <v-btn color="orange" @click="toggleBookmark(dietPlan, 'diet')">
-              {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
+              <!-- Loading indicator for bookmark button -->
+              <v-progress-circular
+                v-if="loadingBookmark"
+                indeterminate
+                color="white"
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!loadingBookmark">
+                {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
+              </span>
             </v-btn>
-            <v-btn color="orange" @click="downloadPDF">Download PDF</v-btn>
+            <v-btn color="orange" @click="downloadPDF">
+              <!-- Loading indicator for download button -->
+              <v-progress-circular
+                v-if="loadingDownload"
+                indeterminate
+                color="white"
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!loadingDownload">Download PDF</span>
+            </v-btn>
           </v-card-actions>
         </div>
       </div>
@@ -66,30 +85,30 @@
             <v-card-title class="food-item-title" style="align-content: center">
               {{ food.name }}
             </v-card-title>
-            <v-card-subtitle style="align-content: center"
-              ><span style="font-weight: 500"> Quantity:</span>
-              {{ food.quantity }}</v-card-subtitle
-            >
-            <v-card-subtitle style="align-content: center"
-              ><span style="font-weight: 500">Calories:</span>
-              {{ food.calories }}</v-card-subtitle
-            >
-            <v-card-subtitle style="align-content: center"
-              ><span style="font-weight: 500">Protein: </span
-              >{{ food.protein }}</v-card-subtitle
-            >
-            <v-card-subtitle style="align-content: center"
-              ><span style="font-weight: 500">Carbohydrates: </span
-              >{{ food.carbohydrates }}</v-card-subtitle
-            >
-            <v-card-subtitle style="align-content: center"
-              ><span style="font-weight: 500">Fat: </span
-              >{{ food.fat }}</v-card-subtitle
-            >
-            <v-card-subtitle style="align-content: center"
-              ><span style="font-weight: 500">Fiber: </span
-              >{{ food.fiber }}</v-card-subtitle
-            >
+            <v-card-subtitle style="align-content: center">
+              <span style="font-weight: 500"> Quantity:</span>
+              {{ food.quantity }}
+            </v-card-subtitle>
+            <v-card-subtitle style="align-content: center">
+              <span style="font-weight: 500">Calories:</span>
+              {{ food.calories }}
+            </v-card-subtitle>
+            <v-card-subtitle style="align-content: center">
+              <span style="font-weight: 500">Protein: </span>
+              {{ food.protein }}
+            </v-card-subtitle>
+            <v-card-subtitle style="align-content: center">
+              <span style="font-weight: 500">Carbohydrates: </span>
+              {{ food.carbohydrates }}
+            </v-card-subtitle>
+            <v-card-subtitle style="align-content: center">
+              <span style="font-weight: 500">Fat: </span>
+              {{ food.fat }}
+            </v-card-subtitle>
+            <v-card-subtitle style="align-content: center">
+              <span style="font-weight: 500">Fiber: </span>
+              {{ food.fiber }}
+            </v-card-subtitle>
           </div>
         </div>
       </v-card-text>
@@ -100,6 +119,7 @@
 <script>
 import jsPDF from "jspdf";
 import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
+
 export default {
   mixins: [bookmarkMixin],
   data() {
@@ -108,6 +128,8 @@ export default {
       dietPlan: null,
       meals: [],
       isWideScreen: true,
+      loadingBookmark: false, // State for bookmark loading
+      loadingDownload: false, // State for download loading
     };
   },
   computed: {
@@ -119,7 +141,7 @@ export default {
         return [];
       }
     },
-    //it filters the meal by the selected day
+    // it filters the meal by the selected day
     filteredMeals() {
       if (this.selectedDay) {
         return this.meals.filter((meal) => meal.day === this.selectedDay);
@@ -127,13 +149,13 @@ export default {
         return [];
       }
     },
-    //it returns the bookmarked diet-plan of the user
+    // it returns the bookmarked diet-plan of the user
     bookmarked() {
       return this.$store.state.bookmarkModule.diet;
     },
   },
   methods: {
-    //fetchDiet method fetch the dietPlan by id and stores in the local dietPlan
+    // fetchDiet method fetch the dietPlan by id and stores in the local dietPlan
     async fetchDiet(id) {
       try {
         await this.$store.dispatch("fetchDietPlan", { id });
@@ -143,88 +165,101 @@ export default {
         console.log(error);
       }
     },
-    //it handles the screen sizing
+    // it handles the screen sizing
     handleResize() {
       this.isWideScreen = window.innerWidth > 790;
     },
-    //it navigates to the previous page
+    // it navigates to the previous page
     back() {
       this.$router.go(-1);
     },
-
+    // Method to download the diet plan as a PDF
     async downloadPDF() {
-      const pdf = new jsPDF("p", "mm", "a4");
-      const margin = 10;
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      let yOffset = margin;
+      this.loadingDownload = true; // Start loading
+      try {
+        const pdf = new jsPDF("p", "mm", "a4");
+        const margin = 10;
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        let yOffset = margin;
 
-      pdf.setFontSize(22);
-      pdf.text(this.dietPlan.plan_name, margin, yOffset);
-      yOffset += 10;
-
-      const details = [
-        `Type: ${this.dietPlan.diet_type}`,
-        `Purpose: ${this.dietPlan.purpose}`,
-        `Total Days: ${this.dietPlan.total_days}`,
-      ];
-
-      pdf.setFontSize(12);
-      details.forEach((detail) => {
-        pdf.text(detail, margin, yOffset);
-        yOffset += 7;
-      });
-
-      this.days.forEach((day) => {
-        pdf.setFontSize(16);
-        pdf.text(`Day ${day}`, margin, yOffset);
+        pdf.setFontSize(22);
+        pdf.text(this.dietPlan.plan_name, margin, yOffset);
         yOffset += 10;
 
-        const dayMeals = this.meals.filter((meal) => meal.day === day);
+        const details = [
+          `Type: ${this.dietPlan.diet_type}`,
+          `Purpose: ${this.dietPlan.purpose}`,
+          `Total Days: ${this.dietPlan.total_days}`,
+        ];
 
-        dayMeals.forEach((meal) => {
-          pdf.setFontSize(14);
-          pdf.text(`Meal Type: ${meal.meal_type}`, margin, yOffset);
+        pdf.setFontSize(12);
+        details.forEach((detail) => {
+          pdf.text(detail, margin, yOffset);
           yOffset += 7;
-
-          pdf.setFontSize(12);
-          meal.foods.forEach((food) => {
-            const foodDetails = [
-              `Food Item: ${food.name}`,
-              `Quantity: ${food.quantity}`,
-              `Calories: ${food.calories}`,
-              `Protein: ${food.protein}`,
-              `Carbohydrates: ${food.carbohydrates}`,
-              `Fat: ${food.fat}`,
-              `Fiber: ${food.fiber}`,
-            ];
-
-            foodDetails.forEach((detail) => {
-              pdf.text(detail, margin + 10, yOffset);
-              yOffset += 7;
-            });
-
-            yOffset += 5;
-          });
-
-          yOffset += 10;
         });
 
-        if (yOffset > pageHeight - margin) {
-          pdf.addPage();
-          yOffset = margin;
-        }
-      });
+        this.days.forEach((day) => {
+          pdf.setFontSize(16);
+          pdf.text(`Day ${day}`, margin, yOffset);
+          yOffset += 10;
 
-      pdf.save(`${this.dietPlan.plan_name}.pdf`);
+          const dayMeals = this.meals.filter((meal) => meal.day === day);
+
+          dayMeals.forEach((meal) => {
+            pdf.setFontSize(14);
+            pdf.text(`Meal Type: ${meal.meal_type}`, margin, yOffset);
+            yOffset += 7;
+
+            pdf.setFontSize(12);
+            meal.foods.forEach((food) => {
+              const foodDetails = [
+                `Food Item: ${food.name}`,
+                `Quantity: ${food.quantity}`,
+                `Calories: ${food.calories}`,
+                `Protein: ${food.protein}`,
+                `Carbohydrates: ${food.carbohydrates}`,
+                `Fat: ${food.fat}`,
+                `Fiber: ${food.fiber}`,
+              ];
+
+              foodDetails.forEach((detail) => {
+                pdf.text(detail, margin + 10, yOffset);
+                yOffset += 7;
+              });
+
+              yOffset += 5;
+            });
+
+            yOffset += 10;
+          });
+
+          if (yOffset > pageHeight - margin) {
+            pdf.addPage();
+            yOffset = margin;
+          }
+        });
+
+        pdf.save(`${this.dietPlan.plan_name}.pdf`);
+      } finally {
+        this.loadingDownload = false;
+      }
+    },
+    // Method to handle bookmarking with loading state
+    async toggleBookmark(dietPlan, itemType) {
+      this.loadingBookmark = true;
+      try {
+        await this.bookmarkOrUndo(dietPlan, itemType);
+      } finally {
+        this.loadingBookmark = false;
+      }
     },
   },
-
-  //created lifecycle hook fetch the dietPlan using the id in route
+  // created lifecycle hook fetch the dietPlan using the id in route
   async created() {
     const { id } = this.$route.params;
     await this.fetchDiet(id);
   },
-  //it handles the screen sizing
+  // it handles the screen sizing
   mounted() {
     window.addEventListener("resize", this.handleResize);
     this.handleResize();

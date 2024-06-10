@@ -123,9 +123,19 @@
         </v-card-text>
         <!-- buttons to perform action -->
         <v-card-actions>
-          <v-btn color="primary" :disabled="isSaveDisabled" @click="saveChanges"
-            >Save</v-btn
+          <v-btn
+            color="primary"
+            :disabled="isSaveDisabled"
+            @click="saveChanges"
           >
+            <v-progress-circular
+              v-if="loading"
+              indeterminate
+              color="white"
+              size="20"
+            ></v-progress-circular>
+            <span v-if="!loading"> Save</span>
+          </v-btn>
           <v-btn @click="dialog = !dialog">Cancel</v-btn>
         </v-card-actions>
       </v-card>
@@ -137,7 +147,15 @@
       <!-- account delete option -->
       <div class="d-flex flex-wrap">
         <h6 class="mt-2">Want to delete your account ?</h6>
-        <v-btn class="ml-10" color="error" @click="deleteAccount">DELETE</v-btn>
+        <v-btn class="ml-10" color="error" @click="deleteAccount">
+          <v-progress-circular
+            v-if="deleteLoading"
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+          <span v-if="!deleteLoading">DELETE</span></v-btn
+        >
       </div>
       <!-- password change option -->
       <div class="d-flex flex-wrap">
@@ -169,6 +187,9 @@ export default {
   data() {
     return {
       isLoading: false,
+      loading: false,
+      deleteLoading: false,
+      changeLoading: false,
       user: {
         name: "",
         email: "",
@@ -250,10 +271,11 @@ export default {
       this.isEmailValid = response.data.length === 0;
     },
     //to save the user information
-    saveChanges() {
+    async saveChanges() {
+      this.loading = true;
       const { name, email, age, number } = this.editedUser;
       const userId = this.$store.state.userModule.userId;
-      this.$store.dispatch("userUpdate", {
+      await this.$store.dispatch("userUpdate", {
         updatedUser: {
           _id: userId,
           name,
@@ -262,18 +284,20 @@ export default {
           number: number,
         },
       });
-
+      this.loading = false;
       this.dialog = false;
     },
     // to delete account make an request to vuex store
-    deleteAccount() {
+    async deleteAccount() {
+      this.deleteLoading = true;
       const id = this.$store.state.userModule.userId;
       const role = this.$store.state.userModule.role;
-      this.$store.dispatch("userDelete", { id, role }).then(() => {
+      await this.$store.dispatch("userDelete", { id, role }).then(() => {
         if (this.$store.state.adminModule.userDeleted === true) {
           this.$router.replace("/");
         }
       });
+      this.deleteLoading = false;
     },
     // to open the password dialog
     openPasswordDialog() {

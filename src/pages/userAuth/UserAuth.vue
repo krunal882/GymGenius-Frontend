@@ -48,15 +48,7 @@
                             :rules="passwordRules"
                           />
                           <v-row>
-                            <v-col cols="12" sm="7">
-                              <v-checkbox
-                                v-model="rememberMe"
-                                label="Remember Me"
-                                class="mt-n1"
-                                color="blue"
-                              />
-                            </v-col>
-                            <v-col cols="12" sm="5">
+                            <v-col class="mb-2">
                               <span class="caption text-blue">
                                 <router-link to="/forgotPassword"
                                   >Forgot password ?</router-link

@@ -1,5 +1,3 @@
-<!-- this component is for displaying the exercises to users -->
-<!--it also provides buttons for the bookmarking and for navigating to previous page -->
 <template>
   <v-container v-if="exercise">
     <v-card>
@@ -105,9 +103,25 @@
           <v-card-actions style="justify-content: space-between">
             <v-btn color="orange" @click="back">Go Back</v-btn>
             <v-btn color="orange" @click="toggleBookmark(exercise, 'exercise')">
-              {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}
+              <v-progress-circular
+                v-if="loadingBookmark"
+                indeterminate
+                color="white"
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!loadingBookmark">
+                {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}
+              </span>
             </v-btn>
-            <v-btn color="orange" @click="downloadPDF">Download PDF</v-btn>
+            <v-btn color="orange" @click="downloadPDF">
+              <v-progress-circular
+                v-if="loadingDownload"
+                indeterminate
+                color="white"
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!loadingDownload">Download PDF</span>
+            </v-btn>
           </v-card-actions>
         </div>
       </v-card>
@@ -135,6 +149,7 @@
     </v-card>
   </v-container>
 </template>
+
 <script>
 import jsPDF from "jspdf";
 import bookmarkMixin from "./../../mixins/bookmarkMixin.js";
@@ -146,6 +161,8 @@ export default {
       images: [""],
       exercise: null,
       isWideScreen: true,
+      loadingBookmark: false,
+      loadingDownload: false,
     };
   },
   methods: {
@@ -186,69 +203,74 @@ export default {
       }
     },
     async downloadPDF() {
-      const pdf = new jsPDF("p", "mm", "a4");
-      const margin = 10;
-      const pageWidth = pdf.internal.pageSize.getWidth();
-      const pageHeight = pdf.internal.pageSize.getHeight();
-      let yOffset = margin;
+      this.loadingDownload = true;
+      try {
+        const pdf = new jsPDF("p", "mm", "a4");
+        const margin = 10;
+        const pageWidth = pdf.internal.pageSize.getWidth();
+        const pageHeight = pdf.internal.pageSize.getHeight();
+        let yOffset = margin;
 
-      // Add Exercise Name
-      pdf.setFontSize(22);
-      pdf.text(this.exercise.name, margin, yOffset);
-      yOffset += 10;
+        // Add Exercise Name
+        pdf.setFontSize(22);
+        pdf.text(this.exercise.name, margin, yOffset);
+        yOffset += 10;
 
-      // Add Exercise Details
-      const details = [
-        `Level: ${this.exercise.level}`,
-        `Category: ${this.exercise.category}`,
-        `Force: ${this.exercise.force}`,
-        `Mechanic: ${this.exercise.mechanic}`,
-        `Primary Muscles: ${this.exercise.primaryMuscles.join(", ")}`,
-        `Secondary Muscles: ${this.exercise.secondaryMuscles.join(", ")}`,
-        `Equipment: ${this.exercise.equipment}`,
-      ];
+        // Add Exercise Details
+        const details = [
+          `Level: ${this.exercise.level}`,
+          `Category: ${this.exercise.category}`,
+          `Force: ${this.exercise.force}`,
+          `Mechanic: ${this.exercise.mechanic}`,
+          `Primary Muscles: ${this.exercise.primaryMuscles.join(", ")}`,
+          `Secondary Muscles: ${this.exercise.secondaryMuscles.join(", ")}`,
+          `Equipment: ${this.exercise.equipment}`,
+        ];
 
-      pdf.setFontSize(12);
-      details.forEach((detail) => {
-        pdf.text(detail, margin, yOffset);
-        yOffset += 7;
-      });
+        pdf.setFontSize(12);
+        details.forEach((detail) => {
+          pdf.text(detail, margin, yOffset);
+          yOffset += 7;
+        });
 
-      // Add Instructions
-      pdf.setFontSize(16);
-      pdf.text("Instructions:", margin, yOffset);
-      yOffset += 10;
+        // Add Instructions
+        pdf.setFontSize(16);
+        pdf.text("Instructions:", margin, yOffset);
+        yOffset += 10;
 
-      pdf.setFontSize(12);
-      this.exercise.instructions.forEach((instruction, index) => {
-        const text = `${index + 1}. ${instruction}`;
-        const textLines = pdf.splitTextToSize(text, pageWidth - 2 * margin);
-        pdf.text(textLines, margin, yOffset);
-        yOffset += textLines.length * 7;
+        pdf.setFontSize(12);
+        this.exercise.instructions.forEach((instruction, index) => {
+          const text = `${index + 1}. ${instruction}`;
+          const textLines = pdf.splitTextToSize(text, pageWidth - 2 * margin);
+          pdf.text(textLines, margin, yOffset);
+          yOffset += textLines.length * 7;
 
-        if (yOffset + 7 > pageHeight - margin) {
-          pdf.addPage();
-          yOffset = margin;
+          if (yOffset + 7 > pageHeight - margin) {
+            pdf.addPage();
+            yOffset = margin;
+          }
+        });
+
+        // Add Images
+        for (let image of this.images) {
+          const img = await this.loadImage(image);
+          const imgProps = pdf.getImageProperties(img);
+          const imgWidth = pageWidth - 2 * margin;
+          const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
+
+          if (yOffset + imgHeight > pageHeight - margin) {
+            pdf.addPage();
+            yOffset = margin;
+          }
+
+          pdf.addImage(img, "JPEG", margin, yOffset, imgWidth, imgHeight);
+          yOffset += imgHeight + margin;
         }
-      });
 
-      // Add Images
-      for (let image of this.images) {
-        const img = await this.loadImage(image);
-        const imgProps = pdf.getImageProperties(img);
-        const imgWidth = pageWidth - 2 * margin;
-        const imgHeight = (imgProps.height * imgWidth) / imgProps.width;
-
-        if (yOffset + imgHeight > pageHeight - margin) {
-          pdf.addPage();
-          yOffset = margin;
-        }
-
-        pdf.addImage(img, "JPEG", margin, yOffset, imgWidth, imgHeight);
-        yOffset += imgHeight + margin;
+        pdf.save(`${this.exercise.name}.pdf`);
+      } finally {
+        this.loadingDownload = false;
       }
-
-      pdf.save(`${this.exercise.name}.pdf`);
     },
     loadImage(src) {
       return new Promise((resolve, reject) => {
@@ -257,6 +279,14 @@ export default {
         img.onload = () => resolve(img);
         img.onerror = (err) => reject(err);
       });
+    },
+    async toggleBookmark(exercise, itemType) {
+      this.loadingBookmark = true;
+      try {
+        await this.bookmarkOrUndo(exercise, itemType);
+      } finally {
+        this.loadingBookmark = false;
+      }
     },
   },
   computed: {
@@ -267,7 +297,6 @@ export default {
   async created() {
     const { id } = this.$route.params;
     await this.fetchExercise(id);
-
     this.loadImages(this.exercise.name, this.exercise.cloudImg);
   },
   mounted() {

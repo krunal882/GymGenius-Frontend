@@ -394,8 +394,8 @@ const actions = {
         { oldPassword, newPassword, userId },
         config
       );
-      if (response.status === 201) {
-        useToast().success("Password changed successfully.");
+      if (response.status === 200) {
+        useToast().success(response.data);
       }
     } catch (error) {
       handleServerError(error);

@@ -51,7 +51,15 @@
           <v-card-actions class="justify-space-between">
             <v-btn color="orange" @click="exploreClicked(yoga)">Explore</v-btn>
             <v-btn color="orange" @click="toggleBookmark(yoga, 'yoga')">
-              {{ isBookmarked(yoga) ? "Undo Bookmark" : "Bookmark" }}
+              <v-progress-circular
+                v-if="loadingYoga[yoga._id]"
+                indeterminate
+                color="white"
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!loadingYoga[yoga._id]">
+                {{ isBookmarked(yoga) ? "Undo Bookmark" : "Bookmark" }}
+              </span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -74,6 +82,11 @@ export default {
       required: true,
     },
   },
+  data() {
+    return {
+      loadingYoga: {}, // To track loading state for each yoga
+    };
+  },
   computed: {
     //to check if yoga is bookmarked or not
     bookmarked() {
@@ -84,6 +97,17 @@ export default {
     //to emit an event to navigate to detail page
     exploreClicked(yoga) {
       this.$emit("explore", { item: yoga, route: "yogaDetail" });
+    },
+    // Override toggleBookmark to handle loading state
+    async toggleBookmark(yoga, itemType) {
+      const yogaId = yoga._id;
+      this.loadingYoga[yogaId] = true;
+
+      try {
+        await this.bookmarkOrUndo(yoga, itemType);
+      } finally {
+        this.loadingYoga[yogaId] = false;
+      }
     },
   },
 };

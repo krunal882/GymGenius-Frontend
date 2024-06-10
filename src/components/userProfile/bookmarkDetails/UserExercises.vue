@@ -1,7 +1,7 @@
 <!-- this component is for displaying the bookmarked exercises of the user -->
 <template>
   <v-container fluid>
-    <v-row v-if="bookmarkedExercises.length != 0">
+    <v-row v-if="bookmarkedExercises.length != 0" class="d-flex flex-wrap">
       <v-col
         v-for="item in bookmarkedExercises"
         :key="item.id"
@@ -15,7 +15,7 @@
           <v-img
             class="align-end text-white"
             :src="getExerciseImagePath(item.name, item.cloudImg)"
-            style="height: 300px"
+            style="height: 300px; cursor: pointer"
             @click="exploreClicked(item)"
             ><v-card-title class="caption">
               {{ item.name }}
@@ -25,27 +25,33 @@
           <v-card-text>
             <div class="subtitle-row">
               <v-card-subtitle>Level: {{ item.level }} </v-card-subtitle>
-              <v-card-subtitle>Force: {{ exercise.force }}</v-card-subtitle>
+              <v-card-subtitle>Force: {{ item.force }}</v-card-subtitle>
             </div>
             <v-card-text>
-              <div class="d-flex">
-                Primary Muscle:
-                <ul v-for="muscle in item.primaryMuscles" :key="muscle">
-                  {{
-                    muscle
-                  }}
-                </ul>
+              <div class="mt-3 d-flex">
+                <span class="muscle-label">Primary Muscle:</span>
+                <span> {{ item.primaryMuscles[0] }}</span>
               </div>
 
-              <div>Equipment needed: {{ item.equipment }}</div>
+              <div>
+                <span class="muscle-label">Equipment needed:</span>
+                <span v-if="item.equipment">{{ item.equipment }}</span>
+                <span v-else>body only</span>
+              </div>
             </v-card-text>
             <!-- buttons for explore and bookmark/undoBookmark -->
             <v-card-actions style="justify-content: space-between">
               <v-btn color="orange" @click="exploreClicked(item)"
                 >Explore</v-btn
               >
-              <v-btn color="orange" @click="undoBookmark(item)"
-                >Undo Bookmark</v-btn
+              <v-btn color="orange" @click="undoBookmark(item)">
+                <v-progress-circular
+                  v-if="loading[item._id]"
+                  indeterminate
+                  color="white"
+                  size="20"
+                ></v-progress-circular>
+                <span v-if="!loading[item._id]">Undo Bookmark</span></v-btn
               >
             </v-card-actions>
           </v-card-text>
@@ -65,6 +71,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      loading: {},
+    };
+  },
   computed: {
     // to fetch bookmarked item from store
     bookmarkedExercises() {
@@ -78,23 +89,32 @@ export default {
       this.$emit("explore", { item: exercise, route: "exerciseDetail" });
     },
     //to fetch exercise image
-    getExerciseImagePath(exerciseName) {
-      const formatedName = exerciseName.replace(/ /g, "_").replace(/\//g, "_");
-
-      const imgPath = `../../../assets/img/workout-exercise/${formatedName}/images/${exerciseName}0.jpg`;
-
-      return imgPath;
+    getExerciseImagePath(exerciseName, cloudImg) {
+      if (cloudImg === undefined) {
+        const formattedName = exerciseName
+          .replace(/ /g, "_")
+          .replace(/\//g, "_");
+        const imgPath = `../../../assets/img/workout-exercise/${formattedName}/images/${exerciseName}0.jpg`;
+        return imgPath;
+      } else {
+        return cloudImg;
+      }
     },
-        //to undo bookmark
-undoBookmark(exercise) {
+    //to undo bookmark
+    async undoBookmark(exercise) {
+      const exerciseId = exercise._id;
+      this.loading[exerciseId] = true;
       const userId = this.$store.state.userModule.userId;
 
-      const exerciseId = exercise._id;
-      this.$store.dispatch("undoBookmark", {
-        userId,
-        itemId: exerciseId,
-        itemType: "exercise",
-      });
+      try {
+        await this.$store.dispatch("undoBookmark", {
+          userId,
+          itemId: exerciseId,
+          itemType: "exercise",
+        });
+      } finally {
+        this.loading[exerciseId] = false;
+      }
     },
   },
 };
@@ -105,6 +125,15 @@ undoBookmark(exercise) {
   transform: scale(1.1);
   transition: transform 0.3s ease-in-out;
   box-shadow: 0px 0px 10px rgba(0, 0, 0, 0.3);
+}
+.subtitle-row {
+  display: flex;
+  justify-content: space-between;
+}
+
+.muscle-label {
+  font-weight: 500;
+  margin-right: 10px;
 }
 .caption {
   position: absolute;

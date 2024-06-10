@@ -1,7 +1,7 @@
 <!-- this component is for admin to see all received orders of the product -->
 <template>
   <div class="container pr-0 pl-0 ml-0 mr-0 mt-5">
-    <v-row class="d-flex">
+    <v-row v-if="product.length != 0" class="d-flex">
       <v-col v-for="product in product?.length" :key="product.id" cols="12">
         <v-row>
           <v-col
@@ -86,6 +86,11 @@
         </v-row>
       </v-col>
     </v-row>
+    <div v-else>
+      <div class="text-center">
+        <h1>No Product Found</h1>
+      </div>
+    </div>
   </div>
 </template>
 

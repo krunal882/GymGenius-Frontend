@@ -23,7 +23,9 @@
               <v-card-actions class="justify-end">
                 <v-btn color="primary" text @click="closeDialog">Cancel</v-btn>
 
-                <v-btn color="error" text @click="Delete">Delete</v-btn>
+                <v-btn color="error" text @click="Delete"
+                  ><span v-if="!loading"> Delete </span></v-btn
+                >
               </v-card-actions>
             </v-card>
           </template>
@@ -38,6 +40,7 @@ export default {
   props: {
     id: String,
     dialog: Boolean,
+    loading: Boolean,
   },
   data() {
     return {

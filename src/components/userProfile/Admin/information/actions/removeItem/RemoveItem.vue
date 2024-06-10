@@ -24,7 +24,7 @@
               <!-- buttons for confirmation -->
               <v-card-actions class="justify-end">
                 <v-btn color="primary" text @click="closeDialog">Cancel</v-btn>
-                <v-btn color="error" text @click="remove()"
+                <v-btn color="error" text @click="remove"
                   ><v-progress-circular
                     v-if="loading"
                     indeterminate

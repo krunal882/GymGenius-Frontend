@@ -15,7 +15,7 @@
     <v-row v-else class="d-flex flex-wrap">
       <v-col
         v-for="dietPlan in dietPlan"
-        :key="dietPlan.id"
+        :key="dietPlan._id"
         cols="12"
         sm="6"
         md="4"
@@ -50,7 +50,15 @@
               Explore
             </v-btn>
             <v-btn color="orange" @click="toggleBookmark(dietPlan, 'diet')">
-              {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
+              <v-progress-circular
+                v-if="loadingDiet[dietPlan._id]"
+                indeterminate
+                color="white"
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!loadingDiet[dietPlan._id]">
+                {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
+              </span>
             </v-btn>
           </v-card-actions>
         </v-card>
@@ -73,7 +81,11 @@ export default {
       required: true,
     },
   },
-
+  data() {
+    return {
+      loadingDiet: {}, // To track loading state for each dietPlan
+    };
+  },
   computed: {
     //it returns the bookmarked dietPlan of the user
     bookmarked() {
@@ -88,6 +100,17 @@ export default {
     //to emit an event to navigate to detail page
     exploreClicked(dietPlan) {
       this.$emit("explore", { item: dietPlan, route: "dietDetail" });
+    },
+    // Override toggleBookmark to handle loading state
+    async toggleBookmark(dietPlan, itemType) {
+      const dietId = dietPlan._id;
+      this.loadingDiet[dietId] = true;
+
+      try {
+        await this.bookmarkOrUndo(dietPlan, itemType);
+      } finally {
+        this.loadingDiet[dietId] = false;
+      }
     },
   },
 };

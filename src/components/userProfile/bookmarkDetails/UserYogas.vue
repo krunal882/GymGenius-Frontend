@@ -1,6 +1,6 @@
 <!-- this component is for displaying the bookmarked yoga poses of the user -->
 <template>
-  <v-container>
+  <v-container fluid>
     <v-row v-if="bookmarkedYogas.length != 0">
       <v-col
         v-for="yoga in bookmarkedYogas"
@@ -10,7 +10,7 @@
         md="4"
         lg="4"
       >
-        <v-card class="image-hover-effect" width="100%">
+        <v-card class="image-hover-effect mx-auto" width="90%">
           <!-- yoga image -->
           <v-img
             height="200"
@@ -19,22 +19,39 @@
             @click="exploreClicked(yoga)"
           >
           </v-img>
-          <v-divider></v-divider>
           <!-- yoga pose information -->
-          <v-card-text>
+          <v-card-text class="pt-0">
             <v-card-title class="text-center">{{
               yoga.sanskrit_name
             }}</v-card-title>
-            <div class="mb-2">Category: {{ yoga.category_name }}</div>
-            <div class="mb-2">English Name: {{ yoga.english_name }}</div>
-            <div class="mb-2">Sanskrit Name: {{ yoga.sanskrit_name }}</div>
-            <div>Translation: {{ yoga.translation_name }}</div>
+            <div class="d-flex justify-space-between">
+              <div class="mb-2">
+                <span class="label"> Category:</span>
+                {{ yoga.category_name }}
+              </div>
+              <div class="mb-2">
+                <span class="label">English Name: </span>{{ yoga.english_name }}
+              </div>
+            </div>
+            <div class="mb-2">
+              <span class="label">Sanskrit Name: </span>{{ yoga.sanskrit_name }}
+            </div>
+            <div>
+              <span class="label">Translation: </span
+              >{{ yoga.translation_name }}
+            </div>
           </v-card-text>
           <!-- buttons for explore and bookmark/undoBookmark -->
           <v-card-actions class="justify-space-between">
             <v-btn color="orange" @click="exploreClicked(yoga)">Explore</v-btn>
-            <v-btn color="orange" @click="undoBookmark(yoga)"
-              >Undo Bookmark</v-btn
+            <v-btn color="orange" @click="undoBookmark(yoga)">
+              <v-progress-circular
+                v-if="loadingYoga[yoga._id]"
+                indeterminate
+                color="white"
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!loadingYoga[yoga._id]"> UNDO BOOKMARK </span></v-btn
             >
           </v-card-actions>
         </v-card>
@@ -52,6 +69,11 @@
 
 <script>
 export default {
+  data() {
+    return {
+      loadingYoga: {}, // To track loading state for each yoga
+    };
+  },
   computed: {
     // to fetch bookmarked item from store
     bookmarkedYogas() {
@@ -64,14 +86,16 @@ export default {
       this.$emit("explore", { item: yoga, route: "yogaDetail" });
     },
     //to undo bookmark
-    undoBookmark(yoga) {
-      const userId = this.$store.state.userModule.userId;
+    async undoBookmark(yoga) {
       const yogaId = yoga._id;
-      this.$store.dispatch("undoBookmark", {
+      this.loadingYoga[yogaId] = true;
+      const userId = this.$store.state.userModule.userId;
+      await this.$store.dispatch("undoBookmark", {
         userId,
         itemId: yogaId,
         itemType: "yoga",
       });
+      this.loadingYoga[yogaId] = false;
     },
   },
 };
@@ -84,5 +108,8 @@ export default {
 }
 .pointer {
   cursor: pointer;
+}
+.label {
+  font-weight: 500;
 }
 </style>

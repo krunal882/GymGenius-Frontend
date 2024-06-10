@@ -71,7 +71,14 @@
                   color="error"
                   small
                   style="margin-top: 10px"
-                  >Remove</v-btn
+                >
+                  <v-progress-circular
+                    v-if="loading"
+                    indeterminate
+                    color="white"
+                    size="20"
+                  ></v-progress-circular>
+                  <span v-else>Remove</span></v-btn
                 >
               </div>
             </v-col>
@@ -133,9 +140,11 @@ export default {
     },
     //to remove product from the cart
     async removeItem(item) {
+      this.loading = true;
       const id = item._id;
       const userId = this.$store.state.userModule.userId;
-      this.$store.dispatch("removeCart", { productId: id, userId });
+      await this.$store.dispatch("removeCart", { productId: id, userId });
+      this.loading = false;
     },
     //to get image from the local
     imgPath(src, category) {

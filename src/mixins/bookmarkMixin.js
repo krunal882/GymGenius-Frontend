@@ -1,11 +1,9 @@
-// mixin component for the bookmark that contains methods related to information bookmark
+import Cookies from "js-cookie";
 
-import Cookies from 'js-cookie';
 export default {
     methods: {
-        //to send request for bookmark or undo-bookmark
-        toggleBookmark(item, itemType) {
-
+        // to send request for bookmark or undo-bookmark
+        async bookmarkOrUndo(item, itemType) {
             const token = Cookies.get("token");
 
             if (!token) {
@@ -17,13 +15,13 @@ export default {
             const userId = this.$store.state.userModule.userId;
             const itemId = item._id;
             if (this.isBookmarked(item, itemType)) {
-                this.$store.dispatch("undoBookmark", {
+                await this.$store.dispatch("undoBookmark", {
                     userId,
                     itemId,
                     itemType,
                 });
             } else {
-                this.$store.dispatch("bookmarkItem", {
+                await this.$store.dispatch("bookmarkItem", {
                     userId,
                     item,
                     itemType,
@@ -33,7 +31,9 @@ export default {
         // to check if item is bookmarked or not
         isBookmarked(item) {
             const bookmarkedItems = this.bookmarked || [];
-            return bookmarkedItems.some((bookmarkedItem) => bookmarkedItem._id === item._id);
+            return bookmarkedItems.some(
+                (bookmarkedItem) => bookmarkedItem._id === item._id
+            );
         },
     },
 };
