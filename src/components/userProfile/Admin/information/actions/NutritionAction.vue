@@ -1,15 +1,6 @@
 <!-- this component is for admin to show food-item and provide options to edit , explore and delete -->
 <template>
   <v-container fluid>
-    <!-- <v-row v-if="loading">
-        <v-col v-for="n in this.foodItem.length" :key="n" cols="4">
-          <v-skeleton-loader
-            class="mx-auto border"
-            max-width="300"
-            type="image, article, chip@2"
-          ></v-skeleton-loader>
-        </v-col>
-      </v-row> -->
     <!-- foodItem preview card -->
     <v-row class="d-flex flex-wrap">
       <v-col
@@ -57,16 +48,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      loading: true,
-    };
-  },
-  computed: {
-    skeletonCount() {
-      return this.loading ? this.foodItem.length : 0;
-    },
-  },
   methods: {
     //to emit an event to navigate to detail page
     async exploreClicked(foodItem) {
@@ -92,26 +73,6 @@ export default {
     deleteClick(foodItem) {
       this.$emit("remove-foodItem", foodItem);
     },
-    loadData() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
-    },
-  },
-  //watcher for the food-item changes
-  watch: {
-    foodItem: {
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.loading = true;
-          this.loadData();
-        }
-      },
-      immediate: true,
-    },
-  },
-  created() {
-    this.loadData();
   },
 };
 </script>

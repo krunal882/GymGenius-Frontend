@@ -1,15 +1,6 @@
 <!-- this component is for admin to show diet plan and provide options to edit , explore and delete -->
 <template>
   <v-container fluid>
-    <!-- <v-row v-if="loading">
-      <v-col v-for="n in this.dietPlan.length" :key="n" cols="12" md="6" lg="4">
-        <v-skeleton-loader
-          class="mx-auto border"
-          max-width="300"
-          type="image, article, chip@2"
-        ></v-skeleton-loader>
-      </v-col>
-    </v-row> -->
     <!-- dietPlan preview card -->
     <v-row class="d-flex flex-wrap">
       <v-col
@@ -70,11 +61,6 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      loading: true,
-    };
-  },
   methods: {
     //to emit an event to navigate to detail page
     async exploreClicked(dietPlan) {
@@ -99,33 +85,6 @@ export default {
     deleteClick(dietPlan) {
       this.$emit("remove-dietPlan", dietPlan);
     },
-    loadData() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 2000);
-    },
-  },
-  computed: {
-    //to get the number of dietPlan to show the skeleton loader
-    skeletonCount() {
-      return this.loading ? this.dietPlan.length : 0;
-    },
-  },
-  //watcher for the dietPlan changes
-
-  watch: {
-    dietPlan: {
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.loading = true;
-          this.loadData();
-        }
-      },
-      immediate: true,
-    },
-  },
-  created() {
-    this.loadData();
   },
 };
 </script>

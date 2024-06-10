@@ -1,17 +1,6 @@
 <!-- this component is for admin to show exercise and provide options to edit , explore and delete -->
 <template>
   <v-container fluid>
-    <!-- Skeleton Loader -->
-    <!-- <v-row v-if="loading">
-        <v-col v-for="n in skeletonCount" :key="n" cols="12" sm="6" md="4" lg="4">
-          <v-skeleton-loader
-            class="mx-auto border"
-            max-width="300"
-            type="image, article, chip@2"
-          ></v-skeleton-loader>
-        </v-col>
-      </v-row> -->
-
     <!-- Cards for Exercise Info -->
     <v-row class="d-flex flex-wrap">
       <v-col
@@ -78,16 +67,7 @@ export default {
       required: true,
     },
   },
-  data() {
-    return {
-      loading: true,
-    };
-  },
-  computed: {
-    skeletonCount() {
-      return this.loading ? this.exercises.length : 0;
-    },
-  },
+
   methods: {
     //to emit an event to navigate to detail page
     async exploreClicked(exercise) {
@@ -116,26 +96,6 @@ export default {
     deleteClick(exercise) {
       this.$emit("remove-exercise", exercise);
     },
-    loadData() {
-      setTimeout(() => {
-        this.loading = false;
-      }, 1000);
-    },
-  },
-  //watcher for the exercise changes
-  watch: {
-    exercises: {
-      handler(newValue, oldValue) {
-        if (newValue !== oldValue) {
-          this.loading = true;
-          this.loadData();
-        }
-      },
-      immediate: true,
-    },
-  },
-  created() {
-    this.loadData();
   },
 };
 </script>

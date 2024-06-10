@@ -11,7 +11,7 @@
       </v-tabs>
     </v-card>
 
-    <v-card>
+    <v-card style="min-height: 600px">
       <!-- different components for different tabs -->
       <v-tabs-window v-model="tab">
         <v-tabs-window-item>
