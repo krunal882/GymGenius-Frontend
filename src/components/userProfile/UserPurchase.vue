@@ -78,7 +78,12 @@
             <v-btn color="primary" text @click="isActive.value = false"
               >Cancel</v-btn
             >
-            <v-btn color="error" text @click="executeReturn">
+            <v-btn
+              color="error"
+              text
+              @click="executeReturn"
+              :disabled="loading"
+            >
               <v-progress-circular
                 v-if="loading"
                 indeterminate

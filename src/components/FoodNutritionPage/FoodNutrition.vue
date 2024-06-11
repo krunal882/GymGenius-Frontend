@@ -25,7 +25,7 @@
           @explore="exploreClicked"
         />
         <template v-slot:empty>
-          <v-alert type="warning">No more products!</v-alert>
+          <v-alert type="warning">No more food-items!</v-alert>
         </template>
       </v-infinite-scroll>
     </div>

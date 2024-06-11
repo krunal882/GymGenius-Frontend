@@ -26,7 +26,11 @@
           color="white"
           size="20"
         ></v-progress-circular>
-        <v-icon v-else color="white" size="50" style="font-size: large"
+        <v-icon
+          v-else
+          color="white"
+          size="50"
+          style="font-size: large; cursor: pointer"
           >mdi-pencil</v-icon
         >
       </template>
@@ -125,13 +129,12 @@
         <v-card-actions>
           <v-btn
             color="primary"
-            :disabled="isSaveDisabled"
+            :disabled="isSaveDisabled || loading"
             @click="saveChanges"
           >
             <v-progress-circular
               v-if="loading"
               indeterminate
-              color="white"
               size="20"
             ></v-progress-circular>
             <span v-if="!loading"> Save</span>
@@ -147,7 +150,12 @@
       <!-- account delete option -->
       <div class="d-flex flex-wrap">
         <h6 class="mt-2">Want to delete your account ?</h6>
-        <v-btn class="ml-10" color="error" @click="deleteAccount">
+        <v-btn
+          class="ml-10"
+          color="error"
+          @click="deleteAccount"
+          :disabled="deleteLoading"
+        >
           <v-progress-circular
             v-if="deleteLoading"
             indeterminate
@@ -321,7 +329,10 @@ export default {
       this.isLoading = true;
 
       const file = event.target.files[0];
-      if (!file) return;
+      if (!file) {
+        this.loading = false;
+        return;
+      }
 
       const allowedTypes = ["image/jpeg", "image/png", "image/gif"];
       if (!allowedTypes.includes(file.type)) {

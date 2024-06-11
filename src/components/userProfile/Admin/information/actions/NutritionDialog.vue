@@ -225,11 +225,10 @@
       <!-- buttons for explore , remove and bookmark-undoBookmark -->
       <v-card-actions>
         <v-btn color="blue darken-1" @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" @click="save(foodItem)"
+        <v-btn color="blue darken-1" @click="save(foodItem)" :disabled="loading"
           ><v-progress-circular
             v-if="loading"
             indeterminate
-            color="white"
             size="20"
           ></v-progress-circular>
           <span v-if="!loading">Save</span></v-btn

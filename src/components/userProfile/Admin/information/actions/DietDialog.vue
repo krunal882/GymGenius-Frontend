@@ -186,11 +186,10 @@
       <!-- button to close the dialog and edit dietPlan -->
       <v-card-actions>
         <v-btn color="blue darken-1" @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" @click="save(dietPlan)"
+        <v-btn color="blue darken-1" @click="save(dietPlan)" :disabled="loading"
           ><v-progress-circular
             v-if="loading"
             indeterminate
-            color="white"
             size="20"
           ></v-progress-circular>
           <span v-if="!loading">Save</span></v-btn

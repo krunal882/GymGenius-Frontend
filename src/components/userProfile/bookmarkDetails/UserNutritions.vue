@@ -27,11 +27,13 @@
             <v-btn color="orange" @click="exploreClicked(foodItem)"
               >Explore</v-btn
             >
-            <v-btn color="orange" @click="undoBookmark(foodItem)"
+            <v-btn
+              color="orange"
+              @click="undoBookmark(foodItem)"
+              :disabled="loadingBookmark[foodItem._id]"
               ><v-progress-circular
                 v-if="loadingBookmark[foodItem._id]"
                 indeterminate
-                color="white"
                 size="20"
               ></v-progress-circular>
               <span v-if="!loadingBookmark[foodItem._id]">

@@ -153,11 +153,14 @@
       <!-- button to close the dialog and add dietPlan -->
       <v-card-actions>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="add(dietPlan)"
+        <v-btn
+          color="blue darken-1"
+          text
+          @click="add(dietPlan)"
+          :disabled="loading"
           ><v-progress-circular
             v-if="loading"
             indeterminate
-            color="white"
             size="20"
           ></v-progress-circular>
           <span v-if="!loading">Add</span></v-btn

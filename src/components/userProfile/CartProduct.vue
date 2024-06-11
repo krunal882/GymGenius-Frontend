@@ -71,6 +71,7 @@
                   color="error"
                   small
                   style="margin-top: 10px"
+                  :disabled="loading"
                 >
                   <v-progress-circular
                     v-if="loading"

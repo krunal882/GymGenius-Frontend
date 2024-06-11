@@ -33,7 +33,6 @@
           <v-progress-circular
             v-else
             indeterminate
-            color="white"
             size="20"
           ></v-progress-circular>
         </v-btn>

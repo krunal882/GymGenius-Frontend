@@ -1,6 +1,6 @@
 <!-- forgot password page -->
 <template>
-  <v-card elevation="1" class="forgot-password-card" style="">
+  <v-card elevation="1" class="forgot-password-card">
     <div class="text-center">
       <h1 class="mb-2">Forgot Password</h1>
       <p>
@@ -25,9 +25,24 @@
         outlined
         :rules="emailRules"
       ></v-text-field>
-      <v-btn class="rounded-0" color="black" x-large block dark @click="reset"
-        >Reset Password</v-btn
+      <v-btn
+        class="rounded-0"
+        color="black"
+        x-large
+        block
+        dark
+        @click="reset"
+        :disabled="loading"
       >
+        <template v-if="loading">
+          <v-progress-circular
+            indeterminate
+            color="white"
+            size="20"
+          ></v-progress-circular>
+        </template>
+        <template v-else> Reset Password </template>
+      </v-btn>
     </v-form>
   </v-card>
 </template>
@@ -37,6 +52,7 @@ export default {
   data() {
     return {
       resetEmail: "",
+      loading: false,
       emailRules: [
         (v) => !!v || "Email is required",
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
@@ -44,13 +60,17 @@ export default {
     };
   },
   methods: {
-    reset() {
-      const email = this.resetEmail;
-      this.$store.dispatch("forgotPassword", { email: this.resetEmail });
-      this.$store.dispatch("forgotPassword", {
-        email: email,
-        password: this.loginPassword,
-      });
+    async reset() {
+      this.loading = true;
+      try {
+        await this.$store.dispatch("forgotPassword", {
+          email: this.resetEmail,
+        });
+      } catch (error) {
+        console.error("Error sending reset email:", error);
+      } finally {
+        this.loading = false;
+      }
     },
   },
 };
@@ -69,7 +89,7 @@ export default {
   display: block;
   margin: 20px auto;
   max-width: 300px;
-  height: 350px;
+  height: 300px;
 }
 
 .v-text-field.rounded-0 {

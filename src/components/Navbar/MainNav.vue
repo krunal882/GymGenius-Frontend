@@ -183,4 +183,21 @@ body {
 .hover {
   cursor: pointer;
 }
+.custom-list-item {
+  padding: 10px 0;
+  transition: background-color 0.3s;
+}
+
+.custom-list-item:hover {
+  background-color: #f0f0f0;
+}
+
+.item {
+  text-decoration: none;
+  color: black;
+}
+.menu-icon {
+  cursor: pointer;
+  margin-right: 10px;
+}
 </style>

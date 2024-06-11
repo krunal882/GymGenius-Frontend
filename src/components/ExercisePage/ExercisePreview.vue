@@ -50,11 +50,14 @@
             <v-btn color="orange" @click="exploreClicked(exercise)"
               >Explore</v-btn
             >
-            <v-btn color="orange" @click="toggleBookmark(exercise, 'exercise')">
+            <v-btn
+              color="orange"
+              @click="toggleBookmark(exercise, 'exercise')"
+              :disabled="loadingExercises[exercise._id]"
+            >
               <v-progress-circular
                 v-if="loadingExercises[exercise._id]"
                 indeterminate
-                color="white"
                 size="20"
               ></v-progress-circular>
               <span v-if="!loadingExercises[exercise._id]">

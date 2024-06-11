@@ -49,11 +49,14 @@
             <v-btn color="orange" @click="exploreClicked(dietPlan)">
               Explore
             </v-btn>
-            <v-btn color="orange" @click="toggleBookmark(dietPlan, 'diet')">
+            <v-btn
+              color="orange"
+              @click="toggleBookmark(dietPlan, 'diet')"
+              :disabled="loadingDiet[dietPlan._id]"
+            >
               <v-progress-circular
                 v-if="loadingDiet[dietPlan._id]"
                 indeterminate
-                color="white"
                 size="20"
               ></v-progress-circular>
               <span v-if="!loadingDiet[dietPlan._id]">

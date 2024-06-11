@@ -91,13 +91,12 @@
           <!-- button for save and cancel edit -->
           <v-btn
             color="primary"
-            :disabled="validationErrors"
+            :disabled="validationErrors || actionLoading"
             @click="saveChanges(editedUser)"
           >
             <v-progress-circular
               v-if="actionLoading"
               indeterminate
-              color="white"
               size="20"
             ></v-progress-circular
             ><span v-if="!actionLoading"> Save </span></v-btn

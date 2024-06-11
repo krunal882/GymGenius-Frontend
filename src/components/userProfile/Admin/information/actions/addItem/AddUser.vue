@@ -107,12 +107,11 @@
         <!-- button for adding user -->
         <v-btn
           color="primary"
-          :disabled="validationErrors || !passwordsMatch"
+          :disabled="validationErrors || !passwordsMatch || loading"
           @click="addUser(user._id)"
           ><v-progress-circular
             v-if="loading"
             indeterminate
-            color="white"
             size="20"
           ></v-progress-circular>
           <span v-if="!loading">Add</span></v-btn

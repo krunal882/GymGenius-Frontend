@@ -44,11 +44,14 @@
               <v-btn color="orange" @click="exploreClicked(item)"
                 >Explore</v-btn
               >
-              <v-btn color="orange" @click="undoBookmark(item)">
+              <v-btn
+                color="orange"
+                @click="undoBookmark(item)"
+                :disabled="loading[item._id]"
+              >
                 <v-progress-circular
                   v-if="loading[item._id]"
                   indeterminate
-                  color="white"
                   size="20"
                 ></v-progress-circular>
                 <span v-if="!loading[item._id]">Undo Bookmark</span></v-btn

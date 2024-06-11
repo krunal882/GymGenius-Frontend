@@ -102,22 +102,28 @@
           <!-- action buttons for the bookmark/undoBookmark and navigation to previous page -->
           <v-card-actions style="justify-content: space-between">
             <v-btn color="orange" @click="back">Go Back</v-btn>
-            <v-btn color="orange" @click="toggleBookmark(exercise, 'exercise')">
+            <v-btn
+              color="orange"
+              @click="toggleBookmark(exercise, 'exercise')"
+              :disabled="loadingBookmark"
+            >
               <v-progress-circular
                 v-if="loadingBookmark"
                 indeterminate
-                color="white"
                 size="20"
               ></v-progress-circular>
               <span v-if="!loadingBookmark">
                 {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}
               </span>
             </v-btn>
-            <v-btn color="orange" @click="downloadPDF">
+            <v-btn
+              color="orange"
+              @click="downloadPDF"
+              :disabled="loadingDownload"
+            >
               <v-progress-circular
                 v-if="loadingDownload"
                 indeterminate
-                color="white"
                 size="20"
               ></v-progress-circular>
               <span v-if="!loadingDownload">Download PDF</span>

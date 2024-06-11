@@ -199,11 +199,10 @@
       <v-card-actions>
         <!-- button to close the dialog and add foodItem -->
         <v-btn color="blue darken-1" @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" @click="add(foodItem)"
+        <v-btn color="blue darken-1" @click="add(foodItem)" :disabled="loading"
           ><v-progress-circular
             v-if="loading"
             indeterminate
-            color="white"
             size="20"
           ></v-progress-circular>
           <span v-if="!loading">Add</span></v-btn

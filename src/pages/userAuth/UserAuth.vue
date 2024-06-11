@@ -62,8 +62,15 @@
                             block
                             tile
                             @click="login"
-                            :disabled="!loginFormValid"
-                            >Log in</v-btn
+                            :disabled="!loginFormValid || loading"
+                          >
+                            <v-progress-circular
+                              v-if="loading"
+                              indeterminate
+                              color="white"
+                              size="20"
+                            ></v-progress-circular>
+                            <span v-if="!loading"> Log in </span></v-btn
                           >
                         </v-col>
                       </v-row>
@@ -191,8 +198,15 @@
                             block
                             tile
                             @click="signUp"
-                            :disabled="!signUpFormValid"
-                            >Sign up</v-btn
+                            :disabled="!signUpFormValid || loading"
+                          >
+                            <v-progress-circular
+                              v-if="loading"
+                              indeterminate
+                              color="white"
+                              size="20"
+                            ></v-progress-circular>
+                            <span v-if="!loading">Sign up</span></v-btn
                           >
                         </v-col>
                       </v-row>
@@ -228,6 +242,7 @@ export default {
       signUpEmail: "",
       signUpPassword: "",
       acceptTerms: false,
+      loading: false,
       emailRules: [
         (v) => !!v || "Email is required",
         (v) => /.+@.+\..+/.test(v) || "E-mail must be valid",
@@ -266,6 +281,7 @@ export default {
   methods: {
     // to login request
     async login() {
+      this.loading = true;
       if (this.$refs.loginForm.validate()) {
         await this.$store.dispatch("userLogin", {
           email: this.loginEmail,
@@ -276,10 +292,12 @@ export default {
           this.$router.replace("/GymGenius");
         }
       }
+      this.loading = false;
     },
 
     // to signup request
     async signUp() {
+      this.loading = true;
       if (this.$refs.signUpForm.validate()) {
         await this.$store.dispatch("userSignup", {
           email: this.signUpEmail,
@@ -294,6 +312,7 @@ export default {
           this.$router.replace("/GymGenius");
         }
       }
+      this.loading = false;
     },
 
     // to toggle password visibility

@@ -29,24 +29,30 @@
           <!-- Action buttons with loading indicators -->
           <v-card-actions style="justify-content: space-between">
             <v-btn color="orange" @click="back">Go Back</v-btn>
-            <v-btn color="orange" @click="toggleBookmark(dietPlan, 'diet')">
+            <v-btn
+              color="orange"
+              @click="toggleBookmark(dietPlan, 'diet')"
+              :disabled="loadingBookmark"
+            >
               <!-- Loading indicator for bookmark button -->
               <v-progress-circular
                 v-if="loadingBookmark"
                 indeterminate
-                color="white"
                 size="20"
               ></v-progress-circular>
               <span v-if="!loadingBookmark">
                 {{ isBookmarked(dietPlan) ? "Undo Bookmark" : "Bookmark" }}
               </span>
             </v-btn>
-            <v-btn color="orange" @click="downloadPDF">
+            <v-btn
+              color="orange"
+              @click="downloadPDF"
+              :disabled="loadingDownload"
+            >
               <!-- Loading indicator for download button -->
               <v-progress-circular
                 v-if="loadingDownload"
                 indeterminate
-                color="white"
                 size="20"
               ></v-progress-circular>
               <span v-if="!loadingDownload">Download PDF</span>

@@ -17,22 +17,28 @@
         <!-- action buttons for the bookmark, previous page navigation, and PDF download -->
         <v-card-actions style="justify-content: space-between">
           <v-btn color="orange" @click="back">Go Back</v-btn>
-          <v-btn color="orange" @click="toggleBookmark(foodItem, 'nutrition')">
+          <v-btn
+            color="orange"
+            @click="toggleBookmark(foodItem, 'nutrition')"
+            :disabled="loadingBookmark"
+          >
             <v-progress-circular
               v-if="loadingBookmark"
               indeterminate
-              color="white"
               size="20"
             ></v-progress-circular>
             <span v-if="!loadingBookmark">
               {{ isBookmarked(foodItem) ? "Undo Bookmark" : "Bookmark" }}
             </span>
           </v-btn>
-          <v-btn color="orange" @click="downloadPDF">
+          <v-btn
+            color="orange"
+            @click="downloadPDF"
+            :disabled="loadingDownload"
+          >
             <v-progress-circular
               v-if="loadingDownload"
               indeterminate
-              color="white"
               size="20"
             ></v-progress-circular>
             <span v-if="!loadingDownload">Download PDF</span>

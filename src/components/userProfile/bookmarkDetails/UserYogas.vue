@@ -44,11 +44,14 @@
           <!-- buttons for explore and bookmark/undoBookmark -->
           <v-card-actions class="justify-space-between">
             <v-btn color="orange" @click="exploreClicked(yoga)">Explore</v-btn>
-            <v-btn color="orange" @click="undoBookmark(yoga)">
+            <v-btn
+              color="orange"
+              @click="undoBookmark(yoga)"
+              :disabled="loadingYoga[yoga._id]"
+            >
               <v-progress-circular
                 v-if="loadingYoga[yoga._id]"
                 indeterminate
-                color="white"
                 size="20"
               ></v-progress-circular>
               <span v-if="!loadingYoga[yoga._id]"> UNDO BOOKMARK </span></v-btn

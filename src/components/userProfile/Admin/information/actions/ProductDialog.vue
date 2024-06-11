@@ -90,7 +90,7 @@
             <v-text-field
               :rules="Rules"
               v-model="product.original_price"
-              label="Secondary Muscles"
+              label="Original Price"
               variant="outlined"
               class="mb-4"
             ></v-text-field>
@@ -110,11 +110,14 @@
         <!-- button to close the dialog and add product -->
         <v-spacer></v-spacer>
         <v-btn color="blue darken-1" text @click="closeDialog">Cancel</v-btn>
-        <v-btn color="blue darken-1" text @click="save(product)"
+        <v-btn
+          color="blue darken-1"
+          text
+          @click="save(product)"
+          :disabled="loading"
           ><v-progress-circular
             v-if="loading"
             indeterminate
-            color="white"
             size="20"
           ></v-progress-circular>
           <span v-if="!loading">Save</span></v-btn

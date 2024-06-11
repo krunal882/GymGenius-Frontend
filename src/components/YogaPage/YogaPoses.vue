@@ -23,7 +23,7 @@
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
         <YogaInfo :yoga="yoga" :loading="loading" @explore="exploreClicked" />
         <template v-slot:empty>
-          <v-alert type="warning">No more products!</v-alert>
+          <v-alert type="warning">No more yoga-poses!</v-alert>
         </template>
       </v-infinite-scroll>
     </div>
