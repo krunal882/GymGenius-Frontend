@@ -1,4 +1,3 @@
-<!-- this component is for admin to add new product information , it provides the dialog with input fields to enter information-->
 <template>
   <v-dialog
     v-model="dialog"
@@ -15,7 +14,7 @@
           <!-- name field -->
           <div class="d-flex flex-wrap">
             <v-text-field
-              :rules="Rules"
+              :rules="commonRules"
               v-model="product.title"
               label="Name"
               variant="outlined"
@@ -24,7 +23,7 @@
             ></v-text-field>
             <!-- category field -->
             <v-text-field
-              :rules="Rules"
+              :rules="commonRules"
               v-model="product.category"
               label="Category"
               variant="outlined"
@@ -35,43 +34,42 @@
           <!-- brand field -->
           <div class="d-flex">
             <v-text-field
-              :rules="Rules"
+              :rules="commonRules"
               v-model="product.brand"
               label="Brand"
               variant="outlined"
               required
               class="mr-4 mb-4"
             ></v-text-field>
+            <!-- original price field -->
+            <v-text-field
+              :rules="commonRules"
+              v-model="product.original_price"
+              label="Original Price"
+              variant="outlined"
+              class="mb-4"
+            ></v-text-field>
+          </div>
+          <div class="d-flex flex-wrap justify-space-between">
             <!-- off field -->
             <v-text-field
-              :rules="Rules"
+              :rules="offRules"
               v-model="product.off"
               variant="outlined"
               label="Off"
               required
               type="number"
-              min="0"
-              class="mb-4"
+              class="mr-4 mb-4"
             ></v-text-field>
-          </div>
-          <div class="d-flex flex-wrap justify-space-between">
             <!-- price field -->
             <v-text-field
-              :rules="Rules"
+              :rules="commonRules"
               v-model="product.price"
               label="Price"
               variant="outlined"
               required
               type="number"
               class="mr-4 mb-4"
-            ></v-text-field>
-            <!-- original price field -->
-            <v-text-field
-              :rules="Rules"
-              v-model="product.original_price"
-              label="original price"
-              variant="outlined"
-              class="mb-4"
             ></v-text-field>
           </div>
           <!-- product state field -->
@@ -131,9 +129,15 @@ export default {
         state: "",
         category: "",
       },
-      Rules: [
+      commonRules: [
         (v) => !!v || "Field is Required",
         (v) => (v.trim && !!v.trim()) || "Field cannot contain only spaces",
+      ],
+      offRules: [
+        (v) => !!v || "Field is Required",
+        (v) => (v.trim && !!v.trim()) || "Field cannot contain only spaces",
+        (v) => v >= 0 || "Value must be greater than or equal to 0",
+        (v) => v <= 99 || "Value must be less than or equal to 99",
       ],
     };
   },
@@ -141,6 +145,12 @@ export default {
   watch: {
     dialogOpen(value) {
       this.dialog = value;
+    },
+    "product.original_price": function () {
+      this.calculatePrice();
+    },
+    "product.off": function () {
+      this.calculatePrice();
     },
   },
   methods: {
@@ -157,6 +167,15 @@ export default {
     handleClickOutside() {
       if (this.dialog) {
         this.closeDialog();
+      }
+    },
+    calculatePrice() {
+      const originalPrice = parseFloat(this.product.original_price);
+      const off = parseFloat(this.product.off);
+
+      if (!isNaN(originalPrice) && !isNaN(off)) {
+        const discountedPrice = originalPrice - originalPrice * (off / 100);
+        this.product.price = discountedPrice.toFixed(0); // Round to two decimal places
       }
     },
     resetForm() {
