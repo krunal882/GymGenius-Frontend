@@ -153,18 +153,36 @@
         <v-btn
           class="ml-10"
           color="error"
-          @click="deleteAccount"
+          @click="openDeleteDialog"
           :disabled="deleteLoading"
         >
-          <v-progress-circular
-            v-if="deleteLoading"
-            indeterminate
-            color="white"
-            size="20"
-          ></v-progress-circular>
-          <span v-if="!deleteLoading">DELETE</span></v-btn
+          <span>DELETE</span></v-btn
         >
       </div>
+      <!-- Confirmation dialog for deleting the account -->
+      <v-dialog v-model="deleteDialog" max-width="500px">
+        <v-card>
+          <v-card-title class="headline">Confirm Delete</v-card-title>
+          <v-card-text
+            >Are you sure you want to delete your account? This action cannot be
+            undone.</v-card-text
+          >
+          <v-card-actions>
+            <v-spacer></v-spacer>
+            <v-btn color="primary" text @click="deleteDialog = false"
+              >Cancel</v-btn
+            >
+            <v-btn color="error" @click="confirmDelete">
+              <v-progress-circular
+                v-if="deleteLoading"
+                indeterminate
+                size="20"
+              ></v-progress-circular>
+              <span v-if="!deleteLoading"> Confirm </span></v-btn
+            >
+          </v-card-actions>
+        </v-card>
+      </v-dialog>
       <!-- password change option -->
       <div class="d-flex flex-wrap">
         <h6 class="mt-2">Want to change your password ?</h6>
@@ -197,6 +215,7 @@ export default {
       isLoading: false,
       loading: false,
       deleteLoading: false,
+      deleteDialog: false,
       changeLoading: false,
       user: {
         name: "",
@@ -366,6 +385,14 @@ export default {
     saveAvatarUrl(imgUrl) {
       const userId = this.$store.state.userModule.userId;
       this.$store.dispatch("addImage", { userId, imgUrl });
+    },
+    // New methods for delete confirmation dialog
+    openDeleteDialog() {
+      this.deleteDialog = true;
+    },
+    async confirmDelete() {
+      await this.deleteAccount();
+      this.deleteDialog = false;
     },
   },
   computed: {
