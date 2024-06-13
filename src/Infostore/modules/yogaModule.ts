@@ -6,7 +6,7 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 // interface for the yoga
-interface Yoga {
+export interface Yoga {
   _id: string;
   category_name: string;
   english_name: string;
@@ -71,7 +71,7 @@ const handleServerError = (error: AxiosError) => {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setYoga(state: State, yoga: Yoga[]) {
     state.yoga = yoga;
   },
@@ -84,7 +84,6 @@ const mutations = {
 
   editYoga(state: State, yoga: Yoga) {
     const index = state.yogaSearch.findIndex((item) => item._id === yoga._id);
-    console.log(index);
     if (index !== -1) {
       state.yogaSearch[index] = yoga;
     }
@@ -198,7 +197,6 @@ const actions = {
   async removeYoga({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {
       const config = createAxiosConfig();
-      console.log(id);
       const url = `http://localhost:3000/yoga-poses/deleteYoga?id=${id}`;
       const response = await axios.delete(url, config);
       if (response.status === 200) {

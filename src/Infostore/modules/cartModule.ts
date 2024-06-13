@@ -6,7 +6,7 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 // interface for the product
-interface Product {
+export interface Product {
   _id: string;
   category: string;
   src: string;
@@ -19,7 +19,7 @@ interface Product {
 }
 
 // state interface
-interface State {
+export interface State {
   cartItems: Product[];
   history: Product[];
 }
@@ -64,7 +64,7 @@ const handleServerError = (error: AxiosError) => {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setCartItems(state: State, cartItems: Product[]) {
     state.cartItems = cartItems;
   },
@@ -170,7 +170,6 @@ const actions = {
         }
       }
     } catch (error) {
-      console.log(error);
       handleServerError(error);
     }
   },

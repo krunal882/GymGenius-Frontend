@@ -1,12 +1,12 @@
 // this vuex store is for admin actions
-import axios, { AxiosResponse, AxiosError } from "axios";
-import { Commit, Dispatch } from "vuex";
+import axios, { AxiosError } from "axios";
+import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 // interface for the user
-interface User {
+export interface User {
   _id: string;
   name: string;
   email: string;
@@ -32,13 +32,13 @@ interface ProductInfo {
 }
 
 // interface for the orders
-interface OrderData {
+export interface OrderData {
   userId: string;
   productInfo: ProductInfo[];
 }
 
 // state interface
-interface State {
+export interface State {
   userInfo: User[];
   productData: OrderData[];
   total: number;
@@ -87,7 +87,7 @@ const handleServerError = (error: AxiosError) => {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setUsers(state: State, data: User[]) {
     state.userInfo = data;
   },

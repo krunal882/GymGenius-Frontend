@@ -6,7 +6,7 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 // interface for the DietPlan
-interface DietPlan {
+export interface DietPlan {
   _id: string;
   name: string;
   cloudImg: string;
@@ -74,7 +74,7 @@ const handleServerError = (error: AxiosError) => {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setDietPlan(state: State, dietPlan: DietPlan[]) {
     state.dietPlan = dietPlan;
   },

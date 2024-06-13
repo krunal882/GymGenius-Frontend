@@ -1,12 +1,12 @@
 // this vuex store is for products actions
 import axios, { AxiosResponse, AxiosError } from "axios";
-import { Commit, GetterTree } from "vuex";
+import { Commit } from "vuex";
 import Cookies from "js-cookie";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 // interface for the product
-interface Product {
+export interface Product {
   _id: string;
   category: string;
   src: string;
@@ -18,7 +18,7 @@ interface Product {
 }
 
 //state interface
-interface State {
+export interface State {
   product: Product[];
   productSearch: Product[];
   adminProduct: Product[];
@@ -99,7 +99,7 @@ const handleServerError = (error: AxiosError) => {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setProduct(
     state: State,
     payload: { data: Product[]; category: string; store: string }

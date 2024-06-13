@@ -6,7 +6,7 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 //interface for the foodItem
-interface FoodItem {
+export interface FoodItem {
   _id: string;
   name: string;
   category: string;
@@ -86,7 +86,7 @@ const handleServerError = (error: AxiosError) => {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setFoodItem(state: State, foodItem: FoodItem[]) {
     state.foodItem = foodItem;
   },

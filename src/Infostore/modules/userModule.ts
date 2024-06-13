@@ -1,12 +1,12 @@
 // this vuex store is for user actions
-import axios, { AxiosResponse, AxiosError } from "axios";
-import { Commit, GetterTree, ActionTree } from "vuex";
+import axios, { AxiosError } from "axios";
+import { Commit } from "vuex";
 import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 import Cookies from "js-cookie";
 
 //interface for the user
-interface State {
+export interface State {
   userId: string;
   role: string;
   token: string;
@@ -18,7 +18,7 @@ interface State {
 }
 
 // interface for creating new user and editing user
-interface User {
+export interface User {
   _id: string;
   name: string;
   email: string;
@@ -103,7 +103,7 @@ const handleServerError = (error: AxiosError) => {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setToken(state: State, data: signup) {
     state.token = data.token;
     Cookies.set("token", data.token, { expires: 30 });

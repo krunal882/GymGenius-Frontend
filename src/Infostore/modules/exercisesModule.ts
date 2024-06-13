@@ -6,16 +6,16 @@ import { useToast } from "vue-toast-notification";
 import "vue-toast-notification/dist/theme-sugar.css";
 
 // interface for the exercise
-interface Exercise {
+export interface Exercise {
   _id: string;
   name: string;
   force: string;
   level: string;
   mechanic: string;
   equipment: string;
-  primaryMuscles: [];
-  secondaryMuscles: [];
-  instructions: [];
+  primaryMuscles: string[];
+  secondaryMuscles: string[];
+  instructions: string[];
   category: string;
   cloudImg: string;
 }
@@ -72,7 +72,7 @@ const handleServerError = (error: AxiosError) => {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setExercises(state: State, exercises: Exercise[]) {
     state.exercises = exercises;
   },

@@ -1,12 +1,9 @@
 {
   "compilerOptions": {
-    // "target": "esnext",
-    // "module": "esnext",
-    // "strict": true,
-    // "jsx": "preserve",
+    "module": "ESNext",
+    "target": "ESNext",
     "moduleResolution": "node",
     "experimentalDecorators": true,
-    // "allowJs": true,
     "skipLibCheck": true,
     "esModuleInterop": true,
     "allowSyntheticDefaultImports": true,
@@ -14,7 +11,8 @@
     "useDefineForClassFields": true,
     "sourceMap": true,
     "baseUrl": ".",
-    "types": ["webpack-env", "js-cookie"],
+    "typeRoots": ["node_modules/@types"],
+    "types": ["webpack-env", "js-cookie", "jest", "node"],
     "paths": {
       "@/*": ["src/*"]
     },

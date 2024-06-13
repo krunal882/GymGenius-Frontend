@@ -47,7 +47,7 @@ const state = {
 };
 
 // mutations for the state changes
-const mutations = {
+export const mutations = {
   setBookmarked(state, payload) {
     switch (payload.category) {
       case "exercise":
@@ -62,8 +62,6 @@ const mutations = {
       case "diet":
         state.diet = payload.data;
         break;
-      default:
-        console.error("Invalid category:", payload.category);
     }
   },
   bookmarkItem(state, payload) {
