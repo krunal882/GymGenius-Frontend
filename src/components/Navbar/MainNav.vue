@@ -52,7 +52,7 @@ export default {
     return {
       activeNavItem: null,
       navItems: [
-        { label: "Home", route: "/", highlight: "/" },
+        { label: "Home", route: "/", highlight: "/GymGenius" },
         {
           label: "Exercises",
           route: "/exercise",
@@ -77,6 +77,9 @@ export default {
           label: "Analyzer",
           route: "/fitnessTrackers",
           highlight: ["/fitnessTrackers", "/fitnessTrackers/:tracker"],
+        },
+        {
+          highlight: ["/profile", "/profile/:section"],
         },
       ],
       token: null,

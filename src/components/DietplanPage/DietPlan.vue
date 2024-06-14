@@ -5,8 +5,9 @@
     <div class="carousel-inner">
       <div class="carousel-item active">
         <img
-          src="../../assets/img/diet-banner.jpg"
+          src="../../assets/img/diet-plan.jpg"
           class="d-block w-100 carousel-image"
+          height="550px"
           alt="..."
         />
       </div>
