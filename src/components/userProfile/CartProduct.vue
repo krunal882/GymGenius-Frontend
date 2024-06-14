@@ -55,6 +55,7 @@
                     placeholder="1"
                     aria-label="Example text with button addon"
                     aria-describedby="button-addon1"
+                    readonly
                   />
                   <button
                     class="btn btn-outline-secondary"

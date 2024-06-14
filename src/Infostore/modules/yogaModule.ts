@@ -20,7 +20,7 @@ export interface Yoga {
 }
 
 // state interface
-interface State {
+export interface State {
   yoga: Yoga[];
   yogaSearch: Yoga[];
   yogaDetail: Yoga;
@@ -97,7 +97,7 @@ export const mutations = {
 };
 
 // Vuex actions for asynchronously handling and committing state changes.
-const actions = {
+export const actions = {
   // action to fetch yoga poses
   async fetchYoga(
     { commit }: { commit: Commit },

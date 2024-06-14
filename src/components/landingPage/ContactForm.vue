@@ -1,6 +1,6 @@
 <!-- this component contains the query form for the user -->
 <template>
-  <container class="bg-light py-3 py-md-5">
+  <v-container class="bg-light py-3 py-md-5">
     <div class="container">
       <div class="row justify-content-md-center">
         <div class="col-12 col-md-10 col-lg-8 col-xl-7 col-xxl-6">
@@ -117,7 +117,7 @@
         </v-col>
       </div>
     </div>
-  </container>
+  </v-container>
 </template>
 
 <script>

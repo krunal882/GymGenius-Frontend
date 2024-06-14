@@ -99,7 +99,7 @@ export const mutations = {
 };
 
 // Vuex actions for asynchronously handling and committing state changes.
-const actions = {
+export const actions = {
   //action to fetch diet plan
   async fetchDietPlan(
     { commit }: { commit: Commit },
@@ -192,7 +192,7 @@ const actions = {
       const response = await axios.patch(url, dietPlan, config);
       if (response.status === 200) {
         commit("editDiet", { id, dietPlan });
-        useToast().success(" Diet-plan updated successfully");
+        useToast().success("Diet-plan updated successfully");
       }
     } catch (error) {
       handleServerError(error);
@@ -207,7 +207,7 @@ const actions = {
       const response = await axios.delete(url, config);
       if (response.status === 200) {
         commit("removeDiet", id);
-        useToast().success(" Diet-plan removed successfully");
+        useToast().success("Diet-plan removed successfully");
       }
     } catch (error) {
       handleServerError(error);

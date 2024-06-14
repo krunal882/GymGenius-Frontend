@@ -59,8 +59,19 @@
         <!-- action buttons for the bookmark/undoBookmark and navigation to previous page -->
         <v-card-actions>
           <v-btn color="orange" @click="back">Go Back</v-btn>
-          <v-btn color="orange" @click="toggleBookmark(yoga, 'yoga')">
-            {{ isBookmarked(yoga) ? "Undo Bookmark" : "Bookmark" }}
+          <v-btn
+            color="orange"
+            @click="toggleBookmark(yoga, 'yoga')"
+            :disabled="loadingYoga[yoga._id]"
+          >
+            <v-progress-circular
+              v-if="loadingYoga[yoga._id]"
+              indeterminate
+              size="20"
+            ></v-progress-circular>
+            <span v-if="!loadingYoga[yoga._id]">
+              {{ isBookmarked(yoga) ? "Undo Bookmark" : "Bookmark" }}
+            </span>
           </v-btn>
           <v-btn color="orange" @click="downloadPDF">Download PDF</v-btn>
         </v-card-actions>
@@ -79,6 +90,7 @@ export default {
       images: [],
       yoga: null,
       isWideScreen: true,
+      loadingYoga: {}, // To track loading state for each yoga
     };
   },
   methods: {
@@ -108,6 +120,17 @@ export default {
         img.onerror = (err) => reject(err);
         img.src = url;
       });
+    },
+    // Override toggleBookmark to handle loading state
+    async toggleBookmark(yoga, itemType) {
+      const yogaId = yoga._id;
+      this.loadingYoga[yogaId] = true;
+
+      try {
+        await this.bookmarkOrUndo(yoga, itemType);
+      } finally {
+        this.loadingYoga[yogaId] = false;
+      }
     },
     // This method generates a PDF with the yoga details and an image
     async downloadPDF() {

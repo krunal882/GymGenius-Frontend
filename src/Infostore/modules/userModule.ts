@@ -122,7 +122,7 @@ export const mutations = {
 };
 
 // Vuex actions for asynchronously handling and committing state changes.
-const actions = {
+export const actions = {
   // action to fetch the user
   async fetchUser({ commit }: { commit: Commit }, { id }: { id: string }) {
     try {

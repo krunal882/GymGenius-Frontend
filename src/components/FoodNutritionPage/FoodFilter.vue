@@ -39,9 +39,8 @@
             >
               <!-- different options for the filter -->
               <!-- category -->
-              <v-card outlined>
+              <v-card>
                 <v-card-title>Filter Food Items</v-card-title>
-                <v-divider></v-divider>
                 <v-select
                   v-model="selectedCategory"
                   :items="categories"
@@ -49,7 +48,6 @@
                   label="Select"
                   persistent-hint
                 ></v-select>
-                <v-divider></v-divider>
                 <!-- name -->
                 <v-select
                   v-model="selectedItem"
@@ -167,9 +165,9 @@ export default {
   data() {
     return {
       showFilter: false,
-      caloriesRange: [20, 500],
-      minCalories: 20,
-      maxCalories: 500,
+      caloriesRange: [0, 200],
+      minCalories: 0,
+      maxCalories: 200,
 
       proteinRange: [0, 20],
       minProtein: 0,
