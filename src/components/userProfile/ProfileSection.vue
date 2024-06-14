@@ -164,8 +164,7 @@
         <v-card>
           <v-card-title class="headline">Confirm Delete</v-card-title>
           <v-card-text
-            >Are you sure you want to delete your account? This action cannot be
-            undone.</v-card-text
+            >Are you sure you want to delete your account?</v-card-text
           >
           <v-card-actions>
             <v-spacer></v-spacer>
@@ -358,12 +357,14 @@ export default {
         console.error(
           "Invalid file type. Only JPEG, PNG, and GIF are allowed."
         );
+        this.loading = false;
         return;
       }
 
       const maxSizeInMB = 5;
       if (file.size > maxSizeInMB * 1024 * 1024) {
         console.error("File size exceeds the 5MB limit.");
+        this.loading = false;
         return;
       }
 

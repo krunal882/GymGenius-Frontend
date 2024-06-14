@@ -39,67 +39,69 @@
             >
               <!-- different options for the filter -->
               <v-card outlined>
-                <v-card-title>Equipment Needed</v-card-title>
-                <v-select
-                  v-model="selectedEquipment"
-                  :items="equipment"
-                  hint="Dumbbell / Cable"
-                  label="Equipment"
-                  multiple
-                  persistent-hint
-                ></v-select>
+                <div class="scrollable-content">
+                  <v-card-title>Equipment Needed</v-card-title>
+                  <v-select
+                    v-model="selectedEquipment"
+                    :items="equipment"
+                    hint="Dumbbell / Cable"
+                    label="Equipment"
+                    multiple
+                    persistent-hint
+                  ></v-select>
 
-                <v-divider></v-divider>
-                <v-card-title>Force Type</v-card-title>
-                <v-select
-                  v-model="selectedForce"
-                  :items="force"
-                  hint="Push / Pull / Static"
-                  label="Force Type"
-                  multiple
-                  persistent-hint
-                ></v-select>
+                  <v-divider></v-divider>
+                  <v-card-title>Force Type</v-card-title>
+                  <v-select
+                    v-model="selectedForce"
+                    :items="force"
+                    hint="Push / Pull / Static"
+                    label="Force Type"
+                    multiple
+                    persistent-hint
+                  ></v-select>
 
-                <v-divider></v-divider>
-                <v-card-title>Muscle Target</v-card-title>
-                <v-select
-                  v-model="selectedMuscle"
-                  :items="muscle"
-                  hint="Shoulders / Chest / Back"
-                  label="Muscle Target"
-                  persistent-hint
-                  multiple
-                ></v-select>
+                  <v-divider></v-divider>
+                  <v-card-title>Muscle Target</v-card-title>
+                  <v-select
+                    v-model="selectedMuscle"
+                    :items="muscle"
+                    hint="Shoulders / Chest / Back"
+                    label="Muscle Target"
+                    persistent-hint
+                    multiple
+                  ></v-select>
 
-                <v-divider></v-divider>
+                  <v-divider></v-divider>
 
-                <v-card-title>Exercise Level</v-card-title>
-                <v-divider></v-divider>
+                  <v-card-title>Exercise Level</v-card-title>
+                  <v-divider></v-divider>
 
-                <v-select
-                  v-model="selectedLevel"
-                  :items="level"
-                  hint="Beginner / Intermediate / Expert"
-                  label="Exercise Level"
-                  persistent-hint
-                  multiple
-                ></v-select>
+                  <v-select
+                    v-model="selectedLevel"
+                    :items="level"
+                    hint="Beginner / Intermediate / Expert"
+                    label="Exercise Level"
+                    persistent-hint
+                    multiple
+                  ></v-select>
 
-                <v-divider></v-divider>
-                <v-card-title>Exercise Category</v-card-title>
-                <v-divider></v-divider>
-                <v-select
-                  v-model="selectedCategory"
-                  :items="category"
-                  hint="Strength / Cardio / Weightlifting"
-                  label="Exercise Category"
-                  multiple
-                  persistent-hint
-                ></v-select>
+                  <v-divider></v-divider>
+                  <v-card-title>Exercise Category</v-card-title>
+                  <v-divider></v-divider>
+                  <v-select
+                    v-model="selectedCategory"
+                    :items="category"
+                    hint="Strength / Cardio / Weightlifting"
+                    label="Exercise Category"
+                    multiple
+                    persistent-hint
+                  ></v-select>
 
-                <v-divider></v-divider>
+                  <v-divider></v-divider>
+                </div>
                 <div
-                  class="container d-flex justify-center align-item-center pb-5"
+                  class="container d-flex justify-center align-item-center pt-5 pb-5"
                 >
                   <!-- buttons to apply or clear filters -->
                   <v-btn
@@ -242,5 +244,12 @@ export default {
 .filter-enter,
 .filter-leave-to {
   opacity: 0;
+}
+
+.scrollable-content {
+  max-height: 350px;
+  overflow-y: auto;
+  padding-right: 25px;
+  padding-left: 25px;
 }
 </style>
