@@ -43,17 +43,13 @@
             <v-card-text v-if="exercise.level" class="pt-4"
               ><span class="details"> Level:</span>
               <span class="details-info">
-                {{
-                  exercise.level.charAt(0).toUpperCase() +
-                  exercise.level.slice(1)
-                }}</span
+                {{ capitalizeFirstLetter(exercise.level) }}</span
               ></v-card-text
             >
             <v-card-text v-if="exercise.category"
               ><span class="details"> Category :</span>
               <span class="details-info">{{
-                exercise.category.charAt(0).toUpperCase() +
-                exercise.category.slice(1)
+                capitalizeFirstLetter(exercise.category)
               }}</span></v-card-text
             >
           </div>
@@ -61,15 +57,12 @@
             <v-card-text v-if="exercise.force" class="pt-4 flex-grow-1"
               ><span class="details"> Force : </span>
               <span class="details-info">{{
-                exercise.force.charAt(0).toUpperCase() + exercise.force.slice(1)
+                capitalizeFirstLetter(exercise.force)
               }}</span></v-card-text
             >
             <v-card-text v-if="exercise.mechanic" class="pt-4 flex-grow-1"
               ><span class="details"> Mechanic: </span
-              >{{
-                exercise.mechanic.charAt(0).toUpperCase() +
-                exercise.mechanic.slice(1)
-              }}</v-card-text
+              >{{ capitalizeFirstLetter(exercise.mechanic) }}</v-card-text
             >
           </div>
           <v-card-text v-if="exercise.primaryMuscles?.length > 0">
@@ -77,7 +70,7 @@
               <span class="details"> Primary Muscle: </span>
               <ul v-for="muscle in exercise.primaryMuscles" :key="muscle">
                 {{
-                  muscle.charAt(0).toUpperCase() + muscle.slice(1)
+                  capitalizeFirstLetter(muscle)
                 }}
               </ul>
             </div></v-card-text
@@ -87,7 +80,7 @@
               <span class="details"> Secondary Muscle target:</span>
               <ul v-for="muscle in exercise.secondaryMuscles" :key="muscle">
                 {{
-                  muscle.charAt(0).toUpperCase() + muscle.slice(1)
+                  capitalizeFirstLetter(muscle)
                 }}
               </ul>
             </div></v-card-text
@@ -95,8 +88,7 @@
           <v-card-text v-if="exercise.equipment"
             ><span class="details"> Equipment Need: </span
             ><span class="details-info">{{
-              exercise.equipment.charAt(0).toUpperCase() +
-              exercise.equipment.slice(1)
+              capitalizeFirstLetter(exercise.equipment)
             }}</span></v-card-text
           >
           <!-- action buttons for the bookmark/undoBookmark and navigation to previous page -->
@@ -172,6 +164,12 @@ export default {
     };
   },
   methods: {
+    //for first latter capitalization
+    capitalizeFirstLetter(string) {
+      if (!string) return "";
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+
     async fetchExercise(id) {
       try {
         await this.$store.dispatch("fetchExercises", { id });

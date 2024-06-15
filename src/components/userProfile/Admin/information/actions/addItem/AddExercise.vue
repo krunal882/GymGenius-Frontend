@@ -169,6 +169,7 @@ export default {
     },
     //to close the dialog
     closeDialog() {
+      this.loading = false;
       this.$emit("close-dialog");
       this.resetForm();
     },

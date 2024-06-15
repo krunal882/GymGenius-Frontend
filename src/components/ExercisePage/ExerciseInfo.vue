@@ -6,7 +6,7 @@
       <div class="carousel-item active">
         <img
           src="../../assets/img/exercise-header.png"
-          class="d-block w-100 carousel-image"
+          class="w-100"
           alt="..."
         />
       </div>

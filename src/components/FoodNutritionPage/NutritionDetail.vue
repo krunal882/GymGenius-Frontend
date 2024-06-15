@@ -1,10 +1,10 @@
 <template>
-  <v-container v-if="foodItem">
+  <v-container v-if="foodItem" fluid>
     <v-card v-if="foodItem" class="mx-auto d-flex custom-card" width="100%">
       <!-- foodItem image -->
       <v-img
         class="align-end text-white"
-        height="300"
+        max-height="300"
         max-width="400"
         :src="imgPath(foodItem.name, foodItem.cloudImg)"
         cover
@@ -12,7 +12,10 @@
       <!-- foodItem information -->
       <div class="custom-content">
         <v-card-title class="custom-title">{{ foodItem.name }}</v-card-title>
-        <v-card-text>Category: {{ foodItem.category }}</v-card-text>
+        <v-card-text>
+          <span style="font-weight: 500"> Category: </span
+          >{{ foodItem.category }}</v-card-text
+        >
 
         <!-- action buttons for the bookmark, previous page navigation, and PDF download -->
         <v-card-actions style="justify-content: space-between">

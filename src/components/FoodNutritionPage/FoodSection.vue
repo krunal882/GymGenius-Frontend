@@ -7,8 +7,8 @@
         <div class="carousel-item active">
           <img
             src="../../assets/img/nutritions99.jpg"
-            class="d-block w-100"
-            style="height: 600px"
+            class="w-100"
+            style="max-height: 600px"
             alt="..."
           />
         </div>

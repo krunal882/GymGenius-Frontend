@@ -4,11 +4,7 @@
     <!-- hero header image -->
     <div class="carousel-inner">
       <div class="carousel-item active">
-        <img
-          src="../../assets/img/nutritions.jpg"
-          class="d-block w-100 carousel-image"
-          alt="..."
-        />
+        <img src="../../assets/img/nutritions.jpg" class="w-100" alt="..." />
       </div>
     </div>
     <!-- search field and filter component -->
@@ -176,10 +172,6 @@ export default {
 .custom-button-style {
   background-color: blue;
   color: white;
-}
-
-.carousel-image {
-  border-radius: 10px;
 }
 
 .iframe-style {

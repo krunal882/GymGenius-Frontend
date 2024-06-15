@@ -156,6 +156,7 @@ export default {
     },
     //to close the dialog
     closeDialog() {
+      this.loading = false;
       this.dialog = false;
       this.$emit("close-dialog");
     },

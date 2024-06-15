@@ -32,16 +32,26 @@
           <!-- exercise information -->
           <v-card-text>
             <div class="subtitle-row">
-              <v-card-subtitle>Level: {{ exercise.level }}</v-card-subtitle>
-              <v-card-subtitle>Force: {{ exercise.force }}</v-card-subtitle>
+              <v-card-subtitle
+                >Level:
+                {{ capitalizeFirstLetter(exercise.level) }}</v-card-subtitle
+              >
+              <v-card-subtitle
+                >Force:
+                {{ capitalizeFirstLetter(exercise.force) }}</v-card-subtitle
+              >
             </div>
             <div class="mt-3 d-flex">
               <span class="muscle-label">Primary Muscle:</span>
-              <span> {{ exercise.primaryMuscles[0] }}</span>
+              <span>{{
+                capitalizeFirstLetter(exercise.primaryMuscles[0])
+              }}</span>
             </div>
             <div>
-              <span class="muscle-label">Equipment needed:</span>
-              <span v-if="exercise.equipment">{{ exercise.equipment }}</span>
+              <span class="muscle-label">Equipment Needed:</span>
+              <span v-if="exercise.equipment">{{
+                capitalizeFirstLetter(exercise.equipment)
+              }}</span>
               <span v-else>body only</span>
             </div>
           </v-card-text>
@@ -91,6 +101,12 @@ export default {
     };
   },
   methods: {
+    //for first latter capitalization
+    capitalizeFirstLetter(string) {
+      if (!string) return "";
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    },
+
     // to get image from the local or stored on cloud
     getExerciseImagePath(exerciseName, cloudImg) {
       if (cloudImg === undefined) {

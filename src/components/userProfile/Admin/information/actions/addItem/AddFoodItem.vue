@@ -278,6 +278,8 @@ export default {
     //to handle and close dialog on outside click
     handleClickOutside() {
       if (this.dialog) {
+        this.loading = false;
+        this.dialog = false;
         this.closeDialog();
       }
     },

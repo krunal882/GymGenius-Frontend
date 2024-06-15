@@ -59,14 +59,14 @@ const links = [
   },
   { icon: "mdi-cart", text: "Cart", route: "cart" },
   { icon: "mdi-bookmark", text: "Bookmarked", route: "bookmark" },
-  { icon: "mdi-currency-inr", text: "purchase", route: "purchase" },
-  { icon: "mdi-logout", text: "logout", route: "logout" },
+  { icon: "mdi-currency-inr", text: "Purchase", route: "purchase" },
+  { icon: "mdi-logout", text: "Logout", route: "logout" },
 ];
 
 const admin = [
   {
     icon: "mdi-account-group",
-    text: "Your users",
+    text: "Your Users",
     route: "users-admin",
   },
   { icon: "mdi-cart-outline", text: "Orders", route: "orders" },
