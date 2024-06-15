@@ -1,7 +1,7 @@
 <!-- this component is for displaying the dietPlan to users -->
 <!--it also provides buttons for the bookmarking and for navigating to previous page -->
 <template>
-  <v-container class="">
+  <v-container>
     <div v-if="dietPlan" class="diet-plan-container">
       <div :class="{ 'd-flex': isWideScreen }">
         <v-img
@@ -119,6 +119,7 @@
         </div>
       </v-card-text>
     </div>
+    <div v-else class="main-loader"></div>
   </v-container>
 </template>
 

@@ -3,7 +3,7 @@
 <template>
   <v-container fluid>
     <!-- skeleton loader for the card  -->
-    <v-row v-if="loading">
+    <!-- <v-row v-if="loading">
       <v-col v-for="n in 12" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
           class="mx-auto"
@@ -11,9 +11,9 @@
           type="image, article, chip@2"
         ></v-skeleton-loader>
       </v-col>
-    </v-row>
+    </v-row> -->
 
-    <v-row v-else>
+    <v-row>
       <!-- yoga preview card -->
       <v-col v-for="yoga in yoga" :key="yoga.id" cols="12" sm="6" md="4" lg="4">
         <v-card class="image-hover-effect mx-auto" width="90%">

@@ -19,11 +19,7 @@
     <!-- preview card component with the infinity scroll applied (with pagination) -->
     <div class="justify-content-center">
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
-        <ExercisePreview
-          :exercises="exercises"
-          :loading="loading"
-          @explore="exploreClicked"
-        />
+        <ExercisePreview :exercises="exercises" @explore="exploreClicked" />
         <template v-slot:empty>
           <v-alert type="warning">No more exercises!</v-alert>
         </template>

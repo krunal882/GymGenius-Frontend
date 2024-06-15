@@ -1,12 +1,17 @@
 <template>
   <v-container v-if="foodItem" fluid>
     <v-card v-if="foodItem" class="mx-auto d-flex custom-card" width="100%">
+      <!-- Skeleton loader for the image -->
+
+      <v-skeleton-loader v-if="loadingImage" type="image@2"></v-skeleton-loader>
+
       <!-- foodItem image -->
       <v-img
+        v-if="!loadingImage"
         class="align-end text-white"
         max-height="300"
         max-width="400"
-        :src="imgPath(foodItem.name, foodItem.cloudImg)"
+        :src="images"
         cover
       ></v-img>
       <!-- foodItem information -->
@@ -297,6 +302,7 @@
       </v-timeline-item>
     </v-timeline>
   </v-container>
+  <v-container v-else> <div class="main-loader"></div> </v-container>
 </template>
 
 <script>
@@ -309,8 +315,10 @@ export default {
     return {
       foodItem: null,
       isWideScreen: true,
+      loadingImage: false,
       loadingBookmark: false, // State for bookmark loading
       loadingDownload: false, // State for download loading
+      images: "",
     };
   },
   methods: {
@@ -326,16 +334,20 @@ export default {
         console.log(error);
       }
     },
+    async loadImages(foodItemName, cloudImg) {
+      this.loadingImage = true;
+      if (cloudImg) {
+        this.images = cloudImg;
+      } else {
+        this.images = `../../../assets/img/foodItem/${foodItemName}.jpg`;
+      }
+      this.loadingImage = false;
+    },
     // Navigate to the previous page
     back() {
       this.$router.go(-1);
     },
-    // Return the image path from local or cloud storage
-    imgPath(foodItemName, cloudImg) {
-      return cloudImg
-        ? cloudImg
-        : `../../../assets/img/foodItem/${foodItemName}.jpg`;
-    },
+
     // Handle bookmark toggling with loading state
     async toggleBookmark(foodItem, itemType) {
       this.loadingBookmark = true; // Start loading
@@ -522,6 +534,7 @@ export default {
   async created() {
     const { id } = this.$route.params;
     await this.fetchFoodItem(id);
+    await this.loadImages(this.foodItem.name, this.foodItem.cloudImg);
   },
 };
 </script>

@@ -15,11 +15,7 @@
     <!-- preview card component with the infinity scroll applied (with pagination) -->
     <div class="justify-content-center">
       <v-infinite-scroll @load="loadMoreProducts" infinite-distance="10">
-        <NutritionPreview
-          :foodItem="foodItem"
-          :loading="loading"
-          @explore="exploreClicked"
-        />
+        <NutritionPreview :foodItem="foodItem" @explore="exploreClicked" />
         <template v-slot:empty>
           <v-alert type="warning">No more food-items!</v-alert>
         </template>

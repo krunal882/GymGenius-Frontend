@@ -1,10 +1,21 @@
 <template>
-  <v-container v-if="exercise">
-    <v-card>
+  <v-container>
+    <v-card v-if="exercise">
       <v-card :class="{ 'd-flex': isWideScreen }" width="auto">
         <div style="flex: 1; padding-right: 16px; position: relative">
+          <!-- Skeleton loader for the image -->
+          <v-row v-if="loadingImage">
+            <v-col>
+              <v-skeleton-loader type="image@2"></v-skeleton-loader>
+            </v-col>
+          </v-row>
           <!-- carousal to display exercise images -->
-          <v-card class="mx-auto" elevation="24" width="auto">
+          <v-card
+            v-if="!loadingImage"
+            class="mx-auto"
+            elevation="24"
+            width="auto"
+          >
             <v-carousel
               :continuous="false"
               :show-arrows="false"
@@ -145,6 +156,7 @@
         </v-card-text>
       </div>
     </v-card>
+    <div v-else class="main-loader"></div>
   </v-container>
 </template>
 
@@ -159,6 +171,7 @@ export default {
       images: [""],
       exercise: null,
       isWideScreen: true,
+      loadingImage: false,
       loadingBookmark: false,
       loadingDownload: false,
     };
@@ -185,6 +198,7 @@ export default {
       this.isWideScreen = window.innerWidth > 790;
     },
     async loadImages(exerciseName, cloudImg) {
+      this.loadingImage = true;
       if (cloudImg === undefined) {
         const formatedName = exerciseName
           .replace(/ /g, "_")
@@ -205,6 +219,7 @@ export default {
       } else {
         this.images = [cloudImg];
       }
+      this.loadingImage = false;
     },
     async downloadPDF() {
       this.loadingDownload = true;

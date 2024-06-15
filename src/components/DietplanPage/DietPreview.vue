@@ -3,16 +3,16 @@
 <template>
   <v-container fluid>
     <!-- skeleton loader for the card  -->
-    <v-row v-if="loading">
+    <!-- <v-row v-if="loading">
       <v-col v-for="n in 12" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
           class="border"
           type="image, article, chip@2"
         ></v-skeleton-loader>
       </v-col>
-    </v-row>
+    </v-row> -->
     <!-- dietPlan preview card -->
-    <v-row v-else class="d-flex flex-wrap">
+    <v-row class="d-flex flex-wrap">
       <v-col
         v-for="dietPlan in dietPlan"
         :key="dietPlan._id"

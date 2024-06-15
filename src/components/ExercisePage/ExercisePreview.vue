@@ -1,16 +1,16 @@
 <template>
   <v-container fluid>
     <!-- skeleton loader for the card  -->
-    <v-row v-if="loading">
+    <!-- <v-row v-if="loading">
       <v-col v-for="n in 12" :key="n" cols="12" sm="6" md="4" lg="4">
         <v-skeleton-loader
           class="mx-auto border"
           type="image, article, chip@2"
         ></v-skeleton-loader>
       </v-col>
-    </v-row>
+    </v-row> -->
     <!-- exercise preview card -->
-    <v-row v-else class="d-flex flex-wrap">
+    <v-row class="d-flex flex-wrap">
       <v-col
         v-for="exercise in exercises"
         :key="exercise._id"
@@ -98,6 +98,7 @@ export default {
   data() {
     return {
       loadingExercises: {}, // To track loading state for each exercise
+      pageLoaded: false, // Track if the page has been loaded before
     };
   },
   methods: {

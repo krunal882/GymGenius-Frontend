@@ -1,8 +1,8 @@
 <!-- this component is for displaying the yogas to users -->
 <!--it also provides buttons for the bookmarking and for navigating to previous page -->
 <template>
-  <v-container v-if="yoga">
-    <v-card :class="{ 'd-flex': isWideScreen }" width="auto">
+  <v-container>
+    <v-card v-if="yoga" :class="{ 'd-flex': isWideScreen }" width="auto">
       <!-- carousal to display yoga images -->
       <div style="flex: 1; padding-right: 16px; position: relative">
         <v-img height="300" :src="yoga.url_png"> </v-img>
@@ -77,6 +77,7 @@
         </v-card-actions>
       </div>
     </v-card>
+    <div v-else class="main-loader"></div>
   </v-container>
 </template>
 
