@@ -34,6 +34,7 @@
         type="button"
         data-bs-target="#carouselExampleIndicators"
         data-bs-slide="prev"
+        alt="button"
       >
         <span class="carousel-control-prev-icon" aria-hidden="true"></span>
       </button>
@@ -42,6 +43,7 @@
         type="button"
         data-bs-target="#carouselExampleIndicators"
         data-bs-slide="next"
+        alt="button"
       >
         <span class="carousel-control-next-icon" aria-hidden="true"></span>
       </button>

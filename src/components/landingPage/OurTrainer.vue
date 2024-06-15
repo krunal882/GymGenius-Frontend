@@ -19,26 +19,44 @@
             <div class="p-4">
               <h5 class="mb-0">{{ trainer.name }}</h5>
               <p class="small text-muted">{{ trainer.position }}</p>
-              <li class="list-inline-item m-0">
-                <a :href="facebookLink" class="social-link">
-                  <font-awesome-icon :icon="icons.faFacebookF" />
-                </a>
-              </li>
-              <li class="list-inline-item m-0">
-                <a :href="twitterLink" class="social-link">
-                  <font-awesome-icon :icon="icons.faTwitter" />
-                </a>
-              </li>
-              <li class="list-inline-item m-0">
-                <a :href="instagramLink" class="social-link">
-                  <font-awesome-icon :icon="icons.faInstagram" />
-                </a>
-              </li>
-              <li class="list-inline-item m-0">
-                <a :href="linkedinLink" class="social-link">
-                  <font-awesome-icon :icon="icons.faLinkedin" />
-                </a>
-              </li>
+              <ul class="list-inline mb-0">
+                <li class="list-inline-item">
+                  <a
+                    :href="facebookLink"
+                    class="social-link"
+                    aria-label="Facebook"
+                  >
+                    <font-awesome-icon :icon="icons.faFacebookF" />
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a
+                    :href="twitterLink"
+                    class="social-link"
+                    aria-label="Twitter"
+                  >
+                    <font-awesome-icon :icon="icons.faTwitter" />
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a
+                    :href="instagramLink"
+                    class="social-link"
+                    aria-label="Instagram"
+                  >
+                    <font-awesome-icon :icon="icons.faInstagram" />
+                  </a>
+                </li>
+                <li class="list-inline-item">
+                  <a
+                    :href="linkedinLink"
+                    class="social-link"
+                    aria-label="LinkedIn"
+                  >
+                    <font-awesome-icon :icon="icons.faLinkedin" />
+                  </a>
+                </li>
+              </ul>
             </div>
           </div>
         </div>

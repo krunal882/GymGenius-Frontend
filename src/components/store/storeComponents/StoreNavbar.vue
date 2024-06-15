@@ -18,6 +18,7 @@
             v-if="navItem.route"
             :to="{ name: navItem.route }"
             @click="setActiveNavItem(index)"
+            :alt="navItem.route"
             >{{ navItem.label }}</router-link
           >
         </li>
@@ -25,7 +26,7 @@
           <!-- cart option button -->
           <v-badge color="error" :content="cartItemCount">
             <router-link :to="{ name: 'cart' }">
-              <v-btn icon size="small">
+              <v-btn icon size="small" alt="Cart section">
                 <v-icon>mdi-cart</v-icon>
               </v-btn>
             </router-link>

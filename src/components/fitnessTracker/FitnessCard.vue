@@ -14,6 +14,7 @@
         height="250"
         width="400"
         :src="item.image"
+        alt="fitness calculator image"
         cover
       ></v-img>
       <v-card-text class="text-center font-weight-bold" style="font-size: 25px">

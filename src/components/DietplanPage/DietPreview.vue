@@ -27,6 +27,7 @@
             style="height: 200px"
             :src="getImgPath(dietPlan.src, dietPlan.cloudImg)"
             cover
+            alt="diet plane image"
             @click="exploreClicked(dietPlan)"
           ></v-img>
           <v-card-title class="text-center plan-name caption">

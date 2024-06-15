@@ -26,7 +26,7 @@
               <v-carousel-item v-for="(image, i) in images" :key="i">
                 <v-sheet height="375px" tile>
                   <div class="d-flex fill-height justify-center align-center">
-                    <v-img :src="image" center></v-img>
+                    <v-img :src="image" center alt="exercise image"></v-img>
                   </div>
                 </v-sheet>
               </v-carousel-item>
@@ -79,20 +79,32 @@
           <v-card-text v-if="exercise.primaryMuscles?.length > 0">
             <div class="d-flex">
               <span class="details"> Primary Muscle: </span>
-              <ul v-for="muscle in exercise.primaryMuscles" :key="muscle">
-                {{
-                  capitalizeFirstLetter(muscle)
-                }}
+              <ul
+                style="
+                  list-style-type: none;
+                  padding-left: 15px;
+                  padding-top: 3px;
+                "
+              >
+                <li v-for="muscle in exercise.primaryMuscles" :key="muscle">
+                  {{ capitalizeFirstLetter(muscle) }}
+                </li>
               </ul>
             </div></v-card-text
           >
           <v-card-text v-if="exercise.secondaryMuscles?.length > 0">
             <div class="d-flex flex-wrap">
               <span class="details"> Secondary Muscle target:</span>
-              <ul v-for="muscle in exercise.secondaryMuscles" :key="muscle">
-                {{
-                  capitalizeFirstLetter(muscle)
-                }}
+              <ul
+                style="
+                  list-style-type: none;
+                  padding-left: 15px;
+                  padding-top: 3px;
+                "
+              >
+                <li v-for="muscle in exercise.secondaryMuscles" :key="muscle">
+                  {{ capitalizeFirstLetter(muscle) }}
+                </li>
               </ul>
             </div></v-card-text
           >

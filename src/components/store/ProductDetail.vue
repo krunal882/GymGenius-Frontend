@@ -11,6 +11,7 @@
           :zoomSize="120"
           :zoomFactore="1.5"
           :magnifiedBorderRadius="100"
+          alt="product image"
           cover
         />
       </v-col>

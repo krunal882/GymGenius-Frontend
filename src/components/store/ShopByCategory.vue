@@ -15,6 +15,7 @@
             height="500"
             :src="image"
             cover
+            alt="category image"
           />
         </router-link>
       </v-card>

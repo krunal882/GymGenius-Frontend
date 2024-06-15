@@ -9,7 +9,7 @@
     <v-carousel-item v-for="(image, i) in images" :key="i">
       <v-sheet style="height: auto">
         <div class="d-flex fill-height justify-center align-center">
-          <img :src="image" class="d-block w-100" alt="..." />
+          <img :src="image" class="d-block w-100" alt="carousel image" />
         </div>
       </v-sheet>
     </v-carousel-item>

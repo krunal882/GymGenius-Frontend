@@ -10,12 +10,14 @@
             class="menu-icon"
             @click="toggleFilter"
             style="color: black; font-size: 24px"
+            aria-label="Toggle Filters"
             >mdi-menu</v-icon
           >
           <span
             class="ml-1 menu-icon"
             style="color: black"
             @click="toggleFilter"
+            aria-label="Filters"
           >
             Filters</span
           >

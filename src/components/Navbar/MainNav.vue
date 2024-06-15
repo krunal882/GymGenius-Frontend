@@ -25,13 +25,14 @@
               {{ navItem.label }}
             </router-link>
           </li>
-          <!-- login/signup button -->
-          <div v-if="!token" class="d-flex flex-wrap">
-            <router-link to="/authentication">
-              <v-btn variant="outlined" color="white">Login/Register</v-btn>
-            </router-link>
-          </div>
         </ul>
+
+        <!-- login/signup button -->
+        <div v-if="!token" class="d-flex flex-wrap">
+          <router-link to="/authentication">
+            <v-btn variant="outlined" color="white">Login/Register</v-btn>
+          </router-link>
+        </div>
       </div>
     </div>
     <!-- profile menu option -->
@@ -129,9 +130,9 @@ export default {
   },
   mounted() {
     this.checkToken();
-    if (this.$store.state.userModule.userId.length > 0) {
-      this.chatBoat();
-    }
+    // if (this.$store.state.userModule.userId.length > 0) {
+    //   this.chatBoat();
+    // }
     const routeIndex = this.navItems.findIndex((item) => {
       if (Array.isArray(item.highlight)) {
         return item.highlight.some((highlight) =>

@@ -17,7 +17,22 @@
     <v-row justify="center">
       <v-card width="400" class="mx-10 my-10 image-hover-effect">
         <router-link :to="{ name: 'foodNutrition' }">
-          <img height="300px" width="100%" :src="nutrition" cover />
+          <div
+            style="position: relative; width: 100%; height: 0; padding-top: 75%"
+          >
+            <img
+              style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+              "
+              :src="nutrition"
+              alt="Food Nutrition"
+            />
+          </div>
         </router-link>
         <!-- card information section -->
         <v-card-title> Food Item Nutrition </v-card-title>
@@ -31,7 +46,13 @@
       </v-card>
       <v-card width="400" class="mx-10 my-10 image-hover-effect">
         <router-link :to="{ name: 'dietPlan' }">
-          <v-img height="300px" width="100%" :src="diet" cover></v-img>
+          <v-img
+            height="300px"
+            width="100%"
+            :src="diet"
+            alt="Diet Plans"
+            cover
+          ></v-img>
         </router-link>
 
         <!-- dietPlan section -->

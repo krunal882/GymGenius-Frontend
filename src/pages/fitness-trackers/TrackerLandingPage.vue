@@ -5,7 +5,7 @@
     <img
       width="100%"
       src="../../assets/img/fitnessTrackers/Fitness-Calculators.png"
-      alt=""
+      alt="poster"
     />
     <!-- card of all fitness calculators -->
     <FitnessCard />

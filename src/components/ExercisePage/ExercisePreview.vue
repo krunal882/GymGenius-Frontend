@@ -69,6 +69,7 @@
                 v-if="loadingExercises[exercise._id]"
                 indeterminate
                 size="20"
+                aria-label="Loading exercise data"
               ></v-progress-circular>
               <span v-if="!loadingExercises[exercise._id]">
                 {{ isBookmarked(exercise) ? "Undo Bookmark" : "Bookmark" }}

@@ -17,6 +17,7 @@
                 class="align-end text-white"
                 height="346"
                 :src="imgPath(product)"
+                alt="product image"
                 cover
               ></v-img>
             </v-col>

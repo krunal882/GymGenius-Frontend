@@ -13,6 +13,7 @@
         max-width="400"
         :src="images"
         cover
+        alt="food item image"
       ></v-img>
       <!-- foodItem information -->
       <div class="custom-content">

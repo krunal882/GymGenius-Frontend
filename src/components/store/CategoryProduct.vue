@@ -21,6 +21,7 @@
             class="align-end text-white"
             height="346"
             :src="imgPath(product.src, product.category)"
+            alt="product image"
             cover
           ></v-img>
           <!-- information of the product -->

@@ -5,7 +5,7 @@
     <v-card v-if="yoga" :class="{ 'd-flex': isWideScreen }" width="auto">
       <!-- carousal to display yoga images -->
       <div style="flex: 1; padding-right: 16px; position: relative">
-        <v-img height="300" :src="yoga.url_png"> </v-img>
+        <v-img height="300" :src="yoga.url_png" alt="yoga pose image"> </v-img>
         <div
           style="
             bottom: 0;
