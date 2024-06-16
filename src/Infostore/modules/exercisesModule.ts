@@ -119,7 +119,7 @@ export const actions = {
   ) {
     try {
       const config = createAxiosConfig();
-      let url = "http://localhost:3000/exercises";
+      let url = "https://gymgenius-backend-production.up.railway.app/exercises";
       if (filteredFilters && Object.keys(filteredFilters).length > 0) {
         const queryParams = Object.entries(filteredFilters)
           .map(([key, value]) => {
