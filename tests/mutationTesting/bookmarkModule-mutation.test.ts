@@ -1,4 +1,4 @@
-import { mutations } from "../src/Infostore/modules/bookmarkModule";
+import { mutations } from "../../src/Infostore/modules/bookmarkModule";
 
 describe("Bookmark Module Mutations", () => {
   let state;

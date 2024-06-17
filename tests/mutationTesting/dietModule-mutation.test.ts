@@ -1,5 +1,5 @@
-import { mutations } from "../src/Infostore/modules/dietPlanModule";
-import { DietPlan } from "../src/Infostore/modules/dietPlanModule";
+import { mutations } from "../../src/Infostore/modules/dietPlanModule";
+import { DietPlan } from "../../src/Infostore/modules/dietPlanModule";
 
 describe("DietPlan Module Mutations", () => {
   let state;

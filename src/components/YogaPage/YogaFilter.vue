@@ -116,7 +116,7 @@ export default {
       const filteredFilters = {};
 
       if (this.selectedCategory.length > 0) {
-        filteredFilters.category = this.selectedCategory;
+        filteredFilters.category_name = this.selectedCategory;
       }
 
       if (Object.keys(filteredFilters).length > 0) {

@@ -3,7 +3,7 @@ import {
   State,
   User,
   OrderData,
-} from "../src/Infostore/modules/adminModule";
+} from "../../src/Infostore/modules/adminModule";
 
 describe("admin module Mutations", () => {
   let state: State;

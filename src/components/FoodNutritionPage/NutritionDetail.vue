@@ -358,6 +358,12 @@ export default {
         this.loadingBookmark = false; // Stop loading
       }
     },
+    // Method to get the image path
+    imgPath(foodItemName, cloudImg) {
+      return cloudImg
+        ? cloudImg
+        : `../../../assets/img/foodItem/${foodItemName}.jpg`;
+    },
     // Handle PDF download with loading state
     async downloadPDF() {
       this.loadingDownload = true; // Start loading

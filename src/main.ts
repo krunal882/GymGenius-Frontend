@@ -1,7 +1,6 @@
 // Import styles , Vue and necessary plugins , Vuetify components and directives
 import "bootstrap/dist/css/bootstrap.css";
 import "@mdi/font/css/materialdesignicons.css";
-import "vue3-toastify/dist/index.css";
 import "primevue/resources/themes/aura-light-green/theme.css";
 import { createRouter, createWebHistory } from "vue-router";
 import store from "./Infostore";

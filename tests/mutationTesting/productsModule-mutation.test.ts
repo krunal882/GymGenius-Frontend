@@ -2,7 +2,7 @@ import {
   mutations,
   State,
   Product,
-} from "../src/Infostore/modules/productsModule";
+} from "../../src/Infostore/modules/productsModule";
 
 describe("Vuex Store Mutations", () => {
   let state: State;

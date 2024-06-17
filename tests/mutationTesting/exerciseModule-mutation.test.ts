@@ -1,5 +1,5 @@
-import { mutations } from "../src/Infostore/modules/exercisesModule";
-import { Exercise } from "../src/Infostore/modules/exercisesModule";
+import { mutations } from "../../src/Infostore/modules/exercisesModule";
+import { Exercise } from "../../src/Infostore/modules/exercisesModule";
 
 describe("Exercise Module Mutations", () => {
   let state;

@@ -130,9 +130,9 @@ export default {
   },
   mounted() {
     this.checkToken();
-    // if (this.$store.state.userModule.userId.length > 0) {
-    //   this.chatBoat();
-    // }
+    if (this.$store.state.userModule.userId.length > 0) {
+      this.chatBoat();
+    }
     const routeIndex = this.navItems.findIndex((item) => {
       if (Array.isArray(item.highlight)) {
         return item.highlight.some((highlight) =>

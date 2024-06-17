@@ -1,4 +1,4 @@
-import { mutations, User, State } from "../src/Infostore/modules/userModule";
+import { mutations, User, State } from "../../src/Infostore/modules/userModule";
 
 // Mock global object to simulate browser environment
 describe("User Module Mutations", () => {

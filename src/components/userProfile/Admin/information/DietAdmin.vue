@@ -1,11 +1,11 @@
 <!-- this component is parent component of dietPlan for the admin actions -->
 <template>
-  <div class="d-flex flex-wrap justify-content-center">
+  <div>
     <!-- component to handle search action by admin -->
     <ItemSearch @search="handleSearch" @add="openAddDialog" />
     <!-- component to add new dietPlan by admin -->
     <AddDiet :dialogOpen="addDialogOpen" @close-dialog="closeAddDialog" />
-    <div v-if="dietPlans.length > 0" class="justify-content-center">
+    <div v-if="dietPlans.length > 0">
       <!-- component for options of edit and delete  -->
       <DietAction
         :dietPlan="dietPlans"

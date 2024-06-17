@@ -1,5 +1,5 @@
-import { mutations } from "../src/Infostore/modules/foodItemModule";
-import { FoodItem } from "../src/Infostore/modules/foodItemModule";
+import { mutations } from "../../src/Infostore/modules/foodItemModule";
+import { FoodItem } from "../../src/Infostore/modules/foodItemModule";
 
 describe("FoodItem Module Mutations", () => {
   let state;

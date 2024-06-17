@@ -1,4 +1,8 @@
-import { mutations, State, Product } from "../src/Infostore/modules/cartModule"; // Adjust the import path as per your project structure
+import {
+  mutations,
+  State,
+  Product,
+} from "../../src/Infostore/modules/cartModule";
 
 describe("cart module Mutations", () => {
   let state: State;

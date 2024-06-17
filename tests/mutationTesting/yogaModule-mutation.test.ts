@@ -1,5 +1,5 @@
-import { mutations } from "../src/Infostore/modules/yogaModule";
-import { Yoga } from "../src/Infostore/modules/yogaModule";
+import { mutations } from "../../src/Infostore/modules/yogaModule";
+import { Yoga } from "../../src/Infostore/modules/yogaModule";
 
 describe("Yoga Module Mutations", () => {
   let state;
