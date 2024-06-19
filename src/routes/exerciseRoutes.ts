@@ -4,6 +4,7 @@ import ExerciseInfo from "../components/ExercisePage/ExerciseInfo.vue";
 import ExercisePage from "../pages/exercise/ExercisePage.vue";
 import ExerciseDetail from "@/components/ExercisePage/ExerciseDetail.vue";
 import { createRouter, createWebHistory } from "vue-router";
+import MuscleSelector from "@/components/BodyModel/MuscleSelector.vue";
 
 // check if user is logged-in / registered or not
 const ifAuthenticated = (to, from, next) => {
@@ -30,6 +31,12 @@ const routes = [
         beforeEnter: ifAuthenticated,
         component: ExerciseDetail,
         name: "exerciseDetail",
+      },
+      {
+        path: "/anatomy",
+        beforeEnter: ifAuthenticated,
+        component: MuscleSelector,
+        name: "muscleModel",
       },
     ],
   },

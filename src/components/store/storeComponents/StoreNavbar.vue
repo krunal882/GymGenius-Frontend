@@ -117,7 +117,7 @@ export default {
           return item.highlight === this.$route.path;
         }
       });
-      this.activeNavItem = routeIndex !== -1 ? routeIndex : 0;
+      this.activeNavItem = routeIndex !== -1 ? routeIndex : null;
     },
   },
 };

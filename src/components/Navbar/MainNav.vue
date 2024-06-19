@@ -33,10 +33,12 @@
             <v-btn variant="outlined" color="white">Login/Register</v-btn>
           </router-link>
         </div>
+        <div class="d-flex flex-wrap">
+          <!-- profile menu option -->
+          <ProfileMenu class="hover" v-if="token" />
+        </div>
       </div>
     </div>
-    <!-- profile menu option -->
-    <ProfileMenu class="hover" v-if="token" />
   </nav>
 </template>
 
@@ -54,6 +56,7 @@ export default {
       activeNavItem: null,
       navItems: [
         { label: "Home", route: "/", highlight: "/GymGenius" },
+        { label: "Anatomy", route: "/anatomy", highlight: "/anatomy" },
         {
           label: "Exercises",
           route: "/exercise",

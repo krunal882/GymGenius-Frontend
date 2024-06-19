@@ -100,9 +100,14 @@
                   list-style-type: none;
                   padding-left: 15px;
                   padding-top: 3px;
+                  display: flex;
                 "
               >
-                <li v-for="muscle in exercise.secondaryMuscles" :key="muscle">
+                <li
+                  v-for="muscle in exercise.secondaryMuscles"
+                  :key="muscle"
+                  style="margin-right: 8px"
+                >
                   {{ capitalizeFirstLetter(muscle) }}
                 </li>
               </ul>

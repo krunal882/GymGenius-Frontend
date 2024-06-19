@@ -208,7 +208,7 @@ export default {
       }
 
       if (this.selectedMuscle.length > 0) {
-        filteredFilters.muscle = this.selectedMuscle;
+        filteredFilters.primaryMuscles = this.selectedMuscle;
       }
       if (Object.keys(filteredFilters).length > 0) {
         this.$emit("filters-applied", filteredFilters);

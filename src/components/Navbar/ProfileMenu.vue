@@ -1,7 +1,7 @@
 <!-- this component is for displaying profile menu button on the navigation bar -->
 <template>
   <v-row>
-    <v-col cols="12" offset-sm="3" sm="6">
+    <v-col>
       <v-menu>
         <template v-slot:activator="{ props }">
           <v-avatar>
