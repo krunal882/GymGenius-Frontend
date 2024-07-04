@@ -3,8 +3,12 @@
     <div class="container">
       <!-- website logo -->
       <router-link class="navbar-brand" to="/GymGenius">
-        <img src="@/assets/logo.png" alt="Logo" style="width: 220px" />
-      </router-link>
+        <img
+          src="@/assets/logo.png"
+          alt="Logo"
+          style="width: 220px"
+        /> </router-link
+      >1
       <!-- navigation options -->
       <div :class="{ 'navbar-collapse': true }">
         <ul class="navbar-nav ml-auto">
@@ -176,6 +180,8 @@ body {
   background-color: #1c2331;
   width: 100%;
   z-index: 1000;
+  position: sticky;
+  top: 0;
 }
 .nav-item.active .nav-link {
   color: rgb(250, 0, 0) !important;

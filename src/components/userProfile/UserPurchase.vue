@@ -54,7 +54,10 @@
     </v-row>
 
     <!-- Empty Cart Message -->
-    <v-alert v-else type="info" class="mb-5">Your cart is empty.</v-alert>
+    <v-alert v-else type="info" class="mb-5">
+      You haven't purchased any products yet. Browse our collection and find
+      something you love!
+    </v-alert>
 
     <!-- Confirmation Dialog -->
     <v-dialog
