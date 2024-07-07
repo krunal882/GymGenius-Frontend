@@ -44,12 +44,44 @@
       :product="cardioCarousal"
       @product-selected="onProductSelected"
     />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764190062746470"
+      crossorigin="anonymous"
+    ></script>
+    <!-- add-1 -->
+    <ins
+      class="adsbygoogle"
+      style="display: block"
+      data-ad-client="ca-pub-7764190062746470"
+      data-ad-slot="7248276222"
+      data-ad-format="auto"
+      data-full-width-responsive="true"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
     <p class="container slider" style="font-size: 30px">SHOP BY WORKOUT</p>
     <ShopByCategory />
     <p class="container slider" style="font-size: 30px; margin-top: 40px">
       SPOTLIGHT
     </p>
     <SpotLight />
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764190062746470"
+      crossorigin="anonymous"
+    ></script>
+    <ins
+      class="adsbygoogle"
+      style="display: block"
+      data-ad-format="autorelaxed"
+      data-ad-client="ca-pub-7764190062746470"
+      data-ad-slot="8399923402"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
     <router-view> </router-view>
   </div>
 </template>

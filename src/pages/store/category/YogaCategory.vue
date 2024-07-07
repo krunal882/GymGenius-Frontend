@@ -18,6 +18,21 @@
         <v-alert type="warning">No more products!</v-alert>
       </template>
     </v-infinite-scroll>
+    <script
+      async
+      src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764190062746470"
+      crossorigin="anonymous"
+    ></script>
+    <ins
+      class="adsbygoogle"
+      style="display: block"
+      data-ad-format="autorelaxed"
+      data-ad-client="ca-pub-7764190062746470"
+      data-ad-slot="8399923402"
+    ></ins>
+    <script>
+      (adsbygoogle = window.adsbygoogle || []).push({});
+    </script>
   </div>
 </template>
 
