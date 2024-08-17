@@ -1,6 +1,9 @@
 <!-- this component displays services that included in the websites and navigation option to that page using card -->
 <template>
   <div class="container marketing">
+
+        <div v-html="adsenseCode"></div>
+
     <div class="text-black absolute top-40 left-30 text-center">
       <h1
         class="text-5xl lg:text-5xl md:text-2xl sm:text-xl"
@@ -53,6 +56,18 @@
 export default {
   data() {
     return {
+
+       adsenseCode: `
+        <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-7764190062746470" crossorigin="anonymous"></script>
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-format="autorelaxed"
+             data-ad-client="ca-pub-7764190062746470"
+             data-ad-slot="4174778919"></ins>
+        <script>
+             (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
+      `,
       // card content
       cards: [
         {
