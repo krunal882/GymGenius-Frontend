@@ -1,7 +1,6 @@
 <!-- this component displays services that included in the websites and navigation option to that page using card -->
 <template>
   <div class="container marketing">
-    <GoogleAd />
     <div class="text-black absolute top-40 left-30 text-center">
       <h1
         class="text-5xl lg:text-5xl md:text-2xl sm:text-xl"
@@ -51,11 +50,7 @@
 </template>
 
 <script>
-import GoogleAd from './GoogleAd.vue';
 export default {
-  components: {
-    GoogleAd,
-  },
   data() {
     return {
       // card content
